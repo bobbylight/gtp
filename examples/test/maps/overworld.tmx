@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="add-on_6" tilewidth="16" tileheight="16">
+  <image source="../res/add-on_6.png" width="480" height="256"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt0k8OATEYBfDuxw6JI2Dn7xGwM7gCdjOuNBwEB8FZvCZtNI3IKFNtvMVv8SWTyXvf10QIkZRUf+PbVxrW3PzSf3/Row8tZRBpD7n/OYwhhYXnHj21x0/J/WeqRw47zz1SR0MYGbPv/duyEvInlrAyZt/7pzi1oaN0A8jjagI1mMIsgDyu1rBRtgHkqVIBe8MhgEwujtZ8DiDTP/e4wFUpxOOdxfq+9G2kU8R30bfR97kFkIeIiIiIiIiIiIiIiIiqcwenaJB/
+  </data>
+ </layer>
+</map>

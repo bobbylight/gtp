@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="16" tileheight="16">
+ <properties>
+  <property name="music" value="MUSIC_OVERWORLD"/>
+ </properties>
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
+  <image source="../res/tiles.png" width="407" height="254"/>
+ </tileset>
+ <tileset firstgid="361" name="collision" tilewidth="16" tileheight="16" spacing="1">
+  <image source="../res/collision.png" trans="ffffff" width="50" height="50"/>
+ </tileset>
+ <tileset firstgid="370" name="territories" tilewidth="16" tileheight="16" spacing="1">
+  <image source="../res/enemy_territory_colors.png" width="135" height="135"/>
+ </tileset>
+ <layer name="tileLayer" width="100" height="100">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2cy1IbMRBF5zcCBCphxdKAiR3n/78r9kJVXV3qpzSWZriLswqjkfpM6x0flmU5AAAAAAAAAAD49rwL9ConU5a33NayZ+N85VHgw9ned6OcSFnRcmnZW/fD2/rEoO1tiRePXet38tMg4340J9K+h4qLmhP6DWrx0srxODkFy9a8jI5z1IfkQYqlhbcsLVaSa09dt+rkpLTprcIzIetCyrlSJy3vvGXX8uRzgnhnfVguNCdRH9RLxMPxyteVP04nW/Th9SA58bqI9oP8mb+sHRfDxdGIw5m1aaSPmgPJA4+L9e9ruCiU7/1ciX/ExWkSF5KPTIxbnGhepL+/5UcZZ6x5r9VP3cq5TOJE8xGNqfXcL4bXS3TcjvZT0nc12kfLOGDlB3ehOYl6aemntL53VI6UOUp2nmQ5kVz0dMK9lP4skhszOTkITiJepHGHx//F4SOztomszWsuZvOhOfHGxOskmx89nEgupDaM9sLn8tG+Q5ufeV1I77X+nrsoz9G5cSbXR7mQ1uutueLt81rfSZ3QZz6Vtlnvexzoo4yBNEcyfVfr3CCak9azH4IPz3p0lA8tlyNOWuK4hgvqxDM+zuDDyuXo97RGbnjKsuqSdTJTbozwkXHirc+ro+xR40XERYuTXn1WraxoPaQcoWWOcuHtp3r4iDhpeYeHf0a9tuQjEy++Lhjpgvuo1WFrPqy40bM7bf91zdzz9FmzeOjho9bm4oG+w/KSddL6zdScbN0HbbO1vy05ifrw1uttqe+dzOykh48nh4sbtbO8e7nQvMzmRLuj4cU6E+X3BTL9Sw8XmpPRfVWtP+mVG/wOo3Y/xXIRrY/Hh9R/FUa7oLlCsRxxF574e+9xZX1kc2SWPXber/CzHMnLcYnlQcaJJ/ZSed4xZLbzJ8kF5ZV5+OoQfys3Mg4iTqRnRnu4cVLqTfPkhnTvqWcfVXOS9S050Z6Z3UeUVg9Wf1LwvjeTX3vyIcWn1UXm3d45wGxOrL0mbW7iiUvUhafsFie1uy6z5Qt3ElmvSbE7LvlzUu17juam5sHr5Z4urHzOfM90fRJ1EllveJ14XPwm0HfM4qKlb+H7KJfOHiL5UubpZT1lueBORo4lPXzytbv2/zNbXVjfRW1Pp7i5CB64k9Ex7o3loyX+ErXzGF4nj4u9+Sh7KlZ/lXHwoLjw1K30X5qLPfmI/lZAJhfo2FCI1tPaQx0dxx75EHVh8UPw0Lv+3O0a75g1HzKs5WFvZO8Aw0N/PGfx8HBfvOeKURej27UHPOfxlgv+OwwgT1lvtDrZwu+OzEbtd7F6rbfhI452boD8mMtHixOM5ev4yDiBi3V9WG7o/jjmVff1IXmhTma8U7s1ejvBWL6OFz42vAg+rPNekEebw3rvU8HH/Xx47h+MbsOeaMkPuOhHdq71vGBffZSH0XXdO4j7nMAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvfkPODnCZUCcAAA=
+  </data>
+ </layer>
+ <layer name="collisionLayer" width="100" height="100" opacity="0.46">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3aQbKDIBCEYd9x3/0vkHKXhdFhaKAZ/6/KnUGYFjHqcQAAAAAAcBz/f9ebqp1MW9F2e9t2czee6Hgj+2Vq13r83fOJ9v3XftkaK/erInuuKs7DyFx6m9VjVs65Cnrmh7IP3+29NYtTy7hH39O0tFlh3b6SuW9ZfR/j0IdRIve5d+NeVZeKWZxUNZ5Zn6pZnO7yyLRVsUYzqepX+ZydTVVHMtFSP+9DPzLxQyY+RjwHIZM8auiDDHyQhRfy8EEWPsjCC3l4GZUH9805M965kkuc+v/4rGNVpXz/MetY1SmuJ5G5wZrSJlunyDt4p+9TdtJar19rd+uGa3f1vdpXufX0uWLG0TE45FB93rWux4r5kunjW66F6n7PzCGy725G9VmdRea3uxqdyQpkct3miprsfs0a4bsOZLLe1XoLD2ThhTw8cA33MiODCv8BR5pVF2r/bOZ8wFrk4IEc8tS1IwcNRR3JQkc1T8ikH9crP8wPTz31JIsxsu9qMU7LMxSymCuSC5mM0fN9FJnoPNWcPLywjvggCy9P1yqy0Ius41W+twUAAAAAAAAAAAAAAAAAAACwlw/ef25oQJwAAA==
+  </data>
+ </layer>
+ <objectgroup name="warpLayer" width="100" height="100">
+  <object name="Garinham" type="warp" x="64" y="192" width="16" height="16">
+   <properties>
+    <property name="col" value="1"/>
+    <property name="map" value="garinham"/>
+    <property name="row" value="14"/>
+   </properties>
+  </object>
+  <object name="Erdrick's Cave" type="warp" x="480" y="352" width="16" height="16">
+   <properties>
+    <property name="col" value="1"/>
+    <property name="map" value="erdricks_cave_1"/>
+    <property name="row" value="1"/>
+   </properties>
+  </object>
+  <object name="becconary" type="warp" x="800" y="816" width="16" height="16">
+   <properties>
+    <property name="col" value="1"/>
+    <property name="map" value="brecconary"/>
+    <property name="row" value="16"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="npcLayer" width="100" height="100">
+  <object name="npc" type="npc" x="144" y="224" width="16" height="16">
+   <properties>
+    <property name="dir" value="down"/>
+    <property name="type" value="oldman"/>
+    <property name="wanders" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="enemyTerritoryLayer" width="100" height="100" opacity="0.36">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3RyQnEMAAEQTtlH/mbfe9TYDVyFUwC09sGAADAV937vF2TVqZHix4terTo0aJHix4terTo0aJHix4terTo0aJHix4terTM/PMcmB56vEGPFj1a9GjRo0WPFj1a9GjRo0WPFj1a9GjRo0WPdYz8+dsxaavSo0WPFj1a9GjRo0WPFj1a9GjRo0WPFj1a9GjRo0WPltEeI+OfHi16tOjRokeLHi16tOjRokeLHi16tOjRokeLHi16AAAAAAAAAAAAAADAeh5/vunkQJwAAA==
+  </data>
+ </layer>
+</map>

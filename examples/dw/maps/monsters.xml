@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<monsters>
+
+   <monster name="Slime" hp="3" mp="0" img="5,0,19,18" dmgImg="69,0,19,18"/>
+
+</monsters>
