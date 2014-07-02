@@ -18,7 +18,7 @@ RoamingState.prototype.update = function(delta) {
    
    var im = game.inputManager;
    
-//   if (im.isKeyDown(gtp.InputManager.Z, true)) {
+//   if (im.isKeyDown(gtp.Keys.Z, true)) {
 //      game.setNpcsPaused(true);
 //      this._commandBubble.reset();
 //      game.audio.playSound('menu');
@@ -33,33 +33,33 @@ RoamingState.prototype.update = function(delta) {
 //      var maxX = game.map.getPixelWidth() * game._scale;
 //      var maxY = game.map.getPixelHeight() * game._scale;
 //      
-      if (im.isKeyDown(gtp.InputManager.UP_ARROW)) {
+      if (im.isKeyDown(gtp.Keys.UP_ARROW)) {
          game.dy--;//hero.tryToMoveUp();
          //this.yOffs = Math.max(this.yOffs-inc, 0);
       }
-      else if (im.isKeyDown(gtp.InputManager.DOWN_ARROW)) {
+      else if (im.isKeyDown(gtp.Keys.DOWN_ARROW)) {
          game.dy++;//hero.tryToMoveDown();
          //this.yOffs = Math.min(this.yOffs+inc, maxY);
       }
-      else if (im.isKeyDown(gtp.InputManager.LEFT_ARROW)) {
+      else if (im.isKeyDown(gtp.Keys.LEFT_ARROW)) {
          game.dx--;//hero.tryToMoveLeft();
          //this.xOffs = Math.max(this.xOffs-inc, 0);
       }
-      else if (im.isKeyDown(gtp.InputManager.RIGHT_ARROW)) {
+      else if (im.isKeyDown(gtp.Keys.RIGHT_ARROW)) {
          game.dx++;//hero.tryToMoveRight();
          //this.xOffs = Math.min(this.xOffs+inc, maxX);
       }
 //      
 //   }
 //   
-//   if (im.isKeyDown(gtp.InputManager.SHIFT)) {
-//      if (im.isKeyDown(gtp.InputManager.C, true)) {
+//   if (im.isKeyDown(gtp.Keys.SHIFT)) {
+//      if (im.isKeyDown(gtp.Keys.C, true)) {
 //         game.toggleShowCollisionLayer();
 //      }
-//      if (im.isKeyDown(gtp.InputManager.T, true)) {
+//      if (im.isKeyDown(gtp.Keys.T, true)) {
 //         game.toggleShowTerritoryLayer();
 //      }
-//      if (im.isKeyDown(gtp.InputManager.S, true)) {
+//      if (im.isKeyDown(gtp.Keys.S, true)) {
 //         game.audio.playSound('stairs');
 //      }
 //   }

@@ -25,7 +25,15 @@ gtp.InputManager.prototype = {
       this.keys[e.keyCode] = false;
       e.stopPropagation();
    },
-
+   
+   /**
+    * Returns whether a specific key is pressed.
+    * @param keyCode {gtp.Keys} A key code.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
    isKeyDown: function(keyCode, clear) {
       var down = this.keys[keyCode];
       if (clear) {
@@ -35,26 +43,3 @@ gtp.InputManager.prototype = {
    }
 
 };
-
-/* const key codes */
-gtp.InputManager.ENTER = 13;
-gtp.InputManager.SHIFT = 16;
-gtp.InputManager.SPACE = 32;
-gtp.InputManager.LEFT_ARROW = 37;
-gtp.InputManager.UP_ARROW = 38;
-gtp.InputManager.RIGHT_ARROW = 39;
-gtp.InputManager.DOWN_ARROW = 40;
-
-gtp.InputManager.A = 65;
-gtp.InputManager.B = 66;
-gtp.InputManager.C = 67;
-gtp.InputManager.D = 68;
-gtp.InputManager.E = 69;
-gtp.InputManager.F = 70;
-gtp.InputManager.R = 82;
-gtp.InputManager.S = 83;
-gtp.InputManager.T = 84;
-gtp.InputManager.W = 87;
-gtp.InputManager.X = 88;
-gtp.InputManager.Y = 89;
-gtp.InputManager.Z = 90;

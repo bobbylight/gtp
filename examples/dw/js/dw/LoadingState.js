@@ -34,6 +34,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
 //                  });
 //            }, 1000);
 setTimeout(function() {
+      game.assets.addImage('title', 'res/title.png');
       game.assets.addImage('hero', 'res/hero.png');
       game.assets.addImage('font', 'res/font_10x10.png');
       game.assets.addJson('overworld.json');
@@ -48,7 +49,7 @@ setTimeout(function() {
          
          var data = game.assets.get('overworld.json');
          var imagePathModifier = function(imagePath) {
-            return imagePath.replace('../', '');
+            return imagePath.replace('../maps', 'res');
          };
          game.map = new tiled.TiledMap(data, {
             imagePathModifier: imagePathModifier,
@@ -59,8 +60,7 @@ setTimeout(function() {
          game.assets.addTmxMap(game.map);
          game.map.setScale(game._scale);
          game.assets.onLoad(function() {
-            game.hero.setMapLocation(52, 45);
-            game.state = new RoamingState();
+            game.setState(new TitleScreenState());
          });
       });
 }, 1000);
@@ -71,12 +71,10 @@ setTimeout(function() {
    },
    
    render: {
-      value: function() {
+      value: function(ctx) {
          
          var game = this.game;
-         var ctx = game.canvas.getContext('2d');
-         ctx.fillStyle = 'rgb(0, 0, 255)';
-         ctx.fillRect(0,0, game.canvas.width, game.canvas.height);
+         game.clearScreen('rgb(0,0,255)');
          
          ctx.fillStyle = 'rgb(0, 0, 0)';
          ctx.font = 'bold 30px Arial';

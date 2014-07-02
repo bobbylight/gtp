@@ -11,9 +11,9 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
          
          var im = this.game.inputManager;
          
-         if (im.isKeyDown(gtp.InputManager.SHIFT)) {
+         if (im.isKeyDown(gtp.Keys.SHIFT)) {
             
-            if (im.isKeyDown(gtp.InputManager.F, true)) {
+            if (im.isKeyDown(gtp.Keys.F, true)) {
                console.log('Toggling fps display...');
             }
             

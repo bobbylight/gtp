@@ -41,7 +41,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
                   game.assets.addTmxMap(game.map);
                   game.map.setScale(game._scale);
                   game.assets.onLoad(function() {
-                     game.state = new RoamingState();
+                     game.setState(new RoamingState());
                   });
                });
             }, 1000);

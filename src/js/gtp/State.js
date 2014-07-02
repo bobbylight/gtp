@@ -14,7 +14,7 @@ gtp.State.prototype = {
       // Subclasses should override
    },
    
-   render: function() {
+   render: function(ctx) {
       // Subclasses should override
    }
    

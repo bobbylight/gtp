@@ -17,6 +17,8 @@ gtp.Game = function(args) {
    this.audio.init();
    this.assets = new gtp.AssetLoader(this._scale, this.audio);
    
+   this.clearScreenColor = 'rgb(0,0,0)';
+   
    this.fpsColor = 'rgb(255,255,255)';
    this.statusMessageRGB = '255,255,255';
    this._statusMessageColor = null;
@@ -78,9 +80,9 @@ gtp.Game.prototype = {
    update: function() {
       
       var im = this.inputManager;
-      if (im.isKeyDown(gtp.InputManager.SHIFT)) {
+      if (im.isKeyDown(gtp.Keys.SHIFT)) {
          
-         if (im.isKeyDown(gtp.InputManager.F, true)) {
+         if (im.isKeyDown(gtp.Keys.F, true)) {
             game.toggleShowFps();
          }
          
@@ -159,6 +161,13 @@ gtp.Game.prototype = {
    toggleShowFps: function() {
       this.showFps = !this.showFps;
       this.setStatusMessage('FPS display: ' + (this.showFps ? 'on' : 'off'));
+   },
+   
+   clearScreen: function(clearScreenColor) {
+      var color = clearScreenColor || this.clearScreenColor;
+      var ctx = this.canvas.getContext('2d');
+      ctx.fillStyle = color;
+      ctx.fillRect(0,0, this.getWidth(), this.getHeight());
    }
    
 };

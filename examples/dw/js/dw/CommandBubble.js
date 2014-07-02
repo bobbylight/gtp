@@ -58,31 +58,31 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
          
          var im = game.inputManager;
          
-         if (im.isKeyDown(gtp.InputManager.UP_ARROW, true)) {
+         if (im.isKeyDown(gtp.Keys.UP_ARROW, true)) {
             this.selection = this.selection - 1;
             if (this.selection<0) {
                this.selection = 7;
             }
          }
       
-         else if (im.isKeyDown(gtp.InputManager.DOWN_ARROW, true)) {
+         else if (im.isKeyDown(gtp.Keys.DOWN_ARROW, true)) {
             this.selection = Math.floor((this.selection+1) % 8);
          }
       
-         else if (this.selection>3 && im.isKeyDown(gtp.InputManager.LEFT_ARROW, true)) {
+         else if (this.selection>3 && im.isKeyDown(gtp.Keys.LEFT_ARROW, true)) {
             this.selection -= 4;
          }
       
-         else if (this.selection<4 && im.isKeyDown(gtp.InputManager.RIGHT_ARROW, true)) {
+         else if (this.selection<4 && im.isKeyDown(gtp.Keys.RIGHT_ARROW, true)) {
             this.selection += 4;
          }
       
-         else if (im.isKeyDown(gtp.InputManager.X, true)) {
+         else if (im.isKeyDown(gtp.Keys.X, true)) {
             this.selection = -1;
             return true;
          }
       
-         else if (im.isKeyDown(gtp.InputManager.Z, true)) {
+         else if (im.isKeyDown(gtp.Keys.Z, true)) {
             game.audio.playSound('menu');
             return true;
          }

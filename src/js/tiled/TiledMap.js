@@ -114,8 +114,10 @@ tiled.TiledMap.prototype = {
             var layer = this.getLayerByIndex(l);
             if (layer.visible) {
                
+               var prevOpacity;
                if (layer.opacity<1) {
-                  ctx.globalAlpha = layer.opacity;
+                  prevOpacity = ctx.globalAlpha;
+                  ctx.globalAlpha = prevOpacity * layer.opacity;
                }
                
                while (_x < screenWidth) {
@@ -126,7 +128,7 @@ tiled.TiledMap.prototype = {
                }
                
                if (layer.opacity<1) {
-                  ctx.globalAlpha = 1;
+                  ctx.globalAlpha = prevOpacity;
                }
                
             }
