@@ -4,6 +4,8 @@
 }
 
 canvas {
+   display: block;
+   margin: 0 auto;
 /*   image-rendering: -webkit-optimize-contrast; /* Webkit */
 /*   image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
 /*   image-rendering: optimize-contrast;         /* Possible future browsers. */

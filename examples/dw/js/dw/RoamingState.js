@@ -30,6 +30,8 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
    update: {
       value: function(delta) {
          
+         this.handleDefaultKeys();
+         
          game.hero.update(delta);
          
          RoamingState._totalTime += delta;
