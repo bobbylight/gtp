@@ -1,9 +1,10 @@
 /**
  * Fades one state out and another state in.
  */
-function FadeOutInState(leavingState, enteringState, timeMillis) {
+function FadeOutInState(leavingState, enteringState, transitionLogic, timeMillis) {
    this._leavingState = leavingState;
    this._enteringState = enteringState;
+   this._transitionLogic = transitionLogic;
    this._fadingOut = true;
    this._alpha = 1;
    this._halfTime = timeMillis && timeMillis>0 ? timeMillis/2 : 800;
@@ -21,6 +22,9 @@ FadeOutInState.prototype = Object.create(gtp.State.prototype, {
             this._curTime -= this._halfTime;
             if (this._fadingOut) {
                this._fadingOut = false;
+               if (this._transitionLogic) {
+                  this._transitionLogic();
+               }
             }
             else {
                game.setState(this._enteringState);

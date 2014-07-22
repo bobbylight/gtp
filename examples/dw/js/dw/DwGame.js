@@ -32,6 +32,10 @@ DwGame.prototype.loadMap = function(mapName, newRow, newCol) {
    this.loadMapStep = DwGame.MAX_LOAD_MAP_STEP;
 //   this.loadMapTime = getPlayTimeNanos() + DwGame.LOAD_MAP_FADE_INC;
    this.audio.playSound('stairs');
+   var updatePlayer = function() {
+      game.hero.mapCol -= 4;
+   };
+   game.setState(new FadeOutInState(game.state, game.state, updatePlayer));
 };
 
 DwGame.prototype.getMapImpl = function(mapName) {

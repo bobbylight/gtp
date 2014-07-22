@@ -14,7 +14,7 @@ function Hero(args) {
    
    this._stepTick = 0;
    this._stepInc = 0;
-};
+}
 
 Hero.MAX_WALK_TICK = 0;
    
@@ -23,9 +23,9 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
    handleIntersectedObject: {
       value: function(/*TiledObject*/ obj) {
          if ('warp' === obj.type) {
-            var newRow = parseInt(obj.properties['row']);
-            var newCol = parseInt(obj.properties['col']);
-            game.loadMap(obj.properties['map'], newRow, newCol);
+            var newRow = parseInt(obj.properties.row, 10);
+            var newCol = parseInt(obj.properties.col, 10);
+            game.loadMap(obj.properties. map, newRow, newCol);
          }
       }   
    },
@@ -77,13 +77,13 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
                   var x = this.mapCol * tileSize;
                   var y = this.mapRow * tileSize;
                   var obj = warpLayer.getObjectIntersecting(x, y, tileSize, tileSize);
-                  if (obj!=null) {
+                  if (obj) {
                      this.handleIntersectedObject(obj);
                   }
       
                   // See if we should fight a monster
                   else {
-                     if (game.randomInt(20)==0) {
+                     if (game.randomInt(20)===0) {
                         game.startRandomEncounter();
                      }
                   }
