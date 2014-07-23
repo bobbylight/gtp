@@ -11,6 +11,7 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
          var im = game.inputManager;
          if (im.isKeyDown(gtp.Keys.ENTER)) {
             game.hero.setMapLocation(52, 45);
+            game.setMap('overworld.json');
             game.setState(new FadeOutInState(this, new RoamingState()));
          }
          

@@ -9,9 +9,6 @@ var DwGame = function(args) {
 DwGame.prototype = Object.create(gtp.Game.prototype);
 //DwGame.prototype.constructor = DwGame;
 
-DwGame.LOAD_MAP_FADE_INC = 30000000;
-DwGame.MAX_LOAD_MAP_STEP = 30;
-
 DwGame.prototype.update = function() {
    gtp.Game.prototype.update.call(this);
 };
@@ -25,17 +22,23 @@ DwGame.prototype.drawMap = function(ctx) {
    this.map.draw(ctx, centerRow, centerCol, dx, dy);
 };
 
+/**
+ * Starts loading a new map.  Fades out of the old one and into the new one.
+ */
 DwGame.prototype.loadMap = function(mapName, newRow, newCol) {
    newMap = this.getMapImpl(mapName);
    this.newRow = newRow;
    this.newCol = newCol;
-   this.loadMapStep = DwGame.MAX_LOAD_MAP_STEP;
-//   this.loadMapTime = getPlayTimeNanos() + DwGame.LOAD_MAP_FADE_INC;
    this.audio.playSound('stairs');
+   var self = this;
    var updatePlayer = function() {
-      game.hero.mapCol -= 4;
+//      game.hero.mapCol -= 4;
+self.setMap(mapName + '.json');
+self.hero.mapRow = newRow;
+self.hero.mapCol = newCol;
+console.log('New row/col === ' + newRow + ', ' + newCol);
    };
-   game.setState(new FadeOutInState(game.state, game.state, updatePlayer));
+   this.setState(new FadeOutInState(this.state, this.state, updatePlayer));
 };
 
 DwGame.prototype.getMapImpl = function(mapName) {
@@ -76,6 +79,41 @@ DwGame.prototype.getMapImpl = function(mapName) {
    return map;
 
 };
+
+DwGame.prototype.setMap = function(assetName) {
+   console.log('Setting map to: ' + assetName);
+   this.map = this.maps[assetName];
+};
+
+DwGame.prototype.initLoadedMap = function(asset) {
+   var data = this.assets.get(asset);
+   var imagePathModifier = function(imagePath) {
+      return imagePath.replace('../maps', 'res');
+   };
+   if (!this.maps) {
+      this.maps = {};
+   }
+   var map = new tiled.TiledMap(data, {
+      imagePathModifier: imagePathModifier,
+      tileWidth: 16, tileHeight: 16,
+      screenWidth: game.getWidth(), screenHeight: game.getHeight()
+   });
+   _adjustGameMap(map);
+   map.setScale(this._scale);
+   return this.maps[asset] = map;
+};
+
+var _adjustGameMap = function(map) {
+   // Hide layers that shouldn't be shown (why aren't they marked as hidden
+   // in Tiled?)
+   for (var i=0; i<map.getLayerCount(); i++) {
+      var layer = map.getLayerByIndex(i);
+      if (layer.name !== 'tileLayer') {
+         layer.visible = false;
+      }
+   }
+};
+
 
 DwGame.prototype.toggleShowCollisionLayer = function() {
    var layer = game.map.getLayer('collisionLayer');

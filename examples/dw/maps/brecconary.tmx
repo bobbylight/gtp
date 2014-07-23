@@ -4,10 +4,10 @@
   <property name="music" value="MUSIC_TOWN"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
-  <image source="tiles.png" width="407" height="254"/>
+  <image source="../res/tiles.png" width="407" height="254"/>
  </tileset>
  <tileset firstgid="361" name="collision" tilewidth="16" tileheight="16" spacing="1">
-  <image source="collision.png" width="50" height="50"/>
+  <image source="../res/collision.png" width="50" height="50"/>
  </tileset>
  <layer name="tileLayer" width="39" height="38">
   <data encoding="base64" compression="gzip">

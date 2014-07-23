@@ -30,6 +30,9 @@ gtp.AssetLoader.prototype = {
       
       url = url || id; // allow e.g. "assets.addJson('overworld.json');"
       
+      if (this._isAlreadyTracked(id)) {
+         return;
+      }
       this.loadingAssetData[id] = { type: gtp.AssetType.JSON };
       console.log('Adding: ' + id + ' => ' + url +
             ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
@@ -60,6 +63,9 @@ gtp.AssetLoader.prototype = {
       var self = this;
       
       var image = new Image();
+      if (this._isAlreadyTracked(id)) {
+         return;
+      }
       this.loadingAssetData[id] = { type: gtp.AssetType.IMAGE };
       console.log('Adding: ' + id + ' => ' + imageSrc +
             ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
@@ -83,9 +89,12 @@ gtp.AssetLoader.prototype = {
       
       if (this.audio.isInitialized()) {
          
-         var self = this;
+         if (this._isAlreadyTracked(id)) {
+            return;
+         }
          this.loadingAssetData[id] = { type: gtp.AssetType.SOUND };
          
+         var self = this;
          var xhr = new XMLHttpRequest();
          xhr.onload = function() {
             // TODO: Clean up this API
@@ -127,6 +136,17 @@ gtp.AssetLoader.prototype = {
       return this.responses[res];
    },
    
+   _isAlreadyTracked: function(id) {
+      if (this.loadingAssetData[id]) {
+         console.log('A resource with id ' + id + ' is already loading.  Assuming they are the same');
+         return true;
+      }
+      else if (this.responses[id]) {
+         console.log('A resource with id ' + id + ' has already been loaded.');
+         return true;
+      }
+   },
+   
    /**
     * Adds a resource.
     * @param res {string} The ID for the resource.
@@ -138,6 +158,10 @@ gtp.AssetLoader.prototype = {
    },
    
    _completed: function(res, response) {
+      if (!this.loadingAssetData[res]) {
+         console.error('Resource not found! - ' + res);
+         return;
+      }
       if (this.loadingAssetData[res].type === gtp.AssetType.JSON) {
          response = JSON.parse(response);
       }
