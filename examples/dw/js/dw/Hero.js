@@ -49,13 +49,11 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
          }
          
          if (this.isMoving()) {
-            
             if (this.walkTick>0) {
                this.walkTick--;
             }
             
             else {
-               
                this.walkTick = Hero.MAX_WALK_TICK;
                if (this.xOffs<0) {
                   this.xOffs += this.getMoveIncrement();
@@ -142,6 +140,7 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
       value: function(row, col) {
          this.mapRow = row;
          this.mapCol = col;
+         this.xOffs = this.yOffs = 0;
       }
    },
    

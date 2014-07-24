@@ -6,6 +6,13 @@ gtp.InputManager = function() {
   
 gtp.InputManager.prototype = {
    
+   clearKeyStates: function() {
+      //console.log('Clearing ' + this.keys.length + ' keys');
+      for (var i=0; i<this.keys.length; i++) {
+         this.keys[i] = false;
+      }
+   },
+   
    install: function() {
       var self = this;
       document.onkeydown = function(e) { self._keyDown(e); };
