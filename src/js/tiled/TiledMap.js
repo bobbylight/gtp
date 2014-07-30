@@ -105,6 +105,7 @@ tiled.TiledMap.prototype = {
       // Paint until the end of the screen
       var row = topLeftRow;
       var layerCount = this.getLayerCount();
+var tileCount = 0;
       while (_y < screenHeight) {
          for (var l=0; l<layerCount; l++) {
             
@@ -123,6 +124,7 @@ tiled.TiledMap.prototype = {
                while (_x < screenWidth) {
                   var value = layer.getData(row%rowCount, col%colCount);
                   this.drawTile(ctx, _x,_y, value, layer);
+tileCount++;
                   _x += tileW;
                   col++;
                }
@@ -140,6 +142,7 @@ tiled.TiledMap.prototype = {
          row++;
       }
       
+//console.log('tileCount === ' + tileCount);
    },
    
    getLayer: function(name) {
@@ -196,7 +199,8 @@ tiled.TiledMap.prototype = {
       var imgY = Math.floor(value/imgColCount) * sh;
       var imgX = (value%imgColCount) * sw;
       
-      ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
+      //ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
+      img.drawScaled2(ctx, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
       
    },
    
@@ -217,6 +221,28 @@ tiled.TiledMap.prototype = {
    
    getPixelHeight: function() {
       return this.rowCount * this.tileHeight;
+   },
+   
+   /**
+    * Removes a layer from this map.
+    * @param {string} layerName The name of the layer to remove.
+    * @return {boolean} Whether a layer by that name was found.
+    * @method
+    */
+   removeLayer: function(layerName) {
+      for (var i=0; i<this.layers.length; i++) {
+         if (this.layers[i].name===layerName) {
+            this.layers.splice(i, 1);
+            delete this.layersByName[layerName];
+            for (var j=0; j<this.objectGroups.length; j++) {
+               if (this.objectGroups[j].name === layerNam) {
+                  delete this.objectGroups[j];
+               }
+            }
+         }
+         return true;
+      }
+      return false;
    }
 
 };

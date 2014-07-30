@@ -1,10 +1,15 @@
 var gtp = gtp || {};
 
+/**
+ * A base class for a game.
+ *
+ * @constructor
+ */
 gtp.Game = function(args) {
    
    args = args || {};
    this._scale = args.scale || 1;
-   this._createCanvas(args.parent, args.width, args.height);
+   this.canvas = gtp.Utils.createCanvas(args.width, args.height, args.parent);
    
    this.inputManager = new gtp.InputManager();
    this.inputManager.install();
@@ -28,26 +33,14 @@ gtp.Game = function(args) {
    this._statusMessage = null;
    this._statusMessageAlpha = 0;
    
+   this.timer = new gtp.Timer();
 };
 
 gtp.Game.prototype = {
    
-   _createCanvas: function(parentDiv, width, height) {
-      
-      if (typeof parentDiv === 'string') {
-         parentDiv = document.getElementById(parentDiv);
-      }
-      
-      this.canvas = document.createElement('canvas');
-      this.canvas.width = width;
-      this.canvas.height = height;
-//this.canvas.style.width = (2 * width) + 'px';
-      gtp.Utils.prepCanvas(this.canvas);
-      
-      parentDiv.appendChild(this.canvas);
-      
-   },
-   
+   /**
+    * Starts the game loop.
+    */
    start: function() {
       // e.g. Dojo's lang.hitch()
       var self = this;
@@ -77,6 +70,12 @@ gtp.Game.prototype = {
       this.render();
    },
    
+   /**
+    * Called during each tick to update game logic.  The default implementation
+    * checks for a shortcut key to toggle the FPS display before delegating to
+    * the current game state.  Subclasses can override, but typically update
+    * logic is handled by game states.
+    */
    update: function() {
       
       var im = this.inputManager;

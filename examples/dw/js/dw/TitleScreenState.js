@@ -31,7 +31,7 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
          var img = game.assets.get('title');
          var x = (game.getWidth() - img.width) / 2;
          var y = 30;
-         ctx.drawImage(img, x, y);
+         img.draw(ctx, x, y);
       }
    },
    

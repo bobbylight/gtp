@@ -36,6 +36,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
 setTimeout(function() {
       game.assets.addImage('title', 'res/title.png');
       game.assets.addImage('hero', 'res/hero.png');
+      game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1);
       game.assets.addImage('font', 'res/font_10x10.png');
       game.assets.addJson('overworld.json');
       game.assets.addJson('brecconary.json');

@@ -101,8 +101,8 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
          
          // TODO: Move SpriteSheets to AssetManager or somewhere else
          if (!this.spriteSheet) {
-            var img = game.assets.get('hero');
-            this.spriteSheet = new gtp.SpriteSheet(img, tileSize, tileSize, game._scale);
+            var gtpImage = game.assets.get('hero');
+            this.spriteSheet = new gtp.SpriteSheet(gtpImage, tileSize, tileSize, game._scale);
          }
          
          var ssRow = 0, ssCol = 0;
@@ -124,7 +124,7 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
          
          var x = (game.canvas.width - tileSize)/2;
          var y = (game.canvas.height - tileSize)/2;
-         this.spriteSheet.draw(ctx, x,y, ssRow, ssCol);
+         this.spriteSheet.drawSprite(ctx, x,y, ssRow, ssCol);
       //   ctx.drawImage(img, imgX,imgY,tileSize,tileSize, x,y,tileSize,tileSize);
       
       }

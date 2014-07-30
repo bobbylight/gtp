@@ -115,6 +115,10 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          game.drawMap(ctx);
          game.hero.render(ctx);
          
+         game.npcs.forEach(function(npc) {
+            npc.render(ctx);
+         });
+         
          if (this._substate===_RoamingSubState.MENU) {
             this._commandBubble.paint(ctx);
          }

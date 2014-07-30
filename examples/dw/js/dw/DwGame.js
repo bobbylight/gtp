@@ -1,7 +1,9 @@
 var DwGame = function(args) {
    gtp.Game.call(this, args);
    this.map = null;
+   this._drawMapCount = 0;
    this.hero = new Hero({ name: 'Erdrick' });
+   this.npcs = [];
    
    this._bumpSoundDelay = 0;
 };
@@ -21,7 +23,26 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          var centerRow = hero.mapRow;
          var dx = hero.xOffs;
          var dy = hero.yOffs;
+         this._drawMapCount++;
+         if (this._drawMapCount === 10) {
+            this.timer.start('drawMap');
+         }
          this.map.draw(ctx, centerRow, centerCol, dx, dy);
+         if (this._drawMapCount === 10) {
+            this.timer.endAndLog('drawMap');
+            this._drawMapCount = 0;
+         }
+      }
+   },
+   
+   getMapXOffs: {
+      value: function() {
+         var hero = game.hero;
+         var centerCol = hero.mapCol;
+         var dx = hero.xOffs;
+         var xOffs = centerCol*16 - 16/2 + dx/2 - this.getWidth()/2;
+//         console.log('xOffs == ' + xOffs);
+         return xOffs;
       }
    },
    
@@ -48,38 +69,10 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function(mapName) {
       
          var map = null;
-         var newNpcs = [];
          
          map = this.assets.get(mapName + '.json');
          //map = MapLoader.load(in, new Java2DTilesetFactory(), SCALE);
          
-      //   // We special-case the NPC layer
-      //   Layer temp = map.getLayer("npcLayer");
-      //   if (temp instanceof ObjectGroup) {
-      //      ObjectGroup npcLayer = (ObjectGroup)temp;
-      //      for (int i=0; i<npcLayer.getObjectCount(); i++) {
-      //         Obj obj = npcLayer.getObject(i);
-      //         if ("npc".equals(obj.getType())) { // Always true
-      //            Npc npc = parseNpc(obj);
-      //            npc.setNpcIndex(newNpcs.size()+1);
-      //            newNpcs.add(npc);
-      //         }
-      //      }
-      //      map.removeLayer("npcs");
-      //   }
-      //
-      //      npcs = newNpcs;
-      //      for (Npc npc : npcs) {
-      //         map.getLayer("collisionLayer").setData(npc.getRow(), npc.getCol(), 1);
-      //      }
-      
-      //      // Hide layers we aren't interested in seeing.
-      //      map.getLayer("collisionLayer").setVisible(collisionLayerVisible);
-      //      Layer layer = map.getLayer("enemyTerritoryLayer");
-      //      if (layer!=null) {
-      //         layer.setVisible(enemyTerritoryLayerVisible);
-      //      }
-      
          return map;
       }
    },
@@ -93,13 +86,16 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    initLoadedMap: {
       value: function(asset) {
+         
          var data = this.assets.get(asset);
          var imagePathModifier = function(imagePath) {
             return imagePath.replace('../maps', 'res');
          };
+         
          if (!this.maps) {
             this.maps = {};
          }
+         
          var map = new tiled.TiledMap(data, {
             imagePathModifier: imagePathModifier,
             tileWidth: 16, tileHeight: 16,
@@ -107,6 +103,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          });
          this._adjustGameMap(map);
          map.setScale(this._scale);
+         
          this.maps[asset] = map;
          return map;
       }
@@ -114,17 +111,75 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    _adjustGameMap: { // TODO: Wrap class in closure and hide this function
       value: function(map) {
+
+         var i, npc;
+         
          // Hide layers that shouldn't be shown (why aren't they marked as hidden
          // in Tiled?)
-         for (var i=0; i<map.getLayerCount(); i++) {
+         for (i=0; i<map.getLayerCount(); i++) {
             var layer = map.getLayerByIndex(i);
             if (layer.name !== 'tileLayer') {
                layer.visible = false;
             }
          }
+         
+         // We special-case the NPC layer
+         var newNpcs = [];
+         var temp = map.getLayer("npcLayer");
+         if (temp && temp.isObjectGroup()) {
+            var npcLayer = temp;
+            for (i=0; i<npcLayer.objects.length; i++) {
+               var obj = npcLayer.objects[i];
+               if ('npc'===obj.type) { // Always true
+                  npc = this._parseNpc(obj);
+                  npc.setNpcIndex(newNpcs.length+1);
+                  newNpcs.push(npc);
+               }
+               else {
+                  console.log('warn: Unhandled object type (expected npc): ' + obj.type);
+               }
+            }
+            map.removeLayer("npcs");
+         }
+         
+         this.npcs = newNpcs;
+         for (i=0; i<this.npcs.length; i++) {
+            npc = this.npcs[i];
+            map.getLayer("collisionLayer").setData(npc.row, npc.col, 1);
+         }
+         
+//         // Hide layers we aren't interested in seeing.
+//         map.getLayer("collisionLayer").setVisible(collisionLayerVisible);
+//         Layer layer = map.getLayer("enemyTerritoryLayer");
+//         if (layer!=null) {
+//            layer.setVisible(enemyTerritoryLayerVisible);
+//         }
+      
       }
    },
    
+   _parseNpc: {
+      value: function(obj) {
+         var index = 0;
+         var type = NpcType.MERCHANT_GREEN;//obj.type;
+         var row = obj.y / (16*1);
+         var col = obj.x / (16*1);
+         var dir = Direction.SOUTH;
+         var tempDir = obj.dir;
+         if (tempDir) {
+            dir = tempDir;
+         }
+         var wanders = true;
+         var wanderStr = obj.wanders;
+         if (wanderStr) {
+            wanders = wanderStr==='true';
+         }
+         var npc = new Npc({ type: type, dir: dir, wanders: wanders,
+                             mapRow: row, mapCol: col });
+         return npc;
+      }
+   },
+
    toggleShowCollisionLayer: {
       value: function() {
          var layer = game.map.getLayer('collisionLayer');

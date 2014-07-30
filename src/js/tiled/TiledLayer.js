@@ -25,6 +25,14 @@ tiled.TiledLayer.prototype = {
       return this.data[index];
    },
    
+   setData: function(row, col, value) {
+      if (!this.data) { // An object layer
+         return false;
+      }
+      var index = row * this.map.colCount + col; // TODO: Convert to a function
+      this.data[index] = value;
+   },
+   
    getObjectByName: function(name) {
       return this.objectsByName ? this.objectsByName[name] : null;
    },

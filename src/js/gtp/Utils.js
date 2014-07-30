@@ -12,14 +12,9 @@ gtp.Utils.resize = function(img, scale) {
    // and copied, pixel by pixel into another offscreen canvas with the 
    // new size.
    
-   var widthScaled = img.width * scale;
-   var heightScaled = img.height * scale;
-   
    var orig, origCtx;
    if (img.nodeName.toLowerCase() === 'img') {
-      orig = document.createElement('canvas');
-      orig.width = img.width;
-      orig.height = img.height;
+      orig = gtp.Utils.createCanvas(img.width, img.height);
       origCtx = orig.getContext('2d');
       origCtx.drawImage(img, 0, 0);
    }
@@ -31,12 +26,12 @@ gtp.Utils.resize = function(img, scale) {
    if (scale === 1) {
       return orig; // No reason to scale
    }
-   
+
    var origPixels = origCtx.getImageData(0, 0, img.width, img.height);
    
-   var scaled = document.createElement('canvas');
-   scaled.width = widthScaled;
-   scaled.height = heightScaled;
+   var widthScaled = img.width * scale;
+   var heightScaled = img.height * scale;
+   var scaled = gtp.Utils.createCanvas(widthScaled, heightScaled);
    var scaledCtx = scaled.getContext('2d');
    var scaledPixels = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
    
@@ -73,6 +68,24 @@ gtp.Utils.mixin = function(source, target) {
          }
       }
    }
+};
+
+gtp.Utils.createCanvas = function(width, height, parentDiv) {
+   
+   var canvas = document.createElement('canvas');
+   canvas.width = width;
+   canvas.height = height;
+//this.canvas.style.width = (2 * width) + 'px';
+   gtp.Utils.prepCanvas(canvas);
+   
+   if (parentDiv) {
+      if (typeof parentDiv === 'string') {
+         parentDiv = document.getElementById(parentDiv);
+      }
+      parentDiv.appendChild(canvas);
+   }
+   
+   return canvas;
 };
 
 gtp.Utils.prepCanvas = function(canvas) {

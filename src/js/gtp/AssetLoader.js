@@ -72,7 +72,8 @@ gtp.AssetLoader.prototype = {
             ', callback == ' + (this.callback!==null));
       image.addEventListener('load', function() {
          var canvas = gtp.Utils.resize(image, self._scale);
-         self._completed(id, canvas);
+         var gtpImage = new gtp.Image(canvas);
+         self._completed(id, gtpImage);
       });
       
       image.src = imageSrc;
@@ -109,6 +110,43 @@ gtp.AssetLoader.prototype = {
          xhr.send(null);
       
       }
+      
+   },
+   
+   /**
+    * Starts loading a sprite sheet resource.
+    * @param id {string} The ID to use when retrieving this resource.
+    * @param imageSrc {string} The URL of the resource.
+    * @param {int} cellW The width of a cell.
+    * @param {int} cellH The height of a cell.
+    * @param {int} spacing The spacing between cells.  Assumed to be 0 if
+    *        not defined.
+    * @method
+    */
+   addSpriteSheet: function(id, imageSrc, cellW, cellH, spacing) {
+      
+      var self = this;
+      spacing = spacing || 0;
+      cellW *= self._scale;
+      cellH *= self._scale;
+      spacing *= self._scale;
+      
+      var image = new Image();
+      if (this._isAlreadyTracked(id)) {
+         return;
+      }
+      this.loadingAssetData[id] = { type: gtp.AssetType.IMAGE };
+      console.log('Adding: ' + id + ' => ' + imageSrc +
+            ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
+            ', callback == ' + (this.callback!==null));
+      image.addEventListener('load', function() {
+         var canvas = gtp.Utils.resize(image, self._scale);
+         var gtpImage = new gtp.Image(canvas);
+         var ss = new gtp.SpriteSheet(gtpImage, cellW, cellH, spacing);
+         self._completed(id, ss);
+      });
+      
+      image.src = imageSrc;
       
    },
    
