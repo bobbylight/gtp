@@ -24,7 +24,6 @@ gtp.AssetLoader.prototype = {
     * Starts loading a JSON resource.
     * @param id {string} The ID to use when retrieving this resource.
     * @param url {string} The URL of the resource.
-    * @method
     */
    addJson: function(id, url) {
       
@@ -56,7 +55,6 @@ gtp.AssetLoader.prototype = {
     * Starts loading an image resource.
     * @param id {string} The ID to use when retrieving this resource.
     * @param imageSrc {string} The URL of the resource.
-    * @method
     */
    addImage: function(id, imageSrc) {
       
@@ -71,7 +69,7 @@ gtp.AssetLoader.prototype = {
             ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
             ', callback == ' + (this.callback!==null));
       image.addEventListener('load', function() {
-         var canvas = gtp.Utils.resize(image, self._scale);
+         var canvas = gtp.ImageUtils.resize(image, self._scale);
          var gtpImage = new gtp.Image(canvas);
          self._completed(id, gtpImage);
       });
@@ -84,7 +82,6 @@ gtp.AssetLoader.prototype = {
     * Starts loading a sound resource.
     * @param id {string} The ID to use when retrieving this resource.
     * @param soundSrc {string} The URL of the resource.
-    * @method
     */
    addSound: function(id, soundSrc) {
       
@@ -121,9 +118,10 @@ gtp.AssetLoader.prototype = {
     * @param {int} cellH The height of a cell.
     * @param {int} spacing The spacing between cells.  Assumed to be 0 if
     *        not defined.
-    * @method
+    * @param {boolean} firstPixelTranslucent If truthy, the pixel at (0, 0)
+    *        is made translucent, along with all other pixels of the same color.
     */
-   addSpriteSheet: function(id, imageSrc, cellW, cellH, spacing) {
+   addSpriteSheet: function(id, imageSrc, cellW, cellH, spacing, firstPixelTranslucent) {
       
       var self = this;
       spacing = spacing || 0;
@@ -140,8 +138,11 @@ gtp.AssetLoader.prototype = {
             ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
             ', callback == ' + (this.callback!==null));
       image.addEventListener('load', function() {
-         var canvas = gtp.Utils.resize(image, self._scale);
+         var canvas = gtp.ImageUtils.resize(image, self._scale);
          var gtpImage = new gtp.Image(canvas);
+         if (firstPixelTranslucent) {
+            gtpImage.makeColorTranslucent(0, 0);
+         }
          var ss = new gtp.SpriteSheet(gtpImage, cellW, cellH, spacing);
          self._completed(id, ss);
       });
@@ -150,6 +151,12 @@ gtp.AssetLoader.prototype = {
       
    },
    
+   /**
+    * Registers all images needed by the TMX map's tilesets to this asset
+    * loader.
+    * 
+    * @param {tiled.TiledMap} map The Tiled map.
+    */
    addTmxMap: function(map) {
       if (map.tilesets && map.tilesets.length) {
          for (var i=0; i<map.tilesets.length; i++) {
@@ -160,6 +167,14 @@ gtp.AssetLoader.prototype = {
       }
    },
    
+   /**
+    * Returns the image corresponding to a Tiled tileset.  This method is
+    * called by the library and is typically not called directly by the
+    * application.
+    * 
+    * @param {tiled.TiledTileset} tileset The tile set.
+    * @return The canvas.
+    */
    getTmxTilesetImage: function(tileset) {
       return this.responses['_tilesetImage_' + tileset.name];
    },
@@ -168,7 +183,6 @@ gtp.AssetLoader.prototype = {
     * Retrieves a resource by ID.
     * @param res {string} The ID of the resource.
     * @return The resource, or null if not found.
-    * @method
     */
    get: function(res) {
       return this.responses[res];
@@ -189,7 +203,6 @@ gtp.AssetLoader.prototype = {
     * Adds a resource.
     * @param res {string} The ID for the resource.
     * @param value {any} The resource value.
-    * @method
     */
    set: function(res, value) {
       this.responses[res] = value;
@@ -220,6 +233,11 @@ gtp.AssetLoader.prototype = {
       }
    },
    
+   /**
+    * Returns whether all assets in thie loader have successfully loaded.
+    * 
+    * @return {boolean} Whether all assets have loaded.
+    */
    isDoneLoading: function() {
       return gtp.Utils.getObjectSize(this.loadingAssetData)===0;
    },

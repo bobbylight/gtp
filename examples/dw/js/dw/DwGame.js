@@ -24,14 +24,14 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          var dx = hero.xOffs;
          var dy = hero.yOffs;
          this._drawMapCount++;
-         if (this._drawMapCount === 10) {
-            this.timer.start('drawMap');
-         }
+//         if (this._drawMapCount === 10) {
+//            this.timer.start('drawMap');
+//         }
          this.map.draw(ctx, centerRow, centerCol, dx, dy);
-         if (this._drawMapCount === 10) {
-            this.timer.endAndLog('drawMap');
-            this._drawMapCount = 0;
-         }
+//         if (this._drawMapCount === 10) {
+//            this.timer.endAndLog('drawMap');
+//            this._drawMapCount = 0;
+//         }
       }
    },
    
@@ -40,9 +40,20 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          var hero = game.hero;
          var centerCol = hero.mapCol;
          var dx = hero.xOffs;
-         var xOffs = centerCol*16 - 16/2 + dx/2 - this.getWidth()/2;
-//         console.log('xOffs == ' + xOffs);
+         var tileSize = this.getTileSize();
+         var xOffs = centerCol*tileSize + tileSize/2 + dx - this.getWidth()/2;
          return xOffs;
+      },
+   },
+      
+   getMapYOffs: {
+      value: function() {
+         var hero = game.hero;
+         var centerRow = hero.mapRow;
+         var dy = hero.yOffs;
+         var tileSize = this.getTileSize();
+         var yOffs = centerRow*tileSize + tileSize/2 + dy - this.getHeight()/2;
+         return yOffs;
       }
    },
    
@@ -162,8 +173,9 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function(obj) {
          var index = 0;
          var type = NpcType.MERCHANT_GREEN;//obj.type;
-         var row = obj.y / (16*1);
-         var col = obj.x / (16*1);
+         var tileSize = this.getTileSize();
+         var row = obj.y / tileSize;
+         var col = obj.x / tileSize;
          var dir = Direction.SOUTH;
          var tempDir = obj.dir;
          if (tempDir) {

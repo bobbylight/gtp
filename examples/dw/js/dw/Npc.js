@@ -22,10 +22,10 @@ Npc.prototype = {
       var ss = game.assets.get('npcs');
       var ssRow = this.type;
       var ssCol = 0;
-      
-      var x = this.mapCol * 16;
+      var x = this.mapCol * game.getTileSize();
 x -= game.getMapXOffs();
-      var y = this.mapRow * 16;
+      var y = this.mapRow * game.getTileSize();
+y -= game.getMapYOffs();
       ss.drawSprite(ctx, x,y, ssRow,ssCol);
    },
    

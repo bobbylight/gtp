@@ -71,11 +71,6 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          
          if (!hero.isMoving()) {
             
-            var inc = 1 * game._scale;
-            
-            var maxX = game.map.getPixelWidth() * game._scale;
-            var maxY = game.map.getPixelHeight() * game._scale;
-            
             if (im.isKeyDown(gtp.Keys.UP_ARROW)) {
                hero.tryToMoveUp();
                //this.yOffs = Math.max(this.yOffs-inc, 0);

@@ -14,29 +14,10 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             var self = this;
             var game = this.game;
             
-//            setTimeout(function() {
-//                  game.assets.add('overworld.json', true);
-//                  // TODO: These should be recursively loaded by the TMX map somehow
-//                  game.assets.addImage('tiles', 'maps/tiles.png');
-//                  game.assets.addImage('collision', 'maps/collision.png');
-//                  game.assets.addImage('territories', 'maps/enemy_territory_colors.png');
-//                  
-//                  game.assets.onLoad(function() {
-//                     
-//                     var data = game.assets.get('overworld.json');
-//                     var imagePathModifier = function(imagePath) {
-//                        return imagePath.replace('../', '');
-//                     };
-//                     game.map = new tiled.TiledMap(data, { imagePathModifier: imagePathModifier });
-//                     game.assets.addTmxMap(game.map);
-//                     game.map.setScale(game._scale);
-//                     game.setState(new RoamingState());
-//                  });
-//            }, 1000);
 setTimeout(function() {
       game.assets.addImage('title', 'res/title.png');
-      game.assets.addImage('hero', 'res/hero.png');
-      game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1);
+      game.assets.addSpriteSheet('hero', 'res/hero.png', 16, 16, 1, true);
+      game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1, true);
       game.assets.addImage('font', 'res/font_10x10.png');
       game.assets.addJson('overworld.json');
       game.assets.addJson('brecconary.json');

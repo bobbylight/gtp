@@ -101,8 +101,7 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
          
          // TODO: Move SpriteSheets to AssetManager or somewhere else
          if (!this.spriteSheet) {
-            var gtpImage = game.assets.get('hero');
-            this.spriteSheet = new gtp.SpriteSheet(gtpImage, tileSize, tileSize, game._scale);
+            this.spriteSheet = game.assets.get('hero');
          }
          
          var ssRow = 0, ssCol = 0;

@@ -26,7 +26,7 @@ gtp.Image.prototype = {
       if (this._canvas.width<256 || this._canvas.height<256) {
          var w = Math.max(256, this._canvas.width);
          var h = Math.max(256, this._canvas.height);
-         var canvas2 = gtp.Utils.createCanvas(w, h);
+         var canvas2 = gtp.ImageUtils.createCanvas(w, h);
          var ctx2 = canvas2.getContext('2d');
          ctx2.drawImage(this._canvas, 0,0);
          this._canvas = canvas2;
@@ -76,7 +76,21 @@ gtp.Image.prototype = {
     */
    drawScaled2: function(ctx, srcX,srcY,srcW,srcH, destX,destY,destW,destH) {
       ctx.drawImage(this._canvas, srcX,srcY,srcW,srcH, destX,destY,destW,destH);
+   },
+   
+   /**
+    * Converts a color of a particular type to completely transparent in this
+    * image.
+    * 
+    * @param {int} x The x-coordinate of the pixel whose color to change.  0 will
+    *        be used if this parameter is undefined.
+    * @param {int} y The y-coordinate of the pixel whose color to change.  0 will
+    *        be used if this parameter is undefined.
+    * @return {Image} This image, which has been modified.
+    * @method
+    */
+   makeColorTranslucent: function(x, y) {
+      gtp.ImageUtils.makeColorTranslucent(this._canvas, x, y);
    }
-   
-   
+
 };

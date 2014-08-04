@@ -1,5 +1,13 @@
+/**
+ * @namespace
+ */
 var tiled = tiled || {};
 
+/**
+ * A 2d game map, generated in Tiled.
+ * 
+ * @constructor
+ */
 tiled.TiledMap = function(data, args) {
 	
    this.rowCount = data.height;
@@ -34,6 +42,13 @@ tiled.TiledMap = function(data, args) {
 
 tiled.TiledMap.prototype = {
    
+   /**
+    * Adds a layer to this map.  This method is called internally by the library
+    * and the programmer typically does not need to call it.
+    * 
+    * @param {object} layerData The raw layer data.
+    * @method
+    */
    addLayer: function(layerData) {
       var layer = new tiled.TiledLayer(this, layerData);
       this.layers.push(layer);
@@ -145,14 +160,35 @@ tileCount++;
 //console.log('tileCount === ' + tileCount);
    },
    
+   /**
+    * Returns a layer by name.
+    * 
+    * @param {string} name The name of the layer.
+    * @return {tiled.TiledLayer} The layer, or null if there is no layer with
+    *         that name.
+    * @method
+    */
    getLayer: function(name) {
       return this.layersByName[name];
    },
    
+   /**
+    * Returns a layer by index.
+    * 
+    * @param {int} index The index of the layer.
+    * @return {tiled.TiledLayer} The layer, or null if there is no layer at
+    *         that index.
+    * @method
+    */
    getLayerByIndex: function(index) {
       return this.layers[index];
    },
    
+   /**
+    * Returns the number of layers in this map.
+    * 
+    * @return {int} The number of layers in this map.
+    */
    getLayerCount: function() {
       return this.layers.length;
    },
@@ -215,10 +251,22 @@ tileCount++;
       }
    },
    
+   /**
+    * Returns the pixel width of this map.
+    * 
+    * @return {int} The pixel width of this map.
+    * @method
+    */
    getPixelWidth: function() {
       return this.colCount * this.tileWidth;
    },
    
+   /**
+    * Returns the pixel height of this map.
+    * 
+    * @return {int} The pixel height of this map.
+    * @method
+    */
    getPixelHeight: function() {
       return this.rowCount * this.tileHeight;
    },

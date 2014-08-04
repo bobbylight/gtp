@@ -1,5 +1,9 @@
 var gtp = gtp || {};
 
+/**
+ * Key enumeration used for input.
+ * @member
+ */
 gtp.Keys = Object.freeze({
    
    ENTER: 13,

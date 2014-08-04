@@ -7,9 +7,11 @@ var gtp = gtp || {};
  */
 gtp.Game = function(args) {
    
+   gtp.Utils.initConsole();
+   
    args = args || {};
    this._scale = args.scale || 1;
-   this.canvas = gtp.Utils.createCanvas(args.width, args.height, args.parent);
+   this.canvas = gtp.ImageUtils.createCanvas(args.width, args.height, args.parent);
    
    this.inputManager = new gtp.InputManager();
    this.inputManager.install();
@@ -118,6 +120,9 @@ gtp.Game.prototype = {
    },
    
    setState: function(state) {
+      if (this.state) {
+         this.state.leaving(this);
+      }
       this.state = state;
       this.state.init(this);
    },

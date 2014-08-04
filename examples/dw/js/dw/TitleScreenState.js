@@ -2,6 +2,24 @@ var TitleScreenState = function() {
    this.assetsLoaded = false;
 };
 TitleScreenState.prototype = Object.create(_BaseState.prototype, {
+   
+   init: {
+      value: function(game) {
+         _BaseState.prototype.init.apply(this, arguments);
+         game.canvas.addEventListener('touchstart', this.handleStart, false);
+      }
+   },
+   
+   leaving: {
+      value: function(game) {
+         game.canvas.removeEventListener('touchstart', this.handleStart, false);
+      }
+   },
+   
+handleStart: function() {
+   console.log('yee, touch detected!');
+   this._startGame();
+},
 
    update: {
       value: function(delta) {
@@ -10,9 +28,7 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
          
          var im = game.inputManager;
          if (im.isKeyDown(gtp.Keys.ENTER)) {
-            game.hero.setMapLocation(52, 45);
-            game.setMap('overworld.json');
-            game.setState(new FadeOutInState(this, new RoamingState()));
+            this._startGame();
          }
          
       }
@@ -51,6 +67,14 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
          }
       }
       
+   },
+   
+   _startGame: {
+      value: function() {
+         game.hero.setMapLocation(52, 45);
+         game.setMap('overworld.json');
+         game.setState(new FadeOutInState(this, new RoamingState()));
+      }
    }
    
 });

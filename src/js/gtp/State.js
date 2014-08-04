@@ -10,6 +10,9 @@ gtp.State.prototype = {
       this.game = game;
    },
    
+   leaving: function(game) {
+   },
+   
    update: function(delta) {
       // Subclasses should override
    },
