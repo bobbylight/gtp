@@ -101,6 +101,11 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
                game.audio.playSound('stairs');
             }
          }
+         
+         game.map.npcs.forEach(function(npc) {
+            npc.update(delta);
+         });
+         
       }
    },
    
@@ -110,7 +115,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          game.drawMap(ctx);
          game.hero.render(ctx);
          
-         game.npcs.forEach(function(npc) {
+         game.map.npcs.forEach(function(npc) {
             npc.render(ctx);
          });
          

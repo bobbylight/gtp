@@ -153,10 +153,10 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             map.removeLayer("npcs");
          }
          
-         this.npcs = newNpcs;
-         for (i=0; i<this.npcs.length; i++) {
-            npc = this.npcs[i];
-            map.getLayer("collisionLayer").setData(npc.row, npc.col, 1);
+         map.npcs = newNpcs;
+         for (i=0; i<map.npcs.length; i++) {
+            npc = map.npcs[i];
+            map.getLayer("collisionLayer").setData(npc.mapRow, npc.mapCol, 1);
          }
          
 //         // Hide layers we aren't interested in seeing.

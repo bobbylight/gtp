@@ -26,6 +26,7 @@ Npc.prototype = {
 x -= game.getMapXOffs();
       var y = this.mapRow * game.getTileSize();
 y -= game.getMapYOffs();
+      ssCol += Hero.STEP_INC;
       ss.drawSprite(ctx, x,y, ssRow,ssCol);
    },
    

@@ -32,7 +32,7 @@ module.exports = function(grunt) {
    },
 
    useminPrepare: {
-      html: 'src/index.html',
+      html: 'examples/dw/index.html',
       options: {
          dest: 'dist'
       }

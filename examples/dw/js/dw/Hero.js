@@ -13,9 +13,13 @@ function Hero(args) {
    this.walkTick = 0;
    
    this._stepTick = 0;
-   this._stepInc = 0;
 }
 
+Hero.STEP_INC = 0;
+
+/**
+ * TODO: This might not be used.  Remove if so.
+ */
 Hero.MAX_WALK_TICK = 0;
    
 Hero.prototype = Object.create(BattleEntity.prototype, {
@@ -42,10 +46,10 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
          this._stepTick += delta;
          if (this._stepTick>=600) {
             this._stepTick -= 600;
-            this._stepInc = 0;
+            Hero.STEP_INC = 0;
          }
          else if (this._stepTick>=300) {
-            this._stepInc = 1;
+            Hero.STEP_INC = 1;
          }
          
          if (this.isMoving()) {
@@ -119,7 +123,7 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
                ssCol = 2;
                break;
          }
-         ssCol += this._stepInc;
+         ssCol += Hero.STEP_INC;
          
          var x = (game.canvas.width - tileSize)/2;
          var y = (game.canvas.height - tileSize)/2;
@@ -162,9 +166,11 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
          else if (data==361) { // i.e., not an NPC
             game.bump();
          }
+         /*
          else {
             console.log("Can't walk (" + row + ", " + col + "): " + data);
          }
+         */
          return canWalk;
       }
    },
