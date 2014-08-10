@@ -25,8 +25,8 @@ module.exports = function(grunt) {
    copy: {
       main: {
          expand: true,
-         cwd: 'src/',
-         src: [ '*.html', '*.json', 'maps/**' ],
+         cwd: 'examples/dw',
+         src: [ '*.html', '*.json', 'css/**', '**/maps/**', 'res/**' ],
          dest: 'dist/',
       },
    },
@@ -103,7 +103,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-usemin');
 
   grunt.registerTask('test', ['jshint'/*, 'qunit'*/]);
-  grunt.registerTask('default', ['jshint', 'copy', 'useminPrepare', 'uglify', 'usemin', 'json-minify']);
+  grunt.registerTask('default', ['jshint', 'copy', 'useminPrepare', 'concat', 'uglify', 'usemin', 'json-minify']);
   grunt.registerTask('doc', ['jsdoc']);
   grunt.registerTask('make-src-zip', ['compress']);
 
