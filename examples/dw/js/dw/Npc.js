@@ -13,6 +13,21 @@ function Npc(args) {
 
 Npc.prototype = {
    
+   // TODO: Change NPC image to remove the need for this
+   _computeColumn: function() {
+      switch (this.direction) {
+         case Direction.NORTH:
+            return 4;
+         case Direction.EAST:
+            return 2;
+         default:
+         case Direction.SOUTH:
+            return 0;
+         case Direction.WEST:
+            return 6;
+      }
+   },
+   
    update: function(delta) {
       // TODO
    },
@@ -21,7 +36,7 @@ Npc.prototype = {
       
       var ss = game.assets.get('npcs');
       var ssRow = this.type;
-      var ssCol = 0;
+      var ssCol = this._computeColumn();
       var x = this.mapCol * game.getTileSize();
 x -= game.getMapXOffs();
       var y = this.mapRow * game.getTileSize();

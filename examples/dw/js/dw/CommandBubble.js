@@ -16,14 +16,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
                break;
       
             case 0: // TALK
-      //         Npc npc = engine.getNpcHeroIsFacing();
-      //         if (npc!=null) {
-      //            npc.setDirection(engine.getHero().getDirection().opposite());
-      //            engine.addScript("test");
-      //         }
-      //         else {
-      //            engine.addScript("nobodyToTalkTo");
-      //         }
+               game.talkToNpc();
                break;
       
             case 1: // STATUS

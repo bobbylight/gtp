@@ -259,8 +259,50 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function() {
          console.log('Start a random encounter!');
       }
+   },
+   
+   getNpcHeroIsFacing: {
+      value: function() {
+         var row = this.hero.mapRow, col = this.hero.mapCol;
+         switch (this.hero.direction) {
+            case Direction.NORTH:
+               row--;
+               break;
+            case Direction.SOUTH:
+               row++;
+               break;
+            case Direction.EAST:
+               col++;
+               break;
+            case Direction.WEST:
+               col--;
+               break;
+         }
+         for (var i=0; i<this.map.npcs.length; i++) {
+            var npc = this.map.npcs[i];
+            if (row===npc.mapRow && col===npc.mapCol) {
+               return npc;
+            }
+         }
+         return null;
+      }
+   },
+   
+   talkToNpc: {
+      value: function() {
+         var npc = this.getNpcHeroIsFacing();
+         if (npc) {
+            //var newNpcDir = this.getHero().direction.opposite();
+            var newNpcDir = (this.hero.direction + 2) % 4;
+            npc.direction = newNpcDir;
+            console.log(new Brecconary().npcText('foo'));
+         }
+         else {
+            console.log(new Brecconary().npcText('foo'));
+         }
+      }
    }
-
+   
 });
 
 DwGame.prototype.constructor = DwGame;
