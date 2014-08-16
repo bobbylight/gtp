@@ -122,6 +122,10 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          if (this._substate===_RoamingSubState.MENU) {
             this._commandBubble.paint(ctx);
          }
+         
+         if (game._showTextBubble) {
+            game._textBubble.paint(ctx);
+         }
       }
    },
    

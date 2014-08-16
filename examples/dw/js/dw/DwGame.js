@@ -6,6 +6,9 @@ var DwGame = function(args) {
    this.npcs = [];
    
    this._bumpSoundDelay = 0;
+   
+   this._textBubble = new TextBubble(this);
+   this._showTextBubble = false;
 };
 
 DwGame.prototype = Object.create(gtp.Game.prototype, {
@@ -295,10 +298,12 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             //var newNpcDir = this.getHero().direction.opposite();
             var newNpcDir = (this.hero.direction + 2) % 4;
             npc.direction = newNpcDir;
-            console.log(new Brecconary().npcText('foo'));
+            this._textBubble.setText(new Brecconary().npcText('foo'));
+            this._showTextBubble = true;
          }
          else {
-            console.log(new Brecconary().npcText('foo'));
+            this._textBubble.setText(new Brecconary().npcText('bar'));
+            this._showTextBubble = true;
          }
       }
    }
