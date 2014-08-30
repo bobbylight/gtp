@@ -12,6 +12,7 @@ gtp.ImageUtils = function() {
  * @method
  */
 gtp.ImageUtils.resize = function(img, scale) {
+   'use strict';
     
    // The original image is drawn into an offscreen canvas of the same size
    // and copied, pixel by pixel into another offscreen canvas with the 
@@ -56,6 +57,7 @@ gtp.ImageUtils.resize = function(img, scale) {
 };
 
 gtp.ImageUtils.createCanvas = function(width, height, parentDiv) {
+   'use strict';
    
    var canvas = document.createElement('canvas');
    canvas.width = width;
@@ -74,6 +76,7 @@ gtp.ImageUtils.createCanvas = function(width, height, parentDiv) {
 };
 
 gtp.ImageUtils.prepCanvas = function(canvas) {
+   'use strict';
    var ctx = canvas.getContext('2d');
    ctx.imageSmoothingEnabled = false;
    ctx.mozImageSmoothingEnabled = false;
@@ -94,6 +97,7 @@ gtp.ImageUtils.prepCanvas = function(canvas) {
  * @method
  */
 gtp.ImageUtils.makeColorTranslucent = function(canvas, x, y) {
+   'use strict';
    
    x = x || 0;
    y = y || 0;

@@ -6,6 +6,7 @@ var gtp = gtp || {};
  * @constructor
  */
 gtp.AudioSystem = function() {
+   'use strict';
    this._soundBuffers = {};
 };
 
@@ -16,9 +17,10 @@ gtp.AudioSystem.prototype = {
     * @method
     */
    init: function() {
+      'use strict';
       try {
          window.AudioContext = window.AudioContext || window.webkitAudioContext;
-         this.context = new AudioContext();
+         this.context = new window.AudioContext();
          this._initialized = true;
       } catch (e) {
          console.error('The Web Audio API is not supported in this browser.');
@@ -33,6 +35,7 @@ gtp.AudioSystem.prototype = {
     * @method
     */
    addSound: function(id, buffer) {
+      'use strict';
       if (this.context) {
          this._soundBuffers[id] = buffer;
       }
@@ -46,6 +49,7 @@ gtp.AudioSystem.prototype = {
     * @method
     */
    isInitialized: function() {
+      'use strict';
       return this._initialized;
    },
    
@@ -55,6 +59,7 @@ gtp.AudioSystem.prototype = {
     * @method
     */
    playSound: function(id) {
+      'use strict';
       if (this.context) {
          var source = this.context.createBufferSource();
          source.buffer = this._soundBuffers[id];

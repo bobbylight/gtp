@@ -1,4 +1,4 @@
-var NpcType = Object.freeze({
+NpcType = Object.freeze({
    SOLDIER_GRAY: 0,
    MAN_BLUE: 1,
    WOMAN_BLUE: 2,

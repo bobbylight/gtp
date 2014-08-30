@@ -6,6 +6,7 @@ var gtp = gtp || {};
  * @constructor
  */
 gtp.Game = function(args) {
+   'use strict';
    
    gtp.Utils.initConsole();
    
@@ -44,6 +45,7 @@ gtp.Game.prototype = {
     * Starts the game loop.
     */
    start: function() {
+      'use strict';
       // e.g. Dojo's lang.hitch()
       var self = this;
       var callback = function() {
@@ -54,6 +56,7 @@ gtp.Game.prototype = {
    },
    
    _tick: function() {
+      'use strict';
       
       if (this._statusMessage) {
          var time = new Date().getTime();
@@ -79,6 +82,7 @@ gtp.Game.prototype = {
     * logic is handled by game states.
     */
    update: function() {
+      'use strict';
       
       var im = this.inputManager;
       if (im.isKeyDown(gtp.Keys.SHIFT)) {
@@ -93,6 +97,7 @@ gtp.Game.prototype = {
    },
    
    render: function() {
+      'use strict';
       
       var ctx = this.canvas.getContext('2d');
       this.state.render(ctx);
@@ -106,20 +111,24 @@ gtp.Game.prototype = {
    },
    
    getHeight: function() {
+      'use strict';
       return this.canvas.height;
    },
    
    getWidth: function() {
+      'use strict';
       return this.canvas.width;
    },
    
    randomInt: function(max) {
+      'use strict';
       var min = 0;
       // Using Math.round() would give a non-uniform distribution!
       return Math.floor(Math.random() * (max - min + 1) + min);
    },
    
    setState: function(state) {
+      'use strict';
       if (this.state) {
          this.state.leaving(this);
       }
@@ -128,6 +137,7 @@ gtp.Game.prototype = {
    },
    
    _renderStatusMessage: function(ctx) {
+      'use strict';
       var x = 10;
       var y = this.canvas.height -30;
       ctx.font = 'Dragon Warrior 2';//'10pt Arial';
@@ -136,6 +146,7 @@ gtp.Game.prototype = {
    },
    
    _renderFps: function(ctx) {
+      'use strict';
       
       this.frames++;
       var now = new Date().getTime();
@@ -157,17 +168,20 @@ gtp.Game.prototype = {
    },
    
    setStatusMessage: function(message) {
+      'use strict';
       this._statusMessage = message;
       this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
       this._statusMessageTime = new Date().getTime() + 100;
    },
    
    toggleShowFps: function() {
+      'use strict';
       this.showFps = !this.showFps;
       this.setStatusMessage('FPS display: ' + (this.showFps ? 'on' : 'off'));
    },
    
    clearScreen: function(clearScreenColor) {
+      'use strict';
       var color = clearScreenColor || this.clearScreenColor;
       var ctx = this.canvas.getContext('2d');
       ctx.fillStyle = color;

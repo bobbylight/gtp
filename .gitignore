@@ -3,4 +3,4 @@ doc
 node_modules
 .tmp
 dist
-
+Thumbs.db

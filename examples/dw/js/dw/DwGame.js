@@ -1,4 +1,5 @@
 var DwGame = function(args) {
+   'use strict';
    gtp.Game.call(this, args);
    this.map = null;
    this._drawMapCount = 0;
@@ -6,21 +7,20 @@ var DwGame = function(args) {
    this.npcs = [];
    
    this._bumpSoundDelay = 0;
-   
-   this._textBubble = new TextBubble(this);
-   this._showTextBubble = false;
 };
 
 DwGame.prototype = Object.create(gtp.Game.prototype, {
 
    update: {
       value: function() {
+         'use strict';
          gtp.Game.prototype.update.call(this);
       }
    },
    
    drawMap: {
       value: function(ctx) {
+         'use strict';
          var hero = game.hero;
          var centerCol = hero.mapCol;
          var centerRow = hero.mapRow;
@@ -40,6 +40,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    getMapXOffs: {
       value: function() {
+         'use strict';
          var hero = game.hero;
          var centerCol = hero.mapCol;
          var dx = hero.xOffs;
@@ -51,6 +52,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       
    getMapYOffs: {
       value: function() {
+         'use strict';
          var hero = game.hero;
          var centerRow = hero.mapRow;
          var dy = hero.yOffs;
@@ -65,7 +67,8 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
     */
    loadMap: {
       value: function(mapName, newRow, newCol) {
-         newMap = this.getMapImpl(mapName);
+         'use strict';
+//         newMap = this.getMapImpl(mapName);
          this.newRow = newRow;
          this.newCol = newCol;
          this.audio.playSound('stairs');
@@ -81,7 +84,8 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    getMapImpl: {
       value: function(mapName) {
-      
+         'use strict';
+         
          var map = null;
          
          map = this.assets.get(mapName + '.json');
@@ -93,6 +97,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    setMap: {
       value: function(assetName) {
+         'use strict';
          console.log('Setting map to: ' + assetName);
          this.map = this.maps[assetName];
       }
@@ -100,6 +105,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    initLoadedMap: {
       value: function(asset) {
+         'use strict';
          
          var data = this.assets.get(asset);
          var imagePathModifier = function(imagePath) {
@@ -125,6 +131,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    _adjustGameMap: { // TODO: Wrap class in closure and hide this function
       value: function(map) {
+         'use strict';
 
          var i, npc;
          
@@ -174,7 +181,8 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    _parseNpc: {
       value: function(obj) {
-         var index = 0;
+         'use strict';
+         //var index = 0;
          var type = NpcType.MERCHANT_GREEN;//obj.type;
          var tileSize = this.getTileSize();
          var row = obj.y / tileSize;
@@ -197,6 +205,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
 
    toggleShowCollisionLayer: {
       value: function() {
+         'use strict';
          var layer = game.map.getLayer('collisionLayer');
          layer.visible = !layer.visible;
          this.setStatusMessage(layer.visible ?
@@ -206,6 +215,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    toggleShowTerritoryLayer: {
       value: function() {
+         'use strict';
          var layer = game.map.getLayer('enemyTerritoryLayer');
          layer.visible = !layer.visible;
          this.setStatusMessage(layer.visible ?
@@ -215,18 +225,21 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    getTileSize: {
       value: function() {
+         'use strict';
          return 16 * this._scale;
       }
    },
    
    getCollisionLayer: {
       value: function() {
+         'use strict';
          return game.map.getLayer('collisionLayer');
       }
    },
    
    bump: {
       value: function() {
+         'use strict';
          if (this._gameTime>this._bumpSoundDelay) {
             this.audio.playSound('bump');
             this._bumpSoundDelay = this._gameTime + 300;
@@ -236,36 +249,42 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    setNpcsPaused: {
       value: function(paused) {
+         'use strict';
          this.npcsPaused = paused;
       }
    },
    
    stringHeight: {
       value: function() {
+         'use strict';
          return this.assets.get('font').cellH;//charHeight();
       }
    },
    
    stringWidth: {
       value: function(str) {
+         'use strict';
          return str ? (str.length*this.assets.get('font').cellW) : 0;
       }
    },
    
    drawString: {
       value: function(text, x, y) {
+         'use strict';
          this.assets.get('font').drawString(text, x, y);
       }
    },
    
    startRandomEncounter: {
       value: function() {
+         'use strict';
          console.log('Start a random encounter!');
       }
    },
    
    getNpcHeroIsFacing: {
       value: function() {
+         'use strict';
          var row = this.hero.mapRow, col = this.hero.mapCol;
          switch (this.hero.direction) {
             case Direction.NORTH:
@@ -288,23 +307,6 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             }
          }
          return null;
-      }
-   },
-   
-   talkToNpc: {
-      value: function() {
-         var npc = this.getNpcHeroIsFacing();
-         if (npc) {
-            //var newNpcDir = this.getHero().direction.opposite();
-            var newNpcDir = (this.hero.direction + 2) % 4;
-            npc.direction = newNpcDir;
-            this._textBubble.setText(new Brecconary().npcText('foo'));
-            this._showTextBubble = true;
-         }
-         else {
-            this._textBubble.setText(new Brecconary().npcText('bar'));
-            this._showTextBubble = true;
-         }
       }
    }
    

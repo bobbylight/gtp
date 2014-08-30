@@ -10,6 +10,7 @@ var gtp = gtp || {};
  * @constructor
  */
 gtp.Image = function(canvas) {
+   'use strict';
    this._canvas = canvas;
    this.width = this._canvas.width;
    this.height = this._canvas.height;
@@ -23,6 +24,7 @@ gtp.Image.prototype = {
     * and vice versa, unless all canvases are >= 256x256.
     */
    _ensure256Square: function() {
+      'use strict';
       if (this._canvas.width<256 || this._canvas.height<256) {
          var w = Math.max(256, this._canvas.width);
          var h = Math.max(256, this._canvas.height);
@@ -41,6 +43,7 @@ gtp.Image.prototype = {
     * @param {int} y The y-coordinate at which to draw.
     */
    draw: function(ctx, x, y) {
+      'use strict';
       ctx.drawImage(this._canvas, x, y);
    },
    
@@ -56,6 +59,7 @@ gtp.Image.prototype = {
     *              drawing.
     */
    drawScaled: function(ctx, x, y, w, h) {
+      'use strict';
       ctx.drawImage(this._canvas, x, y, w, h);
    },
    
@@ -75,6 +79,7 @@ gtp.Image.prototype = {
     *              drawing.
     */
    drawScaled2: function(ctx, srcX,srcY,srcW,srcH, destX,destY,destW,destH) {
+      'use strict';
       ctx.drawImage(this._canvas, srcX,srcY,srcW,srcH, destX,destY,destW,destH);
    },
    
@@ -90,6 +95,7 @@ gtp.Image.prototype = {
     * @method
     */
    makeColorTranslucent: function(x, y) {
+      'use strict';
       gtp.ImageUtils.makeColorTranslucent(this._canvas, x, y);
    }
 

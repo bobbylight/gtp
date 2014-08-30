@@ -7,6 +7,7 @@ gtp.State = function() {
 gtp.State.prototype = {
    
    init: function(game) {
+      'use strict';
       this.game = game;
    },
    

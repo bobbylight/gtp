@@ -1,6 +1,7 @@
 var gtp = gtp || {};
 
 gtp.BitmapFont = function(canvas, cellW, cellH, spacing) {
+   'use strict';
    gtp.SpriteSheet.apply(this, arguments);
 };
 
@@ -8,6 +9,7 @@ gtp.BitmapFont.prototype = Object.create(gtp.SpriteSheet.prototype, {
    
    drawString: {
       value: function(str, x, y) {
+         'use strict';
          
          var glyphCount = this.size;
          var ctx = game.canvas.getContext('2d');

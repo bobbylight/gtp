@@ -1,4 +1,5 @@
 function Bubble(title, x, y, w, h) {
+   'use strict';
    this.title = title;
    var scale = 1;//game._scale;
    this.x = x * scale;
@@ -16,20 +17,22 @@ Bubble.FONT_WIDTH = 16; // 8 * SCALE; TODO
 Bubble.prototype = {
    
    _breakApart: function(text, w) {
-   
+      'use strict';
+      
       var lines = [];
       
       // Newlines are automatic line breaks
       var lineList1 = text.split('\n');
       
       for (var i=0; i<lineList1.length; i++) {
-         this._breakApartLine(line, w, lines);
+         this._breakApartLine(lineList1[i], w, lines);
       }
       
       return lines;
    },
    
    _breakApartLine: function(line, w, lines) {
+      'use strict';
       
       var optimal = Math.floor(w / Bubble.FONT_WIDTH);
       
@@ -51,6 +54,7 @@ Bubble.prototype = {
    },
    
    paint: function(ctx) {
+      'use strict';
       
       var scale = game._scale;
       var fontHeight = game.stringHeight();
@@ -79,10 +83,12 @@ Bubble.prototype = {
    },
    
    getXMargin: function() {
+      'use strict';
       return 8 * game._scale;
    },
    
    getYMargin: function() {
+      'use strict';
       return 8 * game._scale;
    },
    

@@ -1,4 +1,5 @@
 function CommandBubble() {
+   'use strict';
    var scale = game._scale;
    Bubble.call(this, "COMMAND", 90*scale, 2*scale, 140*scale, 90*scale);
    this.selection = 0;
@@ -8,6 +9,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
    
    handleCommandChosen: {
       value: function(/*RoamingState*/ screen) {
+         'use strict';
          
          switch (this.selection) {
       
@@ -16,7 +18,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
                break;
       
             case 0: // TALK
-               game.talkToNpc();
+               screen.talkToNpc();
                break;
       
             case 1: // STATUS
@@ -48,6 +50,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
    handleInput: {
       
       value: function() {
+         'use strict';
          
          var im = game.inputManager;
          
@@ -88,6 +91,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
    paintContent: {
       
       value: function(ctx, y) {
+         'use strict';
       
          var SCALE = game._scale;
          var x = this.x + 20*SCALE;
@@ -119,6 +123,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
    
    reset: {
       value: function() {
+         'use strict';
          this.selection = 0;
       }
    }

@@ -8,6 +8,7 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
    
    handleDefaultKeys: {
       value: function() {
+         'use strict';
          
          var im = this.game.inputManager;
          

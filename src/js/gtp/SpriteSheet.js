@@ -1,6 +1,7 @@
 var gtp = gtp || {};
 
 gtp.SpriteSheet = function(gtpImage, cellW, cellH, spacing) {
+   'use strict';
    this.gtpImage = gtpImage;
    this.cellW = cellW;
    this.cellH = cellH;
@@ -21,6 +22,7 @@ gtp.SpriteSheet = function(gtpImage, cellW, cellH, spacing) {
 gtp.SpriteSheet.prototype = {
    
    drawSprite: function(ctx, x, y, row, col) {
+      'use strict';
       var cellW = this.cellW;
       var cellH = this.cellH;
       var srcX = (cellW + this.spacing) * col;//(col-1);
@@ -30,6 +32,7 @@ gtp.SpriteSheet.prototype = {
    },
    
    drawByIndex: function(ctx, x, y, index) {
+      'use strict';
       var row = Math.floor(index / this.colCount);
       var col = Math.floor(index % this.colCount);
       this.drawSprite(ctx, x, y, row, col);

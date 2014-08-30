@@ -1,17 +1,18 @@
 var LoadingState = function() {
+   'use strict';
    this.assetsLoaded = false;
 };
 LoadingState.prototype = Object.create(_BaseState.prototype, {
 
    update: {
       value: function(delta) {
+         'use strict';
          
          this.handleDefaultKeys();
          
          if (!this.assetsLoaded) {
             
             this.assetsLoaded = true;
-            var self = this;
             var game = this.game;
             
 setTimeout(function() {
@@ -44,6 +45,7 @@ setTimeout(function() {
    
    render: {
       value: function(ctx) {
+         'use strict';
          
          var game = this.game;
          game.clearScreen('rgb(0,0,255)');

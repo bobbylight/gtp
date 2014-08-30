@@ -1,6 +1,7 @@
 var tiled = tiled || {};
 
 tiled.TiledTileset = function(data, imagePathModifier) {
+   'use strict';
    this.firstgid = data.firstgid;
    this.image = data.image;
    if (imagePathModifier) {
@@ -19,6 +20,7 @@ tiled.TiledTileset = function(data, imagePathModifier) {
 tiled.TiledTileset.prototype = {
    
    setScale: function(scale) {
+      'use strict';
       this.imageWidth *= scale;
       this.imageHeight *= scale;
       this.tileWidth *= scale;

@@ -9,6 +9,7 @@ var tiled = tiled || {};
  * @constructor
  */
 tiled.TiledMap = function(data, args) {
+   'use strict';
 	
    this.rowCount = data.height;
    this.colCount = data.width;
@@ -50,6 +51,7 @@ tiled.TiledMap.prototype = {
     * @method
     */
    addLayer: function(layerData) {
+      'use strict';
       var layer = new tiled.TiledLayer(this, layerData);
       this.layers.push(layer);
       this.layersByName[layer.name] = layer;
@@ -60,6 +62,7 @@ tiled.TiledMap.prototype = {
    },
    
    draw: function(ctx, centerRow, centerCol, dx, dy) {
+      'use strict';
       
       dx = dx || 0;
       dy = dy || 0;
@@ -169,6 +172,7 @@ tileCount++;
     * @method
     */
    getLayer: function(name) {
+      'use strict';
       return this.layersByName[name];
    },
    
@@ -181,6 +185,7 @@ tileCount++;
     * @method
     */
    getLayerByIndex: function(index) {
+      'use strict';
       return this.layers[index];
    },
    
@@ -190,10 +195,12 @@ tileCount++;
     * @return {int} The number of layers in this map.
     */
    getLayerCount: function() {
+      'use strict';
       return this.layers.length;
    },
    
    _getImageForGid: function(gid) {
+      'use strict';
       var tilesetCount = this.tilesets.length;
       for (var i=0; i<tilesetCount; i++) {
          if (this.tilesets[i].firstgid>gid) {
@@ -204,6 +211,7 @@ tileCount++;
    },
    
    drawTile: function(ctx, x,y, value, layer) {
+      'use strict';
       
       if (value<=0) { // 0 => no tile to draw
          return;
@@ -241,6 +249,7 @@ tileCount++;
    },
    
    setScale: function(scale) {
+      'use strict';
       this.tileWidth *= scale;
       this.tileHeight *= scale;
       this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
@@ -258,6 +267,7 @@ tileCount++;
     * @method
     */
    getPixelWidth: function() {
+      'use strict';
       return this.colCount * this.tileWidth;
    },
    
@@ -268,6 +278,7 @@ tileCount++;
     * @method
     */
    getPixelHeight: function() {
+      'use strict';
       return this.rowCount * this.tileHeight;
    },
    
@@ -278,12 +289,13 @@ tileCount++;
     * @method
     */
    removeLayer: function(layerName) {
+      'use strict';
       for (var i=0; i<this.layers.length; i++) {
          if (this.layers[i].name===layerName) {
             this.layers.splice(i, 1);
             delete this.layersByName[layerName];
             for (var j=0; j<this.objectGroups.length; j++) {
-               if (this.objectGroups[j].name === layerNam) {
+               if (this.objectGroups[j].name === layerName) {
                   delete this.objectGroups[j];
                }
             }

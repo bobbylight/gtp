@@ -1,6 +1,7 @@
 var tiled = tiled || {};
 
 tiled.TiledObject = function(data) {
+   'use strict';
    gtp.Utils.mixin(data, this);
    this.properties = this.properties || {};
    this.gid = this.gid || -1;
@@ -13,7 +14,8 @@ this.height *= game._scale;
 tiled.TiledObject.prototype = {
    
    intersects: function(ox, oy, ow, oh) {
-   console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh + ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
+      'use strict';
+      console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh + ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
       var tw = this.width;
       var th = this.height;
       var rw = ow;

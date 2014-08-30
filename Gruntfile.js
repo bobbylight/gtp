@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+   'use strict';
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -46,16 +47,11 @@ module.exports = function(grunt) {
 //    },
 
     jshint: {
-      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js', 'examples/**/js/**/*.js'],
-//      options: {
-//        // options here to override JSHint defaults
-//        globals: {
-//          jQuery: true,
-//          console: true,
-//          module: true,
-//          document: true
-//        }
-//      }
+      //files: ['Gruntfile.js', 'src/**/*.js', 'examples/**/js/**/*.js'],
+      files: ['src/**/*.js', 'examples/dw/js/**/*.js'],
+      options: {
+         jshintrc: '.jshintrc'
+      }
     },
     
    'json-minify': {

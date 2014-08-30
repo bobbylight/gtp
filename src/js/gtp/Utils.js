@@ -14,6 +14,7 @@ gtp.Utils = function() {
  * @return {int} The number of elements in the object.
  */
 gtp.Utils.getObjectSize = function(obj) {
+   'use strict';
    var size = 0;
    for (var key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -30,6 +31,7 @@ gtp.Utils.getObjectSize = function(obj) {
  * @param {object} target The object that will receive the new properties.
  */
 gtp.Utils.mixin = function(source, target) {
+   'use strict';
    for (var prop in source) {
       if (source.hasOwnProperty(prop)) {
          if (!target[prop]) {
@@ -43,6 +45,7 @@ gtp.Utils.mixin = function(source, target) {
  * Defines console functions for IE9 and other braindead browsers.
  */
 gtp.Utils.initConsole = function() {
+   'use strict';
    if (!window.console) {
       var noOp = function() {};
       window.console = {

@@ -1,6 +1,7 @@
 var tiled = tiled || {};
 
 tiled.TiledLayer = function(map, data) {
+   'use strict';
 	
 	this.map = map;
 	this.name = data.name;
@@ -18,6 +19,7 @@ tiled.TiledLayer = function(map, data) {
 tiled.TiledLayer.prototype = {
    
    getData: function(row, col) {
+      'use strict';
       if (!this.data) { // An object layer
          return -1;
       }
@@ -26,6 +28,7 @@ tiled.TiledLayer.prototype = {
    },
    
    setData: function(row, col, value) {
+      'use strict';
       if (!this.data) { // An object layer
          return false;
       }
@@ -34,10 +37,12 @@ tiled.TiledLayer.prototype = {
    },
    
    getObjectByName: function(name) {
+      'use strict';
       return this.objectsByName ? this.objectsByName[name] : null;
    },
    
    getObjectIntersecting: function(x, y, w, h) {
+      'use strict';
       if (this.objects) {
          for (var i=0; i<this.objects.length; i++) {
             var obj = this.objects[i];
@@ -50,10 +55,12 @@ tiled.TiledLayer.prototype = {
    },
    
    isObjectGroup: function() {
+      'use strict';
       return this.type === 'objectgroup';
    },
    
    _setObjects: function(objects) {
+      'use strict';
       if (objects) {
          this.objects = [];
          this.objectsByName = {};

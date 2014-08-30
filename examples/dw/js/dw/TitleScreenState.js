@@ -1,10 +1,12 @@
 var TitleScreenState = function() {
+   'use strict';
    this.assetsLoaded = false;
 };
 TitleScreenState.prototype = Object.create(_BaseState.prototype, {
    
    init: {
       value: function(game) {
+         'use strict';
          _BaseState.prototype.init.apply(this, arguments);
          game.canvas.addEventListener('touchstart', this.handleStart, false);
       }
@@ -12,17 +14,22 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
    
    leaving: {
       value: function(game) {
+         'use strict';
          game.canvas.removeEventListener('touchstart', this.handleStart, false);
       }
    },
    
-handleStart: function() {
-   console.log('yee, touch detected!');
-   this._startGame();
+handleStart: {
+   value: function() {
+      'use strict';
+      console.log('yee, touch detected!');
+      this._startGame();
+   }
 },
 
    update: {
       value: function(delta) {
+         'use strict';
          
          this.handleDefaultKeys();
          
@@ -36,6 +43,7 @@ handleStart: function() {
    
    render: {
       value: function(ctx) {
+         'use strict';
          
          var game = this.game;
          game.clearScreen();
@@ -54,6 +62,7 @@ handleStart: function() {
    _adjustGameMap: {
       
       value: function() {
+         'use strict';
          
          var map = game.map;
          
@@ -71,6 +80,7 @@ handleStart: function() {
    
    _startGame: {
       value: function() {
+         'use strict';
          game.hero.setMapLocation(52, 45);
          game.setMap('overworld.json');
          game.setState(new FadeOutInState(this, new RoamingState()));

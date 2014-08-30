@@ -2,6 +2,7 @@
  * Fades one state out and another state in.
  */
 function FadeOutInState(leavingState, enteringState, transitionLogic, timeMillis) {
+   'use strict';
    this._leavingState = leavingState;
    this._enteringState = enteringState;
    this._transitionLogic = transitionLogic;
@@ -15,6 +16,7 @@ FadeOutInState.prototype = Object.create(gtp.State.prototype, {
    
    update: {
       value: function(delta) {
+         'use strict';
          
 //         console.log('delta === ' + delta);
          this._curTime += delta;
@@ -46,6 +48,7 @@ FadeOutInState.prototype = Object.create(gtp.State.prototype, {
    
    render: {
       value: function(ctx) {
+         'use strict';
          
          var game = this.game;
          game.clearScreen();

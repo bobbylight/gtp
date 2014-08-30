@@ -1,21 +1,21 @@
 var _RoamingSubState = Object.freeze({
    ROAMING: 0,
-   MENU: 1
+   MENU: 1,
+   TALKING: 2
 });
 
 var RoamingState = function() {
+   'use strict';
+   
    this._substate = _RoamingSubState.ROAMING;
    
    this._updateMethods = {};
    this._updateMethods[_RoamingSubState.ROAMING] = this._updateRoaming;
    this._updateMethods[_RoamingSubState.MENU] = this._updateMenu;
+   this._updateMethods[_RoamingSubState.TALKING] = this._updateTalking;
    
-   var margin = 10;
-   var x = margin;
-   var w = game.canvas.width - 2*margin;
-   var h = 150;
-   var y = game.canvas.height - h - margin;
-   this._textBubble = new Bubble('Hello', x, y, w, h);
+   this._textBubble = new TextBubble(game);
+   this._showTextBubble = false;
    
    this._commandBubble = new CommandBubble();
 };
@@ -29,7 +29,8 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
 
    update: {
       value: function(delta) {
-         
+         'use strict';
+
          this.handleDefaultKeys();
          
          game.hero.update(delta);
@@ -45,8 +46,9 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
    
    _updateMenu: {
       value: function(delta) {
+         'use strict';
          
-         var im = game.inputManager;
+         //var im = game.inputManager;
          var done = this._commandBubble.handleInput();
          if (done) {
             this._commandBubble.handleCommandChosen(this);
@@ -57,6 +59,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
    
    _updateRoaming: {
       value: function(delta) {
+         'use strict';
          
          var hero = game.hero;
          var im = game.inputManager;
@@ -109,8 +112,21 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
       }
    },
    
+   _updateTalking: {
+      value: function(delta) {
+         'use strict';
+         
+         var done = this._textBubble.handleInput();
+         if (done) {
+            this.startRoaming();
+            return;
+         }
+      }
+   },
+   
    render: {
       value: function(ctx) {
+         'use strict';
          
          game.drawMap(ctx);
          game.hero.render(ctx);
@@ -123,16 +139,38 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             this._commandBubble.paint(ctx);
          }
          
-         if (game._showTextBubble) {
-            game._textBubble.paint(ctx);
+         if (this._showTextBubble) {
+            this._textBubble.paint(ctx);
          }
       }
    },
    
    startRoaming: {
       value: function() {
+         'use strict';
          game.setNpcsPaused(false);
+         this._showTextBubble = false;
          this._substate = _RoamingSubState.ROAMING;
+      }
+   },
+   
+   talkToNpc: {
+      value: function() {
+         'use strict';
+         var npc = game.getNpcHeroIsFacing();
+         if (npc) {
+            var hero = game.hero;
+            //var newNpcDir = this.getHero().direction.opposite();
+            var newNpcDir = (hero.direction + 2) % 4;
+            npc.direction = newNpcDir;
+            this._textBubble.setText(new Brecconary().npcText('foo'));
+            this._showTextBubble = true;
+            this._substate = _RoamingSubState.TALKING;
+         }
+         else {
+            this._textBubble.setText(new Brecconary().npcText('bar'));
+            this._showTextBubble = true;
+         }
       }
    }
    

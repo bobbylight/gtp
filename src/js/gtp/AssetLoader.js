@@ -11,6 +11,7 @@ var gtp = gtp || {};
  * @constructor
  */
 gtp.AssetLoader = function(scale, audio) {
+   'use strict';
    this._scale = scale || 1;
    this.loadingAssetData = {};
    this.responses = {};
@@ -26,6 +27,7 @@ gtp.AssetLoader.prototype = {
     * @param url {string} The URL of the resource.
     */
    addJson: function(id, url) {
+      'use strict';
       
       url = url || id; // allow e.g. "assets.addJson('overworld.json');"
       
@@ -57,6 +59,7 @@ gtp.AssetLoader.prototype = {
     * @param imageSrc {string} The URL of the resource.
     */
    addImage: function(id, imageSrc) {
+      'use strict';
       
       var self = this;
       
@@ -84,6 +87,7 @@ gtp.AssetLoader.prototype = {
     * @param soundSrc {string} The URL of the resource.
     */
    addSound: function(id, soundSrc) {
+      'use strict';
       
       if (this.audio.isInitialized()) {
          
@@ -122,6 +126,7 @@ gtp.AssetLoader.prototype = {
     *        is made translucent, along with all other pixels of the same color.
     */
    addSpriteSheet: function(id, imageSrc, cellW, cellH, spacing, firstPixelTranslucent) {
+      'use strict';
       
       var self = this;
       spacing = spacing || 0;
@@ -158,6 +163,7 @@ gtp.AssetLoader.prototype = {
     * @param {tiled.TiledMap} map The Tiled map.
     */
    addTmxMap: function(map) {
+      'use strict';
       if (map.tilesets && map.tilesets.length) {
          for (var i=0; i<map.tilesets.length; i++) {
             var tileset = map.tilesets[i];
@@ -176,6 +182,7 @@ gtp.AssetLoader.prototype = {
     * @return The canvas.
     */
    getTmxTilesetImage: function(tileset) {
+      'use strict';
       return this.responses['_tilesetImage_' + tileset.name];
    },
    
@@ -185,10 +192,12 @@ gtp.AssetLoader.prototype = {
     * @return The resource, or null if not found.
     */
    get: function(res) {
+      'use strict';
       return this.responses[res];
    },
    
    _isAlreadyTracked: function(id) {
+      'use strict';
       if (this.loadingAssetData[id]) {
          console.log('A resource with id ' + id + ' is already loading.  Assuming they are the same');
          return true;
@@ -205,10 +214,12 @@ gtp.AssetLoader.prototype = {
     * @param value {any} The resource value.
     */
    set: function(res, value) {
+      'use strict';
       this.responses[res] = value;
    },
    
    _completed: function(res, response) {
+      'use strict';
       if (!this.loadingAssetData[res]) {
          console.error('Resource not found! - ' + res);
          return;
@@ -239,10 +250,12 @@ gtp.AssetLoader.prototype = {
     * @return {boolean} Whether all assets have loaded.
     */
    isDoneLoading: function() {
+      'use strict';
       return gtp.Utils.getObjectSize(this.loadingAssetData)===0;
    },
    
    onLoad: function(callback) {
+      'use strict';
       if (this.isDoneLoading()) {
          callback.call();
       }

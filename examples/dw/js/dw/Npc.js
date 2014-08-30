@@ -1,4 +1,5 @@
 function Npc(args) {
+   'use strict';
    gtp.Utils.mixin(args, this);
 //   this.type = NpcType.MERCHANT;
 //   this.dir = Direction.SOUTH;
@@ -15,6 +16,7 @@ Npc.prototype = {
    
    // TODO: Change NPC image to remove the need for this
    _computeColumn: function() {
+      'use strict';
       switch (this.direction) {
          case Direction.NORTH:
             return 4;
@@ -33,6 +35,7 @@ Npc.prototype = {
    },
    
    render: function(ctx) {
+      'use strict';
       
       var ss = game.assets.get('npcs');
       var ssRow = this.type;
@@ -46,12 +49,14 @@ y -= game.getMapYOffs();
    },
    
    setMapLocation: function(row, col) {
+      'use strict';
       this.mapRow = row;
       this.mapCol = col;
       this.xOffs = this.yOffs = 0;
    },
    
    setNpcIndex: function(index) {
+      'use strict';
       this.npcIndex = index;
    }
    
