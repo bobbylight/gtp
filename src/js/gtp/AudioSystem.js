@@ -14,7 +14,6 @@ gtp.AudioSystem.prototype = {
    
    /**
     * Initializes the audio system.
-    * @method
     */
    init: function() {
       'use strict';
@@ -32,7 +31,6 @@ gtp.AudioSystem.prototype = {
     * Registers a sound for later playback.
     * @param id {string} The ID to use when retrieving this sound.
     * @param buffer {object} The sound data.
-    * @method
     */
    addSound: function(id, buffer) {
       'use strict';
@@ -46,7 +44,6 @@ gtp.AudioSystem.prototype = {
     * @param id {string} The ID to use when retrieving this resource.
     * @param url {string} The URL of the resource.
     * @return {boolean} Whether the sound system is initialized
-    * @method
     */
    isInitialized: function() {
       'use strict';
@@ -56,7 +53,6 @@ gtp.AudioSystem.prototype = {
    /**
     * Plays the sound with the given ID.
     * @param id {string} The ID to use when retrieving this resource.
-    * @method
     */
    playSound: function(id) {
       'use strict';

@@ -1,5 +1,15 @@
 var gtp = gtp || {};
 
+/**
+ * Handles input for games.<p>
+ * 
+ * For keyboards, allows polling of individual key presses, both with and
+ * without the keyboard repeat delay.<p>
+ * 
+ * Touch and mouse input are currently not supported.
+ * 
+ * @constructor
+ */
 gtp.InputManager = function() {
    'use strict';
    this.keys = [];
@@ -7,6 +17,9 @@ gtp.InputManager = function() {
   
 gtp.InputManager.prototype = {
    
+   /**
+    * Resets all keys to be in their "not depressed" states.
+    */
    clearKeyStates: function() {
       'use strict';
       //console.log('Clearing ' + this.keys.length + ' keys');
@@ -15,6 +28,10 @@ gtp.InputManager.prototype = {
       }
    },
    
+   /**
+    * Installs this keyboard manager.  Should be called during game
+    * initialization.
+    */
    install: function() {
       'use strict';
       var self = this;

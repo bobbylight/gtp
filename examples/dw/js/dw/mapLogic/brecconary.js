@@ -10,8 +10,8 @@ Brecconary.prototype = {
    
    npcText: function(npc) {
       'use strict';
-      
-      return 'Hello world!';
+      console.log(npc);
+      return 'Brave traveller,  you must save us from the dreaded Dragon Lord!!';
    }
    
 };

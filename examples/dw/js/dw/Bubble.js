@@ -7,12 +7,14 @@ function Bubble(title, x, y, w, h) {
    this.w = w * scale;
    this.h = h * scale;
    
+   this._fontWidth = game.assets.get('font').cellW;
+   
 //      int strokeW = 2 * SCALE;
 //      borderStroke = new BasicStroke(strokeW, BasicStroke.CAP_ROUND,
 //                              BasicStroke.JOIN_ROUND);
 }
 
-Bubble.FONT_WIDTH = 16; // 8 * SCALE; TODO
+Bubble.MARGIN = 10; // 5 * SCALE; TODO
 
 Bubble.prototype = {
    
@@ -34,7 +36,7 @@ Bubble.prototype = {
    _breakApartLine: function(line, w, lines) {
       'use strict';
       
-      var optimal = Math.floor(w / Bubble.FONT_WIDTH);
+      var optimal = Math.floor(w / this._fontWidth);
       
       while (line.length > optimal) {
          
@@ -79,7 +81,7 @@ Bubble.prototype = {
          game.drawString(this.title, x+2*scale, this.y);
       }
       
-      this.paintContent(ctx, this.y+fontHeight+this.getXMargin());
+      this.paintContent(ctx, this.y+this.getYMargin());
    },
    
    getXMargin: function() {
@@ -90,6 +92,10 @@ Bubble.prototype = {
    getYMargin: function() {
       'use strict';
       return 8 * game._scale;
+   },
+   
+   update: function(delta) {
+      // Should be overridden
    },
    
    paintContent: function(ctx, y) {

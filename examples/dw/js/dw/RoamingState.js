@@ -117,6 +117,10 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          
          var done = this._textBubble.handleInput();
+         if (this._showTextBubble) {
+            this._textBubble.update(delta);
+         }
+         
          if (done) {
             this.startRoaming();
             return;

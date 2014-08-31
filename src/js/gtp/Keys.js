@@ -2,7 +2,7 @@ var gtp = gtp || {};
 
 /**
  * Key enumeration used for input.
- * @member
+ * @constructor
  */
 gtp.Keys = Object.freeze({
    
