@@ -5,9 +5,14 @@
    "debug": false,
    "devel": true,
    "eqeqeq": true,
+   "eqnull": true,       // Suppress warnings about == null comparisons
+   "forin":  true,       // Require use of hasOwnProperty() check in for...in loops
+   "freeze": true,       // Prohibit overwriting prototypes of native objects such as Array and Date
+   "immed": true,        // Prohibits immediate function invocations without wrapping them in parens
    "latedef": true,      // Prohibit use of variable before it is defined
    "laxcomma": true,     // Suppress warnings about comma-first style in object literals
    "newcap": true,       // Require constructor functions to be capitalized
+   "noempty": true,      // Prohibit empty blocks in code
    "shadow": false,
    "strict": true,
    "undef": true,        // Warns about unknown globals
