@@ -87,15 +87,14 @@
                  "name":"npc",
                  "properties":
                     {
-                     "dir":"down",
                      "type":"oldman",
                      "wanders":"true"
                     },
                  "type":"npc",
                  "visible":true,
                  "width":16,
-                 "x":144,
-                 "y":224
+                 "x":688,
+                 "y":800
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -118,13 +117,14 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "logicFile":"overworld",
      "music":"MUSIC_OVERWORLD"
     },
  "tileheight":16,
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/maps\/tiles.png",
+         "image":"res\/tiles.png",
          "imageheight":254,
          "imagewidth":407,
          "margin":0,
@@ -139,7 +139,7 @@
         }, 
         {
          "firstgid":361,
-         "image":"..\/maps\/collision.png",
+         "image":"res\/collision.png",
          "imageheight":50,
          "imagewidth":50,
          "margin":0,
@@ -155,7 +155,7 @@
         }, 
         {
          "firstgid":370,
-         "image":"..\/maps\/enemy_territory_colors.png",
+         "image":"res\/enemy_territory_colors.png",
          "imageheight":135,
          "imagewidth":135,
          "margin":0,

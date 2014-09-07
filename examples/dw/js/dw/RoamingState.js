@@ -161,20 +161,26 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
    talkToNpc: {
       value: function() {
          'use strict';
+         
+         var logic = game.getMapLogic();
+         if (!logic) {
+            console.log('Error: No map logic found for this map!  Cannot talk to NPCs!');
+            return;
+         }
+         
          var npc = game.getNpcHeroIsFacing();
          if (npc) {
             var hero = game.hero;
             //var newNpcDir = this.getHero().direction.opposite();
             var newNpcDir = (hero.direction + 2) % 4;
             npc.direction = newNpcDir;
-            this._textBubble.setText(new Brecconary().npcText('foo'));
-            this._showTextBubble = true;
-            this._substate = _RoamingSubState.TALKING;
+            this._textBubble.setText(logic.npcText(npc));
          }
          else {
-            this._textBubble.setText(new Brecconary().npcText('bar'));
-            this._showTextBubble = true;
+            this._textBubble.setText('There is nobody in that direction!');
          }
+         this._showTextBubble = true;
+         this._substate = _RoamingSubState.TALKING;
       }
    }
    

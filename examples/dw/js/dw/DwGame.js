@@ -7,6 +7,7 @@ var DwGame = function(args) {
    this.npcs = [];
    
    this._bumpSoundDelay = 0;
+   this._mapLogics = {};
 };
 
 DwGame.prototype = Object.create(gtp.Game.prototype, {
@@ -35,6 +36,21 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
 //            this.timer.endAndLog('drawMap');
 //            this._drawMapCount = 0;
 //         }
+      }
+   },
+   
+   getMapLogic: {
+      value: function() {
+         'use strict';
+         var logicFile = this.map.properties.logicFile;
+         logicFile = logicFile.charAt(0).toUpperCase() + logicFile.substring(1);
+         console.log(logicFile);
+         var logic = this._mapLogics[logicFile];
+         if (!logic) {
+            logic = this._mapLogics[logicFile] = new window[logicFile]();
+         }
+         console.log('... ' + logic);
+         return logic;
       }
    },
    
@@ -78,7 +94,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             self.hero.setMapLocation(newRow, newCol);
             self.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
          };
-         this.setState(new FadeOutInState(this.state, this.state, updatePlayer));
+         this.setState(new /*FadeOutInState*/MapChangeState(this.state, this.state, updatePlayer));
       }
    },
    
@@ -146,18 +162,22 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          
          // We special-case the NPC layer
          var newNpcs = [];
+         var newTalkAcrosses = {};
          var temp = map.getLayer("npcLayer");
          if (temp && temp.isObjectGroup()) {
             var npcLayer = temp;
             for (i=0; i<npcLayer.objects.length; i++) {
                var obj = npcLayer.objects[i];
-               if ('npc'===obj.type) { // Always true
+               if ('npc'===obj.type) {
                   npc = this._parseNpc(obj);
                   npc.setNpcIndex(newNpcs.length+1);
                   newNpcs.push(npc);
                }
+               else if ('talkAcross'===obj.type) {
+                  newTalkAcrosses[this._parseTalkAcrossKey(obj)] = true;
+               }
                else {
-                  console.log('warn: Unhandled object type (expected npc): ' + obj.type);
+                  console.error('Unhandled object type in tiled map: ' + obj.type);
                }
             }
             map.removeLayer("npcs");
@@ -168,6 +188,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             npc = map.npcs[i];
             map.getLayer("collisionLayer").setData(npc.mapRow, npc.mapCol, 1);
          }
+         map.talkAcrosses = newTalkAcrosses;
          
 //         // Hide layers we aren't interested in seeing.
 //         map.getLayer("collisionLayer").setVisible(collisionLayerVisible);
@@ -183,26 +204,44 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function(obj) {
          'use strict';
          //var index = 0;
+         var name = obj.name;
          var type = NpcType.MERCHANT_GREEN;//obj.type;
          var tileSize = this.getTileSize();
          var row = obj.y / tileSize;
          var col = obj.x / tileSize;
          var dir = Direction.SOUTH;
-         var tempDir = obj.dir;
+         var tempDir = obj.properties.dir;
          if (tempDir) {
-            dir = tempDir;
+            dir = Direction[tempDir.toUpperCase()] || Direction.SOUTH;
          }
          var wanders = true;
          var wanderStr = obj.wanders;
          if (wanderStr) {
             wanders = wanderStr==='true';
          }
-         var npc = new Npc({ type: type, dir: dir, wanders: wanders,
-                             mapRow: row, mapCol: col });
+         var npc = new Npc({ name: name, type: type, direction: dir,
+                             wanders: wanders, mapRow: row, mapCol: col });
          return npc;
       }
    },
-
+   
+   _parseTalkAcrossKey: {
+      value: function(obj) {
+         'use strict';
+         var tileSize = this.getTileSize();
+         var row = obj.y / tileSize;
+         var col = obj.x / tileSize;
+         return this._getTalkAcrossKey(row, col);
+      }
+   },
+   
+   _getTalkAcrossKey: {
+      value: function(row, col) {
+         'use strict';
+         return row + ',' + col;
+      }
+   },
+   
    toggleShowCollisionLayer: {
       value: function() {
          'use strict';
@@ -286,20 +325,22 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function() {
          'use strict';
          var row = this.hero.mapRow, col = this.hero.mapCol;
-         switch (this.hero.direction) {
-            case Direction.NORTH:
-               row--;
-               break;
-            case Direction.SOUTH:
-               row++;
-               break;
-            case Direction.EAST:
-               col++;
-               break;
-            case Direction.WEST:
-               col--;
-               break;
-         }
+         do {
+            switch (this.hero.direction) {
+               case Direction.NORTH:
+                  row--;
+                  break;
+               case Direction.SOUTH:
+                  row++;
+                  break;
+               case Direction.EAST:
+                  col++;
+                  break;
+               case Direction.WEST:
+                  col--;
+                  break;
+            }
+         } while (this.getShouldTalkAcross(row, col));
          for (var i=0; i<this.map.npcs.length; i++) {
             var npc = this.map.npcs[i];
             if (row===npc.mapRow && col===npc.mapCol) {
@@ -307,6 +348,13 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             }
          }
          return null;
+      }
+   },
+   
+   getShouldTalkAcross: {
+      value: function(row, col) {
+         'use strict';
+         return this.map.talkAcrosses[this._getTalkAcrossKey(row, col)];
       }
    }
    

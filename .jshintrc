@@ -32,6 +32,8 @@
       "FadeOutInState": true,
       "Hero": true,
       "LoadingState": true,
+      "MapChangeState": true,
+      "MapLogic": true,
       "Npc": true,
       "NpcType": true,
       "RoamingState": true,

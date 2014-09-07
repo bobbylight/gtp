@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="16" tileheight="16">
  <properties>
+  <property name="logicFile" value="overworld"/>
   <property name="music" value="MUSIC_OVERWORLD"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
@@ -46,9 +47,8 @@
   </object>
  </objectgroup>
  <objectgroup name="npcLayer" width="100" height="100">
-  <object name="npc" type="npc" x="144" y="224" width="16" height="16">
+  <object name="npc" type="npc" x="688" y="800" width="16" height="16">
    <properties>
-    <property name="dir" value="down"/>
     <property name="type" value="oldman"/>
     <property name="wanders" value="true"/>
    </properties>

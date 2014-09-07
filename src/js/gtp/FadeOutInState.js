@@ -1,7 +1,11 @@
+var gtp = gtp || {};
+
 /**
  * Fades one state out and another state in.
+ * 
+ * @constructor
  */
-function FadeOutInState(leavingState, enteringState, transitionLogic, timeMillis) {
+gtp.FadeOutInState = function(leavingState, enteringState, transitionLogic, timeMillis) {
    'use strict';
    this._leavingState = leavingState;
    this._enteringState = enteringState;
@@ -10,9 +14,9 @@ function FadeOutInState(leavingState, enteringState, transitionLogic, timeMillis
    this._alpha = 1;
    this._halfTime = timeMillis && timeMillis>0 ? timeMillis/2 : 800;
    this._curTime = 0;
-}
+};
 
-FadeOutInState.prototype = Object.create(gtp.State.prototype, {
+gtp.FadeOutInState.prototype = Object.create(gtp.State.prototype, {
    
    update: {
       value: function(delta) {
@@ -29,7 +33,7 @@ FadeOutInState.prototype = Object.create(gtp.State.prototype, {
                }
             }
             else {
-               game.setState(this._enteringState);
+               this._setState(this._enteringState);
                return;
             }
          }
@@ -63,8 +67,21 @@ FadeOutInState.prototype = Object.create(gtp.State.prototype, {
          }
          ctx.globalAlpha = previousAlpha;
       }
+   },
+   
+   /**
+    * Sets the new game state.  This is a hook for subclasses to perform
+    * extra logic.
+    *
+    * @param state The new state.
+    */
+   _setState: {
+      value: function(state) {
+         'use strict';
+         game.setState(this._enteringState);
+      }
    }
    
 });
 
-FadeOutInState.prototype.constructor = FadeOutInState;
+gtp.FadeOutInState.prototype.constructor = gtp.FadeOutInState;

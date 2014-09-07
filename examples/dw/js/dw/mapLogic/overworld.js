@@ -1,18 +1,15 @@
 /**
- * Logic for the town of Brecconary.
+ * Logic for the overworld.
  * @constructor
  */
-function Brecconary() {
+function Overworld() {
    
 }
 
-Brecconary.prototype = (function() {
+Overworld.prototype = (function() {
    'use strict';
    
    var initialTalks = {
-      'greeter': 'Brave traveller, you must save us from the dreaded Dragon Lord!!',
-      'merchant1': 'Sorry, I\'m all sold out of stuff.',
-      'innkeeper': 'All rooms are full.  Find somewhere else.'
    };
    
    return Object.create(MapLogic.prototype, {
@@ -33,4 +30,4 @@ Brecconary.prototype = (function() {
    
 })();
 
-Brecconary.prototype.constructor = Brecconary;
+Overworld.prototype.constructor = Overworld;

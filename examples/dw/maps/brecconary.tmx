@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="39" height="38" tilewidth="16" tileheight="16">
  <properties>
+  <property name="logicFile" value="brecconary"/>
   <property name="music" value="MUSIC_TOWN"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
@@ -43,7 +44,7 @@
   </object>
  </objectgroup>
  <objectgroup name="npcLayer" width="39" height="38">
-  <object name="man1" type="npc" x="32" y="224" width="16" height="16">
+  <object name="greeter" type="npc" x="32" y="224" width="16" height="16">
    <properties>
     <property name="type" value="man"/>
     <property name="wanders" value="false"/>
@@ -57,10 +58,12 @@
   </object>
   <object name="innkeeper" type="npc" x="176" y="352" width="16" height="16">
    <properties>
-    <property name="dir" value="left"/>
+    <property name="dir" value="west"/>
     <property name="type" value="merchant"/>
     <property name="wanders" value="false"/>
    </properties>
   </object>
+  <object name="table1" type="talkAcross" x="160" y="352" width="16" height="16"/>
+  <object name="table2" type="talkAcross" x="96" y="96" width="16" height="16"/>
  </objectgroup>
 </map>

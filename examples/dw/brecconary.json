@@ -84,7 +84,7 @@
          "objects":[
                 {
                  "height":16,
-                 "name":"man1",
+                 "name":"greeter",
                  "properties":
                     {
                      "type":"man",
@@ -115,7 +115,7 @@
                  "name":"innkeeper",
                  "properties":
                     {
-                     "dir":"left",
+                     "dir":"west",
                      "type":"merchant",
                      "wanders":"false"
                     },
@@ -124,6 +124,32 @@
                  "width":16,
                  "x":176,
                  "y":352
+                }, 
+                {
+                 "height":16,
+                 "name":"table1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"talkAcross",
+                 "visible":true,
+                 "width":16,
+                 "x":160,
+                 "y":352
+                }, 
+                {
+                 "height":16,
+                 "name":"table2",
+                 "properties":
+                    {
+
+                    },
+                 "type":"talkAcross",
+                 "visible":true,
+                 "width":16,
+                 "x":96,
+                 "y":96
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -135,13 +161,14 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "logicFile":"brecconary",
      "music":"MUSIC_TOWN"
     },
  "tileheight":16,
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/..\/..\/gtp\/examples\/dw\/res\/tiles.png",
+         "image":"res\/tiles.png",
          "imageheight":254,
          "imagewidth":407,
          "margin":0,
@@ -156,7 +183,7 @@
         }, 
         {
          "firstgid":361,
-         "image":"..\/..\/..\/gtp\/examples\/dw\/res\/collision.png",
+         "image":"res\/collision.png",
          "imageheight":50,
          "imagewidth":50,
          "margin":0,
