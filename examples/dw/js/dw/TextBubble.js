@@ -21,11 +21,16 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
       value: function() {
          'use strict';
          var im = game.inputManager;
-         if (!this._textDone && im.isKeyDown(gtp.Keys.Z, true)) {
+         if (!this._textDone &&
+               (im.isKeyDown(gtp.Keys.X, true) || im.isKeyDown(gtp.Keys.Z, true))) {
             this._textDone = true;
             this._curLine = this._lines.length - 1;
          }
          else if (im.isKeyDown(gtp.Keys.X, true) || im.isKeyDown(gtp.Keys.Z, true)) {
+            if (this._talkManager.hasNext()) {
+               this.setText(this._talkManager.next());
+               return false;
+            }
             return true;
          }
          return false;
@@ -72,15 +77,25 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
                game.drawString(text, x, y);
                y += 10 * game._scale;
             }
+            if (this._textDone && this._talkManager.hasNext()) {
+               // TODO: Remove magic constants
+               game.drawString('\u007f', this.x+this.w-30, this.y+this.h-30);
+            }
          }
          
       }
    },
    
+   /**
+    * Renders text in this bubble.
+    * 
+    * @param {TalkSegment} text The text to render.
+    * @member
+    */
    setText: {
       value: function(text) {
          'use strict';
-         this._text = text;
+         this._text = text.text;
          if (this._text) {
             var w = this.w - 2*Bubble.MARGIN;
             this._lines = this._breakApart(this._text, w);
@@ -88,6 +103,14 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             this._curCharMillis = 0;
             this._textDone = false;
          }
+      }
+   },
+   
+   setTalkManager: {
+      value: function(talkManager) {
+         'use strict';
+         this._talkManager = talkManager;
+         this.setText(this._talkManager.start());
       }
    }
    

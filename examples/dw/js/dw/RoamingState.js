@@ -168,18 +168,21 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             return;
          }
          
+         var talkManager = new TalkManager();
+         
          var npc = game.getNpcHeroIsFacing();
          if (npc) {
             var hero = game.hero;
             //var newNpcDir = this.getHero().direction.opposite();
             var newNpcDir = (hero.direction + 2) % 4;
             npc.direction = newNpcDir;
-            this._textBubble.setText(logic.npcText(npc));
+            talkManager.setSegments(logic.npcText(npc));
          }
          else {
-            this._textBubble.setText('There is nobody in that direction!');
+            talkManager.addSegment('There is nobody in that direction!');
          }
          this._showTextBubble = true;
+         this._textBubble.setTalkManager(talkManager);
          this._substate = _RoamingSubState.TALKING;
       }
    }

@@ -10,7 +10,8 @@ Brecconary.prototype = (function() {
    'use strict';
    
    var initialTalks = {
-      'greeter': 'Brave traveller, you must save us from the dreaded Dragon Lord!!',
+      'greeter': [ 'Brave traveller, you must save us from the dreaded Dragon Lord!!',
+            'But you should buy some supplies before venturing out...' ],
       'merchant1': 'Sorry, I\'m all sold out of stuff.',
       'innkeeper': 'All rooms are full.  Find somewhere else.'
    };

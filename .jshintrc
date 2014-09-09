@@ -37,6 +37,8 @@
       "Npc": true,
       "NpcType": true,
       "RoamingState": true,
+      "TalkManager": true,
+      "TalkSegment": true,
       "TextBubble": true,
       "tiled": true,
       "TitleScreenState": true
