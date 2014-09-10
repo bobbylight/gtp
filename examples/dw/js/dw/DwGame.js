@@ -314,6 +314,13 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   drawArrow: {
+      value: function(x, y) {
+         'use strict';
+         this.drawString('\u007f', x, y);
+      }
+   },
+   
    startRandomEncounter: {
       value: function() {
          'use strict';

@@ -20,6 +20,12 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
    handleInput: {
       value: function() {
          'use strict';
+         
+         if (this._textDone && this._questionBubble) {
+            var result = this._questionBubble.handleInput();
+            return result;
+         }
+         
          var im = game.inputManager;
          if (!this._textDone &&
                (im.isKeyDown(gtp.Keys.X, true) || im.isKeyDown(gtp.Keys.Z, true))) {
@@ -58,6 +64,10 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             }
          }
          
+         else if (this._questionBubble) {
+            this._questionBubble.update(delta);
+         }
+         
       }
    },
    
@@ -79,8 +89,12 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             }
             if (this._textDone && this._talkManager.hasNext()) {
                // TODO: Remove magic constants
-               game.drawString('\u007f', this.x+this.w-30, this.y+this.h-30);
+               game.drawArrow(this.x+this.w-30, this.y+this.h-30);
             }
+         }
+         
+         if (this._textDone && this._questionBubble) {
+            this._questionBubble.paint(ctx);
          }
          
       }
@@ -103,12 +117,16 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             this._curCharMillis = 0;
             this._textDone = false;
          }
+         if (text.choices) {
+            this._questionBubble = new QuestionBubble(game, text.choices);
+         }
       }
    },
    
    setTalkManager: {
       value: function(talkManager) {
          'use strict';
+         delete this._questionBubble;
          this._talkManager = talkManager;
          this.setText(this._talkManager.start());
       }

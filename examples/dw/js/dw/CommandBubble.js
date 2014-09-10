@@ -116,7 +116,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
          x -= game.stringWidth(">") + 2*SCALE;
          y0 = y + Y_INC * (this.selection%4);
       
-         game.drawString("\u007f", x, y0); // DEL, but we use for our arrow
+         game.drawArrow(x, y0); // DEL, but we use for our arrow
       
       }
    },
