@@ -87,7 +87,7 @@
                  "name":"greeter",
                  "properties":
                     {
-                     "type":"man",
+                     "type":"man_blue",
                      "wanders":"false"
                     },
                  "type":"npc",
@@ -101,7 +101,7 @@
                  "name":"merchant1",
                  "properties":
                     {
-                     "type":"merchant",
+                     "type":"merchant_green",
                      "wanders":"false"
                     },
                  "type":"npc",
@@ -116,7 +116,7 @@
                  "properties":
                     {
                      "dir":"west",
-                     "type":"merchant",
+                     "type":"merchant_green",
                      "wanders":"false"
                     },
                  "type":"npc",
@@ -150,6 +150,20 @@
                  "width":16,
                  "x":96,
                  "y":96
+                }, 
+                {
+                 "height":16,
+                 "name":"oldman1",
+                 "properties":
+                    {
+                     "type":"old_man_gray",
+                     "wanders":"true"
+                    },
+                 "type":"npc",
+                 "visible":true,
+                 "width":16,
+                 "x":112,
+                 "y":224
                 }],
          "opacity":1,
          "type":"objectgroup",

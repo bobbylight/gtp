@@ -205,7 +205,13 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          'use strict';
          //var index = 0;
          var name = obj.name;
-         var type = NpcType.MERCHANT_GREEN;//obj.type;
+         var type;
+         if (obj.properties.type) {
+            type = NpcType[obj.properties.type.toUpperCase()];
+         }
+         if (!type) {
+            type = NpcType.MERCHANT_GREEN;
+         }
          var tileSize = this.getTileSize();
          var row = obj.y / tileSize;
          var col = obj.x / tileSize;
@@ -362,6 +368,28 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function(row, col) {
          'use strict';
          return this.map.talkAcrosses[this._getTalkAcrossKey(row, col)];
+      }
+   },
+   
+   anyKeyPressed: {
+      value: function() {
+         'use strict';
+         var im = this.inputManager;
+         return im.isKeyDown(gtp.Keys.X, true) || im.isKeyDown(gtp.Keys.Z, true);
+      }
+   },
+   
+   actionKeyPressed: {
+      value: function() {
+         'use strict';
+         return this.inputManager.isKeyDown(gtp.Keys.Z, true);
+      }
+   },
+   
+   cancelKeyPressed: {
+      value: function() {
+         'use strict';
+         return this.inputManager.isKeyDown(gtp.Keys.X, true);
       }
    }
    

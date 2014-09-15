@@ -23,21 +23,21 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          
          if (this._textDone && this._questionBubble) {
             var result = this._questionBubble.handleInput();
-            return result;
+            if (result) {
+               var nextState = this._questionBubble.getSelectedChoiceNextDialogue();
+               this._conversation.setDialogueState(nextState);
+               delete this._questionBubble;
+               return !this._updateConversation();
+            }
+            return false;
          }
          
-         var im = game.inputManager;
-         if (!this._textDone &&
-               (im.isKeyDown(gtp.Keys.X, true) || im.isKeyDown(gtp.Keys.Z, true))) {
+         if (!this._textDone && game.anyKeyPressed()) {
             this._textDone = true;
             this._curLine = this._lines.length - 1;
          }
-         else if (im.isKeyDown(gtp.Keys.X, true) || im.isKeyDown(gtp.Keys.Z, true)) {
-            if (this._talkManager.hasNext()) {
-               this.setText(this._talkManager.next());
-               return false;
-            }
-            return true;
+         else if (game.anyKeyPressed()) {
+            return !this._updateConversation();
          }
          return false;
       }
@@ -87,7 +87,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
                game.drawString(text, x, y);
                y += 10 * game._scale;
             }
-            if (this._textDone && this._talkManager.hasNext()) {
+            if (this._textDone && this._conversation.hasNext()) {
                // TODO: Remove magic constants
                game.drawArrow(this.x+this.w-30, this.y+this.h-30);
             }
@@ -123,15 +123,25 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
       }
    },
    
-   setTalkManager: {
-      value: function(talkManager) {
+   setConversation: {
+      value: function(conversation) {
          'use strict';
          delete this._questionBubble;
-         this._talkManager = talkManager;
-         this.setText(this._talkManager.start());
+         this._conversation = conversation;
+         this.setText(this._conversation.start());
+      }
+   },
+   
+   _updateConversation: {
+      value: function() {
+         'use strict';
+         if (this._conversation.hasNext()) {
+            this.setText(this._conversation.next());
+            return true;
+         }
+         return false;
       }
    }
-   
 });
 
 TextBubble.prototype.constructor = TextBubble;

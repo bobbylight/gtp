@@ -34,9 +34,9 @@ gtp.Utils.mixin = function(source, target) {
    'use strict';
    for (var prop in source) {
       if (source.hasOwnProperty(prop)) {
-         if (!target[prop]) {
+         //if (!target[prop]) {
             target[prop] = source[prop];
-         }
+         //}
       }
    }
 };

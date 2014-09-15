@@ -13,6 +13,8 @@ function Hero(args) {
    this.exp = 0;
    this.walkTick = 0;
    
+   this.strength = 5;
+   
    this._stepTick = 0;
 }
 
@@ -231,6 +233,17 @@ Hero.prototype = Object.create(BattleEntity.prototype, {
             this.yOffs -= game.getTileSize();
          }
          this.direction = Direction.SOUTH;
+      }
+   },
+   
+   /**
+    * Modifies the player's gold amount, and plays the appropriate sound effect.
+    */
+   addGold: {
+      value: function(amt) {
+         'use strict';
+         this.gold = Math.max(0, this.gold + amt);
+         //game.audio.playSound('gold');
       }
    }
    

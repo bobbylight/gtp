@@ -13,7 +13,6 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
          var im = this.game.inputManager;
          
          if (im.isKeyDown(gtp.Keys.SHIFT)) {
-            console.log(gtp.Keys.P);
             if (im.isKeyDown(gtp.Keys.P, true)) {
                if (!game.canvas.style.width) {
                   game.canvas.style.width = game.canvas.width + 'px';

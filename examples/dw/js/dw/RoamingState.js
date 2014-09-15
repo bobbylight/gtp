@@ -64,7 +64,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          var hero = game.hero;
          var im = game.inputManager;
          
-         if (im.isKeyDown(gtp.Keys.Z, true)) {
+         if (game.actionKeyPressed()) {
             game.setNpcsPaused(true);
             this._commandBubble.reset();
             game.audio.playSound('menu');
@@ -168,7 +168,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             return;
          }
          
-         var talkManager = new TalkManager();
+         var conversation = new Conversation();
          
          var npc = game.getNpcHeroIsFacing();
          if (npc) {
@@ -176,13 +176,13 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             //var newNpcDir = this.getHero().direction.opposite();
             var newNpcDir = (hero.direction + 2) % 4;
             npc.direction = newNpcDir;
-            talkManager.setSegments(logic.npcText(npc));
+            conversation.setSegments(logic.npcText(npc));
          }
          else {
-            talkManager.addSegment('There is nobody in that direction!');
+            conversation.addSegment('There is nobody in that direction!');
          }
          this._showTextBubble = true;
-         this._textBubble.setTalkManager(talkManager);
+         this._textBubble.setConversation(conversation);
          this._substate = _RoamingSubState.TALKING;
       }
    }

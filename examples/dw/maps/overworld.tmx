@@ -49,7 +49,7 @@
  <objectgroup name="npcLayer" width="100" height="100">
   <object name="npc" type="npc" x="688" y="800" width="16" height="16">
    <properties>
-    <property name="type" value="oldman"/>
+    <property name="type" value="old_man_gray"/>
     <property name="wanders" value="true"/>
    </properties>
   </object>

@@ -87,7 +87,7 @@
                  "name":"npc",
                  "properties":
                     {
-                     "type":"oldman",
+                     "type":"old_man_gray",
                      "wanders":"true"
                     },
                  "type":"npc",

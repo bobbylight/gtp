@@ -1,9 +1,10 @@
-function TalkManager() {
+function Conversation() {
    'use strict';
    this._segments = [];
+   this._responses = [];
 }
 
-TalkManager.prototype = (function() {
+Conversation.prototype = (function() {
    'use strict';
    
    return {
@@ -16,7 +17,7 @@ TalkManager.prototype = (function() {
        */
       addSegment: function(segment) {
          if (segment.length) { // A string
-            segment = new TalkSegment(segment);
+            segment = { text: segment };
          }
          this._segments.push(segment);
       },
@@ -49,6 +50,21 @@ TalkManager.prototype = (function() {
       
       next: function() {
          return this._segments[this._segmentIndex++];
+      },
+      
+      setDialogueState: function(state) {
+         if (!state) {
+            // Assume we want the conversation to end
+            this._segmentIndex = this._segments.length;
+         }
+         for (var i=0; i<this._segments.length; i++) {
+            if (this._segments[i].id === state) {
+               this._segmentIndex = i;
+               return;
+            }
+         }
+         console.error('Unknown next dialogue state: "' + state + '"');
+         this._segmentIndex = this._segments.length;
       }
       
    };

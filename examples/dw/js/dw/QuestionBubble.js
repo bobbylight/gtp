@@ -21,11 +21,10 @@ QuestionBubble.prototype = Object.create(Bubble.prototype, {
    handleInput: {
       value: function() {
          'use strict';
-         var im = game.inputManager;
-         if (im.isKeyDown(gtp.Keys.X, true)) {
+         if (game.cancelKeyPressed()) {
             this._curChoice = 0;
          }
-         else if (im.isKeyDown(gtp.Keys.Z, true)) {
+         else if (game.actionKeyPressed()) {
             this._done = true;
             return true;
          }
@@ -60,21 +59,28 @@ QuestionBubble.prototype = Object.create(Bubble.prototype, {
             if (this._curChoice === i) {
                game.drawArrow(this.x + Bubble.MARGIN, y);
             }
-            game.drawString(this._choices[i], x, y);
+            game.drawString(this._choices[i].text, x, y);
             y += 10 * game._scale;
          }
          
       }
    },
    
-   getSelectedChoice: {
+   getSelectedChoiceNextDialogue: {
       value: function() {
-         return this._curChoice;
+         'use strict';
+         var choice = this._choices[this._curChoice];
+         if (choice.next) {
+            // Just a string id of the next dialogue, or a function
+            return choice.next.length ? choice.next : choice.next();
+         }
+         return null;
       }
    },
    
    setChoices: {
       value: function(choices) {
+         'use strict';
          this._choices = choices;
       }
    }
