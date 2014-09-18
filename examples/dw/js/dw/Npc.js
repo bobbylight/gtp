@@ -58,6 +58,11 @@ y -= game.getMapYOffs();
    setNpcIndex: function(index) {
       'use strict';
       this.npcIndex = index;
+   },
+   
+   nudge: function() {
+      'use strict';
+      this.direction = (this.direction + 1) % 4;
    }
    
 };
