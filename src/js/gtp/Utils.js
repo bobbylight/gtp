@@ -41,6 +41,18 @@ gtp.Utils.mixin = function(source, target) {
    }
 };
 
+/**
+ * Returns a random integer between min (inclusive) and max (exclusive).
+ * 
+ * @param {int} min The minimum possible value, inclusive.
+ * @param {int} max The maximum possible value, exclusive.
+ * @return {int} The random integer value.
+ */
+gtp.Utils.randomInt = function(min, max) {
+   // Using Math.round() will give you a non-uniform distribution!
+   return Math.floor(Math.random() * (max - min)) + min;
+};
+
 /** 
  * Defines console functions for IE9 and other braindead browsers.
  */

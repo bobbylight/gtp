@@ -10,6 +10,7 @@ function Npc(args) {
    this.xOffs = 0;
    this.yOffs = 0;
    this._stepTick = 0;
+   this._stepDelay = new gtp.Delay(2000, -400, 400);
 }
 
 Npc.prototype = {
@@ -31,7 +32,16 @@ Npc.prototype = {
    },
    
    update: function(delta) {
-      // TODO
+      
+      var nudge = false;
+      if (this._stepDelay.update(delta)) {
+         nudge = true;
+         this._stepDelay.reset();
+      }
+      
+      if (nudge) {
+         this.nudge();
+      }
    },
    
    render: function(ctx) {

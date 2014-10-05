@@ -18,7 +18,6 @@ var RoamingState = function() {
    this._showTextBubble = false;
    
    this._commandBubble = new CommandBubble();
-   this._npcStepDelay = new gtp.Delay(2000);
 };
 
 RoamingState.prototype = Object.create(_BaseState.prototype, {
@@ -106,16 +105,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             }
          }
          
-         var nudgeNpcs = false;
-         if (this._npcStepDelay.update(delta)) {
-            nudgeNpcs = true;
-            this._npcStepDelay.reset();
-         }
-         
          game.map.npcs.forEach(function(npc) {
-            if (nudgeNpcs) {
-               npc.nudge();
-            }
             npc.update(delta);
          });
          
