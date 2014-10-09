@@ -9,10 +9,52 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="css/stylesheet.css">
 
-    <title>Gtp</title>
+   <!-- build:js js/dw.min.js -->
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/Utils.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/ImageUtils.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/Timer.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/Delay.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/Image.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/AudioSystem.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/AssetType.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/AssetLoader.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/SpriteSheet.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/BitmapFont.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/InputManager.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/Keys.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/Game.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/State.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/gtp/FadeOutInState.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/tiled/TiledTileset.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/tiled/TiledMap.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/tiled/TiledObject.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/../../src/js/tiled/TiledLayer.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/DwGame.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/_BaseState.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/BattleEntity.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/Bubble.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/CommandBubble.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/TextBubble.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/QuestionBubble.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/Direction.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/Hero.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/LoadingState.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/MapChangeState.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/MapLogic.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/NpcType.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/Npc.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/TitleScreenState.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/RoamingState.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/Conversation.js'></script>
+   <!-- TODO: Dynamically load these scripts in MapChangeStates. -->
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/mapLogic/brecconary.js'></script>
+   <script src='http://rawgit.com/bobbylight/gtp/master/examples/dw/js/dw/mapLogic/overworld.js'></script>
+   
+   <title>Gtp</title>
   </head>
 
-  <body>
+  <body onload='init("parent")'>
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
@@ -51,7 +93,7 @@ for anybody out there.  It currently handles:
 
 <h3>
 <a class="anchor"><span class="octicon octicon-link"></span></a>Demo</h3>
-<iframe src="https://github.com/bobbylight/gtp/tree/master/examples/dw/index.html" width="500" height="500"></iframe>
+<div id='parent'></div>
 
 </h3>
 <h3>
