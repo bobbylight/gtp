@@ -251,7 +251,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    toggleShowCollisionLayer: {
       value: function() {
          'use strict';
-         var layer = game.map.getLayer('collisionLayer');
+         var layer = this.getCollisionLayer();
          layer.visible = !layer.visible;
          this.setStatusMessage(layer.visible ?
                'Collision layer showing' : 'Collision layer hidden');
@@ -261,7 +261,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    toggleShowTerritoryLayer: {
       value: function() {
          'use strict';
-         var layer = game.map.getLayer('enemyTerritoryLayer');
+         var layer = this.map.getLayer('enemyTerritoryLayer');
          layer.visible = !layer.visible;
          this.setStatusMessage(layer.visible ?
                'Territory layer showing' : 'Territory layer hidden');

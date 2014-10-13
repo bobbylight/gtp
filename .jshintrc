@@ -40,6 +40,7 @@
       "QuestionBubble": true,
       "QuestionSegment": true,
       "RoamingState": true,
+      "RoamingEntity": true,
       "TalkManager": true,
       "TalkSegment": true,
       "TextBubble": true,

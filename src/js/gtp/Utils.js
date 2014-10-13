@@ -49,6 +49,7 @@ gtp.Utils.mixin = function(source, target) {
  * @return {int} The random integer value.
  */
 gtp.Utils.randomInt = function(min, max) {
+   'use strict';
    // Using Math.round() will give you a non-uniform distribution!
    return Math.floor(Math.random() * (max - min)) + min;
 };

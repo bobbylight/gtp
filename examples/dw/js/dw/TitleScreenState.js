@@ -81,8 +81,8 @@ handleStart: {
    _startGame: {
       value: function() {
          'use strict';
-         game.hero.setMapLocation(52, 45);
          game.setMap('overworld.json');
+         game.hero.setMapLocation(52, 45);
          game.setState(new gtp.FadeOutInState(this, new RoamingState()));
       }
    }
