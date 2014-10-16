@@ -7,7 +7,10 @@ var gtp = gtp || {};
  */
 gtp.AudioSystem = function() {
    'use strict';
+   this._currentMusic = null;
    this._soundBuffers = {};
+   this._musicFade = 0.3; // seconds
+   this._fadeMusic = true;
 };
 
 gtp.AudioSystem.prototype = {
@@ -50,9 +53,57 @@ gtp.AudioSystem.prototype = {
       return this._initialized;
    },
    
+   fadeOutMusic: function(newMusicId) {
+      'use strict';
+      
+      if (this.context) {
+         if (this._currentMusic) {
+            // We must "anchor" via setValueAtTime() before calling a *rampToValue() method (???)
+            this._faderGain.gain.setValueAtTime(this._faderGain.gain.value, this.context.currentTime);
+            this._faderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
+            var that = this;
+            setTimeout(function() {
+               that.playMusic(newMusicId);
+            }, this._musicFade * 1000);
+         }
+         else {
+            this.playMusic(newMusicId);
+         }
+      }
+   },
+   
+   /**
+    * Plays a specific sound as background music.  Only one "music" can play
+    * at a time, as opposed to "sounds," of which multiple can be playing at
+    * one time.
+    * @param {string} id The ID of the resource to play as music.
+    */
+   playMusic: function(id) {
+      'use strict';
+      if (this.context) {
+         if (this._currentMusic) {
+            this._currentMusic.stop();
+            this._currentMusic.disconnect();
+            delete this._currentMusic;
+            this._faderGain.disconnect();
+            delete this._faderGain;
+         }
+         this._faderGain = this.context.createGain();
+         this._faderGain.gain.setValueAtTime(1, this.context.currentTime);
+         this._faderGain.gain.value = 1;
+         this._currentMusic = this.context.createBufferSource();
+         this._currentMusic.buffer = this._soundBuffers[id];
+         this._currentMusic.loop = true;
+         this._currentMusic.connect(this._faderGain);
+         this._faderGain.connect(this.context.destination);
+         this._currentMusic.start(0);
+         console.log('Just started new music with id: ' + id);
+      }
+   },
+   
    /**
     * Plays the sound with the given ID.
-    * @param id {string} The ID to use when retrieving this resource.
+    * @param {string} id The ID of the resource to play.
     */
    playSound: function(id) {
       'use strict';
@@ -62,6 +113,26 @@ gtp.AudioSystem.prototype = {
          source.connect(this.context.destination);
          source.start(0);
       }
+   },
+   
+   get fadeMusic() {
+      'use strict';
+      return this._fadeMusic;
+   },
+   
+   set fadeMusic(fade) {
+      'use strict';
+      this._fadeMusic = fade || false;
+   },
+   
+   get musicFadeSeconds() {
+      'use strict';
+      return this._musicFade;
+   },
+   
+   set musicFadeSeconds(seconds) {
+      'use strict';
+      this._musicFade = seconds;
    }
    
 };

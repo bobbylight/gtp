@@ -90,6 +90,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          this.audio.playSound('stairs');
          var self = this;
          var updatePlayer = function() {
+            self.hero.setMapLocation(-1, -1); // Free the location he was in in the map
             self.setMap(mapName + '.json');
             self.hero.setMapLocation(newRow, newCol);
             self.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
@@ -111,11 +112,22 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   _resetMap: {
+      value: function(map) {
+         'use strict';
+         for (var i=0; i<map.npcs.length; i++) {
+            map.npcs[i].reset();
+         }
+      }
+   },
+   
    setMap: {
       value: function(assetName) {
          'use strict';
          console.log('Setting map to: ' + assetName);
          this.map = this.maps[assetName];
+         this._resetMap(this.maps[assetName]);
+         this.audio.fadeOutMusic('overworldMusic');
       }
    },
    

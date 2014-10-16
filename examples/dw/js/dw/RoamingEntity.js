@@ -53,8 +53,11 @@ RoamingEntity.prototype = {
       'use strict';
       if (this.mapRow!=null && this.mapCol!=null) {
          var layer = game.getCollisionLayer();
+         console.log('*** clearing data at: ' + this.mapRow + ', ' + this.mapCol);
          layer.setData(this.mapRow, this.mapCol, 0);
-         layer.setData(row, col, 1);
+         if (row>-1 && col>-1) { // row===-1 && col===-1 => don't display
+            layer.setData(row, col, 1);
+         }
       }
       this.mapRow = row;
       this.mapCol = col;

@@ -22,6 +22,7 @@ setTimeout(function() {
       game.assets.addImage('font', 'res/font_10x10.png');
       game.assets.addJson('overworld.json');
       game.assets.addJson('brecconary.json');
+      game.assets.addSound('overworldMusic', 'res/sound/05 Dragon Quest 1 - Kingdom of Alefgard (22khz mono).ogg');
       game.assets.addSound('bump', 'res/sound/42 Dragon Quest 1 - Bumping into Walls (22khz mono).wav');
       game.assets.addSound('menu', 'res/sound/32 Dragon Quest 1 - Menu Button (22khz mono).wav');
       game.assets.addSound('stairs', 'res/sound/30 Dragon Quest 1 - Stairs Down (22khz mono).wav');

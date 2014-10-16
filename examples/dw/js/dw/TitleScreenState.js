@@ -9,6 +9,8 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          _BaseState.prototype.init.apply(this, arguments);
          game.canvas.addEventListener('touchstart', this.handleStart, false);
+         this._delay = new gtp.Delay([ 600, 400 ]);
+         this._blink = true;
       }
    },
    
@@ -33,6 +35,11 @@ handleStart: {
          
          this.handleDefaultKeys();
          
+         if (this._delay.update(delta)) {
+            this._delay.reset();
+            this._blink = !this._blink;
+         }
+         
          var im = game.inputManager;
          if (im.isKeyDown(gtp.Keys.ENTER)) {
             this._startGame();
@@ -47,15 +54,19 @@ handleStart: {
          
          var game = this.game;
          game.clearScreen();
-         
-         ctx.fillStyle = 'rgb(255, 255, 255)';
-         ctx.font = 'bold 30px Arial';
-         ctx.fillText('Press Enter', 150, game.getHeight()-40);
+         var w = game.getWidth();
          
          var img = game.assets.get('title');
-         var x = (game.getWidth() - img.width) / 2;
+         var x = (w - img.width) / 2;
          var y = 30;
          img.draw(ctx, x, y);
+         
+         if (this._blink) {
+            var prompt = 'Press Enter';
+            x = (w - game.stringWidth(prompt)) / 2;
+            y = game.getHeight() - 40;
+            game.drawString(prompt, x, y);
+         }
       }
    },
    

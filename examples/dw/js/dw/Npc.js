@@ -3,9 +3,11 @@ function Npc(args) {
    
    RoamingEntity.call(this, args);
    gtp.Utils.mixin(args, this);
-//   this.type = NpcType.MERCHANT;
-//   this.wanders = false;
-//   
+   
+   this._origMapRow = this.mapRow;
+   this._origMapCol = this.mapCol;
+   this._origDir = this.direction;
+   
    this._stepDelay = new gtp.Delay(3000, -500, 500);
    
    //gtp.Utils.mixin(RoamingEntityMixin.prototype, this);
@@ -61,6 +63,15 @@ Npc.prototype = Object.create(RoamingEntity.prototype, {
    y += this.yOffs;
          ssCol += Hero.STEP_INC;
          ss.drawSprite(ctx, x,y, ssRow,ssCol);
+      }
+   },
+   
+   reset: {
+      value: function() {
+         'use strict';
+         this.setMapLocation(this._origMapRow, this._origMapCol);
+         this.direction = this._origDir;
+         this._stepDelay.reset();
       }
    },
    
