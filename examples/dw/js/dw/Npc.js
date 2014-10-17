@@ -8,7 +8,10 @@ function Npc(args) {
    this._origMapCol = this.mapCol;
    this._origDir = this.direction;
    
-   this._stepDelay = new gtp.Delay(3000, -500, 500);
+   if (this.wanders) {
+      this._stepDelay = new gtp.Delay(3000, -500, 500);
+      delete this.wanders;
+   }
    
    //gtp.Utils.mixin(RoamingEntityMixin.prototype, this);
    //RoamingEntityMixin.call(this);
@@ -38,7 +41,7 @@ Npc.prototype = Object.create(RoamingEntity.prototype, {
       value: function(delta) {
          'use strict';
       
-         if (this._stepDelay.update(delta)) {
+         if (this._stepDelay && this._stepDelay.update(delta)) {
             this._step();
             this._stepDelay.reset();
          }
@@ -71,7 +74,9 @@ Npc.prototype = Object.create(RoamingEntity.prototype, {
          'use strict';
          this.setMapLocation(this._origMapRow, this._origMapCol);
          this.direction = this._origDir;
-         this._stepDelay.reset();
+         if (this._stepDelay) {
+            this._stepDelay.reset();
+         }
       }
    },
    
