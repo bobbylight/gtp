@@ -87,7 +87,7 @@
                  "name":"greeter",
                  "properties":
                     {
-                     "range":"2, 14, 5, 16",
+                     "range":"2, 10, 2, 14",
                      "type":"man_blue",
                      "wanders":"false"
                     },

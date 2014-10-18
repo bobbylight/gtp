@@ -233,13 +233,28 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             dir = Direction[tempDir.toUpperCase()] || Direction.SOUTH;
          }
          var wanders = true;
-         var wanderStr = obj.wanders;
+         var wanderStr = obj.properties.wanders;
          if (wanderStr) {
             wanders = wanderStr==='true';
          }
+         var range = this._parseRange(obj.properties.range);
          var npc = new Npc({ name: name, type: type, direction: dir,
-                             wanders: wanders, mapRow: row, mapCol: col });
+                     range: range, wanders: wanders, mapRow: row, mapCol: col });
          return npc;
+      }
+   },
+   
+   _parseRange: {
+      value: function(rangeStr) {
+         'use strict';
+         var range = null;
+         if (rangeStr) {
+            range = rangeStr.split(/,\s*/);
+            range = range.map(function(value) {
+               return parseInt(value);
+            });
+         }
+         return range;
       }
    },
    

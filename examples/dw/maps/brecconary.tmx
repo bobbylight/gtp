@@ -12,12 +12,12 @@
  </tileset>
  <layer name="tileLayer" width="39" height="38">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2WS47DIBBEkcfKInOEsEE5ge9/ucwiSKVSdUPjjmZG8qJkC3Dz3D94lFIef1jbgtqP9rfaoo1Ztgri+Upqgq2JdZ5W2Kw1lZ7MhutG/lphs+JrfdfZ+B82mOvvx1tn2XayPWJrwl6f+/oAW7cZYVP/l+23DeyijZ7ziq2RjVvR+bHBmigb7nsXXMhn+U3VEL+fqVPMcfSLx6a4lDL8hmxef0M7M/0jiw3jyHyKjWvcqvkIm6pBjidyYUw/zTaTb1YtcEyxxlXNR3qIOq+43yMjrlHreEydHd75yN/+hv4728jHyk415iw7BygS09EdycuXncZw7nAUZZvxm6pndS/1uLpm2azx7+LfR9BvEa4om3XOcL9iNo/L442yWT3dus/tYn9vr0w26/6FtdD1nNyvM66y3YruScxm7Wf9WxVrI2wqzxSbyjNm4xicZeN84/dRL2NbnKuZtZDpt/5tVg/xasHqG969d4VtRbN9C8+qaEwzlXkuXLp06dKqXtHeMB8oFwAA
+   H4sIAAAAAAAAA+2WS47DIBBEkcfKInOEsEE5ge9/ucwiSKVSdUPjjmZG8qJkC3Dz3D94lFIef1jbgtqP9rfaoo1Ztgri+Upqgq2JdZ5W2Kw1lZ7MhutG/lphs+JrfdfZ+B82mOvvx1tn2XayPWJrwl6f+/oAW7cZYVP/l+23DeyijZ7ziq2RjVvR+bHBmigb7nsXXMhn+U3VEL+fqVPMcfSLx6a4lDL8hmxef0M7M/0jiw3jyHyKjWvcqvkIm6pBjidyYUw/zTaTb1YtcEyxxlXNR3qIOq+43yMjrlHreEydHd75yN/+hv4728jHyk415iw7BygS09EdycuXncZw7nAUZZvxm6pndS/1uLpm2azx7+LfR9BvEa4om3XOcL9iNo/L442yWT3dus/tYn9vr0w26/6FtdD1nNyvM66y3YruScxm7Wf9WxVrI2wqzxSbyjNm4xicZeN84/dRL2NbnKuZtZDpt/5tVg/xasHqG969d4VtRbN9C8+qaEwzlXkuXLp06dKqXtHeMB8oFwAA
   </data>
  </layer>
  <layer name="collisionLayer" width="39" height="38" opacity="0.26">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2W4Q6AIAiE7XF7/xfobzbB4wB1i9vcKvP8dAq0drbuy94yPCS21drFhuwXw8buveY36mPZpL5T2Kweq9je41m2jPOGfI9QxZDeB423O9jQ92Lrfb53XLrzO8546T9ia4escynxWObLYJt5RuRTph6RagdGo5gkxSdkP6Qc5am3vHWXhT2CLaJG1+b0sFk8kbV52Zg8qP1nWfuMDX3WPDS2qPNmYcveN6RJ4xEvlo0Rmo88cTy7zdhLpVIpWg8/lK20KBcAAA==
+   H4sIAAAAAAAAA+2W4Q6AIAiE7XF7/xfobzbB4wB1i9vcKvP8dAq0drbuy94yPCS21drFhuwXw8buveY36mPZpL5T2Kweq9je41m2jPOGfI9QxZDeB423O9jQ92Lrfb53XLrzO8546T9ia4escynxWObLYJt5RuRTph6RagdGo5gkxSdkP6Qc5am3vHWXhT2CLaJG1+b0sFk8kbV52Zg8qP1nWfuMDX3WPDS2qPNmYcveN6RJ4xEvlo0Rmo88cTy7zdhLpVIpWg8/lK20KBcAAA==
   </data>
  </layer>
  <objectgroup name="warpLayer" width="39" height="38">
@@ -46,6 +46,7 @@
  <objectgroup name="npcLayer" width="39" height="38">
   <object name="greeter" type="npc" x="32" y="224" width="16" height="16">
    <properties>
+    <property name="range" value="2, 14, 5, 16"/>
     <property name="type" value="man_blue"/>
     <property name="wanders" value="false"/>
    </properties>

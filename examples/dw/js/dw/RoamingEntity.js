@@ -49,6 +49,18 @@ RoamingEntity.prototype = {
       // Do nothing; subclasses can override
    },
    
+   /**
+    * If this entity is only allowed to walk around in a certain range, this
+    * method returns true iff the specified location is outside of that range.
+    */
+   _isOutOfRange: function(row, col) {
+      if (this.range) {
+         return col<this.range[0] || col>this.range[2] ||
+               row<this.range[1] || row>this.range[3];
+      }
+      return false;
+   },
+   
    setMapLocation: function(row, col) {
       'use strict';
       if (this.mapRow!=null && this.mapCol!=null) {
@@ -73,6 +85,11 @@ RoamingEntity.prototype = {
     */
    _tryToMove: function(row, col) {
       'use strict';
+      
+      if (this._isOutOfRange(row, col)) {
+         return false;
+      }
+      
       var data = game.getCollisionLayer().getData(row, col);
       var canWalk = data===0;//-1;
       if (canWalk) {
