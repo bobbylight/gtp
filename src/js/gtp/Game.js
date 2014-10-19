@@ -110,6 +110,11 @@ gtp.Game.prototype = {
       }
    },
    
+   getGameTime: function() {
+      'use strict';
+      return this._gameTime;
+   },
+   
    getHeight: function() {
       'use strict';
       return this.canvas.height;

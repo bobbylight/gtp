@@ -6,6 +6,15 @@ function _BaseState() {
 
 _BaseState.prototype = Object.create(gtp.State.prototype, {
    
+   createScreenshot: {
+      value: function() {
+         var canvas = gtp.ImageUtils.createCanvas(game.getWidth(), game.getHeight());
+         var ctx = canvas.getContext('2d');
+         this.render(ctx);
+         return canvas;
+      }
+   },
+   
    handleDefaultKeys: {
       value: function() {
          'use strict';

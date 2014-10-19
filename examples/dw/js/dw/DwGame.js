@@ -366,7 +366,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    startRandomEncounter: {
       value: function() {
          'use strict';
-         console.log('Start a random encounter!');
+         this.setState(new BattleTransitionState(this.state, new BattleState()));
       }
    },
    

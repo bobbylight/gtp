@@ -32,6 +32,10 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
 
          this.handleDefaultKeys();
+         if (game.inputManager.isKeyDown(gtp.Keys.R, true)) {
+            game.startRandomEncounter();
+            return;
+         }
          
          game.hero.update(delta);
          
