@@ -11,6 +11,7 @@ gtp.AudioSystem = function() {
    this._soundBuffers = {};
    this._musicFade = 0.3; // seconds
    this._fadeMusic = true;
+   this._muted = false;
 };
 
 gtp.AudioSystem.prototype = {
@@ -23,6 +24,10 @@ gtp.AudioSystem.prototype = {
       try {
          window.AudioContext = window.AudioContext || window.webkitAudioContext;
          this.context = new window.AudioContext();
+         this._volumeFaderGain = this.context.createGain();
+         this._volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
+         this._volumeFaderGain.gain.value = 1;
+         this._volumeFaderGain.connect(this.context.destination);
          this._initialized = true;
       } catch (e) {
          console.error('The Web Audio API is not supported in this browser.');
@@ -42,25 +47,16 @@ gtp.AudioSystem.prototype = {
       }
    },
    
-   /**
-    * Starts loading a JSON resource.
-    * @param id {string} The ID to use when retrieving this resource.
-    * @param url {string} The URL of the resource.
-    * @return {boolean} Whether the sound system is initialized
-    */
-   isInitialized: function() {
-      'use strict';
-      return this._initialized;
-   },
-   
    fadeOutMusic: function(newMusicId) {
       'use strict';
       
       if (this.context) {
          if (this._currentMusic) {
-            // We must "anchor" via setValueAtTime() before calling a *rampToValue() method (???)
-            this._faderGain.gain.setValueAtTime(this._faderGain.gain.value, this.context.currentTime);
-            this._faderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
+            if (!this._muted) {
+               // We must "anchor" via setValueAtTime() before calling a *rampToValue() method (???)
+               this._musicFaderGain.gain.setValueAtTime(this._musicFaderGain.gain.value, this.context.currentTime);
+               this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
+            }
             var that = this;
             setTimeout(function() {
                that.playMusic(newMusicId);
@@ -73,6 +69,17 @@ gtp.AudioSystem.prototype = {
    },
    
    /**
+    * Starts loading a JSON resource.
+    * @param id {string} The ID to use when retrieving this resource.
+    * @param url {string} The URL of the resource.
+    * @return {boolean} Whether the sound system is initialized
+    */
+   isInitialized: function() {
+      'use strict';
+      return this._initialized;
+   },
+   
+   /**
     * Plays a specific sound as background music.  Only one "music" can play
     * at a time, as opposed to "sounds," of which multiple can be playing at
     * one time.
@@ -81,21 +88,24 @@ gtp.AudioSystem.prototype = {
    playMusic: function(id) {
       'use strict';
       if (this.context) {
+         // Note: We destroy and recreate _musicFaderGain each time, because
+         // it appears to occasionally start playing muted if we do not do
+         // so, even when gain.value===1, on Chrome 38.
          if (this._currentMusic) {
             this._currentMusic.stop();
             this._currentMusic.disconnect();
             delete this._currentMusic;
-            this._faderGain.disconnect();
-            delete this._faderGain;
+            this._musicFaderGain.disconnect();
+            delete this._musicFaderGain;
          }
-         this._faderGain = this.context.createGain();
-         this._faderGain.gain.setValueAtTime(1, this.context.currentTime);
-         this._faderGain.gain.value = 1;
+         this._musicFaderGain = this.context.createGain();
+         this._musicFaderGain.gain.setValueAtTime(1, this.context.currentTime);
+         this._musicFaderGain.gain.value = 1;
          this._currentMusic = this.context.createBufferSource();
          this._currentMusic.buffer = this._soundBuffers[id];
          this._currentMusic.loop = true;
-         this._currentMusic.connect(this._faderGain);
-         this._faderGain.connect(this.context.destination);
+         this._currentMusic.connect(this._musicFaderGain);
+         this._musicFaderGain.connect(this._volumeFaderGain);
          this._currentMusic.start(0);
          console.log('Just started new music with id: ' + id);
       }
@@ -110,9 +120,20 @@ gtp.AudioSystem.prototype = {
       if (this.context) {
          var source = this.context.createBufferSource();
          source.buffer = this._soundBuffers[id];
-         source.connect(this.context.destination);
+         source.connect(this._volumeFaderGain);
          source.start(0);
       }
+   },
+   
+   toggleMuted: function() {
+      'use strict';
+      this._muted = !this._muted;
+      if (this.context) {
+         var initialValue = this._muted ? 0 : 1;
+         this._volumeFaderGain.gain.setValueAtTime(initialValue, this.context.currentTime);
+         this._volumeFaderGain.gain.value = initialValue;
+      }
+      return this._muted;
    },
    
    get fadeMusic() {

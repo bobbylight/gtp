@@ -62,6 +62,7 @@
                  "properties":
                     {
                      "col":"1",
+                     "dir":"east",
                      "map":"brecconary",
                      "row":"16"
                     },

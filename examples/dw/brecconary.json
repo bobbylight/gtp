@@ -32,6 +32,7 @@
                  "properties":
                     {
                      "col":"50",
+                     "dir":"south",
                      "map":"overworld",
                      "row":"51"
                     },
@@ -47,6 +48,7 @@
                  "properties":
                     {
                      "col":"50",
+                     "dir":"south",
                      "map":"overworld",
                      "row":"51"
                     },
@@ -62,6 +64,7 @@
                  "properties":
                     {
                      "col":"50",
+                     "dir":"south",
                      "map":"overworld",
                      "row":"51"
                     },

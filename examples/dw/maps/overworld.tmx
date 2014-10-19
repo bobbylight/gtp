@@ -41,6 +41,7 @@
   <object name="becconary" type="warp" x="800" y="816" width="16" height="16">
    <properties>
     <property name="col" value="1"/>
+    <property name="dir" value="east"/>
     <property name="map" value="brecconary"/>
     <property name="row" value="16"/>
    </properties>

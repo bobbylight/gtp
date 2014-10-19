@@ -82,7 +82,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
     * Starts loading a new map.  Fades out of the old one and into the new one.
     */
    loadMap: {
-      value: function(mapName, newRow, newCol) {
+      value: function(mapName, newRow, newCol, dir) {
          'use strict';
 //         newMap = this.getMapImpl(mapName);
          this.newRow = newRow;
@@ -93,6 +93,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             self.hero.setMapLocation(-1, -1); // Free the location he was in in the map
             self.setMap(mapName + '.json');
             self.hero.setMapLocation(newRow, newCol);
+            self.hero.direction = dir || Direction.SOUTH;
             self.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
          };
          this.setState(new /*FadeOutInState*/MapChangeState(this.state, this.state, updatePlayer));
@@ -272,6 +273,14 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function(row, col) {
          'use strict';
          return row + ',' + col;
+      }
+   },
+   
+   toggleMuted: {
+      value: function() {
+         'use strict';
+         var muted = this.audio.toggleMuted();
+         this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
       }
    },
    

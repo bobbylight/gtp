@@ -54,6 +54,7 @@ RoamingEntity.prototype = {
     * method returns true iff the specified location is outside of that range.
     */
    _isOutOfRange: function(row, col) {
+      'use strict';
       if (this.range) {
          return col<this.range[0] || col>this.range[2] ||
                row<this.range[1] || row>this.range[3];
@@ -65,7 +66,6 @@ RoamingEntity.prototype = {
       'use strict';
       if (this.mapRow!=null && this.mapCol!=null) {
          var layer = game.getCollisionLayer();
-         console.log('*** clearing data at: ' + this.mapRow + ', ' + this.mapCol);
          layer.setData(this.mapRow, this.mapCol, 0);
          if (row>-1 && col>-1) { // row===-1 && col===-1 => don't display
             layer.setData(row, col, 1);

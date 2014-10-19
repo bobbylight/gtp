@@ -11,6 +11,7 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
          game.canvas.addEventListener('touchstart', this.handleStart, false);
          this._delay = new gtp.Delay([ 600, 400 ]);
          this._blink = true;
+         game.audio.playMusic('titleMusic');
       }
    },
    

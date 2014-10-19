@@ -25,7 +25,8 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
          if ('warp' === obj.type) {
             var newRow = parseInt(obj.properties.row, 10);
             var newCol = parseInt(obj.properties.col, 10);
-            game.loadMap(obj.properties. map, newRow, newCol);
+            var newDir = Direction.fromString(obj.properties.dir);
+            game.loadMap(obj.properties. map, newRow, newCol, newDir);
          }
       }   
    },

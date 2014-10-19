@@ -26,8 +26,8 @@ MapChangeState.prototype = Object.create(gtp.FadeOutInState.prototype, {
    _setState: {
       value: function(state) {
          'use strict';
-         gtp.FadeOutInState.prototype._setState.apply(this, arguments);
          game.getMapLogic().init();
+         gtp.FadeOutInState.prototype._setState.apply(this, arguments);
       }
    }
    

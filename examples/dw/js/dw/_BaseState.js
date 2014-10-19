@@ -34,6 +34,9 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
                game.canvas.style.width = (parseInt(game.canvas.style.width.substring(0, game.canvas.style.width.length-2), 10)-1) + 'px';
                game.canvas.style.height = (parseInt(game.canvas.style.height.substring(0, game.canvas.style.height.length-2), 10)-1) + 'px';
             }
+            else if (im.isKeyDown(gtp.Keys.M, true)) {
+               game.toggleMuted();
+            }
          }
          
       }
