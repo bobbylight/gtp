@@ -49,7 +49,6 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          if (!logic) {
             logic = this._mapLogics[logicFile] = new window[logicFile]();
          }
-         console.log('... ' + logic);
          return logic;
       }
    },
@@ -407,11 +406,14 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
-   anyKeyPressed: {
-      value: function() {
-         'use strict';
+   anyKeyDown: {
+      value: function(clear) {
+         if (typeof clear === 'undefined') {
+            clear = true;
+         }
          var im = this.inputManager;
-         return im.isKeyDown(gtp.Keys.X, true) || im.isKeyDown(gtp.Keys.Z, true);
+         return im.isKeyDown(gtp.Keys.Z, clear) || im.isKeyDown(gtp.Keys.X, clear) ||
+               im.isKeyDown(gtp.Keys.ENTER, clear);
       }
    },
    

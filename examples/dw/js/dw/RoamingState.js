@@ -76,7 +76,8 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             return;
          }
          
-         if (!hero.isMoving()) {
+         // Make sure we're not in BattleTransitionState
+         if (!hero.isMoving() && game.state===this) {
             
             if (im.isKeyDown(gtp.Keys.UP_ARROW)) {
                hero.tryToMoveUp();

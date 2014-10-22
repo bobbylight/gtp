@@ -27,8 +27,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          
          this.handleDefaultKeys();
          
-         var im = game.inputManager;
-         if (im.isKeyDown(gtp.Keys.ENTER)) {
+         if (game.anyKeyDown(true)) {
             game.setState(new RoamingState());
          }
          

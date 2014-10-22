@@ -32,12 +32,14 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             return false;
          }
          
-         if (!this._textDone && game.anyKeyPressed()) {
-            this._textDone = true;
-            this._curLine = this._lines.length - 1;
-         }
-         else if (game.anyKeyPressed()) {
-            return !this._updateConversation();
+         if (game.anyKeyDown()) {
+            if (!this._textDone) {
+               this._textDone = true;
+               this._curLine = this._lines.length - 1;
+            }
+            else {
+               return !this._updateConversation();
+            }
          }
          return false;
       }

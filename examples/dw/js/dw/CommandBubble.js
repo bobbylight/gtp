@@ -73,12 +73,12 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
             this.selection += 4;
          }
       
-         else if (im.isKeyDown(gtp.Keys.X, true)) {
+         else if (game.cancelKeyPressed()) {
             this.selection = -1;
             return true;
          }
       
-         else if (im.isKeyDown(gtp.Keys.Z, true)) {
+         else if (game.actionKeyPressed()) {
             game.audio.playSound('menu');
             return true;
          }

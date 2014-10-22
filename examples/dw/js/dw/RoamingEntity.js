@@ -23,7 +23,6 @@ RoamingEntity.prototype = {
    
    handleIsMovingInUpdate: function() {
       'use strict';
-      
       if (this.isMoving()) {
          if (this.xOffs<0) {
             this.xOffs += this.getMoveIncrement();
