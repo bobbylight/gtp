@@ -91,7 +91,7 @@ Bubble.prototype = {
    
    getYMargin: function() {
       'use strict';
-      return 8 * game._scale;
+      return this.title ? game.getTileSize() : (8 * game._scale);
    },
    
    update: function(delta) {

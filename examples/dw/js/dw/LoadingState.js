@@ -23,15 +23,18 @@ setTimeout(function() {
       game.assets.addImage('font', 'res/font_10x10.png');
       game.assets.addJson('overworld.json');
       game.assets.addJson('brecconary.json');
-      game.assets.addSound('titleMusic', 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
-      game.assets.addSound('overworldMusic', 'res/sound/05 Dragon Quest 1 - Kingdom of Alefgard (22khz mono).ogg');
-      game.assets.addSound('bump', 'res/sound/42 Dragon Quest 1 - Bumping into Walls (22khz mono).wav');
+      game.assets.addSound(Sounds.MUSIC_TITLE_SCREEN, 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
+      game.assets.addSound(Sounds.MUSIC_TOWN, 'res/sound/04 Dragon Quest 1 - Peaceful Village (22khz mono).ogg');
+      game.assets.addSound(Sounds.MUSIC_OVERWORLD, 'res/sound/05 Dragon Quest 1 - Kingdom of Alefgard (22khz mono).ogg');
+      game.assets.addSound(Sounds.MUSIC_BATTLE, 'res/sound/14 Dragon Quest 1 - A Monster Draws Near (16khz mono).ogg', 2.32);
+      game.assets.addSound('run',  'res/sound/30 Dragon Quest 1 - Stairs Down (22khz mono).wav');
       game.assets.addSound('menu', 'res/sound/32 Dragon Quest 1 - Menu Button (22khz mono).wav');
+      game.assets.addSound('bump', 'res/sound/42 Dragon Quest 1 - Bumping into Walls (22khz mono).wav');
       game.assets.addSound('stairs', 'res/sound/30 Dragon Quest 1 - Stairs Down (22khz mono).wav');
       game.assets.onLoad(function() {
          
          var font = game.assets.get('font');
-         game.assets.set('font', new gtp.BitmapFont(font, 20,20, 12));
+         game.assets.set('font', new gtp.BitmapFont(font, 18,20, 14,12));
          
          game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
          game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));

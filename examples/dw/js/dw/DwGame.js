@@ -126,8 +126,11 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          'use strict';
          console.log('Setting map to: ' + assetName);
          this.map = this.maps[assetName];
-         this._resetMap(this.maps[assetName]);
-         this.audio.fadeOutMusic('overworldMusic');
+         this._resetMap(this.map);
+         var newMusic = Sounds[this.map.properties.music];
+         if (newMusic !== this.audio.getCurrentMusic()) {
+            this.audio.fadeOutMusic(newMusic);
+         }
       }
    },
    
@@ -408,6 +411,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    anyKeyDown: {
       value: function(clear) {
+         'use strict';
          if (typeof clear === 'undefined') {
             clear = true;
          }

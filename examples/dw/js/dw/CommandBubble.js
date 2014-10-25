@@ -1,7 +1,8 @@
 function CommandBubble() {
    'use strict';
    var scale = game._scale;
-   Bubble.call(this, "COMMAND", 90*scale, 2*scale, 140*scale, 90*scale);
+   var tileSize = game.getTileSize();
+   Bubble.call(this, "COMMAND", 90*scale, tileSize, 140*scale, 90*scale);
    this.selection = 0;
 }
 
@@ -54,22 +55,22 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
          
          var im = game.inputManager;
          
-         if (im.isKeyDown(gtp.Keys.UP_ARROW, true)) {
+         if (im.up(true)) {
             this.selection = this.selection - 1;
             if (this.selection<0) {
                this.selection = 7;
             }
          }
       
-         else if (im.isKeyDown(gtp.Keys.DOWN_ARROW, true)) {
+         else if (im.down(true)) {
             this.selection = Math.floor((this.selection+1) % 8);
          }
       
-         else if (this.selection>3 && im.isKeyDown(gtp.Keys.LEFT_ARROW, true)) {
+         else if (this.selection>3 && im.left(true)) {
             this.selection -= 4;
          }
       
-         else if (this.selection<4 && im.isKeyDown(gtp.Keys.RIGHT_ARROW, true)) {
+         else if (this.selection<4 && im.right(true)) {
             this.selection += 4;
          }
       

@@ -5,6 +5,14 @@ var BattleState = function() {
 
 BattleState.prototype = Object.create(_BaseState.prototype, {
    
+   init: {
+      value: function(game) {
+         'use strict';
+         gtp.State.prototype.init.apply(this, arguments); // Not defined in super, but in parent of super (?)
+         this._commandBubble = new BattleCommandBubble();
+      }
+   },
+   
    render: {
       value: function(ctx) {
          'use strict';
@@ -18,6 +26,18 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          var y = (height - battleBG.height)/2;
          battleBG.draw(ctx, x, y);
          
+         // Might not have had init() called yet if called from BattleTransitionState
+         if (this._commandBubble) {
+            this._commandBubble.paint(ctx);
+         }
+      }
+   },
+   
+   tryToRun: {
+      value: function() {
+         'use strict';
+         game.audio.playSound('run');
+         game.setState(new RoamingState());
       }
    },
    
@@ -27,8 +47,8 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          
          this.handleDefaultKeys();
          
-         if (game.anyKeyDown(true)) {
-            game.setState(new RoamingState());
+         if (this._commandBubble.handleInput()) {
+            this._commandBubble.handleCommandChosen(this);
          }
          
       }

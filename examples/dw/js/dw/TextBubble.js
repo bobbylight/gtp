@@ -106,7 +106,6 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
     * Renders text in this bubble.
     * 
     * @param {TalkSegment} text The text to render.
-    * @member
     */
    setText: {
       value: function(text) {

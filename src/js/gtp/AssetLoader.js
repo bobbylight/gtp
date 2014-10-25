@@ -85,8 +85,10 @@ gtp.AssetLoader.prototype = {
     * Starts loading a sound resource.
     * @param id {string} The ID to use when retrieving this resource.
     * @param soundSrc {string} The URL of the resource.
+    * @param {number} [loopStart=0] Where to start, in seconds, if/when this
+    *        sound loops (which is typical when using a sound as music).
     */
-   addSound: function(id, soundSrc) {
+   addSound: function(id, soundSrc, loopStart) {
       'use strict';
       
       if (this.audio.isInitialized()) {
@@ -101,7 +103,8 @@ gtp.AssetLoader.prototype = {
          xhr.onload = function() {
             // TODO: Clean up this API
             self.audio.context.decodeAudioData(xhr.response, function(buffer) {
-               self.audio.addSound(id, buffer);
+               var sound = new gtp.Sound(id, buffer, loopStart || 0);
+               self.audio.addSound(sound);
                self._completed(id, buffer);
             });
          };

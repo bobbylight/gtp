@@ -38,10 +38,10 @@ QuestionBubble.prototype = Object.create(Bubble.prototype, {
          
          var im = game.inputManager;
          
-         if (im.isKeyDown(gtp.Keys.UP_ARROW, true)) {
+         if (im.up(true)) {
             this._curChoice = Math.max(0, this._curChoice-1);
          }
-         else if (im.isKeyDown(gtp.Keys.DOWN_ARROW, true)) {
+         else if (im.down(true)) {
             this._curChoice = Math.min(this._curChoice+1, this._choices.length-1);
          }
          

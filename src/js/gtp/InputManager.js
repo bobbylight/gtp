@@ -29,6 +29,18 @@ gtp.InputManager.prototype = {
    },
    
    /**
+    * Returns whether down is pressed.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   down: function(clear) {
+      'use strict';
+      return this.isKeyDown(gtp.Keys.DOWN_ARROW, clear);
+   },
+   
+   /**
     * Installs this keyboard manager.  Should be called during game
     * initialization.
     */
@@ -70,6 +82,42 @@ gtp.InputManager.prototype = {
          this.keys[keyCode] = false;
       }
       return down;
+   },
+   
+   /**
+    * Returns whether left is pressed.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   left: function(clear) {
+      'use strict';
+      return this.isKeyDown(gtp.Keys.LEFT_ARROW, clear);
+   },
+   
+   /**
+    * Returns whether right is pressed.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   right: function(clear) {
+      'use strict';
+      return this.isKeyDown(gtp.Keys.RIGHT_ARROW, clear);
+   },
+   
+   /**
+    * Returns whether up is pressed.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   up: function(clear) {
+      'use strict';
+      return this.isKeyDown(gtp.Keys.UP_ARROW, clear);
    }
-
+   
 };

@@ -28,6 +28,7 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
          
          this.state = 0;
          this.tick = 0;
+         game.audio.playMusic(Sounds.MUSIC_BATTLE);
          
       }
    },
@@ -63,70 +64,70 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
                break;
             case 24:
                ctx.drawImage(this._enteringStateScreenshot, x[4],y[1],x[4]+xts-x[4],y[2]-y[1], x[4],y[1],x[4]+xts-x[4],y[2]-y[1]);
-               // Fall through
+               /* falls through */
             case 23:
                ctx.drawImage(this._enteringStateScreenshot, x[4],y[2],x[4]+xts-x[4],y[3]-y[2], x[4],y[2],x[4]+xts-x[4],y[3]-y[2]);
-               // Fall through
+               /* falls through */
             case 22:
                ctx.drawImage(this._enteringStateScreenshot, x[4],y[3],x[4]+xts-x[4],y[4]-y[3], x[4],y[3],x[4]+xts-x[4],y[4]-y[3]);
-               // Fall through
+               /* falls through */
             case 21:
                ctx.drawImage(this._enteringStateScreenshot, x[4],y[4],x[4]+xts-x[4],y[4]+yts-y[4], x[4],y[4],x[4]+xts-x[4],y[4]+yts-y[4]);
-               // Fall through
+               /* falls through */
             case 20:
                ctx.drawImage(this._enteringStateScreenshot, x[0],y[0],x[4]-x[0],y[4]+yts-y[0], x[0],y[0],x[4]-x[0],y[4]+yts-y[0]);
                break;
             case 19:
                ctx.drawImage(this._enteringStateScreenshot, x[2],y[4],x[3]-x[2],y[4]+yts-y[4], x[2],y[4],x[3]-x[2],y[4]+yts-y[4]);
-               // Fall through
+               /* falls through */
             case 18:
                ctx.drawImage(this._enteringStateScreenshot, x[1],y[4],x[2]-x[1],y[4]+yts-y[4], x[1],y[4],x[2]-x[1],y[4]+yts-y[4]);
-               // Fall through
+               /* falls through */
             case 17:
                ctx.drawImage(this._enteringStateScreenshot, x[0],y[4],x[1]-x[0],y[4]+yts-y[4], x[0],y[4],x[1]-x[0],y[4]+yts-y[4]);
-               // Fall through
+               /* falls through */
             case 16:
                ctx.drawImage(this._enteringStateScreenshot, x[0],y[3],x[1]-x[0],y[4]-y[3], x[0],y[3],x[1]-x[0],y[4]-y[3]);
-               // Fall through
+               /* falls through */
             case 15:
                ctx.drawImage(this._enteringStateScreenshot, x[0],y[2],x[1]-x[0],y[3]-y[2], x[0],y[2],x[1]-x[0],y[3]-y[2]);
-               // Fall through
+               /* falls through */
             case 14:
                ctx.drawImage(this._enteringStateScreenshot, x[0],y[1],x[1]-x[0],y[2]-y[1], x[0],y[1],x[1]-x[0],y[2]-y[1]);
-               // Fall through
+               /* falls through */
             case 13:
                ctx.drawImage(this._enteringStateScreenshot, x[0],y[0],x[1]-x[0],y[1]-y[0], x[0],y[0],x[1]-x[0],y[1]-y[0]);
-               // Fall through
+               /* falls through */
             case 12:
                ctx.drawImage(this._enteringStateScreenshot, x[1],y[0],x[4]-x[1],y[4]-y[0], x[1],y[0],x[4]-x[1],y[4]-y[0]);
                break;
             case 11:
                ctx.drawImage(this._enteringStateScreenshot, x[2],y[0],x[3]-x[2],y[1]-y[0], x[2],y[0],x[3]-x[2],y[1]-y[0]);
-               // Fall through
+               /* falls through */
             case 10:
                ctx.drawImage(this._enteringStateScreenshot, x[3],y[0],x[4]-x[3],y[1]-y[0], x[3],y[0],x[4]-x[3],y[1]-y[0]);
-               // Fall through
+               /* falls through */
             case 9:
                ctx.drawImage(this._enteringStateScreenshot, x[1],y[1],x[4]-x[1],y[4]-y[1], x[1],y[1],x[4]-x[1],y[4]-y[1]);
                break;
             case 8:
                ctx.drawImage(this._enteringStateScreenshot, x[3],y[2],x[4]-x[3],y[3]-y[2], x[3],y[2],x[4]-x[3],y[3]-y[2]);
-               // Fall through
+               /* falls through */
             case 7:
                ctx.drawImage(this._enteringStateScreenshot, x[3],y[3],x[4]-x[3],y[4]-y[3], x[3],y[3],x[4]-x[3],y[4]-y[3]);
-               // Fall through
+               /* falls through */
             case 6:
                ctx.drawImage(this._enteringStateScreenshot, x[1],y[1],x[3]-x[1],y[4]-y[1], x[1],y[1],x[3]-x[1],y[4]-y[1]);
                break;
             case 5:
                ctx.drawImage(this._enteringStateScreenshot, x[1],y[3],x[2]-x[1],y[4]-y[3], x[1],y[3],x[2]-x[1],y[4]-y[3]);
-               // Fall through
+               /* falls through */
             case 4:
                ctx.drawImage(this._enteringStateScreenshot, x[1],y[1],x[3]-x[1],y[3]-y[1], x[1],y[1],x[3]-x[1],y[3]-y[1]);
                break;
             case 3:
                ctx.drawImage(this._enteringStateScreenshot, x[1],y[1],x[2]-x[1],y[2]-y[1], x[1],y[1],x[2]-x[1],y[2]-y[1]);
-               // Fall through
+               /* falls through */
             case 2:
                ctx.drawImage(this._enteringStateScreenshot, x[2],y[1],x[3]-x[2],y[3]-y[1], x[2],y[1],x[3]-x[2],y[3]-y[1]);
                break;
@@ -144,7 +145,7 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
          
          this.handleDefaultKeys();
          
-         if (this.tick==0) {
+         if (this.tick===0) {
             this.tick = game.getGameTime() + this._TICK_COUNT;
          }
          else {

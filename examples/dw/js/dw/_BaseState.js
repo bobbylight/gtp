@@ -8,6 +8,7 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
    
    createScreenshot: {
       value: function() {
+         'use strict';
          var canvas = gtp.ImageUtils.createCanvas(game.getWidth(), game.getHeight());
          var ctx = canvas.getContext('2d');
          this.render(ctx);

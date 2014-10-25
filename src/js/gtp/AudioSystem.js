@@ -8,7 +8,7 @@ var gtp = gtp || {};
 gtp.AudioSystem = function() {
    'use strict';
    this._currentMusic = null;
-   this._soundBuffers = {};
+   this._sounds = {};
    this._musicFade = 0.3; // seconds
    this._fadeMusic = true;
    this._muted = false;
@@ -37,13 +37,12 @@ gtp.AudioSystem.prototype = {
    
    /**
     * Registers a sound for later playback.
-    * @param id {string} The ID to use when retrieving this sound.
-    * @param buffer {object} The sound data.
+    * @param sound {gtp.Sound} The sound.
     */
-   addSound: function(id, buffer) {
+   addSound: function(sound) {
       'use strict';
       if (this.context) {
-         this._soundBuffers[id] = buffer;
+         this._sounds[sound.id] = sound;
       }
    },
    
@@ -66,6 +65,16 @@ gtp.AudioSystem.prototype = {
             this.playMusic(newMusicId);
          }
       }
+   },
+   
+   /**
+    * Returns the ID of the current music being played.
+    * 
+    * @return {string} The current music's ID.
+    */
+   getCurrentMusic: function() {
+      'use strict';
+      return this.currentMusicId;
    },
    
    /**
@@ -102,11 +111,16 @@ gtp.AudioSystem.prototype = {
          this._musicFaderGain.gain.setValueAtTime(1, this.context.currentTime);
          this._musicFaderGain.gain.value = 1;
          this._currentMusic = this.context.createBufferSource();
-         this._currentMusic.buffer = this._soundBuffers[id];
          this._currentMusic.loop = true;
+         var sound = this._sounds[id];
+         this._musicLoopStart = sound.loopStart || 0;
+         this._currentMusic.loopStart = this._musicLoopStart;
+         this._currentMusic.buffer = sound.buffer;
+         this._currentMusic.loopEnd = this._currentMusic.buffer.duration;
          this._currentMusic.connect(this._musicFaderGain);
          this._musicFaderGain.connect(this._volumeFaderGain);
          this._currentMusic.start(0);
+         this.currentMusicId = id;
          console.log('Just started new music with id: ' + id);
       }
    },
@@ -119,7 +133,7 @@ gtp.AudioSystem.prototype = {
       'use strict';
       if (this.context) {
          var source = this.context.createBufferSource();
-         source.buffer = this._soundBuffers[id];
+         source.buffer = this._sounds[id].buffer;
          source.connect(this._volumeFaderGain);
          source.start(0);
       }

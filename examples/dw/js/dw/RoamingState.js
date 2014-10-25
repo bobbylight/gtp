@@ -79,19 +79,19 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          // Make sure we're not in BattleTransitionState
          if (!hero.isMoving() && game.state===this) {
             
-            if (im.isKeyDown(gtp.Keys.UP_ARROW)) {
+            if (im.up()) {
                hero.tryToMoveUp();
                //this.yOffs = Math.max(this.yOffs-inc, 0);
             }
-            else if (im.isKeyDown(gtp.Keys.DOWN_ARROW)) {
+            else if (im.down()) {
                hero.tryToMoveDown();
                //this.yOffs = Math.min(this.yOffs+inc, maxY);
             }
-            else if (im.isKeyDown(gtp.Keys.LEFT_ARROW)) {
+            else if (im.left()) {
                hero.tryToMoveLeft();
                //this.xOffs = Math.max(this.xOffs-inc, 0);
             }
-            else if (im.isKeyDown(gtp.Keys.RIGHT_ARROW)) {
+            else if (im.right()) {
                hero.tryToMoveRight();
                //this.xOffs = Math.min(this.xOffs+inc, maxX);
             }

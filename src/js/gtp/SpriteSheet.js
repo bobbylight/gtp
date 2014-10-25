@@ -6,23 +6,25 @@ var gtp = gtp || {};
  * @param {gtp.Image} gtpImage A GTP image that is the source for the sprite sheet.
  * @param {int} cellW The width of a cell in the sprite sheet.
  * @param {int} cellH The height of a cell in the sprite sheet.
- * @param {int} spacing Optional empty space between cells.  This defaults to
- *        <code>1</code> if not specified.
+ * @param {int} [spacing=1] Optional empty space between cells.
+ * @param {int} [spacingY=spacing] Optional vertical empty space between cells.
+ *        Specify only if different than the horizontal spacing.
  * @constructor
  */
-gtp.SpriteSheet = function(gtpImage, cellW, cellH, spacing) {
+gtp.SpriteSheet = function(gtpImage, cellW, cellH, spacing, spacingY) {
    'use strict';
    this.gtpImage = gtpImage;
    this.cellW = cellW;
    this.cellH = cellH;
-   this.spacing = spacing || 1;
+   this.spacingX = spacing || 1;
+   this.spacingY = spacingY || this.spacingX;
    
-   this.rowCount = Math.floor(gtpImage.height / (cellH + spacing));
-   if ((gtpImage.height - this.rowCount*(cellH+spacing)) >= cellH) {
+   this.rowCount = Math.floor(gtpImage.height / (cellH + this.spacingY));
+   if ((gtpImage.height - this.rowCount*(cellH+this.spacingY)) >= cellH) {
       this.rowCount++;
    }
-   this.colCount = Math.floor(gtpImage.width / (cellW + spacing));
-   if ((gtpImage.width - this.colCount*(cellW+spacing)) >= cellW) {
+   this.colCount = Math.floor(gtpImage.width / (cellW + this.spacingX));
+   if ((gtpImage.width - this.colCount*(cellW+this.spacingX)) >= cellW) {
       this.colCount++;
    }
    
@@ -43,8 +45,8 @@ gtp.SpriteSheet.prototype = {
       'use strict';
       var cellW = this.cellW;
       var cellH = this.cellH;
-      var srcX = (cellW + this.spacing) * col;//(col-1);
-      var srcY = (cellH + this.spacing) * row;//(row-1);
+      var srcX = (cellW + this.spacingX) * col;//(col-1);
+      var srcY = (cellH + this.spacingY) * row;//(row-1);
       //ctx.drawImage(this.gtpImage.canvas, srcX,srcY,cellW,cellH, x,y,cellW,cellH);
       this.gtpImage.drawScaled2(ctx, srcX,srcY,cellW,cellH, x,y,cellW,cellH);
    },
