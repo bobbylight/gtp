@@ -26,6 +26,11 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          var y = (height - battleBG.height)/2;
          battleBG.draw(ctx, x, y);
          
+         var enemyImg = game.assets.get('Slime');
+         var x = (width - enemyImg.width) / 2;
+         var y = height/2 + 50 - enemyImg.height;//(height - enemyImg.height) / 2;
+         enemyImg.draw(ctx, x, y);
+         
          // Might not have had init() called yet if called from BattleTransitionState
          if (this._commandBubble) {
             this._commandBubble.paint(ctx);

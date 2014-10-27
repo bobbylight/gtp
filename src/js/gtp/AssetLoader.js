@@ -54,6 +54,33 @@ gtp.AssetLoader.prototype = {
    },
    
    /**
+    * Starts loading a canvas resource.
+    * @param id {string} The ID to use when retrieving this resource.
+    * @param imageSrc {string} The URL of the resource.
+    */
+   addCanvas: function(id, imageSrc) {
+      'use strict';
+      
+      var self = this;
+      
+      var image = new Image();
+      if (this._isAlreadyTracked(id)) {
+         return;
+      }
+      this.loadingAssetData[id] = { type: gtp.AssetType.IMAGE };
+      console.log('Adding: ' + id + ' => ' + imageSrc +
+            ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
+            ', callback == ' + (this.callback!==null));
+      image.addEventListener('load', function() {
+         var canvas = gtp.ImageUtils.resize(image, self._scale);
+         self._completed(id, canvas);
+      });
+      
+      image.src = imageSrc;
+      
+   },
+   
+   /**
     * Starts loading an image resource.
     * @param id {string} The ID to use when retrieving this resource.
     * @param imageSrc {string} The URL of the resource.

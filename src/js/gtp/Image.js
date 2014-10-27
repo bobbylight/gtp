@@ -9,11 +9,20 @@ var gtp = gtp || {};
  *
  * @constructor
  */
-gtp.Image = function(canvas) {
+gtp.Image = function(canvas, x, y, w, h) {
    'use strict';
    this._canvas = canvas;
-   this.width = this._canvas.width;
-   this.height = this._canvas.height;
+   if (x!=null && y!=null && w!=null && h!=null) {
+      this.x = x;
+      this.y = y;
+      this._width = w;
+      this._height = h;
+   }
+   else {
+      this.x = this.y = 0;
+      this._width = this._canvas.width;
+      this._height = this._canvas.height;
+   }
    this._ensure256Square();
 };
 
@@ -44,7 +53,8 @@ gtp.Image.prototype = {
     */
    draw: function(ctx, x, y) {
       'use strict';
-      ctx.drawImage(this._canvas, x, y);
+      ctx.drawImage(this._canvas, this.x,this.y,this._width,this._height,
+            x,y,this._width,this._height);
    },
    
    /**
@@ -60,7 +70,8 @@ gtp.Image.prototype = {
     */
    drawScaled: function(ctx, x, y, w, h) {
       'use strict';
-      ctx.drawImage(this._canvas, x, y, w, h);
+      ctx.drawImage(this._canvas, this.x,this.y,this._width,this._height,
+            x, y, w, h);
    },
    
    /**
@@ -80,7 +91,10 @@ gtp.Image.prototype = {
     */
    drawScaled2: function(ctx, srcX,srcY,srcW,srcH, destX,destY,destW,destH) {
       'use strict';
-      ctx.drawImage(this._canvas, srcX,srcY,srcW,srcH, destX,destY,destW,destH);
+      srcX = this.x + srcX;
+      srcY = this.y + srcY;
+      ctx.drawImage(this._canvas, srcX,srcY,srcW,srcH,
+            destX,destY,destW,destH);
    },
    
    /**
@@ -97,6 +111,16 @@ gtp.Image.prototype = {
    makeColorTranslucent: function(x, y) {
       'use strict';
       gtp.ImageUtils.makeColorTranslucent(this._canvas, x, y);
+   },
+   
+   get width() {
+      'use strict';
+      return this._width;
+   },
+   
+   get height() {
+      'use strict';
+      return this._height;
    }
-
+   
 };
