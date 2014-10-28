@@ -41,7 +41,9 @@ setTimeout(function() {
          // delete game.assets.get('monsters');
          var images = atlas.parse();
          for (var id in images) {
-            game.assets.set(id, images[id]);
+            if (images.hasOwnProperty(id)) {
+               game.assets.set(id, images[id]);
+            }
          }
          
          var font = game.assets.get('font');

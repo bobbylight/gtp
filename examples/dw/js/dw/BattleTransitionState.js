@@ -56,7 +56,7 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
    
          var x = [ cx-2*xts-xts/2, cx-xts-xts/2, cx-xts/2, cx+xts/2, cx+xts+xts/2 ];
          var y = [ cy-2*yts-yts/2, cy-yts-yts/2, cy-yts/2, cy+yts/2, cy+yts+xts/2 ];
-   console.log('Rendering: ' + this.state);
+         
          switch (this.state) {
    
             case 25:

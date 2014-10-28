@@ -23,6 +23,7 @@ Brecconary.prototype = (function() {
                'But you should buy some supplies before venturing out...',
                {
                   id: 'makeUserChoose',
+                  clear: true,
                   text: 'Do you want my help?',
                   choices: [
                      { text: 'Yes', next: function() {

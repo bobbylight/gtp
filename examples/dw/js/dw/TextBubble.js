@@ -3,15 +3,38 @@ function TextBubble(game) {
    var scale = game._scale;
    var margin = Bubble.MARGIN*scale;
    var width = game.getWidth() - 2*margin;
-   var height = TextBubble.HEIGHT * scale;
+   var height = game.getTileSize() * 5;
    Bubble.call(this, null, margin, game.getHeight()-margin-height,
          width, height);
 }
 
-TextBubble.HEIGHT = 100;
 TextBubble.CHAR_RENDER_MILLIS = 40;
 
 TextBubble.prototype = Object.create(Bubble.prototype, {
+   
+   addToConversation: {
+      value: function(text) {
+         'use strict';
+         this._conversation.addSegment(text);
+         this._updateConversation();
+      }
+   },
+   
+   _append: {
+      value: function(text) {
+         'use strict';
+         this._text = this._text + '\n' + text.text;
+         this._curLine = this._lines.length;
+         var w = this.w - 2*Bubble.MARGIN;
+         this._lines = this._lines.concat(this._breakApart(text.text, w));
+         this._curOffs = 0;
+         this._curCharMillis = 0;
+         this._textDone = false;
+         if (text.choices) {
+            this._questionBubble = new QuestionBubble(game, text.choices);
+         }
+      }
+   },
    
    /**
     * Returns whether the user is "done" talking; that is, whether the entire
@@ -42,6 +65,17 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             }
          }
          return false;
+      }
+   },
+   
+   /**
+    * Returns true if the current conversation has completed.
+    */
+   isDone: {
+      value: function() {
+         'use strict';
+         return this._textDone && !this._questionBubble &&
+               (!this.conversation || !this.conversation.hasNext());
       }
    },
    
@@ -107,7 +141,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
     * 
     * @param {TalkSegment} text The text to render.
     */
-   setText: {
+   _setText: {
       value: function(text) {
          'use strict';
          this._text = text.text;
@@ -129,7 +163,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          'use strict';
          delete this._questionBubble;
          this._conversation = conversation;
-         this.setText(this._conversation.start());
+         this._setText(this._conversation.start());
       }
    },
    
@@ -137,7 +171,13 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
       value: function() {
          'use strict';
          if (this._conversation.hasNext()) {
-            this.setText(this._conversation.next());
+            var segment = this._conversation.next();
+            if (segment.clear) {
+               this._setText(segment);
+            }
+            else {
+               this._append(segment);
+            }
             return true;
          }
          return false;
