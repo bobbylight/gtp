@@ -15,7 +15,7 @@ BattleCommandBubble.prototype = Object.create(Bubble.prototype, {
          switch (this.selection) {
       
             case 0: // Fight
-               console.log('Not implemented');
+               state.fight();
                break;
       
             case 1: // Run
@@ -23,11 +23,11 @@ BattleCommandBubble.prototype = Object.create(Bubble.prototype, {
                break;
       
             case 2: // Spell
-               console.log('Not implemented');
+               state.spell();
                break;
       
             case 3: // Item
-               console.log('Not implemented');
+               state.item();
                break;
             
          }

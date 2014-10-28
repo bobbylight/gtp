@@ -5,11 +5,27 @@ var BattleState = function() {
 
 BattleState.prototype = Object.create(_BaseState.prototype, {
    
+   fight: {
+      value: function() {
+         'use strict';
+         this._textBubble.append({ text: 'Command?' });
+      }
+   },
+   
    init: {
       value: function(game) {
          'use strict';
          gtp.State.prototype.init.apply(this, arguments); // Not defined in super, but in parent of super (?)
          this._commandBubble = new BattleCommandBubble();
+         this._textBubble = new TextBubble(game);
+         this._textBubble.setText({ text: 'A Slime draws near!  Command?' });
+      }
+   },
+   
+   item: {
+      value: function() {
+         'use strict';
+         this._textBubble.append({ text: 'Command?' });
       }
    },
    
@@ -32,9 +48,20 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          enemyImg.draw(ctx, x, y);
          
          // Might not have had init() called yet if called from BattleTransitionState
-         if (this._commandBubble) {
+         if (this._textBubble && this._textBubble.isDone() && this._commandBubble) {
             this._commandBubble.paint(ctx);
          }
+         if (this._textBubble) {
+            this._textBubble.paint(ctx);
+         }
+         
+      }
+   },
+   
+   run: {
+      value: function() {
+         'use strict';
+         console.log('Run is not implemented');
       }
    },
    
@@ -52,7 +79,11 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          
          this.handleDefaultKeys();
          
-         if (this._commandBubble.handleInput()) {
+         if (!this._textBubble.isDone()) {
+            this._textBubble.handleInput();
+            this._textBubble.update(delta);
+         }
+         else if (this._commandBubble.handleInput()) {
             this._commandBubble.handleCommandChosen(this);
          }
          

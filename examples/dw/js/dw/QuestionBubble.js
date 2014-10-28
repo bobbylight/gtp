@@ -5,7 +5,7 @@ function QuestionBubble(game, choices) {
    var x = 200 * scale;
    var y = 20 * scale;
    var width = game.getWidth() - 2*margin;
-   var height = TextBubble.HEIGHT * scale;
+   var height = game.getTileSize() * 5;
    Bubble.call(this, null, x, y, width, height);
    
    this._choices = choices;

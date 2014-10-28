@@ -3,15 +3,30 @@ function TextBubble(game) {
    var scale = game._scale;
    var margin = Bubble.MARGIN*scale;
    var width = game.getWidth() - 2*margin;
-   var height = TextBubble.HEIGHT * scale;
+   var height = game.getTileSize() * 5;
    Bubble.call(this, null, margin, game.getHeight()-margin-height,
          width, height);
 }
 
-TextBubble.HEIGHT = 100;
 TextBubble.CHAR_RENDER_MILLIS = 40;
 
 TextBubble.prototype = Object.create(Bubble.prototype, {
+   
+   append: {
+      value: function(text) {
+         'use strict';
+         this._curOffs = this._text.length;
+         this._text = this._text + text.text;
+         this._curLine = this._lines.length;
+         var w = this.w - 2*Bubble.MARGIN;
+         this._lines = this._lines.append(this._breakApart(this._text, w));
+         this._curCharMillis = 0;
+         this._textDone = false;
+         if (text.choices) {
+            this._questionBubble = new QuestionBubble(game, text.choices);
+         }
+      }
+   },
    
    /**
     * Returns whether the user is "done" talking; that is, whether the entire
@@ -42,6 +57,16 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             }
          }
          return false;
+      }
+   },
+   
+   /**
+    * Returns true if the current conversation has completed.
+    */
+   isDone: {
+      value: function() {
+         return this._textDone && !this._questionBubble &&
+               (!this.conversation || !this.conversation.hasNext());
       }
    },
    
