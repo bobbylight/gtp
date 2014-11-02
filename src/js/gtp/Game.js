@@ -138,7 +138,7 @@ gtp.Game.prototype = {
          this.state.leaving(this);
       }
       this.state = state;
-      this.state.init(this);
+      this.state.init();
    },
    
    _renderStatusMessage: function(ctx) {

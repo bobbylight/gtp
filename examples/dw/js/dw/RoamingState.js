@@ -7,6 +7,7 @@ var _RoamingSubState = Object.freeze({
 var RoamingState = function() {
    'use strict';
    
+   _BaseState.apply(this, arguments);
    this._substate = _RoamingSubState.ROAMING;
    
    this._updateMethods = {};

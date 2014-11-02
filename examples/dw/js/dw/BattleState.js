@@ -13,7 +13,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    },
    
    init: {
-      value: function(game) {
+      value: function() {
          'use strict';
          gtp.State.prototype.init.apply(this, arguments); // Not defined in super, but in parent of super (?)
          this._commandBubble = new BattleCommandBubble();

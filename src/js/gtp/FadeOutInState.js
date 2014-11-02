@@ -7,6 +7,7 @@ var gtp = gtp || {};
  */
 gtp.FadeOutInState = function(leavingState, enteringState, transitionLogic, timeMillis) {
    'use strict';
+   gtp.State.apply(this, arguments);
    this._leavingState = leavingState;
    this._enteringState = enteringState;
    this._transitionLogic = transitionLogic;
@@ -54,7 +55,6 @@ gtp.FadeOutInState.prototype = Object.create(gtp.State.prototype, {
       value: function(ctx) {
          'use strict';
          
-         var game = this.game;
          game.clearScreen();
          
          var previousAlpha = ctx.globalAlpha;

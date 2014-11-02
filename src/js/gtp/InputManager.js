@@ -41,6 +41,18 @@ gtp.InputManager.prototype = {
    },
    
    /**
+    * Returns whether enter is pressed.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   enter: function(clear) {
+      'use strict';
+      return this.isKeyDown(gtp.Keys.ENTER, clear);
+   },
+   
+   /**
     * Installs this keyboard manager.  Should be called during game
     * initialization.
     */

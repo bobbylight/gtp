@@ -1,5 +1,6 @@
-var LoadingState = function() {
+var LoadingState = function(args) {
    'use strict';
+   _BaseState.apply(this, args);
    this.assetsLoaded = false;
 };
 LoadingState.prototype = Object.create(_BaseState.prototype, {
@@ -14,6 +15,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             
             this.assetsLoaded = true;
             var game = this.game;
+            var self = this;
             
 setTimeout(function() {
       game.assets.addImage('title', 'res/title.png');
@@ -52,7 +54,7 @@ setTimeout(function() {
          game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
          game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
          game.assets.onLoad(function() {
-            game.setState(new TitleScreenState());
+            game.setState(new gtp.FadeOutInState(self, new GamesAtLunchAdvertState()));
          });
       });
 }, 1000);

@@ -1,6 +1,6 @@
-var DwGame = function(args) {
+var DwGame = function() {
    'use strict';
-   gtp.Game.call(this, args);
+   gtp.Game.apply(this, arguments);
    this.map = null;
    this._drawMapCount = 0;
    this.hero = new Hero({ name: 'Erdrick' });
@@ -417,7 +417,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          }
          var im = this.inputManager;
          return im.isKeyDown(gtp.Keys.Z, clear) || im.isKeyDown(gtp.Keys.X, clear) ||
-               im.isKeyDown(gtp.Keys.ENTER, clear);
+               im.enter(clear);
       }
    },
    

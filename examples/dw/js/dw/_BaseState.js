@@ -1,7 +1,8 @@
 /**
  * Functionality common amongst all states in this game.
  */
-function _BaseState() {
+function _BaseState(args) {
+   gtp.State.apply(this, args);
 }
 
 _BaseState.prototype = Object.create(gtp.State.prototype, {

@@ -1,11 +1,13 @@
 var TitleScreenState = function() {
    'use strict';
+   _BaseState.apply(this, arguments);
    this.assetsLoaded = false;
 };
+
 TitleScreenState.prototype = Object.create(_BaseState.prototype, {
    
    init: {
-      value: function(game) {
+      value: function() {
          'use strict';
          _BaseState.prototype.init.apply(this, arguments);
          game.canvas.addEventListener('touchstart', this.handleStart, false);
@@ -42,7 +44,7 @@ handleStart: {
          }
          
          var im = game.inputManager;
-         if (im.isKeyDown(gtp.Keys.ENTER)) {
+         if (im.enter()) {
             this._startGame();
          }
          
