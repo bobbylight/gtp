@@ -78,7 +78,8 @@ gtp.AudioSystem.prototype = {
    },
    
    /**
-    * Starts loading a JSON resource.
+    * Returns whether the audio system initialized properly.  This will return
+    * false if the user's browser does not support the web audio API.
     * @param id {string} The ID to use when retrieving this resource.
     * @param url {string} The URL of the resource.
     * @return {boolean} Whether the sound system is initialized

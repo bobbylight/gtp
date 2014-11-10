@@ -64,10 +64,25 @@ handleStart: {
          var y = 30;
          img.draw(ctx, x, y);
          
+         if (game.audio.isInitialized()) {
+            var text = 'Sound is disabled as your';
+            x = ( w - game.stringWidth(text)) / 2;
+            y = 390;
+            game.drawString(text, x, y);
+            text = 'browser does not support';
+            x = ( w - game.stringWidth(text)) / 2;
+            y += 26;
+            game.drawString(text, x, y);
+            text = 'web audio';
+            x = (w - game.stringWidth(text)) / 2;
+            y += 26;
+            game.drawString(text, x, y);
+         }
+         
          if (this._blink) {
             var prompt = 'Press Enter';
             x = (w - game.stringWidth(prompt)) / 2;
-            y = game.getHeight() - 40;
+            y = 240;
             game.drawString(prompt, x, y);
          }
       }
