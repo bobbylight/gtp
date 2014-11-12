@@ -140,7 +140,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          
          var data = this.assets.get(asset);
          var imagePathModifier = function(imagePath) {
-            return imagePath.replace('../maps', 'res');
+            return imagePath.replace('../', 'res/');
          };
          
          if (!this.maps) {
@@ -317,6 +317,13 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function() {
          'use strict';
          return game.map.getLayer('collisionLayer');
+      }
+   },
+   
+   getEnemyTerritoryLayer: {
+      value: function() {
+         'use strict';
+         return game.map.getLayer('enemyTerritoryLayer');
       }
    },
    

@@ -102,9 +102,7 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
 
          // See if we should fight a monster
          else {
-            if (game.randomInt(20)===0) {
-               game.startRandomEncounter();
-            }
+            this._possiblyStartRandomEncounter();
          }
       }
    },
@@ -117,6 +115,21 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
          'use strict';
          this.gold = Math.max(0, this.gold + amt);
          //game.audio.playSound('gold');
+      }
+   },
+   
+   _possiblyStartRandomEncounter: {
+      value: function() {
+         'use strict';
+         if (game.randomInt(20)===0) {
+            var enemyTerritoryLayer = game.getEnemyTerritoryLayer();
+            if (enemyTerritoryLayer) {
+               var territory = enemyTerritoryLayer.getData(game.hero.mapRow, game.hero.mapCol);
+               if (territory > 0) {
+                  game.startRandomEncounter();
+               }
+            }
+         }
       }
    }
    

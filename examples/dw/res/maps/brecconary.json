@@ -186,7 +186,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"res\/tiles.png",
+         "image":"..\/tiles.png",
          "imageheight":254,
          "imagewidth":407,
          "margin":0,
@@ -201,7 +201,7 @@
         }, 
         {
          "firstgid":361,
-         "image":"res\/collision.png",
+         "image":"..\/collision.png",
          "imageheight":50,
          "imagewidth":50,
          "margin":0,

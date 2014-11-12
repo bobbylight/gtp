@@ -17,7 +17,6 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             var game = this.game;
             var self = this;
             
-setTimeout(function() {
       game.assets.addImage('title', 'res/title.png');
       game.assets.addSpriteSheet('hero', 'res/hero.png', 16, 16, 1, true);
       game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1, true);
@@ -25,8 +24,9 @@ setTimeout(function() {
       game.assets.addImage('font', 'res/font_10x10.png');
       game.assets.addCanvas('monsters', 'res/monsters.png');
       game.assets.addJson('res/enemyAtlas.json');
-      game.assets.addJson('overworld.json');
-      game.assets.addJson('brecconary.json');
+      game.assets.addJson('overworld.json', 'res/maps/overworld.json');
+      game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');
+      game.assets.addJson('tantegelCastle.json', 'res/maps/tantegelCastle.json');
       game.assets.addSound(Sounds.MUSIC_TITLE_SCREEN, 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
       game.assets.addSound(Sounds.MUSIC_TOWN, 'res/sound/04 Dragon Quest 1 - Peaceful Village (22khz mono).ogg');
       game.assets.addSound(Sounds.MUSIC_OVERWORLD, 'res/sound/05 Dragon Quest 1 - Kingdom of Alefgard (22khz mono).ogg');
@@ -53,11 +53,11 @@ setTimeout(function() {
          
          game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
          game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
+         game.assets.addTmxMap(game.initLoadedMap('tantegelCastle.json'));
          game.assets.onLoad(function() {
             game.setState(new gtp.FadeOutInState(self, new GamesAtLunchAdvertState()));
          });
       });
-}, 1000);
 
          }
       
