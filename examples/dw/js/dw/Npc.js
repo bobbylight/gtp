@@ -9,7 +9,7 @@ function Npc(args) {
    this._origDir = this.direction;
    
    if (this.wanders) {
-      this._stepDelay = new gtp.Delay(3000, -500, 500);
+      this._stepDelay = new gtp.Delay({ millis: 3000, minDelta: -500, maxDelta: 500 });
       delete this.wanders;
    }
    

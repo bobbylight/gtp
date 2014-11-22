@@ -1,9 +1,11 @@
 /**
  * Functionality common amongst all states in this game.
+ * @constructor
  */
-function _BaseState(args) {
+_BaseState = function(args) {
+   'use strict';
    gtp.State.apply(this, args);
-}
+};
 
 _BaseState.prototype = Object.create(gtp.State.prototype, {
    

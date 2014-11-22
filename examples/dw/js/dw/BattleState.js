@@ -8,7 +8,18 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    fight: {
       value: function() {
          'use strict';
-         this._textBubble.addToConversation({ text: 'Not implemented, command?' });
+         this._fightDelay = new gtp.Delay({ millis: [ 500 ], callback: gtp.Utils.hitch(this, this._fightCallback) });
+         game.audio.playSound('attack');
+         this._textBubble.addToConversation({ text: 'You attack!' });
+      }
+   },
+   
+   _fightCallback: {
+      value: function(param) {
+         'use strict';
+         game.audio.playSound('hit');
+         this._textBubble.addToConversation({ text: 'Direct hit! Command?' });
+         delete this._fightDelay;
       }
    },
    
@@ -74,6 +85,10 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          
          this.handleDefaultKeys();
+         
+         if (this._fightDelay) {
+            this._fightDelay.update(delta);
+         }
          
          if (!this._textBubble.isDone()) {
             this._textBubble.handleInput();

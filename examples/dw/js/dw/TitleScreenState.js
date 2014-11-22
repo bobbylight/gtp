@@ -11,7 +11,7 @@ TitleScreenState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          _BaseState.prototype.init.apply(this, arguments);
          game.canvas.addEventListener('touchstart', this.handleStart, false);
-         this._delay = new gtp.Delay([ 600, 400 ]);
+         this._delay = new gtp.Delay({ millis: [ 600, 400 ] });
          this._blink = true;
          game.audio.playMusic(Sounds.MUSIC_TITLE_SCREEN);
       }

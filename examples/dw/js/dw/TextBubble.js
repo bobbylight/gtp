@@ -9,6 +9,7 @@ function TextBubble(game) {
 }
 
 TextBubble.CHAR_RENDER_MILLIS = 40;
+TextBubble.MAX_LINE_COUNT = 6;
 
 TextBubble.prototype = Object.create(Bubble.prototype, {
    
@@ -27,7 +28,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          this._curLine = this._lines.length;
          var w = this.w - 2*Bubble.MARGIN;
          this._lines = this._lines.concat(this._breakApart(text.text, w));
-         this._curOffs = 0;
+         this._curOffs = -1;
          this._curCharMillis = 0;
          this._textDone = false;
          if (text.choices) {
@@ -58,6 +59,9 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          if (game.anyKeyDown()) {
             if (!this._textDone) {
                this._textDone = true;
+               if (this._lines.length > TextBubble.MAX_LINE_COUNT) {
+                  this._lines.splice(0, this._lines.length-TextBubble.MAX_LINE_COUNT);
+               }
                this._curLine = this._lines.length - 1;
             }
             else {
@@ -87,6 +91,10 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             this._curCharMillis += delta;
             if (this._curCharMillis > TextBubble.CHAR_RENDER_MILLIS) {
                this._curCharMillis -= TextBubble.CHAR_RENDER_MILLIS;
+               if (this._curOffs===-1 && this._curLine===TextBubble.MAX_LINE_COUNT) {
+                  this._lines.shift();
+                  this._curLine--;
+               }
                this._curOffs++;
                if (this._curOffs === this._lines[this._curLine].length) {
                   if (this._curLine === this._lines.length-1) {
@@ -95,7 +103,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
                   else {
                      this._curLine++;
                   }
-                  this._curOffs = 0;
+                  this._curOffs = -1;
                }
             }
          }
@@ -118,7 +126,8 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             for (var i=0; i<=this._curLine; i++) {
                var text = this._lines[i];
                if (!this._textDone && i===this._curLine) {
-                  text = text.substring(0, this._curOffs);
+                  var end = Math.max(0, this._curOffs);
+                  text = text.substring(0, end);
                }
                game.drawString(text, x, y);
                y += 10 * game._scale;
@@ -148,7 +157,8 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          if (this._text) {
             var w = this.w - 2*Bubble.MARGIN;
             this._lines = this._breakApart(this._text, w);
-            this._curLine = this._curOffs = 0;
+            this._curLine = 0;
+            this._curOffs = -1;
             this._curCharMillis = 0;
             this._textDone = false;
          }

@@ -7,6 +7,7 @@ var gtp = gtp || {};
  * @constructor
  */
 gtp.State = function(game) {
+   'use strict';
    this.game = game || window.game;
 };
 

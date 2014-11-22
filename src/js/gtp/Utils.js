@@ -25,6 +25,22 @@ gtp.Utils.getObjectSize = function(obj) {
 };
 
 /**
+ * Equivlaent to dojo/_base/hitch, returns a function in a specific scope.
+ * 
+ * @param {object} scope The scope to run the function in (e.g. the value of
+ *        "this").
+ * @param {function} func The function.
+ * @return {function} A function that does the same thing as 'func', but in the
+ *         specified scope.
+ */
+gtp.Utils.hitch = function(scope, func) {
+   'use strict';
+   return function() {
+      func.apply(scope, arguments);
+   };
+};
+
+/**
  * Adds the properties of one element into another.
  * 
  * @param {object} source The object with properties to mix into another object.

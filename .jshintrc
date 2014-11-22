@@ -34,6 +34,7 @@
       "Direction": true,
       "DwGame": true,
       "FadeOutInState": true,
+      "GamesAtLunchAdvertState": true,
       "Hero": true,
       "LoadingState": true,
       "MapChangeState": true,

@@ -9,7 +9,7 @@ GamesAtLunchAdvertState.prototype = Object.create(_BaseState.prototype, {
       value: function() {
          'use strict';
          _BaseState.prototype.init.apply(this, arguments);
-         this._delay = new gtp.Delay(3000);
+         this._delay = new gtp.Delay({ millis: 3000 });
       }
    },
    
