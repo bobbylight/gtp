@@ -36,7 +36,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
       game.assets.addSound('hit', 'res/sound/34 Dragon Quest 1 - Hit (22khz mono).wav');
       game.assets.addSound('attack', 'res/sound/36 Dragon Quest 1 - Attack (22khz mono).ogg');
       game.assets.addSound('bump', 'res/sound/42 Dragon Quest 1 - Bumping into Walls (22khz mono).wav');
-      game.assets.addSound('stairs', 'res/sound/30 Dragon Quest 1 - Stairs Down (22khz mono).wav');
+      game.assets.addSound('stairs', 'res/sound/29 Dragon Quest 1 - Stairs Up (22khz mono).wav');
       game.assets.onLoad(function() {
          
          // TODO: This could be done much, much more cleanly
@@ -57,7 +57,13 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
          game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
          game.assets.addTmxMap(game.initLoadedMap('tantegelCastle.json'));
          game.assets.onLoad(function() {
-            game.setState(new gtp.FadeOutInState(self, new GamesAtLunchAdvertState()));
+            var skipTitle = gtp.Utils.getRequestParam('skipTitle');
+            if (skipTitle !== null) { // Allow empty strings
+               game.startNewGame();
+            }
+            else {
+               game.setState(new gtp.FadeOutInState(self, new GamesAtLunchAdvertState()));
+            }
          });
       });
 

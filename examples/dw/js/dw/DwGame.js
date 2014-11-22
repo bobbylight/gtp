@@ -278,6 +278,17 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   startNewGame: {
+      value: function() {
+         'use strict';
+         var transitionLogic = function() {
+            game.setMap('overworld.json');
+            game.hero.setMapLocation(52, 45);
+         };
+         game.setState(new gtp.FadeOutInState(this.state, new RoamingState(), transitionLogic));
+      }
+   },
+   
    toggleMuted: {
       value: function() {
          'use strict';

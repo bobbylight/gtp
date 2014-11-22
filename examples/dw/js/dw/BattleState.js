@@ -8,6 +8,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    fight: {
       value: function() {
          'use strict';
+         this._commandExecuting = true;
          this._fightDelay = new gtp.Delay({ millis: [ 500 ], callback: gtp.Utils.hitch(this, this._fightCallback) });
          game.audio.playSound('attack');
          this._textBubble.addToConversation({ text: 'You attack!' });
@@ -19,6 +20,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          game.audio.playSound('hit');
          this._textBubble.addToConversation({ text: 'Direct hit! Command?' });
+         this._commandExecuting = false;
          delete this._fightDelay;
       }
    },
@@ -28,6 +30,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          gtp.State.prototype.init.apply(this, arguments); // Not defined in super, but in parent of super (?)
          this._commandBubble = new BattleCommandBubble();
+         this._commandExecuting = false;
          this._textBubble = new TextBubble(game);
          var conversation = new Conversation();
          conversation.addSegment({ text: 'A Slime draws near!  Command?' });
@@ -61,7 +64,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          enemyImg.draw(ctx, x, y);
          
          // Might not have had init() called yet if called from BattleTransitionState
-         if (this._textBubble && this._textBubble.isDone() && this._commandBubble) {
+         if (!this._commandExecuting && this._textBubble && this._textBubble.isDone()) {
             this._commandBubble.paint(ctx);
          }
          if (this._textBubble) {
@@ -71,7 +74,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
       }
    },
    
-   tryToRun: {
+   run: {
       value: function() {
          'use strict';
          game.audio.playSound('run');
@@ -94,7 +97,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
             this._textBubble.handleInput();
             this._textBubble.update(delta);
          }
-         else if (this._commandBubble.handleInput()) {
+         else if (!this._commandExecuting && this._commandBubble.handleInput()) {
             this._commandBubble.handleCommandChosen(this);
          }
          

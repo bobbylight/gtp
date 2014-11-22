@@ -19,7 +19,7 @@ BattleCommandBubble.prototype = Object.create(Bubble.prototype, {
                break;
       
             case 1: // Run
-               state.tryToRun();
+               state.run();
                break;
       
             case 2: // Spell

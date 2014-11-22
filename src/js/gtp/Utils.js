@@ -25,6 +25,43 @@ gtp.Utils.getObjectSize = function(obj) {
 };
 
 /**
+ * Returns the value of a request parameter.
+ * 
+ * @param {string} param The name of the request parameter.
+ * @return {string} The value of the request parameter, or <code>null</code>
+ *         if it was not specified.
+ */
+gtp.Utils.getRequestParam = function(param) {
+   'use strict';
+   var searchFor = param;
+   var params = window.location.search.substring(1);
+   var equals, end;
+   if (params.indexOf(searchFor)===0) {
+      equals = params.indexOf('=');
+      if (equals === -1) {
+         return '';
+      }
+      equals++;
+      end = Math.max(params.indexOf('&', equals), params.length);
+      return params.substring(equals, end);
+   }
+   searchFor = '&' + searchFor;
+   var index = params.indexOf(searchFor);
+   if (index >= -1) {
+      var start = index + searchFor.length;
+      if (params.charAt(start) === '=') {
+         start++;
+         end = Math.max(params.indexOf('&', start), params.length);
+         return params.substring(start, end);
+      }
+      else if (start===params.length) {
+         return '';
+      }
+   }
+   return null;
+};
+
+/**
  * Equivlaent to dojo/_base/hitch, returns a function in a specific scope.
  * 
  * @param {object} scope The scope to run the function in (e.g. the value of
