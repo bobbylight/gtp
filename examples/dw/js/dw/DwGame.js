@@ -3,15 +3,28 @@ var DwGame = function() {
    gtp.Game.apply(this, arguments);
    this.map = null;
    this._drawMapCount = 0;
-   this.hero = new Hero({ name: 'Erdrick' });
-   this.npcs = [];
-   
-   this._bumpSoundDelay = 0;
-   this._mapLogics = {};
 };
 
 DwGame.prototype = Object.create(gtp.Game.prototype, {
-
+   
+   start: {
+      value: function() {
+         'use strict';
+         this._init();
+         gtp.Game.prototype.start.apply(this, arguments);
+      }
+   },
+   
+   _init: {
+      value: function() {
+         'use strict';
+         this.hero = new Hero({ name: 'Erdrick' });
+         this.npcs = [];
+         this._bumpSoundDelay = 0;
+         this._mapLogics = {};
+      }
+   },
+   
    update: {
       value: function() {
          'use strict';

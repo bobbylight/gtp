@@ -7,13 +7,15 @@ function RoamingEntity() {
    this.xOffs = this.xOffs || 0;
    this.yOffs = this.yOffs || 0;
    this._stepTick = 0;
+   // TODO: Make this time-dependant!
+   this._moveInc = game._scale * (game._targetFps===30 ? 2 : 1);
 }
 
 RoamingEntity.prototype = {
    
    getMoveIncrement: function() {
       'use strict';
-      return game._scale * 2;
+      return this._moveInc;
    },
    
    isMoving: function() {

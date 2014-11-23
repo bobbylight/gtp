@@ -17,7 +17,7 @@ gtp.Game = function(args) {
    this.inputManager = new gtp.InputManager();
    this.inputManager.install();
    this._gameTime = 0;
-   this._targetFps = arguments.targetFps || 30;
+   this._targetFps = args.targetFps || 30;
    this._interval = 1000 / this._targetFps;
    this.lastTime = null;
    

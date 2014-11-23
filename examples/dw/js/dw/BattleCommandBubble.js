@@ -63,7 +63,7 @@ BattleCommandBubble.prototype = Object.create(Bubble.prototype, {
       
          else if (game.cancelKeyPressed()) {
             this.reset();
-            return true;
+            return false;
          }
       
          else if (game.actionKeyPressed()) {

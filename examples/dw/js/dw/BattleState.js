@@ -77,9 +77,28 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    run: {
       value: function() {
          'use strict';
+         this._commandExecuting = true;
+         this._fightDelay = new gtp.Delay({ millis: [ 600 ], callback: gtp.Utils.hitch(this, this._runCallback) });
          game.audio.playSound('run');
-         game.audio.fadeOutMusic(Sounds.MUSIC_OVERWORLD);
-         game.setState(new RoamingState());
+         this._textBubble.addToConversation({ text: game.hero.name + ' started to run away.' });
+      }
+   },
+   
+   _runCallback: {
+      value: function(param) {
+         'use strict';
+         delete this._fightDelay;
+         var success = gtp.Utils.randomInt(0, 2) === 1;
+         if (success) {
+            this._commandExecuting = false;
+            game.audio.fadeOutMusic(Sounds.MUSIC_OVERWORLD);
+            game.setState(new RoamingState());
+         }
+         else {
+            this._commandExecuting = false;
+            this._commandBubble.reset();
+            this._textBubble.addToConversation({ text: 'Couldn\'t run!' });
+         }
       }
    },
    

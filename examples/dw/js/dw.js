@@ -9,7 +9,8 @@ var game;
 
 function init(parent) {
    'use strict';
-   game = new DwGame({ parent: parent, scale: SCALE, width: CANVAS_WIDTH, height: CANVAS_HEIGHT });
+   game = new DwGame({ parent: parent, scale: SCALE, width: CANVAS_WIDTH, height: CANVAS_HEIGHT,
+         targetFps: 60 });
    game.setState(new LoadingState());
    game.start();
 }

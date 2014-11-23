@@ -8,7 +8,7 @@ function TextBubble(game) {
          width, height);
 }
 
-TextBubble.CHAR_RENDER_MILLIS = 40;
+TextBubble.CHAR_RENDER_MILLIS = 0;
 TextBubble.MAX_LINE_COUNT = 6;
 
 TextBubble.prototype = Object.create(Bubble.prototype, {
