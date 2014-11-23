@@ -50,6 +50,18 @@
     <property name="wanders" value="false"/>
    </properties>
   </object>
+  <object name="woman_at_shop" type="npc" x="80" y="128" width="16" height="16">
+   <properties>
+    <property name="type" value="woman_blue"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="soldier1" type="npc" x="192" y="272" width="16" height="16">
+   <properties>
+    <property name="type" value="soldier_red"/>
+    <property name="wanders" value="true"/>
+   </properties>
+  </object>
   <object name="merchant1" type="npc" x="96" y="80" width="16" height="16">
    <properties>
     <property name="type" value="merchant_green"/>
@@ -65,7 +77,13 @@
   </object>
   <object name="table1" type="talkAcross" x="160" y="352" width="16" height="16"/>
   <object name="table2" type="talkAcross" x="96" y="96" width="16" height="16"/>
-  <object name="oldman1" type="npc" x="112" y="224" width="16" height="16">
+  <object name="oldman_test" type="npc" x="112" y="224" width="16" height="16">
+   <properties>
+    <property name="type" value="old_man_gray"/>
+    <property name="wanders" value="true"/>
+   </properties>
+  </object>
+  <object name="oldman1" type="npc" x="160" y="80" width="16" height="16">
    <properties>
     <property name="type" value="old_man_gray"/>
     <property name="wanders" value="true"/>

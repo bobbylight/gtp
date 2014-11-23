@@ -7,6 +7,27 @@ function Conversation() {
 Conversation.prototype = (function() {
    'use strict';
    
+   function parameterize(segment) {
+      var text = segment.text;
+      // TODO: This could be much, much better
+      var lbrace = text.indexOf('{');
+      while (lbrace > -1) {
+         var rbrace = text.indexOf('}', lbrace+1);
+         if (rbrace > -1) {
+            var expression = text.substring(lbrace+1, rbrace);
+            if (expression === 'hero.name') {
+               text = text.substring(0, lbrace) + game.hero.name + text.substring(rbrace+1);
+               lbrace = text.indexOf('{', lbrace+game.hero.name.length);
+            }
+            else {
+               console.error('Unknown token in NPC text: ' + expression);
+               lbrace = -1;
+            }
+         }
+      }
+      segment.text = text;
+   }
+   
    return {
       
       /**
@@ -19,6 +40,7 @@ Conversation.prototype = (function() {
          if (segment.length) { // A string
             segment = { text: segment };
          }
+         parameterize(segment);
          this._segments.push(segment);
       },
       

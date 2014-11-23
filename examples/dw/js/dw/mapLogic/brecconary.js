@@ -12,10 +12,23 @@ Brecconary.prototype = (function() {
    var talks = {
       
       greeter: function(game) {
-         return 'Welcome to Brecconary!';
+         return 'Thou art most welcome in Brecconary.';
       },
       
       oldman1: function(game) {
+         return 'Watch thy Hit Points when in the Poisonous Marsh.';
+      },
+      
+      woman_at_shop: function(game) {
+         return 'Welcome!\nEnter the shop and speak to its keeper across the desk.';
+      },
+      
+      soldier1: function(game) {
+         return [ 'Many have been the warriors who have perished on this quest.',
+            'But for thee I wish success, {hero.name}.' ];
+      },
+      
+      oldman_test: function(game) {
          
          if (game.hero.strength<100) {
             return [

@@ -237,7 +237,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          if (obj.properties.type) {
             type = NpcType[obj.properties.type.toUpperCase()];
          }
-         if (!type) {
+         if (type == null) { // 0 is a valid value
             type = NpcType.MERCHANT_GREEN;
          }
          var tileSize = this.getTileSize();
