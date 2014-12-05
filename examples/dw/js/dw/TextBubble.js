@@ -1,11 +1,11 @@
 function TextBubble(game) {
    'use strict';
-   var scale = game._scale;
-   var margin = Bubble.MARGIN*scale;
-   var width = game.getWidth() - 2*margin;
+   var tileSize = game.getTileSize();
+   var x = tileSize;
+   var width = game.getWidth() - 2*x;
    var height = game.getTileSize() * 5;
-   Bubble.call(this, null, margin, game.getHeight()-margin-height,
-         width, height);
+   var y = game.getHeight() - tileSize - height;
+   Bubble.call(this, null, x, y, width, height);
 }
 
 TextBubble.CHAR_RENDER_MILLIS = 0;

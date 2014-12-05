@@ -52,6 +52,13 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   getEnemy: {
+      value: function(name) {
+         'use strict';
+         return this.assets.get('enemies')[name];
+      }
+   },
+   
    getMapLogic: {
       value: function() {
          'use strict';

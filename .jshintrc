@@ -33,6 +33,7 @@
       "Conversation": true,
       "Direction": true,
       "DwGame": true,
+      "Enemy": true,
       "FadeOutInState": true,
       "GamesAtLunchAdvertState": true,
       "Hero": true,

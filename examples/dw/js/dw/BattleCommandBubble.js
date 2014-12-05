@@ -1,8 +1,7 @@
 function BattleCommandBubble() {
    'use strict';
    var tileSize = game.getTileSize();
-   var scale = game._scale;
-   Bubble.call(this, "COMMAND", 90*scale, tileSize, 150*scale, 60*scale);
+   Bubble.call(this, "COMMAND", 8*tileSize, tileSize, tileSize*8, tileSize*3);
    this.selection = 0;
 }
 
@@ -84,18 +83,18 @@ BattleCommandBubble.prototype = Object.create(Bubble.prototype, {
          var SCALE = game._scale;
          var x = this.x + 20*SCALE;
          var y0 = y;
-         var Y_INC = game.stringHeight() + 7*SCALE;
+         var Y_INC = game.stringHeight() + 6*SCALE;
       
-         game.drawString("Fight", x, y0); y0 += Y_INC;
-         game.drawString("Run", x, y0); y0 += Y_INC;
+         game.drawString("FIGHT", x, y0); y0 += Y_INC;
+         game.drawString("RUN", x, y0); y0 += Y_INC;
       
-         x += 70 * SCALE;
+         x += 64 * SCALE;
          y0 -= 2*Y_INC;
-         game.drawString("Spell", x, y0); y0 += Y_INC;
-         game.drawString("Item", x, y0); y0 += Y_INC;
+         game.drawString("SPELL", x, y0); y0 += Y_INC;
+         game.drawString("ITEM", x, y0); y0 += Y_INC;
       
          if (this.selection<2) {
-            x -= 70 * SCALE;
+            x -= 64 * SCALE;
          }
          x -= game.stringWidth(">") + 2*SCALE;
          y0 = y + Y_INC * (this.selection%2);

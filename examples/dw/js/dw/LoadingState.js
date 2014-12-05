@@ -21,9 +21,10 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
       game.assets.addSpriteSheet('hero', 'res/hero.png', 16, 16, 1, true);
       game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1, true);
       game.assets.addImage('battleBG', 'res/battle_backgrounds.png');
-      game.assets.addImage('font', 'res/font_10x10.png');
-      game.assets.addCanvas('monsters', 'res/monsters.png');
-      game.assets.addJson('res/enemyAtlas.json');
+      game.assets.addImage('font', 'res/font_8x10.png');
+      game.assets.addJson('enemies', 'res/enemies.json');
+      game.assets.addCanvas('enemiesImage', 'res/monsters.png');
+      game.assets.addJson('enemyAtlas', 'res/enemyAtlas.json');
       game.assets.addJson('overworld.json', 'res/maps/overworld.json');
       game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');
       game.assets.addJson('tantegelCastle.json', 'res/maps/tantegelCastle.json');
@@ -40,8 +41,8 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
       game.assets.onLoad(function() {
          
          // TODO: This could be done much, much more cleanly
-         var enemyJson = game.assets.get('res/enemyAtlas.json');
-         var atlas = new gtp.ImageAtlas({ atlasInfo: enemyJson, canvas: game.assets.get('monsters') });
+         var enemyJson = game.assets.get('enemyAtlas');
+         var atlas = new gtp.ImageAtlas({ atlasInfo: enemyJson, canvas: game.assets.get('enemiesImage') });
          // delete game.assets.get('monsters');
          var images = atlas.parse();
          for (var id in images) {
@@ -51,7 +52,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
          }
          
          var font = game.assets.get('font');
-         game.assets.set('font', new gtp.BitmapFont(font, 18,20, 14,12));
+         game.assets.set('font', new gtp.BitmapFont(font, 16,20, 16,12));
          
          game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
          game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
