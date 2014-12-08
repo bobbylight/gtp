@@ -23,7 +23,8 @@ gtp.Game = function(args) {
    
    this.audio = new gtp.AudioSystem();
    this.audio.init();
-   this.assets = new gtp.AssetLoader(this._scale, this.audio);
+   var assetPrefix = args.assetRoot || null;
+   this.assets = new gtp.AssetLoader(this._scale, this.audio, assetPrefix);
    
    this.clearScreenColor = 'rgb(0,0,0)';
    

@@ -10,13 +10,14 @@ var gtp = gtp || {};
  * @param audio A web audio context.
  * @constructor
  */
-gtp.AssetLoader = function(scale, audio) {
+gtp.AssetLoader = function(scale, audio, urlPrefix) {
    'use strict';
    this._scale = scale || 1;
    this.loadingAssetData = {};
    this.responses = {};
    this.callback = null;
    this.audio = audio;
+   this._urlPrefix = urlPrefix;
 };
 
 gtp.AssetLoader.prototype = {
@@ -30,6 +31,9 @@ gtp.AssetLoader.prototype = {
       'use strict';
       
       url = url || id; // allow e.g. "assets.addJson('overworld.json');"
+      if (this._urlPrefix) {
+         url = this._urlPrefix + url;
+      }
       
       if (this._isAlreadyTracked(id)) {
          return;
@@ -61,6 +65,10 @@ gtp.AssetLoader.prototype = {
    addCanvas: function(id, imageSrc) {
       'use strict';
       
+      if (this._urlPrefix) {
+         imageSrc = this._urlPrefix + imageSrc;
+      }
+      
       var self = this;
       
       var image = new Image();
@@ -87,6 +95,10 @@ gtp.AssetLoader.prototype = {
     */
    addImage: function(id, imageSrc) {
       'use strict';
+      
+      if (this._urlPrefix) {
+         imageSrc = this._urlPrefix + imageSrc;
+      }
       
       var self = this;
       
@@ -125,6 +137,10 @@ gtp.AssetLoader.prototype = {
          }
          this.loadingAssetData[id] = { type: gtp.AssetType.SOUND };
          
+         if (this._urlPrefix) {
+            soundSrc = this._urlPrefix + soundSrc;
+         }
+      
          var self = this;
          var xhr = new XMLHttpRequest();
          xhr.onload = function() {
@@ -163,6 +179,10 @@ gtp.AssetLoader.prototype = {
       cellW *= self._scale;
       cellH *= self._scale;
       spacing *= self._scale;
+      
+      if (this._urlPrefix) {
+         imageSrc = this._urlPrefix + imageSrc;
+      }
       
       var image = new Image();
       if (this._isAlreadyTracked(id)) {

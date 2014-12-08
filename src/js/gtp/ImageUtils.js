@@ -69,6 +69,8 @@ gtp.ImageUtils.createCanvas = function(width, height, parentDiv) {
       if (typeof parentDiv === 'string') {
          parentDiv = document.getElementById(parentDiv);
       }
+      // Clear previous contents in place there was a placeholder image
+      parentDiv.innerHTML = '';
       parentDiv.appendChild(canvas);
    }
    
