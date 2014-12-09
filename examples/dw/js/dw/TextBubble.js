@@ -27,7 +27,9 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          this._text = this._text + '\n' + text.text;
          this._curLine = this._lines.length;
          var w = this.w - 2*Bubble.MARGIN;
-         this._lines = this._lines.concat(this._breakApart(text.text, w));
+         var breakApartResult = this._breakApart(text.text, w);
+         this._lines = this._lines.concat(breakApartResult.lines);
+         this._delays = breakApartResult.delays;
          this._curOffs = -1;
          this._curCharMillis = 0;
          this._textDone = false;
@@ -87,6 +89,15 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
       value: function(delta) {
          'use strict';
          
+         if (this._delay) {
+            if (this._delay.update(delta)) {
+               delete this._delay;
+            }
+            else {
+               return;
+            }
+         }
+         
          if (!this._textDone) {
             this._curCharMillis += delta;
             if (this._curCharMillis > TextBubble.CHAR_RENDER_MILLIS) {
@@ -94,6 +105,15 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
                if (this._curOffs===-1 && this._curLine===TextBubble.MAX_LINE_COUNT) {
                   this._lines.shift();
                   this._curLine--;
+               }
+               // TODO: This could be more performant...
+               if (this._delays && this._delays.length>0) {
+                  var elem = this._delays[0];
+                  if (elem.offs === this._curOffs+1) {
+                     this._delays.shift();
+                     this._delay = new gtp.Delay({ millis: elem.millis });
+                     return;
+                  }
                }
                this._curOffs++;
                if (this._curOffs === this._lines[this._curLine].length) {
@@ -156,7 +176,9 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          this._text = text.text;
          if (this._text) {
             var w = this.w - 2*Bubble.MARGIN;
-            this._lines = this._breakApart(this._text, w);
+            var breakApartResult = this._breakApart(this._text, w);
+            this._lines = breakApartResult.lines;
+            this._delays = breakApartResult.delays;
             this._curLine = 0;
             this._curOffs = -1;
             this._curCharMillis = 0;

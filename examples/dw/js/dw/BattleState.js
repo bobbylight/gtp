@@ -5,6 +5,14 @@ var BattleState = function() {
 
 BattleState.prototype = Object.create(_BaseState.prototype, {
    
+   _backToRoaming: {
+      value: function() {
+         'use strict';
+         game.audio.fadeOutMusic(Sounds.MUSIC_OVERWORLD);
+         game.setState(new RoamingState());
+      }
+   },
+   
    fight: {
       value: function() {
          'use strict';
@@ -29,7 +37,17 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
       value: function() {
          'use strict';
          delete this._enemyFlashDelay;
-         this._textBubble.addToConversation({ text: 'Direct hit! Command?' });
+         
+         var damage = 1;
+         var dead = this._enemy.takeDamage(damage);
+         
+         var text = "Direct hit! Thy enemy's hit points have been reduced by " + damage + '.';
+         if (dead) {
+            text += '\nThou hast defeated the ' + this._enemy.name + '.';
+            this._enemiesDead = true;
+         }
+         this._textBubble.addToConversation({ text: text });
+            
          this._commandExecuting = false;
       }
    },
@@ -70,7 +88,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          var y = (height - battleBG.height)/2 - tileSize;
          battleBG.draw(ctx, x, y);
          
-         if (this._enemy) {
+         if (this._enemy && !this._enemiesDead) {
             
             var flash = Math.round(this._flashMillis) % 40 > 20;
             var enemyImg = this._enemy.getImage(flash);
@@ -86,6 +104,11 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
                this._textBubble.paint(ctx);
             }
          
+         }
+         else if (this._enemiesDead) {
+            if (this._textBubble) {
+               this._textBubble.paint(ctx);
+            }
          }
          
       }
@@ -108,8 +131,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          var success = gtp.Utils.randomInt(0, 2) === 1;
          if (success) {
             this._commandExecuting = false;
-            game.audio.fadeOutMusic(Sounds.MUSIC_OVERWORLD);
-            game.setState(new RoamingState());
+            this._backToRoaming();
          }
          else {
             this._commandExecuting = false;
@@ -124,6 +146,13 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          
          this.handleDefaultKeys();
+         
+         if (this._enemiesDead) {
+            if (game.anyKeyDown()) {
+               this._backToRoaming();
+               return;
+            }
+         }
          
          if (this._fightDelay) {
             this._fightDelay.update(delta);

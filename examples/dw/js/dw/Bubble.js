@@ -21,19 +21,63 @@ Bubble.prototype = {
    _breakApart: function(text, w) {
       'use strict';
       
-      var lines = [];
+      var result = { lines: [], delays: [] };
       
       // Newlines are automatic line breaks
-      var lineList1 = text.split('\n');
+      text = this._removeSpecialEscapes(text, result.delays);
+      var lineList = text.split('\n');
       
-      for (var i=0; i<lineList1.length; i++) {
-         this._breakApartLine(lineList1[i], w, lines);
+      for (var i=0; i<lineList.length; i++) {
+         this._breakApartLine(lineList[i], w, result);
       }
       
-      return lines;
+      return result;
    },
    
-   _breakApartLine: function(line, w, lines) {
+   /**
+    * Locates special escapes in text and addds entries into the appropriate
+    * arrays (delays, font color changes, etc.).
+    * 
+    * @param {string} text The text to scan.
+    * @param {array} delays The array to put delays into.
+    * @return {string} The text, with any escapes removed.
+    */
+   _removeSpecialEscapes: function(text, delays) {
+      
+      // Delay formats:
+      //    \d      - default ms
+      //    \d{300} - 300 ms
+      
+      var index, lastOffs = 0;
+      while ((index = text.indexOf('\\d', lastOffs)) > -1) {
+         
+         if ((index + 2) < text.length && text.charAt(index + 2) === '{') {
+            var end = text.indexOf('}', index + 3);
+            if (end > -1) {
+               var delay = parseInt(text.substring(index + 3, end));
+               console.log('Adding a delay of ' + delay + ' ms');
+               delays.push({ offs: index, millis: delay });
+               text = text.substring(0, index) + text.substring(end + 1);
+            }
+            else {
+               console.warn('Suspicious, aparent unclosed delay at offset ' + start);
+            }
+         }
+         
+         else {
+            var delay = 500;
+            console.log('Adding the default delay of ' + delay + ' ms');
+            delays.push({ offs: index, millis: delay });
+            text = text.substring(0, index) + text.substring(index + 2);
+         }
+         
+         lastOffs = index;
+      }
+      
+      return text;
+   },
+   
+   _breakApartLine: function(line, w, result) {
       'use strict';
       
       var optimal = Math.floor(w / this._fontWidth);
@@ -45,13 +89,13 @@ Bubble.prototype = {
          while (ch!==' ') {
             ch = line.charAt(--offs);
          }
-         lines.push(line.substring(0, offs));
+         result.lines.push(line.substring(0, offs));
          
          line = line.substring(offs).trim();
       }
       
       //if (line.length>0) {
-         lines.push(line);
+         result.lines.push(line);
       //}
    },
    

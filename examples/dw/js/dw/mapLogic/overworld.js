@@ -10,6 +10,14 @@ Overworld.prototype = (function() {
    'use strict';
    
    var initialTalks = {
+      
+      npc: function(game) {
+         return [
+            'I speak with... \\ddelays...',
+            'Did you notice that?'
+         ];
+      }
+      
    };
    
    return Object.create(MapLogic.prototype, {
@@ -22,7 +30,8 @@ Overworld.prototype = (function() {
       npcText: {
          value: function(npc) {
             console.log('Talking to: ' + JSON.stringify(npc));
-            return initialTalks[npc.name] || 'I have nothing to say...';
+            var func = initialTalks[npc.name];
+            return func ? func(game) : 'I have nothing to say...';
          }
       }
    

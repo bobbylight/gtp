@@ -10,14 +10,14 @@ var gtp = gtp || {};
  * @param audio A web audio context.
  * @constructor
  */
-gtp.AssetLoader = function(scale, audio, urlPrefix) {
+gtp.AssetLoader = function(scale, audio, assetRoot) {
    'use strict';
    this._scale = scale || 1;
    this.loadingAssetData = {};
    this.responses = {};
    this.callback = null;
    this.audio = audio;
-   this._urlPrefix = urlPrefix;
+   this._assetRoot = assetRoot;
 };
 
 gtp.AssetLoader.prototype = {
@@ -31,8 +31,8 @@ gtp.AssetLoader.prototype = {
       'use strict';
       
       url = url || id; // allow e.g. "assets.addJson('overworld.json');"
-      if (this._urlPrefix) {
-         url = this._urlPrefix + url;
+      if (this._assetRoot) {
+         url = this._assetRoot + url;
       }
       
       if (this._isAlreadyTracked(id)) {
@@ -65,8 +65,8 @@ gtp.AssetLoader.prototype = {
    addCanvas: function(id, imageSrc) {
       'use strict';
       
-      if (this._urlPrefix) {
-         imageSrc = this._urlPrefix + imageSrc;
+      if (this._assetRoot) {
+         imageSrc = this._assetRoot + imageSrc;
       }
       
       var self = this;
@@ -96,8 +96,8 @@ gtp.AssetLoader.prototype = {
    addImage: function(id, imageSrc) {
       'use strict';
       
-      if (this._urlPrefix) {
-         imageSrc = this._urlPrefix + imageSrc;
+      if (this._assetRoot) {
+         imageSrc = this._assetRoot + imageSrc;
       }
       
       var self = this;
@@ -137,8 +137,8 @@ gtp.AssetLoader.prototype = {
          }
          this.loadingAssetData[id] = { type: gtp.AssetType.SOUND };
          
-         if (this._urlPrefix) {
-            soundSrc = this._urlPrefix + soundSrc;
+         if (this._assetRoot) {
+            soundSrc = this._assetRoot + soundSrc;
          }
       
          var self = this;
@@ -180,8 +180,8 @@ gtp.AssetLoader.prototype = {
       cellH *= self._scale;
       spacing *= self._scale;
       
-      if (this._urlPrefix) {
-         imageSrc = this._urlPrefix + imageSrc;
+      if (this._assetRoot) {
+         imageSrc = this._assetRoot + imageSrc;
       }
       
       var image = new Image();
