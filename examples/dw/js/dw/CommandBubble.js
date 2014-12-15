@@ -2,7 +2,11 @@ function CommandBubble() {
    'use strict';
    var scale = game._scale;
    var tileSize = game.getTileSize();
-   Bubble.call(this, "COMMAND", 90*scale, tileSize, 140*scale, 90*scale);
+   var w = 140 * scale;
+   var h = 90 * scale;
+   var x = game.getWidth() - tileSize - w;
+   var y = tileSize;
+   Bubble.call(this, "COMMAND", x, y, w, h);
    this.selection = 0;
 }
 

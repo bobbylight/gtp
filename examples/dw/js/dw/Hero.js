@@ -4,10 +4,16 @@ function Hero(args) {
    
    this.name = args.name;
    this.level = 1;
-   this.gold = 0;
-   this.exp = 0;
+   this.gold = 768;
+   this.exp = 12345;
    
    this.strength = 5;
+   this.defense = 10;
+   
+   this.hp = args.hp || 1234;
+   this.maxHp = args.hp || 0;
+   this.mp = args.mp || 0;
+   this.maxMp = args.mp || 0;
    
    //BattleEntity.call(this, args); // TODO: Better way to do a mixin?
    //gtp.Utils.mixin(RoamingEntityMixin.prototype, this);

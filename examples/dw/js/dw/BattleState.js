@@ -44,7 +44,14 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          var text = "Direct hit! Thy enemy's hit points have been reduced by " + damage + '.';
          if (dead) {
             text += '\nThou hast defeated the ' + this._enemy.name + '.';
+            text += '\nThy experience increases by ' + this._enemy.xp + '.';
+            text += '\nThy gold increases by ' + this._enemy.gp + '.';
             this._enemiesDead = true;
+            
+            game.hero.exp += this._enemy.xp;
+            game.hero.gold += this._enemy.gp;
+            
+            // TODO: Check for level up
          }
          this._textBubble.addToConversation({ text: text });
             
@@ -64,6 +71,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          conversation.addSegment({ text: 'A ' + this._enemy.name + ' draws near!  Command?' });
          this._textBubble.setConversation(conversation);
          this._enemyAttackShake = 0;
+         this._statBubble = new StatBubble();
       }
    },
    
@@ -96,9 +104,13 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
             y += battleBG.height - tileSize/2 - enemyImg.height;
             enemyImg.draw(ctx, x, y);
             
-            // Might not have had init() called yet if called from BattleTransitionState
-            if (!this._commandExecuting && this._textBubble && this._textBubble.isDone()) {
-               this._commandBubble.paint(ctx);
+            if (!this._commandExecuting) {
+               if (this._textBubble && this._textBubble.isDone()) {
+                  this._commandBubble.paint(ctx);
+               }
+            }
+            if (this._statBubble) {
+               this._statBubble.paint(ctx);
             }
             if (this._textBubble) {
                this._textBubble.paint(ctx);
@@ -106,6 +118,9 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          
          }
          else if (this._enemiesDead) {
+            if (this._statBubble) {
+               this._statBubble.paint(ctx);
+            }
             if (this._textBubble) {
                this._textBubble.paint(ctx);
             }

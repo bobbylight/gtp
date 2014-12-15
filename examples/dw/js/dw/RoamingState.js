@@ -19,6 +19,8 @@ var RoamingState = function() {
    this._showTextBubble = false;
    
    this._commandBubble = new CommandBubble();
+   this._statBubble = new StatBubble();
+   this._stationaryTimer = new gtp.Delay({ millis: 1000 });
 };
 
 RoamingState.prototype = Object.create(_BaseState.prototype, {
@@ -82,22 +84,28 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             
             if (im.up()) {
                hero.tryToMoveUp();
+               this._stationaryTimer.reset();
                //this.yOffs = Math.max(this.yOffs-inc, 0);
             }
             else if (im.down()) {
                hero.tryToMoveDown();
+               this._stationaryTimer.reset();
                //this.yOffs = Math.min(this.yOffs+inc, maxY);
             }
             else if (im.left()) {
                hero.tryToMoveLeft();
+               this._stationaryTimer.reset();
                //this.xOffs = Math.max(this.xOffs-inc, 0);
             }
             else if (im.right()) {
                hero.tryToMoveRight();
+               this._stationaryTimer.reset();
                //this.xOffs = Math.min(this.xOffs+inc, maxX);
             }
             
          }
+         
+         this._showStats = this._stationaryTimer.update(delta);
          
          if (im.isKeyDown(gtp.Keys.SHIFT)) {
             if (im.isKeyDown(gtp.Keys.C, true)) {
@@ -152,6 +160,10 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          if (this._showTextBubble) {
             this._textBubble.paint(ctx);
          }
+         
+         if (this._substate!==_RoamingSubState.ROAMING || this._showStats) {
+            this._statBubble.paint(ctx);
+         }
       }
    },
    
@@ -161,6 +173,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          game.setNpcsPaused(false);
          this._showTextBubble = false;
          this._substate = _RoamingSubState.ROAMING;
+         this._stationaryTimer.reset();
       }
    },
    
