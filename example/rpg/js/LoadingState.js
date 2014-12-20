@@ -12,7 +12,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             
             this.assetsLoaded = true;
             var self = this;
-            var game = this.game;
+            //var game = this.game;
             
             // Simulate a delay, just for fun...
             setTimeout(function() {
@@ -54,7 +54,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
    render: {
       value: function() {
          
-         var game = this.game;
+         //var game = this.game;
          var ctx = game.canvas.getContext('2d');
          ctx.fillStyle = 'rgb(0, 0, 255)';
          ctx.fillRect(0,0, game.canvas.width, game.canvas.height);

@@ -9,7 +9,7 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
    handleDefaultKeys: {
       value: function() {
          
-         var im = this.game.inputManager;
+         var im = game.inputManager;
          
          if (im.isKeyDown(gtp.Keys.SHIFT)) {
             
