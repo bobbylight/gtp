@@ -8,25 +8,34 @@
     <meta http-equiv="X-Frame-Options" content="allow" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="css/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/gtp.css">
 
+    <script src='demo/js/dw.min.js'></script>
+    
    <title>Gtp</title>
+
+    <script>
+    function insertGame() {
+      init('gameDiv', 'demo/');
+    }
+    </script>
   </head>
 
   <body>
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/bobbylight/gtp">View on GitHub</a>
+      <header class="inner">
+        <a id="forkme_banner" href="https://github.com/bobbylight/gtp">View on GitHub</a>
 
-          <h1 id="project_title">Gtp</h1>
-          <h2 id="project_tagline">A very basic JavaScript 2D game framework.</h2>
+        <h1 id="project_title">Gtp</h1>
+        <h2 id="project_tagline">A very basic JavaScript 2D game framework.</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/bobbylight/gtp/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/bobbylight/gtp/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+        <section id="downloads">
+          <a class="zip_download_link" href="https://github.com/bobbylight/gtp/zipball/master">Download this project as a .zip file</a>
+          <a class="tar_download_link" href="https://github.com/bobbylight/gtp/tarball/master">Download this project as a tar.gz file</a>
+        </section>
+      </header>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -51,7 +60,10 @@ for anybody out there.  It currently handles:
 
 <h3>
 <a class="anchor"><span class="octicon octicon-link"></span></a>Demo</h3>
-<a href="demo/index.html">Click here for the demo (sorry so ghetto)</a>
+
+<div id='gameDiv'>
+   <a href="#" onclick="insertGame(); return false;">Click here for the demo (sorry so ghetto)</a>
+</div>
 
 </h3>
 <h3>

@@ -4,14 +4,10 @@
   <property name="logicFile" value="overworld"/>
   <property name="music" value="MUSIC_OVERWORLD"/>
  </properties>
- <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
-  <image source="../res/tiles.png" width="407" height="254"/>
- </tileset>
- <tileset firstgid="361" name="collision" tilewidth="16" tileheight="16" spacing="1">
-  <image source="../res/collision.png" trans="ffffff" width="50" height="50"/>
- </tileset>
+ <tileset firstgid="1" source="tileset_tiles.tsx"/>
+ <tileset firstgid="361" source="collision_tiles.tsx"/>
  <tileset firstgid="370" name="territories" tilewidth="16" tileheight="16" spacing="1">
-  <image source="../res/enemy_territory_colors.png" width="135" height="135"/>
+  <image source="../enemy_territory_colors.png" width="135" height="135"/>
  </tileset>
  <layer name="tileLayer" width="100" height="100">
   <data encoding="base64" compression="gzip">
@@ -20,7 +16,7 @@
  </layer>
  <layer name="collisionLayer" width="100" height="100" opacity="0.46">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3aQbKDIBCEYd9x3/0vkHKXhdFhaKAZ/6/KnUGYFjHqcQAAAAAAcBz/f9ebqp1MW9F2e9t2czee6Hgj+2Vq13r83fOJ9v3XftkaK/erInuuKs7DyFx6m9VjVs65Cnrmh7IP3+29NYtTy7hH39O0tFlh3b6SuW9ZfR/j0IdRIve5d+NeVZeKWZxUNZ5Zn6pZnO7yyLRVsUYzqepX+ZydTVVHMtFSP+9DPzLxQyY+RjwHIZM8auiDDHyQhRfy8EEWPsjCC3l4GZUH9805M965kkuc+v/4rGNVpXz/MetY1SmuJ5G5wZrSJlunyDt4p+9TdtJar19rd+uGa3f1vdpXufX0uWLG0TE45FB93rWux4r5kunjW66F6n7PzCGy725G9VmdRea3uxqdyQpkct3miprsfs0a4bsOZLLe1XoLD2ThhTw8cA33MiODCv8BR5pVF2r/bOZ8wFrk4IEc8tS1IwcNRR3JQkc1T8ikH9crP8wPTz31JIsxsu9qMU7LMxSymCuSC5mM0fN9FJnoPNWcPLywjvggCy9P1yqy0Ius41W+twUAAAAAAAAAAAAAAAAAAACwlw/ef25oQJwAAA==
+   H4sIAAAAAAAAC+3aS3KDMBCEYXLc3P8CqSxS8YLHSOqResT/VbHDYjRtAQYfBwAAAAAAx/H9db6pxukZKzru6Nhu7uYTnW9kv57etR6/ej7R2q/26+2xcr+rz1bLpfe7qvgeRtaSQqVMVteqXHM9x3Ezsj6UNXyOl3WeqZBJS43Z9zStY7bWsUsejveZrXVUyOJX5D73bs4rs9kti1+qHs/OpOV4u+TRM5bb3N3qeaK8x3fLw6mWFqo+OmXiUscI9fM+By519HpDJi51Re2ciUs9URnPQRx64FJHK6ceKlWcU7V6W1XKpEqdo6pkUqHGt3hbFs5rxLWubK7zdq0rm+u8s+pyv292rW3GO1fnubvVpf49PutYKm6ZKN9/zDqWmmMmimeIkWO4zf3PTjVF3sHfbbjW2q+ra3frhnN3/T3bV7mN1LxjxtE5OOSw+7prvR4r1ktPjW85F6rrnplDZN9qsmpWZ9Hz2aqyM1mBTM7HXNGT6uesDJ99IJP1zq63q7w9D7LwtvJ8hX+rzuHkcG5GX3b4DZhpVl/o/bOZ6wH3WA8+MvtEDn0yrhvkoKHoI1noqNYJmYzjfOWH9eFppJ9kkaP3XS3ytNwLk8VckVzIJMfI/6PIROep5+ThheuID7Lw8nSuIgu9yHV8l//bAgAAAAAAAAAAAAAAAAAAAKjlBz9BO6VAnAAA
   </data>
  </layer>
  <objectgroup name="warpLayer" width="100" height="100">
@@ -41,8 +37,17 @@
   <object name="becconary" type="warp" x="800" y="816" width="16" height="16">
    <properties>
     <property name="col" value="1"/>
+    <property name="dir" value="east"/>
     <property name="map" value="brecconary"/>
     <property name="row" value="16"/>
+   </properties>
+  </object>
+  <object name="tantegel" type="warp" x="720" y="848" width="16" height="16">
+   <properties>
+    <property name="col" value="12"/>
+    <property name="dir" value="north"/>
+    <property name="map" value="tantegelCastle"/>
+    <property name="row" value="31"/>
    </properties>
   </object>
  </objectgroup>
