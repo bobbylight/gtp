@@ -1,101 +1,99 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Gtp : A very basic JavaScript 2D game framework.">
-    <meta http-equiv="X-Frame-Options" content="allow" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="css/stylesheet.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/gtp.css">
-
-    <script src='demo/js/dw.min.js'></script>
-    
+<head>
+   <meta charset='utf-8'>
+   <meta http-equiv="X-UA-Compatible" content="chrome=1">
+   <meta name="description" content="Gtp : A very basic JavaScript 2D game framework.">
+   <meta http-equiv="X-Frame-Options" content="allow" />
+   
+   <link rel="stylesheet" type="text/css" media="screen" href="css/stylesheet.css">
+   <link rel="stylesheet" type="text/css" media="screen" href="css/gtp.css">
+   
    <title>Gtp</title>
+   
+</head>
 
-    <script>
-    function insertGame() {
-      init('gameDiv', 'demo/');
-    }
-    </script>
-  </head>
+<body>
 
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
+   <!-- HEADER -->
+   <div id="header_wrap" class="outer">
       <header class="inner">
-        <a id="forkme_banner" href="https://github.com/bobbylight/gtp">View on GitHub</a>
-
-        <h1 id="project_title">Gtp</h1>
-        <h2 id="project_tagline">A very basic JavaScript 2D game framework.</h2>
-
-        <section id="downloads">
-          <a class="zip_download_link" href="https://github.com/bobbylight/gtp/zipball/master">Download this project as a .zip file</a>
-          <a class="tar_download_link" href="https://github.com/bobbylight/gtp/tarball/master">Download this project as a tar.gz file</a>
-        </section>
+         <a id="forkme_banner" href="https://github.com/bobbylight/gtp">View on GitHub</a>
+         
+         <h1 id="project_title">Gtp</h1>
+         <h2 id="project_tagline">A very basic JavaScript 2D game framework.</h2>
+         
+         <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/bobbylight/gtp/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/bobbylight/gtp/tarball/master">Download this project as a tar.gz file</a>
+         </section>
       </header>
-    </div>
+   </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
+   <!-- MAIN CONTENT -->
+   <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a class="anchor"><span class="octicon octicon-link"></span></a>What is it?</h3>
+         
+         <h3>
+            <a class="anchor"><span class="octicon octicon-link"></span></a>What is it?
+         </h3>
+         <p>
+         GTP is a very basic 2D game library written in JavaScript.  It's just something I'm tinkering with and I doubt it is useful
+         for anybody out there.  It currently handles:
+         <ul>
+            <li>Input (keyboard and mouse, touch input in the future)
+            <li>Audio
+            <li>Resource loading
+            <li>Screens/state management
+            <li>Sprites
+            <li>Bitmap fonts
+            <li><a href="http://www.mapeditor.org/">Tiled</a> map support
+         </ul>
+         </p>
 
-<p>
-GTP is a very basic 2D game library written in JavaScript.  It's just something I'm tinkering with and I doubt it is useful
-for anybody out there.  It currently handles:
-<ul>
-   <li>Input (keyboard and mouse, touch input in the future)
-   <li>Audio
-   <li>Resource loading
-   <li>Screens/state management
-   <li>Sprites
-   <li>Bitmap fonts
-   <li><a href="http://www.mapeditor.org/">Tiled</a> map support
-</ul>
-</p>
-
-<h3>
-<a class="anchor"><span class="octicon octicon-link"></span></a>Demo</h3>
-
-<div id='gameDiv'>
-   <a href="#" onclick="insertGame(); return false;">Click here for the demo (sorry so ghetto)</a>
-</div>
-
-</h3>
-<h3>
-<a class="anchor" ><span class="octicon octicon-link"></span></a>License</h3>
-<p>
-This library is licensed under a modified BSD license.  Resources for the example games belong to <a href="http://www.square-enix.com/">Square Enix</a>.  Please don't sue, it's a labor of love!
-</p>
-
-<h3>
-<a class="anchor" ><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>
-<ul>
-   <li><a href="http://github.com/bobbylight">bobbylight</a> - Everything
-</ul>
-</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+         <h3>
+            <a class="anchor"><span class="octicon octicon-link"></span></a>Demo
+         </h3>
+         <div id='gameDiv'>
+            <a href="#" onclick="insertGame(); return false;">
+               <div id='dw-screenshot-bw'></div>
+               <div id='dw-screenshot-color'></div>
+            </a>
+         </div>
+         <h3>
+            <a class="anchor" ><span class="octicon octicon-link"></span></a>License
+         </h3>
+         <p>
+         This library is licensed under a modified BSD license.  Resources for the example games belong to <a href="http://www.square-enix.com/">Square Enix</a>.  Please don't sue, it's a labor of love!
+         </p>
+         
+         <h3>
+            <a class="anchor" ><span class="octicon octicon-link"></span></a>Authors and Contributors
+         </h3>
+         <p>
+         <ul>
+            <li><a href="http://github.com/bobbylight">bobbylight</a> - Everything
+         </ul>
+         </p>
+         
       </section>
-    </div>
+   </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
+   <!-- FOOTER  -->
+   <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
-    </div>
+   </div>
+   
+   <script src='demo/js/dw.min.js'></script>
+   <script>
+   function insertGame() {
+      init('gameDiv', 'demo/');
+   }
+   </script>
+   
+</body>
 
-    
-
-  </body>
 </html>
