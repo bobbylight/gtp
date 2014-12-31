@@ -16,11 +16,11 @@
    transition: opacity 0.5s ease-in-out;
 }
 #dw-screenshot-bw {
-   background-image: url(/images/dw_screenshot_1_bw.png);
+   background-image: url(../images/dw_screenshot_1_bw.png);
 }
 #dw-screenshot-color {
    opacity: 0;
-   background-image: url(/images/dw_screenshot_1_color.png);
+   background-image: url(../images/dw_screenshot_1_color.png);
 }
 #dw-screenshot-color:hover {
    opacity: 1;
