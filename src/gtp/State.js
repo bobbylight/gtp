@@ -6,9 +6,17 @@ var gtp = gtp || {};
  * 
  * @constructor
  */
-gtp.State = function(game) {
+gtp.State = function(args) {
    'use strict';
-   this.game = game || window.game;
+   if (args instanceof gtp.Game) {
+      this.game = args;
+   }
+   else if (args && args.game) {
+      this.game = args.game;
+   }
+   else {
+      this.game = window.game;
+   }
 };
 
 gtp.State.prototype = {
