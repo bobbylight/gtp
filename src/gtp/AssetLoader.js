@@ -149,7 +149,7 @@ gtp.AssetLoader.prototype = {
             // TODO: Clean up this API
             self.audio.context.decodeAudioData(xhr.response, function(buffer) {
                var sound = new gtp.Sound(id, buffer, loopStart || 0);
-               if (loopByDefaultIfMusic) {
+               if (typeof loopByDefaultIfMusic !== 'undefined') {
                   sound.loopsByDefaultIfMusic = loopByDefaultIfMusic;
                }
                self.audio.addSound(sound);
