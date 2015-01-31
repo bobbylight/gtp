@@ -94,10 +94,18 @@ gtp.AudioSystem.prototype = {
     * at a time, as opposed to "sounds," of which multiple can be playing at
     * one time.
     * @param {string} id The ID of the resource to play as music.
+    * @param {boolean} loop Whether the music should loop.
     */
-   playMusic: function(id) {
+   playMusic: function(id, loop) {
       'use strict';
+      
       if (this.context) {
+         
+         var sound = this._sounds[id];
+         if (typeof loop === 'undefined') {
+            loop = sound.loopsByDefaultIfMusic;
+         }
+         
          // Note: We destroy and recreate _musicFaderGain each time, because
          // it appears to occasionally start playing muted if we do not do
          // so, even when gain.value===1, on Chrome 38.
@@ -112,8 +120,7 @@ gtp.AudioSystem.prototype = {
          this._musicFaderGain.gain.setValueAtTime(1, this.context.currentTime);
          this._musicFaderGain.gain.value = 1;
          this._currentMusic = this.context.createBufferSource();
-         this._currentMusic.loop = true;
-         var sound = this._sounds[id];
+         this._currentMusic.loop = loop;
          this._musicLoopStart = sound.loopStart || 0;
          this._currentMusic.loopStart = this._musicLoopStart;
          this._currentMusic.buffer = sound.buffer;
@@ -122,8 +129,10 @@ gtp.AudioSystem.prototype = {
          this._musicFaderGain.connect(this._volumeFaderGain);
          this._currentMusic.start(0);
          this.currentMusicId = id;
-         console.log('Just started new music with id: ' + id);
+         console.log('Just started new music with id: ' + id + ', loop: ' + loop);
+         
       }
+      
    },
    
    /**
