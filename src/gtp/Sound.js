@@ -11,6 +11,7 @@ gtp.Sound = function(id, buffer, loopStart) {
    'use strict';
    this._id = id;
    this._buffer = buffer;
+   this._loopsByDefault = true;
    this._loopStart = loopStart || 0;
 };
 
@@ -24,6 +25,16 @@ gtp.Sound.prototype = {
    get id() {
       'use strict';
       return this._id;
+   },
+   
+   get loopsByDefaultIfMusic() {
+      'use strict';
+      return this._loopsByDefault;
+   },
+   
+   set loopsByDefaultIfMusic(loopsByDefault) {
+      'use strict';
+      this._loopsByDefault = loopsByDefault;
    },
    
    get loopStart() {
