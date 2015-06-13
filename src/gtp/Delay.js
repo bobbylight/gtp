@@ -44,12 +44,33 @@ gtp.Delay.prototype = {
    update: function(delta) {
       'use strict';
       if (this._remaining > 0) {
-         this._remaining -= delta;
+         this._remaining = Math.max(this._remaining - delta, 0);
          if (this._remaining <= 0 && this._callback) {
             this._callback(this);
          }
       }
       return this.isDone();
+   },
+   
+   /**
+    * Returns the remaining time on this delay.
+    *
+    * @return {boolean} The remaining time on this delay.
+    */
+   getRemaining: function() {
+      'use strict';
+      return this._remaining;
+   },
+   
+   /**
+    * Returns how far along we are in this delay, in the range
+    * 0 - 1.
+    *
+    * @return {int} How far along we are in this delay.
+    */
+   getRemainingPercent: function() {
+      'use strict';
+      return this._remaining / this._curInitial;
    },
    
    /**
@@ -76,7 +97,7 @@ gtp.Delay.prototype = {
    
    reset: function() {
       'use strict';
-      this._remaining = this._initial[this._initialIndex];
+      this._curInitial = this._remaining = this._initial[this._initialIndex];
       this._initialIndex = (this._initialIndex + 1) % this._initial.length;
       if (this._minDelta || this._maxDelta) {
          this._remaining += gtp.Utils.randomInt(this._minDelta, this._maxDelta);
