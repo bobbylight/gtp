@@ -13,6 +13,9 @@ var gtp = gtp || {};
  *        value specified in millis.
  * @param {int} [args.maxDelta] If specified, a maximum amount of variance for
  *        the event.
+ * @param {int} [args.loop] If specified and <code>true</code>, this timer will
+ *        automatically repeat and <code>isDone()</code> will never return
+ *        <code>true</code>.
  * @param {function} [args.callback] If specified, a callback function that
  *        will be called when this delay fires.
  * @constructor
@@ -29,6 +32,9 @@ gtp.Delay = function(args) {
       this.setRandomDelta(args.minDelta, args.maxDelta);
    }
    this._callback = args.callback;
+   this._loop = !!args.loop;
+   this._loopCount = 0;
+   this._maxLoopCount = args.loopCount || -1;
    this.reset();
 };
 
@@ -49,7 +55,26 @@ gtp.Delay.prototype = {
             this._callback(this);
          }
       }
+      if (this._loop && this._remaining <= 0) {
+         if (this._loopCount < this._maxLoopCount) {
+            this._loopCount++;
+            this.reset(true);
+         }
+         else {
+            this._remaining = -1;
+         }
+      }
       return this.isDone();
+   },
+   
+   /**
+    * Returns the number of times this Delay has looped.
+    *
+    * @return {int} The number of times this Delay has looped.
+    */
+   getLoopCount: function() {
+      'use strict';
+      return this._loopCount;
    },
    
    /**
@@ -80,7 +105,8 @@ gtp.Delay.prototype = {
     */
    isDone: function() {
       'use strict';
-      return this._remaining <= 0;
+      return (!this._loop || this._loopCount < this._maxLoopCount) &&
+            this._remaining <= 0;
    },
    
    /**
@@ -95,9 +121,22 @@ gtp.Delay.prototype = {
       this._maxDelta = max;
    },
    
-   reset: function() {
+   /**
+    * Resets this delay.  This can be called after <code>isDone()</code>
+    * returns <code>true</code> to start a timer again.
+    *
+    * @param {int} [smooth] If <code>true</code>, any time this timer went
+    *        "over" in the previous iteration is counted towards the next
+    *        iteration.  The default value is <code>false</code>
+    */
+   reset: function(smooth) {
       'use strict';
+      smooth = !!smooth;
+      var prevRemaining = this._remaining;
       this._curInitial = this._remaining = this._initial[this._initialIndex];
+      if (smooth && prevRemaining < 0) {
+         this._remaining += prevRemaining; // Subtract how much we went over
+      }
       this._initialIndex = (this._initialIndex + 1) % this._initial.length;
       if (this._minDelta || this._maxDelta) {
          this._remaining += gtp.Utils.randomInt(this._minDelta, this._maxDelta);
@@ -108,6 +147,7 @@ gtp.Delay.prototype = {
       'use strict';
       return '[gtp.Delay: _initial=' + this._initial +
             ', _remaining=' + this._remaining +
+            ', _loop=' + this._loop +
             ', _callback=' + (this._callback != null) +
             ']';
    }

@@ -9,10 +9,15 @@ var gtp = gtp || {};
  * Touch and mouse input are currently not supported.
  * 
  * @constructor
+ * @param {int} [keyRefireMillis=0] What the key refiring time should be, in
+ *        milliseconds.  A value of 0 means to take the operating system
+ *        default.
  */
-gtp.InputManager = function() {
+gtp.InputManager = function(keyRefireMillis) {
    'use strict';
    this.keys = [];
+   this._refireMillis = keyRefireMillis || 0;
+   this._repeatTimers = [];
 };
   
 gtp.InputManager.prototype = {
@@ -26,6 +31,10 @@ gtp.InputManager.prototype = {
    clearKeyState: function(key) {
       'use strict';
       this.keys[key] = false;
+      if (this._repeatTimers[key]) {
+         clearInterval(this._repeatTimers[key]);
+         this._repeatTimers[key] = null;
+      }
    },
    
    /**
@@ -35,7 +44,7 @@ gtp.InputManager.prototype = {
       'use strict';
       //console.log('Clearing ' + this.keys.length + ' keys');
       for (var i=0; i<this.keys.length; i++) {
-         this.keys[i] = false;
+         this.clearKeyState(i);
       }
    },
    
@@ -80,13 +89,44 @@ gtp.InputManager.prototype = {
       if (keyCode===32 || (keyCode>=37 && keyCode<=40)) { // An arrow key or space
          e.preventDefault();
       }
-      this.keys[e.keyCode] = true;
+      if (this._refireMillis) {
+         if (!this._repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
+            if (keyCode === 90) {
+               console.log('_keyDown: Setting to true for 90');
+            }
+            this.keys[keyCode] = true;
+            var self = this;
+            this._repeatTimers[keyCode] = setInterval(function() {
+               console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
+               self.keys[keyCode] = true;
+            }, self._refireMillis);
+         }
+      }
+      else {
+         this.keys[keyCode] = true;
+      }
       e.stopPropagation();
    },
 
    _keyUp: function(e) {
       'use strict';
-      this.keys[e.keyCode] = false;
+      var key = e.keyCode;
+      if (this._refireMillis) {
+         if (this._repeatTimers[key]) { // Should always be true
+            this.keys[key] = false;
+            if (key === 90) {
+               console.log('_keyUp: Setting to false for 90');
+            }
+            clearInterval(this._repeatTimers[key]);
+            this._repeatTimers[key] = null;
+         }
+         else {
+            console.error('_keyUp: Timer does not exist for key: ' + key + '!');
+         }
+      }
+      else {
+         this.keys[key] = false;
+      }
       e.stopPropagation();
    },
    
@@ -101,7 +141,7 @@ gtp.InputManager.prototype = {
    isKeyDown: function(keyCode, clear) {
       'use strict';
       var down = this.keys[keyCode];
-      if (clear) {
+      if (down && clear) {
          this.keys[keyCode] = false;
       }
       return down;

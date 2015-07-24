@@ -14,7 +14,7 @@ gtp.Game = function(args) {
    this._scale = args.scale || 1;
    this.canvas = gtp.ImageUtils.createCanvas(args.width, args.height, args.parent);
    
-   this.inputManager = new gtp.InputManager();
+   this.inputManager = new gtp.InputManager(args.keyRefreshMillis || 0);
    this.inputManager.install();
    this._gameTime = 0;
    this._targetFps = args.targetFps || 30;
