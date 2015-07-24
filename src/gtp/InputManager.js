@@ -18,6 +18,17 @@ gtp.InputManager = function() {
 gtp.InputManager.prototype = {
    
    /**
+    * Resets a specific key to its "not depressed" state.
+    * 
+    * @param {int} key The key to reset.
+    * @see clearKeyStates
+    */
+   clearKeyState: function(key) {
+      'use strict';
+      this.keys[key] = false;
+   },
+   
+   /**
     * Resets all keys to be in their "not depressed" states.
     */
    clearKeyStates: function() {
