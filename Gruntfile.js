@@ -42,18 +42,24 @@ module.exports = function(grunt) {
       html: 'dist/index.html'
    },
   
-//    qunit: {
-//      files: ['test/**/*.html']
-//    },
-
-    jshint: {
+   jshint: {
       //files: ['Gruntfile.js', 'src/**/*.js', 'examples/**/js/**/*.js'],
       files: ['src/**/*.js', 'examples/dw/js/**/*.js'],
       options: {
          jshintrc: '.jshintrc'
       }
-    },
+   },
     
+   karma: {
+      options: {
+         configFile: 'karma.conf.js'
+      },
+      continuous: {
+         //singleRun: true,
+         browsers: [ 'PhantomJS' ]
+      }
+   },
+   
    'json-minify': {
       main: { // Minifies JSON in place
          files: 'dist/**/*.json'
@@ -96,9 +102,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-json-minify');
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-usemin');
 
-  grunt.registerTask('test', ['jshint'/*, 'qunit'*/]);
+  grunt.registerTask('test', ['jshint', 'karma:continuous']);
   grunt.registerTask('default', ['jshint', 'copy', 'useminPrepare', 'concat', 'uglify', 'usemin', 'json-minify']);
   grunt.registerTask('doc', ['jsdoc']);
   grunt.registerTask('make-src-zip', ['compress']);

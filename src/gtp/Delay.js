@@ -56,11 +56,12 @@ gtp.Delay.prototype = {
          }
       }
       if (this._loop && this._remaining <= 0) {
-         if (this._loopCount < this._maxLoopCount) {
+         if (this._maxLoopCount === -1 || this._loopCount < this._maxLoopCount-1) {
             this._loopCount++;
             this.reset(true);
          }
          else {
+            this._loopCount = this._maxLoopCount;
             this._remaining = -1;
          }
       }
@@ -105,7 +106,7 @@ gtp.Delay.prototype = {
     */
    isDone: function() {
       'use strict';
-      return (!this._loop || this._loopCount < this._maxLoopCount) &&
+      return (!this._loop || this._loopCount === this._maxLoopCount) &&
             this._remaining <= 0;
    },
    

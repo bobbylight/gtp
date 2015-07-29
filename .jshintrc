@@ -9,6 +9,7 @@
    "forin":  true,       // Require use of hasOwnProperty() check in for...in loops
    "freeze": true,       // Prohibit overwriting prototypes of native objects such as Array and Date
    "immed": true,        // Prohibits immediate function invocations without wrapping them in parens
+   "jasmine": true,      // Jasmine is used for unit testing
    "latedef": true,      // Prohibit use of variable before it is defined
    "laxcomma": true,     // Suppress warnings about comma-first style in object literals
    "newcap": true,       // Require constructor functions to be capitalized
