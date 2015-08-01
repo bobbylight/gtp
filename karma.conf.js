@@ -17,6 +17,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'src/gtp/Utils.js',
       'src/gtp/Delay.js',
       'src/gtp/SpriteSheet.js',
       'src/gtp/BitmapFont.js',
@@ -33,6 +34,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'src/gtp/Utils.js': 'coverage',
       'src/gtp/Delay.js': 'coverage',
       'src/gtp/SpriteSheet.js': 'coverage',
       'src/gtp/BitmapFont.js': 'coverage',

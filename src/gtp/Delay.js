@@ -16,11 +16,14 @@ var gtp = gtp || {};
  * @param {int} [args.loop] If specified and <code>true</code>, this timer will
  *        automatically repeat and <code>isDone()</code> will never return
  *        <code>true</code>.
+ * @param {int} [args.loopCount] This argument is only honored if
+ *        <code>args.loop</code> is defined and <code>true</code>.  If true,
+ *        this argument is the number of times to loop; if this argument is not
+ *        specified, looping will occur indefinitely.
  * @param {function} [args.callback] If specified, a callback function that
  *        will be called when this delay fires.
  * @constructor
  */
-// TODO: Add property to auto-repeat, possibly run callback on ticks
 gtp.Delay = function(args) {
    'use strict';
    if (!args || !args.millis) {
@@ -34,7 +37,7 @@ gtp.Delay = function(args) {
    this._callback = args.callback;
    this._loop = !!args.loop;
    this._loopCount = 0;
-   this._maxLoopCount = args.loopCount || -1;
+   this._maxLoopCount = this._loop ? (args.loopCount || -1) : -1;
    this.reset();
 };
 
@@ -50,19 +53,24 @@ gtp.Delay.prototype = {
    update: function(delta) {
       'use strict';
       if (this._remaining > 0) {
-         this._remaining = Math.max(this._remaining - delta, 0);
+         this._remaining -= delta;
          if (this._remaining <= 0 && this._callback) {
             this._callback(this);
          }
       }
-      if (this._loop && this._remaining <= 0) {
-         if (this._maxLoopCount === -1 || this._loopCount < this._maxLoopCount-1) {
-            this._loopCount++;
-            this.reset(true);
+      if (this._remaining <= 0) {
+         if (this._loop) {
+            if (this._maxLoopCount === -1 || this._loopCount < this._maxLoopCount-1) {
+               this._loopCount++;
+               this.reset(true);
+            }
+            else {
+               this._loopCount = this._maxLoopCount;
+               this._remaining = -1;
+            }
          }
          else {
-            this._loopCount = this._maxLoopCount;
-            this._remaining = -1;
+            this._remaining = Math.max(0, this._remaining);
          }
       }
       return this.isDone();
@@ -76,6 +84,28 @@ gtp.Delay.prototype = {
    getLoopCount: function() {
       'use strict';
       return this._loopCount;
+   },
+   
+   /**
+    * Returns the maximum delta value, or -1 if none was defined.
+    *
+    * @return {int} The maximum delta value.
+    * @see getMinDelta()
+    */
+   getMaxDelta: function() {
+      'use strict';
+      return typeof this._maxDelta !== 'undefined' ? this._maxDelta : -1;
+   },
+   
+   /**
+    * Returns the minimum delta value, or -1 if none was defined.
+    *
+    * @return {int} The minimum delta value.
+    * @see getMaxDelta()
+    */
+   getMinDelta: function() {
+      'use strict';
+      return typeof this._minDelta !== 'undefined' ? this._minDelta : -1;
    },
    
    /**
