@@ -8,6 +8,7 @@ gtp.Keys = Object.freeze({
    
    ENTER: 13,
    SHIFT: 16,
+   CTRL: 17,
    SPACE: 32,
    LEFT_ARROW: 37,
    UP_ARROW: 38,

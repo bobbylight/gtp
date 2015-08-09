@@ -49,6 +49,18 @@ gtp.InputManager.prototype = {
    },
    
    /**
+    * Returns whether ctrl is pressed.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   ctrl: function(clear) {
+      'use strict';
+      return this.isKeyDown(gtp.Keys.CTRL, clear);
+   },
+   
+   /**
     * Returns whether down is pressed.
     * @param clear {boolean} Whether the key's state should be reset to "not
     *        pressed" when this method returns.  This is useful to effectively
@@ -83,6 +95,23 @@ gtp.InputManager.prototype = {
       document.onkeyup = function(e) { self._keyUp(e); };
    },
 
+   /**
+    * Returns whether a specific key is pressed.
+    * @param keyCode {gtp.Keys} A key code.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   isKeyDown: function(keyCode, clear) {
+      'use strict';
+      var down = this.keys[keyCode];
+      if (down && clear) {
+         this.keys[keyCode] = false;
+      }
+      return down;
+   },
+   
    _keyDown: function(e) {
       'use strict';
       var keyCode = e.keyCode;
@@ -91,13 +120,10 @@ gtp.InputManager.prototype = {
       }
       if (this._refireMillis) {
          if (!this._repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
-            if (keyCode === 90) {
-               console.log('_keyDown: Setting to true for 90');
-            }
             this.keys[keyCode] = true;
             var self = this;
             this._repeatTimers[keyCode] = setInterval(function() {
-               console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
+               //console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
                self.keys[keyCode] = true;
             }, self._refireMillis);
          }
@@ -114,9 +140,6 @@ gtp.InputManager.prototype = {
       if (this._refireMillis) {
          if (this._repeatTimers[key]) { // Should always be true
             this.keys[key] = false;
-            if (key === 90) {
-               console.log('_keyUp: Setting to false for 90');
-            }
             clearInterval(this._repeatTimers[key]);
             this._repeatTimers[key] = null;
          }
@@ -128,23 +151,6 @@ gtp.InputManager.prototype = {
          this.keys[key] = false;
       }
       e.stopPropagation();
-   },
-   
-   /**
-    * Returns whether a specific key is pressed.
-    * @param keyCode {gtp.Keys} A key code.
-    * @param clear {boolean} Whether the key's state should be reset to "not
-    *        pressed" when this method returns.  This is useful to effectively
-    *        enable the keyboard's buffering.
-    * @return {boolean} Whether the key was pressed.
-    */
-   isKeyDown: function(keyCode, clear) {
-      'use strict';
-      var down = this.keys[keyCode];
-      if (down && clear) {
-         this.keys[keyCode] = false;
-      }
-      return down;
    },
    
    /**
@@ -169,6 +175,18 @@ gtp.InputManager.prototype = {
    right: function(clear) {
       'use strict';
       return this.isKeyDown(gtp.Keys.RIGHT_ARROW, clear);
+   },
+   
+   /**
+    * Returns whether shift is pressed.
+    * @param clear {boolean} Whether the key's state should be reset to "not
+    *        pressed" when this method returns.  This is useful to effectively
+    *        enable the keyboard's buffering.
+    * @return {boolean} Whether the key was pressed.
+    */
+   shift: function(clear) {
+      'use strict';
+      return this.isKeyDown(gtp.Keys.SHIFT, clear);
    },
    
    /**

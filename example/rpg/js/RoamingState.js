@@ -10,6 +10,7 @@ RoamingState.prototype = new gtp.State();
 RoamingState._totalTime = 0;
 
 RoamingState.prototype.update = function(delta) {
+   'use strict';
    
    RoamingState._totalTime += delta;
    if (RoamingState._totalTime>=1000) {
@@ -33,19 +34,19 @@ RoamingState.prototype.update = function(delta) {
 //      var maxX = game.map.getPixelWidth() * game._scale;
 //      var maxY = game.map.getPixelHeight() * game._scale;
 //      
-      if (im.isKeyDown(gtp.Keys.UP_ARROW)) {
+      if (im.up()) {
          game.dy--;//hero.tryToMoveUp();
          //this.yOffs = Math.max(this.yOffs-inc, 0);
       }
-      else if (im.isKeyDown(gtp.Keys.DOWN_ARROW)) {
+      else if (im.down()) {
          game.dy++;//hero.tryToMoveDown();
          //this.yOffs = Math.min(this.yOffs+inc, maxY);
       }
-      else if (im.isKeyDown(gtp.Keys.LEFT_ARROW)) {
+      else if (im.left()) {
          game.dx--;//hero.tryToMoveLeft();
          //this.xOffs = Math.max(this.xOffs-inc, 0);
       }
-      else if (im.isKeyDown(gtp.Keys.RIGHT_ARROW)) {
+      else if (im.right()) {
          game.dx++;//hero.tryToMoveRight();
          //this.xOffs = Math.min(this.xOffs+inc, maxX);
       }

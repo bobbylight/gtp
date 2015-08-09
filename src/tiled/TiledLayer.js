@@ -23,7 +23,7 @@ tiled.TiledLayer.prototype = {
       if (!this.data) { // An object layer
          return -1;
       }
-      var index = row * this.map.colCount + col;
+      var index = this._getIndex(row, col);
       return this.data[index];
    },
    
@@ -32,8 +32,13 @@ tiled.TiledLayer.prototype = {
       if (!this.data) { // An object layer
          return false;
       }
-      var index = row * this.map.colCount + col; // TODO: Convert to a function
+      var index = this._getIndex(row, col);
       this.data[index] = value;
+   },
+   
+   _getIndex: function(row, col) {
+      'use strict';
+      return row * this.map.colCount + col;
    },
    
    getObjectByName: function(name) {
