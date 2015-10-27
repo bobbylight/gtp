@@ -1,10 +1,13 @@
 var LoadingState = function() {
+   'use strict';
    this.assetsLoaded = false;
 };
+
 LoadingState.prototype = Object.create(_BaseState.prototype, {
 
    update: {
       value: function(delta) {
+         'use strict';
          
          this.handleDefaultKeys();
          
@@ -14,37 +17,35 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             var self = this;
             //var game = this.game;
             
-            // Simulate a delay, just for fun...
-            setTimeout(function() {
-               game.assets.addImage('bg', 'res/add-on_6.png');
+            game.assets.addImage('bg', 'res/add-on_6.png');
 //               game.assets.addImage('font', 'res/font.png');
-               game.assets.addJson('maps/overworld.json');
+            game.assets.addJson('maps/overworld.json');
+            game.assets.addSpriteSheet('hero', 'res/blauekrieger_modified.png', 18, 26, 6, true);
 //               game.assets.addSound('bump', 'res/sound/42 Dragon Quest 1 - Bumping into Walls (22khz mono).wav');
 //               game.assets.addSound('menu', 'res/sound/32 Dragon Quest 1 - Menu Button (22khz mono).wav');
 //               game.assets.addSound('stairs', 'res/sound/30 Dragon Quest 1 - Stairs Down (22khz mono).wav');
 
-               game.assets.onLoad(function() {
-                  
+            game.assets.onLoad(function() {
+               
 //                  var font = game.assets.get('font');
 //                  game.assets.set('font', new gtp.BitmapFont(font, 20,20, 12));
-                  
-                  var data = game.assets.get('maps/overworld.json');
-                  var imagePathModifier = function(imagePath) {
-                     return imagePath.replace('../', '');
-                  };
-                  game.map = new tiled.TiledMap(data, {
-                     imagePathModifier: imagePathModifier,
-                     tileWidth: 16, tileHeight: 16,
-                     screenWidth: game.getWidth(), screenHeight: game.getHeight()
-                  });
-                  self._adjustGameMap();
-                  game.assets.addTmxMap(game.map);
-                  game.map.setScale(game._scale);
-                  game.assets.onLoad(function() {
-                     game.setState(new RoamingState());
-                  });
+               
+               var data = game.assets.get('maps/overworld.json');
+               var imagePathModifier = function(imagePath) {
+                  return imagePath.replace('../', '');
+               };
+               game.map = new tiled.TiledMap(data, {
+                  imagePathModifier: imagePathModifier,
+                  tileWidth: 16, tileHeight: 16,
+                  screenWidth: game.getWidth(), screenHeight: game.getHeight()
                });
-            }, 1000);
+               self._adjustGameMap();
+               game.assets.addTmxMap(game.map);
+               game.map.setScale(game._scale);
+               game.assets.onLoad(function() {
+                  game.setState(new RoamingState());
+               });
+            });
 
          }
       
@@ -53,6 +54,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
    
    render: {
       value: function() {
+         'use strict';
          
          //var game = this.game;
          var ctx = game.canvas.getContext('2d');
@@ -69,6 +71,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
    _adjustGameMap: {
       
       value: function() {
+         'use strict';
          
          var map = game.map;
          
