@@ -93,29 +93,32 @@ gtp.AudioSystem.prototype = {
     * Plays a specific sound as background music.  Only one "music" can play
     * at a time, as opposed to "sounds," of which multiple can be playing at
     * one time.
-    * @param {string} id The ID of the resource to play as music.
+    * @param {string} id The ID of the resource to play as music.  If this is
+    *        <code>null</code>, the current music is stopped but no new music
+    *        is started.
     * @param {boolean} loop Whether the music should loop.
+    * @see stopMusic
     */
    playMusic: function(id, loop) {
       'use strict';
       
       if (this.context) {
          
+         // Note: We destroy and recreate _musicFaderGain each time, because
+         // it appears to occasionally start playing muted if we do not do
+         // so, even when gain.value===1, on Chrome 38.
+         if (this._currentMusic) {
+            this.stopMusic(false);
+         }
+         
+         if (!id) {
+            return; // null id => don't play any music
+         }
          var sound = this._sounds[id];
          if (typeof loop === 'undefined') {
             loop = sound.loopsByDefaultIfMusic;
          }
          
-         // Note: We destroy and recreate _musicFaderGain each time, because
-         // it appears to occasionally start playing muted if we do not do
-         // so, even when gain.value===1, on Chrome 38.
-         if (this._currentMusic) {
-            this._currentMusic.stop();
-            this._currentMusic.disconnect();
-            delete this._currentMusic;
-            this._musicFaderGain.disconnect();
-            delete this._musicFaderGain;
-         }
          this._musicFaderGain = this.context.createGain();
          this._musicFaderGain.gain.setValueAtTime(1, this.context.currentTime);
          this._musicFaderGain.gain.value = 1;
@@ -147,6 +150,24 @@ gtp.AudioSystem.prototype = {
          source.connect(this._volumeFaderGain);
          source.start(0);
       }
+   },
+   
+   /**
+    * Stops the currently playing music, if any.
+    * @param {boolean} pause If <code>true</code>, the music is only paused;
+    *        otherwise, native resources are freed and the music cannot be
+    *        resumed.
+    * @see playMusic
+    */
+   stopMusic: function(pause) {
+      'use strict';
+         this._currentMusic.stop();
+         if (!pause) {
+            this._currentMusic.disconnect();
+            this._musicFaderGain.disconnect();
+            delete this._currentMusic;
+            delete this._musicFaderGain;
+         }
    },
    
    toggleMuted: function() {
