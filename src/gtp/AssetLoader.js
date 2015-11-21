@@ -171,19 +171,24 @@ gtp.AssetLoader.prototype = {
     * @param imageSrc {string} The URL of the resource.
     * @param {int} cellW The width of a cell.
     * @param {int} cellH The height of a cell.
-    * @param {int} spacing The spacing between cells.  Assumed to be 0 if
-    *        not defined.
+    * @param {int} spacingX The horizontal spacing between cells.  Assumed to
+    *        be 0 if not defined.
+    * @param {int} spacingY The vertical spacing between cells.  Assumed to
+    *        be 0 if not defined.
     * @param {boolean} firstPixelTranslucent If truthy, the pixel at (0, 0)
     *        is made translucent, along with all other pixels of the same color.
     */
-   addSpriteSheet: function(id, imageSrc, cellW, cellH, spacing, firstPixelTranslucent) {
+   addSpriteSheet: function(id, imageSrc, cellW, cellH, spacingX, spacingY,
+         firstPixelTranslucent) {
       'use strict';
       
       var self = this;
-      spacing = spacing || 0;
+      spacingX = spacingX || 0;
+      spacingY = spacingY || 0;
       cellW *= self._scale;
       cellH *= self._scale;
-      spacing *= self._scale;
+      spacingX *= self._scale;
+      spacingY *= self._scale;
       
       if (this._assetRoot) {
          imageSrc = this._assetRoot + imageSrc;
@@ -203,7 +208,7 @@ gtp.AssetLoader.prototype = {
          if (firstPixelTranslucent) {
             gtpImage.makeColorTranslucent(0, 0);
          }
-         var ss = new gtp.SpriteSheet(gtpImage, cellW, cellH, spacing);
+         var ss = new gtp.SpriteSheet(gtpImage, cellW, cellH, spacingX, spacingY);
          self._completed(id, ss);
       });
       

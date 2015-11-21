@@ -38,7 +38,7 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
                break;
          }
          ssCol += (Hero.STEP_INC * 2);
-         console.log(this.xOffs + ', ' + this.yOffs + ', ' + Hero.STEP_INC);
+         console.log(this.mapRow + ', ' + this.mapCol + ' - ' + this.xOffs + ', ' + this.yOffs + ', ' + Hero.STEP_INC);
          
          var x = (game.canvas.width - tileSize)/2;
          var y = (game.canvas.height - tileSize)/2;

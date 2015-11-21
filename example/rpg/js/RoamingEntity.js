@@ -113,12 +113,12 @@ RoamingEntity.prototype = {
          return false;
       }
       
-//      var data = game.getCollisionLayer().getData(row, col);
-//      var canWalk = data===0;//-1;
-//      if (canWalk) {
-//         this.setMapLocation(row, col);
-//      }
-//      
+      var data = game.getCollisionLayer().getData(row, col);
+      var canWalk = data===0;//-1;
+      if (canWalk) {
+         this.setMapLocation(row, col);
+      }
+      
 //      // TODO: Is there a better way to determine that I'm the hero?
 //      else if (data===361 && this.constructor === dw.Hero) { // i.e., not an NPC
 //         game.bump();

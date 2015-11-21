@@ -16,8 +16,8 @@ gtp.SpriteSheet = function(gtpImage, cellW, cellH, spacing, spacingY) {
    this.gtpImage = gtpImage;
    this.cellW = cellW;
    this.cellH = cellH;
-   this.spacingX = spacing || 1;
-   this.spacingY = spacingY || this.spacingX;
+   this.spacingX = typeof spacing === 'undefined' ? 1 : spacing;
+   this.spacingY = typeof spacingY === 'undefined' ? this.spacingX : spacingY;
    
    this.rowCount = Math.floor(gtpImage.height / (cellH + this.spacingY));
    if ((gtpImage.height - this.rowCount*(cellH+this.spacingY)) >= cellH) {
