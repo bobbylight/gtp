@@ -20,7 +20,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             game.assets.addImage('bg', 'res/add-on_6.png');
 //               game.assets.addImage('font', 'res/font.png');
             game.assets.addJson('maps/overworld.json');
-            game.assets.addSpriteSheet('hero', 'res/blauekrieger_modified.png', 18, 26, 6, true);
+            game.assets.addSpriteSheet('hero', 'res/blauekrieger_modified.png', 18,26, 6,6, true);
 //               game.assets.addSound('bump', 'res/sound/42 Dragon Quest 1 - Bumping into Walls (22khz mono).wav');
 //               game.assets.addSound('menu', 'res/sound/32 Dragon Quest 1 - Menu Button (22khz mono).wav');
 //               game.assets.addSound('stairs', 'res/sound/30 Dragon Quest 1 - Stairs Down (22khz mono).wav');
@@ -45,6 +45,15 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
                game.assets.onLoad(function() {
                   game.setState(new RoamingState());
                });
+               
+               // Hide layers that shouldn't be shown (why aren't they marked
+               // as hidden in Tiled?)
+               for (var i = 0; i < game.map.getLayerCount(); i++) {
+                  var layer = game.map.getLayerByIndex(i);
+                  if (layer.name.indexOf('tileLayer') !== 0) {
+                     layer.visible = false;
+                  }
+               }
             });
 
          }
