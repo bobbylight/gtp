@@ -15,12 +15,27 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
 
 
-    // list of files / patterns to load in the browser
+    // list of files / patterns to load in the browser.
+    // Note that this is also the order stuff is loaded in, so we cannot just
+    // wildcard all JS files in a folder, due to dependencies (!)
+    // See also:  http://karma-runner.github.io/0.13/config/files.html
     files: [
+      'src/gtp/AssetType.js',
+      'src/gtp/AssetLoader.js',
       'src/gtp/Utils.js',
       'src/gtp/Delay.js',
+      'src/gtp/Rectangle.js',
       'src/gtp/SpriteSheet.js',
       'src/gtp/BitmapFont.js',
+      'src/gtp/State.js',
+      'src/gtp/FadeOutInState.js',
+      'src/gtp/Image.js',
+      'src/gtp/ImageAtlas.js',
+      'src/gtp/ImageUtils.js',
+      'src/gtp/Keys.js',
+      'src/gtp/InputManager.js',
+      //'src/gtp/Sound.js',
+      'src/gtp/Timer.js',
       'src/tiled/*.js',
       'test/**/*.js'
     ],
@@ -34,10 +49,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/gtp/Utils.js': 'coverage',
-      'src/gtp/Delay.js': 'coverage',
-      'src/gtp/SpriteSheet.js': 'coverage',
-      'src/gtp/BitmapFont.js': 'coverage',
+      'src/gtp/*.js': 'coverage',
       'src/tiled/*.js': 'coverage'
     },
 
