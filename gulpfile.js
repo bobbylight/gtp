@@ -62,8 +62,8 @@
    });
    
    gulp.task('default', function() {
-      //runSequence('jshint', 'clean', 'usemin', 'cssmin', 'copy-non-minified-files');
-      runSequence('watch-js');
+      // We build the minified demo game too, just so Travis CI does it as well
+      runSequence('jshint, clean, test, demo-usemin, demo-cssmin, demo-copy-extra-files');
    });
    
    gulp.task('watch-js', function() {
