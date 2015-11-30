@@ -6,4 +6,5 @@ dist
 dist.zip
 Thumbs.db
 coverage
+npm-debug.log
 
