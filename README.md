@@ -1,7 +1,7 @@
 GTP - A very basic 2D HTML5 game library
 ========================================
 [![Build Status](https://travis-ci.org/bobbylight/gtp.svg?branch=master)](https://travis-ci.org/bobbylight/gtp)
-
+[![Coverage Status](https://coveralls.io/repos/bobbylight/gtp/badge.svg?branch=master&service=github)](https://coveralls.io/github/bobbylight/gtp?branch=master)
 
 This is a basic game library for 2D HTML5 games.  It is a WIP, and probably
 isn't very useful to most people.
