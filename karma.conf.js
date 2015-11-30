@@ -22,6 +22,7 @@ module.exports = function(config) {
     files: [
       'src/gtp/AssetType.js',
       'src/gtp/AssetLoader.js',
+      'src/gtp/BrowserUtil.js',
       'src/gtp/Utils.js',
       'src/gtp/Delay.js',
       'src/gtp/Rectangle.js',
@@ -57,7 +58,8 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: [ 'progress', 'coverage' ],
+//    reporters: [ 'progress', 'coverage' ],
+    reporters: [ 'dots', 'coverage' ],
 
 
     // web server port

@@ -33,29 +33,27 @@ gtp.Utils.getObjectSize = function(obj) {
  */
 gtp.Utils.getRequestParam = function(param) {
    'use strict';
-   var searchFor = param;
-   var params = window.location.search.substring(1);
-   var equals, end;
-   if (params.indexOf(searchFor)===0) {
-      equals = params.indexOf('=');
-      if (equals === -1) {
-         return '';
-      }
-      equals++;
-      end = Math.max(params.indexOf('&', equals), params.length);
-      return params.substring(equals, end);
-   }
-   searchFor = '&' + searchFor;
+   
+   // Replace leading '?' with '&'
+   var params = '&' + gtp.BrowserUtil.getWindowLocationSearch().substring(1);
+   
+   var searchFor = '&' + param;
    var index = params.indexOf(searchFor);
    if (index >= -1) {
       var start = index + searchFor.length;
       if (params.charAt(start) === '=') {
          start++;
-         end = Math.max(params.indexOf('&', start), params.length);
+         var end = params.indexOf('&', start); // &foo=val1&bar=val2
+         if (end === -1) {
+            end = params.length; // &foo=val1
+         }
          return params.substring(start, end);
       }
+      else if (params.charAt(start) === '&') {
+         return ''; // &foo&bar
+      }
       else if (start===params.length) {
-         return '';
+         return ''; // &foo
       }
    }
    return null;
