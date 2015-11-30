@@ -68,7 +68,13 @@ module.exports = function(config) {
 //    reporters: [ 'progress', 'coverage' ],
     reporters: [ 'dots', 'coverage' ],
 
-
+    coverageReporter: {
+        instrumenterOptions: {
+            istanbul: { noCompact: true }
+        },
+        type: 'lcov' // Generates lcov and HTML (lcov for coveralls.io)
+    },
+    
     // web server port
     port: 9876,
 

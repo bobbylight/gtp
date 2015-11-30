@@ -16,11 +16,13 @@
    var jshint = require('gulp-jshint');
    var stylish = require('jshint-stylish');
    var KarmaServer = require('karma').Server;
+   var coveralls = require('gulp-coveralls');
    
    gulp.task('clean', function() {
       return del([
          './dist',
-         './example/rpg/dist'
+         './example/rpg/dist',
+         './coverage'
       ]);
    });
    
@@ -61,11 +63,6 @@
          .pipe(jshint.reporter('fail'));
    });
    
-   gulp.task('default', function() {
-      // We build the minified demo game too, just so Travis CI does it as well
-      runSequence('jshint', 'clean', 'test', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
-   });
-   
    gulp.task('watch-js', function() {
       gulp.watch('src/**/*.js', [ 'jshint' ]);
       gulp.watch('example/rpg/src/js/**/*.js', [ 'jshint' ]);
@@ -93,6 +90,20 @@
          singleRun: false,
          browsers: [ 'PhantomJS' ]
       }, done).start();
+   });
+   
+   gulp.task('default', function() {
+      // We build the minified demo game too, just so Travis CI does it as well
+      runSequence('jshint', 'clean', 'test', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
+   });
+   
+   gulp.task('upload-coverage-data', function() {
+      gulp.src('coverage/**/lcov.info')
+          .pipe(coveralls());
+   });
+   
+   gulp.task('ci-build', function() {
+      runSequence('default', 'upload-coverage-data');
    });
    
 })();
