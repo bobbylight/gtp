@@ -63,7 +63,7 @@
    
    gulp.task('default', function() {
       // We build the minified demo game too, just so Travis CI does it as well
-      runSequence('jshint, clean, test, demo-usemin, demo-cssmin, demo-copy-extra-files');
+      runSequence('jshint', 'clean', 'test', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
    });
    
    gulp.task('watch-js', function() {
@@ -75,6 +75,15 @@
       new KarmaServer({
          configFile: __dirname + '/karma.conf.js',
          singleRun: true
+      }, done).start();
+   });
+   
+   // By default we only test on PhantomJS for CI builds
+   gulp.task('test-all-browsers', function(done) {
+      new KarmaServer({
+         configFile: __dirname + '/karma.conf.js',
+         singleRun: true,
+         browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ]
       }, done).start();
    });
    

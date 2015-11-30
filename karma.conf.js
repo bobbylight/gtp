@@ -47,6 +47,8 @@ module.exports = function(config) {
     ],
 
     
+    // Plugins need to be explicitly specified for tests to run in actual
+    // browsers
     plugins: [ 'karma-jasmine', 'karma-coverage',
                'karma-phantomjs-launcher', 'karma-chrome-launcher',
                'karma-firefox-launcher'
@@ -86,8 +88,9 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    //browsers: ['Chrome', 'Firefox', 'IE'],
-    browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ],
+    //browsers: [ 'Chrome', 'Firefox', 'IE', 'PhantomJS' ],
+    // By default we only test on PhantomJS for CI builds
+    browsers: [ 'PhantomJS' ],
 
 
     // Continuous Integration mode
