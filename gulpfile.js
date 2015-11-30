@@ -103,7 +103,11 @@
    });
    
    gulp.task('ci-build', function() {
-      runSequence('default', 'upload-coverage-data');
+      // runSequence does not appear to work when calling another task that
+      // has a runSequence in it!  It will run the second task after the
+      // first task in the "child" runSequence
+      //runSequence('default', 'upload-coverage-data');
+      runSequence('jshint', 'clean', 'test', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files', 'upload-coverage-data');
    });
    
 })();
