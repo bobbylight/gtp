@@ -82,8 +82,8 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
       value: function() {
          'use strict';
          
-         var map = game.map;
-         
+//         var map = game.map;
+//         
 //         // Hide layers that shouldn't be shown (why aren't they marked as hidden
 //         // in Tiled?)
 //         for (var i=0; i<map.getLayerCount(); i++) {

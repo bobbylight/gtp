@@ -35,7 +35,7 @@ TestGame.prototype.drawMap = function(ctx) {
 
 TestGame.prototype.loadMap = function(mapName, newRow, newCol) {
    'use strict';
-   newMap = this.getMapImpl(mapName);
+   /*newMap = */this.getMapImpl(mapName);
    this.newRow = newRow;
    this.newCol = newCol;
    this.loadMapStep = TestGame.MAX_LOAD_MAP_STEP;
@@ -47,7 +47,7 @@ TestGame.prototype.getMapImpl = function(mapName) {
    'use strict';
 
    var map = null;
-   var newNpcs = [];
+//   var newNpcs = [];
    
    map = this.assets.get(mapName + '.json');
    //map = MapLoader.load(in, new Java2DTilesetFactory(), SCALE);

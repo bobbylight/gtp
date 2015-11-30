@@ -13,6 +13,7 @@
    "latedef": true,      // Prohibit use of variable before it is defined
    "laxcomma": true,     // Suppress warnings about comma-first style in object literals
    "newcap": true,       // Require constructor functions to be capitalized
+   "node": true,         // "require", etc. is defined
    "noempty": true,      // Prohibit empty blocks in code
    "shadow": false,
    "strict": true,
@@ -24,35 +25,13 @@
       "gtp": true,
       "game": true,
       "_BaseState": true,
-      "BattleCommandBubble": true,
-      "BattleEntity": true,
-      "BattleState": true,
-      "BattleTransitionState": true,
-      "Brecconary": true,
-      "Bubble": true,
-      "CommandBubble": true,
-      "Conversation": true,
       "Direction": true,
-      "DwGame": true,
-      "Enemy": true,
-      "FadeOutInState": true,
-      "GamesAtLunchAdvertState": true,
       "Hero": true,
       "LoadingState": true,
-      "MapChangeState": true,
-      "MapLogic": true,
-      "Npc": true,
-      "NpcType": true,
-      "QuestionBubble": true,
-      "QuestionSegment": true,
       "RoamingState": true,
       "RoamingEntity": true,
-      "Sounds": true,
-      "TalkManager": true,
-      "TalkSegment": true,
-      "TextBubble": true,
-      "tiled": true,
-      "TitleScreenState": true
+      "TestGame": true,
+      "tiled": true
    },
-   "exported": [ "init", "BattleEntity" ]
+   "exported": [ "init" ]
 }

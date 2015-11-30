@@ -1,7 +1,7 @@
-var _RoamingSubState = Object.freeze({
-   ROAMING: 0,
-   MENU: 1
-});
+//var _RoamingSubState = Object.freeze({
+//   ROAMING: 0,
+//   MENU: 1
+//});
 
 var RoamingState = function() {
 };
@@ -33,10 +33,10 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
       //   
          if (!hero.isMoving()) {
             
-            var inc = 1 * game._scale;
-            
-            var maxX = game.map.getPixelWidth() * game._scale;
-            var maxY = game.map.getPixelHeight() * game._scale;
+//            var inc = 1 * game._scale;
+//            
+//            var maxX = game.map.getPixelWidth() * game._scale;
+//            var maxY = game.map.getPixelHeight() * game._scale;
             
             if (im.up()) {
                hero.tryToMoveUp();
