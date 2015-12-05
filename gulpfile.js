@@ -15,6 +15,10 @@
    var rev = require('gulp-rev');
    var jshint = require('gulp-jshint');
    var stylish = require('jshint-stylish');
+   var tsc = require('gulp-typescript');
+   var tsconfig = tsc.createProject('tsconfig.json');
+   var sourcemaps = require('gulp-sourcemaps');
+   var tslint = require('gulp-tslint');
    var KarmaServer = require('karma').Server;
    var coveralls = require('gulp-coveralls');
    
@@ -53,18 +57,36 @@
          .pipe(gulp.dest('example/rpg/dist/res/'));
    });
    gulp.task('demo-build', function() {
-      runSequence('jshint', 'clean', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
+      runSequence('tslint', 'compile-ts', 'clean', 'demo-usemin',
+                'demo-cssmin', 'demo-copy-extra-files');
    });
    
+   gulp.task('compile-ts', function() {
+        var tsResult = gulp.src([ 'src/**/*.ts' ])
+            .pipe(sourcemaps.init())
+            .pipe(tsc(tsconfig));
+        tsResult.dts.pipe(gulp.dest('dist/'));
+        return tsResult.js
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest('dist/'));
+   });
+   gulp.task('tslint', function() {
+    return gulp.src([ 'src/**/*.ts' ])
+        .pipe(tslint())
+        .pipe(tslint.report('prose'));
+   });
+   
+   // Our demo game is pure JS, so it still uses jshint
    gulp.task('jshint', function() {
-      return gulp.src([ 'src/**/*.js', 'example/rpg/src/js/**/*.js' ])
+      return gulp.src([ 'example/rpg/src/js/**/*.js' ])
          .pipe(jshint())
          .pipe(jshint.reporter(stylish))
          .pipe(jshint.reporter('fail'));
    });
    
-   gulp.task('watch-js', function() {
-      gulp.watch('src/**/*.js', [ 'jshint' ]);
+   // Lints and builds the library and demo source when changes occur.
+   gulp.task('watch', function() {
+      gulp.watch('src/**/*.ts', [ 'tslint', 'compile-ts' ]);
       gulp.watch('example/rpg/src/js/**/*.js', [ 'jshint' ]);
    });
    
@@ -94,7 +116,8 @@
    
    gulp.task('default', function() {
       // We build the minified demo game too, just so Travis CI does it as well
-      runSequence('jshint', 'clean', 'test', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
+      runSequence('tslint', 'clean', 'compile-ts', 'test',
+            'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
    });
    
    gulp.task('upload-coverage-data', function() {
@@ -107,7 +130,10 @@
       // has a runSequence in it!  It will run the second task after the
       // first task in the "child" runSequence
       //runSequence('default', 'upload-coverage-data');
-      runSequence('jshint', 'clean', 'test', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files', 'upload-coverage-data');
+      runSequence('tslint', 'jshint',
+                  'clean', 'compile-ts', 'test',
+                  'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files',
+                  'upload-coverage-data');
    });
    
 })();

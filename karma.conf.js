@@ -20,24 +20,26 @@ module.exports = function(config) {
     // wildcard all JS files in a folder, due to dependencies (!)
     // See also:  http://karma-runner.github.io/0.13/config/files.html
     files: [
-      'src/gtp/AssetType.js',
-      'src/gtp/AssetLoader.js',
-      'src/gtp/BrowserUtil.js',
-      'src/gtp/Utils.js',
-      'src/gtp/Delay.js',
-      'src/gtp/Rectangle.js',
-      'src/gtp/SpriteSheet.js',
-      'src/gtp/BitmapFont.js',
-      'src/gtp/State.js',
-      'src/gtp/FadeOutInState.js',
-      'src/gtp/Image.js',
-      'src/gtp/ImageAtlas.js',
-      'src/gtp/ImageUtils.js',
-      'src/gtp/Keys.js',
-      'src/gtp/InputManager.js',
-      //'src/gtp/Sound.js',
-      'src/gtp/Timer.js',
-      'src/tiled/*.js',
+      'dist/gtp/Keys.js',
+      'dist/gtp/Rectangle.js',
+      'dist/gtp/BrowserUtil.js',
+      'dist/gtp/Utils.js',
+      'dist/gtp/Delay.js',
+      'dist/gtp/Keys.js',
+      'dist/gtp/ImageUtils.js',
+      'dist/gtp/InputManager.js',
+      'dist/gtp/State.js',
+      'dist/gtp/Timer.js',
+      'dist/gtp/AssetType.js',
+      'dist/gtp/AudioSystem.js',
+      'dist/gtp/Image.js',
+      'dist/gtp/ImageAtlas.js',
+      //'dist/gtp/Sound.js',
+      'dist/gtp/AssetLoader.js',
+      'dist/gtp/SpriteSheet.js',
+      'dist/gtp/BitmapFont.js',
+      'dist/gtp/FadeOutInState.js',
+      'dist/tiled/*.js',
       'test/**/*.js'
     ],
 
@@ -57,8 +59,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/gtp/*.js': 'coverage',
-      'src/tiled/*.js': 'coverage'
+      'dist/gtp/*.js': 'coverage',
+      'dist/tiled/*.js': 'coverage'
     },
 
 

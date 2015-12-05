@@ -2,8 +2,7 @@
 doc
 node_modules
 .tmp
-dist
-dist.zip
+example/rpg/dist
 Thumbs.db
 coverage
 npm-debug.log

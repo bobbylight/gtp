@@ -3,8 +3,7 @@ GTP - A very basic 2D HTML5 game library
 [![Build Status](https://travis-ci.org/bobbylight/gtp.svg?branch=master)](https://travis-ci.org/bobbylight/gtp)
 [![Coverage Status](https://coveralls.io/repos/bobbylight/gtp/badge.svg?branch=master&service=github)](https://coveralls.io/github/bobbylight/gtp?branch=master)
 
-This is a basic game library for 2D HTML5 games.  It is a WIP, and probably
-isn't very useful to most people.
+This is a basic game library for 2D HTML5 games, written in TypeScript.
 
 Features include:
 
@@ -25,9 +24,9 @@ Next, check out the project and install all dependencies:
     cd gtp
     npm install
 
-The development version of the library lives in `src/`.  An example game (itself
-a WIP) lives in `example/`.  Both the library and the example game can be built
-via running gulp:
+The TypeScript code lives in `src/`, and is transpiled into 'dist/'.  An example
+game (itself a WIP also) lives in `example/`.  Both the library and the example
+game can be built via running gulp:
 
     gulp
 
