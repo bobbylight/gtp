@@ -1,7 +1,7 @@
 module gtp {
     'use strict';
 
-    interface BaseStateArgs {
+    export interface BaseStateArgs {
         game: gtp.Game;
     }
 
