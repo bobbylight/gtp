@@ -88,6 +88,12 @@ var gtp;
                 this._renderStatusMessage(ctx);
             }
         };
+        Game.prototype.clearScreen = function (clearScreenColor) {
+            if (clearScreenColor === void 0) { clearScreenColor = this.clearScreenColor; }
+            var ctx = this.canvas.getContext('2d');
+            ctx.fillStyle = clearScreenColor;
+            ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
+        };
         Game.prototype.getGameTime = function () {
             return this._gameTime;
         };
@@ -138,15 +144,14 @@ var gtp;
             this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
             this._statusMessageTime = new Date().getTime() + 100;
         };
+        Game.prototype.toggleMuted = function () {
+            var muted = this.audio.toggleMuted();
+            this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
+            return muted;
+        };
         Game.prototype.toggleShowFps = function () {
             this.showFps = !this.showFps;
             this.setStatusMessage('FPS display: ' + (this.showFps ? 'on' : 'off'));
-        };
-        Game.prototype.clearScreen = function (clearScreenColor) {
-            if (clearScreenColor === void 0) { clearScreenColor = this.clearScreenColor; }
-            var ctx = this.canvas.getContext('2d');
-            ctx.fillStyle = clearScreenColor;
-            ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
         };
         return Game;
     })();

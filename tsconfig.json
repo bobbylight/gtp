@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "target": "es5",
+        "declaration": true,
         "noImplicitAny": true,
         "removeComments": false,
         "preserveConstEnums": true,
@@ -8,5 +9,10 @@
         "rootDir": "src/",
         "sourceMap": true
     },
-    "exclude": []
+    "exclude": [
+        "node_modules",
+        "bower_components",
+        "dist",
+        "dist-all"
+    ]
 }

@@ -1,19 +1,22 @@
 module gtp {
     'use strict';
 
-    export class DelayArgs {
+    /**
+     * Arguments to the Delay constructor.
+     */
+    export interface DelayArgs {
         millis: any;
-        minDelta: number;
-        maxDelta: number;
-        callback: Function;
-        loop: boolean;
-        loopCount: number;
+        minDelta?: number;
+        maxDelta?: number;
+        callback?: Function;
+        loop?: boolean;
+        loopCount?: number;
     }
 
     /**
      * A way to keep track of a delay.  Useful when you want some event to occur
      * every X milliseconds, for example.
-     * 
+     *
      * @param {object} args Arguments to this delay.
      * @param {number-or-array} args.millis The number of milliseconds between
      *        events.  You can specify an array of numbers to have the even trigger
@@ -66,7 +69,7 @@ module gtp {
         /**
          * Should be called in the update() method of the current game state to
          * update this Delay.
-         * 
+         *
          * @param {int} delta The time that has elapsed since the last call to this
          *        method.
          */
@@ -94,7 +97,7 @@ module gtp {
             }
             return this.isDone();
         }
-   
+
         /**
          * Returns the number of times this Delay has looped.
          *
@@ -103,7 +106,7 @@ module gtp {
         getLoopCount(): number {
             return this._loopCount;
         }
-   
+
         /**
          * Returns the maximum delta value, or -1 if none was defined.
          *
@@ -113,7 +116,7 @@ module gtp {
         getMaxDelta(): number {
             return typeof this._maxDelta !== 'undefined' ? this._maxDelta : -1;
         }
-   
+
         /**
          * Returns the minimum delta value, or -1 if none was defined.
          *
@@ -123,7 +126,7 @@ module gtp {
         getMinDelta(): number {
             return typeof this._minDelta !== 'undefined' ? this._minDelta : -1;
         }
-   
+
         /**
          * Returns the remaining time on this delay.
          *
@@ -132,7 +135,7 @@ module gtp {
         getRemaining(): number {
             return this._remaining;
         }
-   
+
         /**
          * Returns how far along we are in this delay, in the range
          * 0 - 1.
@@ -142,20 +145,20 @@ module gtp {
         getRemainingPercent(): number {
             return this._remaining / this._curInitial;
         }
-   
+
         /**
          * Returns whether this Delay has completed.
-         * 
+         *
          * @return {boolean} Whether this Delay has completed.
          */
         isDone(): boolean {
             return (!this._loop || this._loopCount === this._maxLoopCount) &&
                 this._remaining <= 0;
         }
-   
+
         /**
          * Causes this delay to trigger with a little random variance.
-         * 
+         *
          * @param {int} min The minimum possible variance, inclusive.
          * @param {int} max The maximum possible variance, exclusive.
          */

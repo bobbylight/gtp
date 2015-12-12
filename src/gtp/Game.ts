@@ -1,6 +1,6 @@
 module gtp {
 	'use strict';
-	
+
 	/**
 	 * A base class for a game.
 	 *
@@ -75,7 +75,7 @@ module gtp {
 			};
 			setInterval(callback, this._interval);
 		}
-   
+
 		private _tick() {
 
 			if (this._statusMessage) {
@@ -94,7 +94,7 @@ module gtp {
 			this.update();
 			this.render();
 		}
-   
+
 		/**
 		 * Called during each tick to update game logic.  The default implementation
 		 * checks for a shortcut key to toggle the FPS display before delegating to
@@ -114,7 +114,7 @@ module gtp {
 			this.state.update(this._interval);
 
 		}
-   
+
 		render() {
 
 			var ctx = this.canvas.getContext('2d');
@@ -127,25 +127,31 @@ module gtp {
 				this._renderStatusMessage(ctx);
 			}
 		}
-   
+
+		clearScreen(clearScreenColor: string = this.clearScreenColor) {
+			var ctx = this.canvas.getContext('2d');
+			ctx.fillStyle = clearScreenColor;
+			ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
+		}
+		
 		getGameTime() : number {
 			return this._gameTime;
 		}
-   
+
 		getHeight() : number {
 			return this.canvas.height;
 		}
-   
+
 		getWidth() : number {
 			return this.canvas.width;
 		}
-   
+
 		randomInt(max: number) : number {
 			var min = 0;
 			// Using Math.round() would give a non-uniform distribution!
 			return Math.floor(Math.random() * (max - min + 1) + min);
 		}
-   
+
 		setState(state: gtp.State) {
 			if (this.state) {
 				this.state.leaving(this);
@@ -153,7 +159,7 @@ module gtp {
 			this.state = state;
 			this.state.init();
 		}
-   
+
 		private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
 			var x = 10;
 			var y = this.canvas.height - 30;
@@ -161,7 +167,7 @@ module gtp {
 			ctx.fillStyle = this._statusMessageColor;
 			ctx.fillText(this._statusMessage, x, y);
 		}
-   
+
 		private _renderFps(ctx: CanvasRenderingContext2D) {
 
 			this.frames++;
@@ -182,23 +188,22 @@ module gtp {
 			ctx.fillText(this._fpsMsg, x, y);
 
 		}
-   
+
 		setStatusMessage(message: string) {
 			this._statusMessage = message;
 			this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
 			this._statusMessageTime = new Date().getTime() + 100;
 		}
-   
+
+    toggleMuted(): boolean {
+      var muted = this.audio.toggleMuted();
+      this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
+      return muted;
+    }
+
 		toggleShowFps() {
 			this.showFps = !this.showFps;
 			this.setStatusMessage('FPS display: ' + (this.showFps ? 'on' : 'off'));
 		}
-   
-		clearScreen(clearScreenColor: string = this.clearScreenColor) {
-			var ctx = this.canvas.getContext('2d');
-			ctx.fillStyle = clearScreenColor;
-			ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
-		}
-
 	}
 }

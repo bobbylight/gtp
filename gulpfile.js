@@ -25,6 +25,7 @@
    gulp.task('clean', function() {
       return del([
          './dist',
+         './dist-all',
          './example/rpg/dist',
          './coverage'
       ]);
@@ -62,13 +63,29 @@
    });
    
    gulp.task('compile-ts', function() {
+        
+        // Generate concatenated stuff first
+        var tsconfigConcatenated = {
+            target: tsconfig.target || 'es5',
+            declaration: true,
+            outFile: 'gtp-all.js'
+        };
         var tsResult = gulp.src([ 'src/**/*.ts' ])
+            .pipe(sourcemaps.init())
+            .pipe(tsc(tsconfigConcatenated));
+        tsResult.dts.pipe(gulp.dest('dist-all/'));
+        /*return */tsResult.js
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest('dist-all/'));
+        
+        tsResult = gulp.src([ 'src/**/*.ts' ])
             .pipe(sourcemaps.init())
             .pipe(tsc(tsconfig));
         tsResult.dts.pipe(gulp.dest('dist/'));
         return tsResult.js
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('dist/'));
+        
    });
    gulp.task('tslint', function() {
     return gulp.src([ 'src/**/*.ts' ])

@@ -1,12 +1,6 @@
 var gtp;
 (function (gtp) {
     'use strict';
-    var DelayArgs = (function () {
-        function DelayArgs() {
-        }
-        return DelayArgs;
-    })();
-    gtp.DelayArgs = DelayArgs;
     /**
      * A way to keep track of a delay.  Useful when you want some event to occur
      * every X milliseconds, for example.
