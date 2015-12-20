@@ -34,7 +34,7 @@ module tiled {
 			if (!this.data) { // An object layer
 				return -1;
 			}
-			var index = this._getIndex(row, col);
+			var index: number = this._getIndex(row, col);
 			return this.data[index];
 		}
    
@@ -42,7 +42,7 @@ module tiled {
 			if (!this.data) { // An object layer
 				return false;
 			}
-			var index = this._getIndex(row, col);
+			var index: number = this._getIndex(row, col);
 			this.data[index] = value;
 		}
    
@@ -56,8 +56,8 @@ module tiled {
    
 		getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject {
 			if (this.objects) {
-				for (var i = 0; i < this.objects.length; i++) {
-					var obj = this.objects[i];
+				for (var i: number = 0; i < this.objects.length; i++) {
+					var obj: TiledObject = this.objects[i];
 					if (obj.intersects(x, y, w, h)) {
 						return obj;
 					}
@@ -75,8 +75,8 @@ module tiled {
 			if (objects) {
 				this.objects = [];
 				this.objectsByName = {};
-				for (var i = 0; i < objects.length; i++) {
-					var obj = new tiled.TiledObject(objects[i]);
+				for (var i: number = 0; i < objects.length; i++) {
+					var obj: TiledObject = new tiled.TiledObject(objects[i]);
 					this.objects.push(obj);
 					this.objectsByName[objects[i].name] = obj;
 				}

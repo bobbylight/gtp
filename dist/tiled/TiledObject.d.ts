@@ -1,6 +1,3 @@
-interface Window {
-    game: any;
-}
 declare module tiled {
     class TiledObject {
         gid: number;

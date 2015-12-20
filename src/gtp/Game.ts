@@ -11,7 +11,6 @@ module gtp {
 		/*private */_scale: number;
 		canvas: HTMLCanvasElement;
 		inputManager: gtp.InputManager;
-		_gameTime: number;
 		_targetFps: number;
 		_interval: number;
 		lastTime: number;
@@ -28,6 +27,7 @@ module gtp {
 		private _statusMessageAlpha: number;
 		private _statusMessageTime: number;
 		state: gtp.State;
+		private _gameTimer: _GameTimer;
 		timer: gtp.Timer;
 
 		constructor(args: any = {}) {
@@ -39,14 +39,13 @@ module gtp {
 
 			this.inputManager = new gtp.InputManager(args.keyRefreshMillis || 0);
 			this.inputManager.install();
-			this._gameTime = 0;
 			this._targetFps = args.targetFps || 30;
 			this._interval = 1000 / this._targetFps;
 			this.lastTime = 0;
 
 			this.audio = new gtp.AudioSystem();
 			this.audio.init();
-			var assetPrefix = args.assetRoot || null;
+			var assetPrefix: string = args.assetRoot || null;
 			this.assets = new gtp.AssetLoader(this._scale, this.audio, assetPrefix);
 
 			this.clearScreenColor = 'rgb(0,0,0)';
@@ -60,7 +59,133 @@ module gtp {
 			this._statusMessage = null;
 			this._statusMessageAlpha = 0;
 
+			this._gameTimer = new _GameTimer();
 			this.timer = new gtp.Timer();
+		}
+
+		clearScreen(clearScreenColor: string = this.clearScreenColor) {
+			var ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
+			ctx.fillStyle = clearScreenColor;
+			ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
+		}
+
+		getHeight(): number {
+			return this.canvas.height;
+		}
+
+		getWidth(): number {
+			return this.canvas.width;
+		}
+
+		/**
+		 * Returns whether this game is paused.
+		 * @return {boolean} Whether this game is paused.
+		 */
+		get paused(): boolean {
+			return this._gameTimer.paused;
+		}
+
+		/**
+		 * Returns the length of time the game has been played so far.  This is
+		 * "playable time;" that is, time in which the user is playing, and the
+		 * game is not paused or in a "not updating" state (such as the main
+		 * frame not having focus).
+		 *
+		 * @return The amount of time the game has been played, in milliseconds.
+		 * @see resetPlayTime
+		 */
+		get playTime(): number {
+			return this._gameTimer.playTime;
+		}
+
+		/**
+		 * Returns a random number between <code>0</code> and
+		 * <code>number</code>, exclusive.
+		 *
+		 * @param max {number} The upper bound, exclusive.
+		 * @return {number} The random number.
+		 */
+		randomInt(max: number): number {
+			var min: number = 0;
+			// Using Math.round() would give a non-uniform distribution!
+			return Math.floor(Math.random() * (max - min + 1) + min);
+		}
+
+		render() {
+
+			var ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
+			this.state.render(ctx);
+
+			if (this.showFps) {
+				this._renderFps(ctx);
+			}
+			if (this._statusMessage && this._statusMessageAlpha > 0) {
+				this._renderStatusMessage(ctx);
+			}
+		}
+
+		private _renderFps(ctx: CanvasRenderingContext2D) {
+
+			this.frames++;
+			var now: number = new Date().getTime();
+			if (this.lastTime === null) {
+				this.lastTime = now;
+			}
+			else if (now - this.lastTime >= 1000) {
+				this._fpsMsg = this.frames + ' fps';
+				this.frames = 0;
+				this.lastTime = now;
+			}
+
+			var x: number = 10;
+			var y: number = 15;
+			ctx.font = '10pt Arial';
+			ctx.fillStyle = this.fpsColor;
+			ctx.fillText(this._fpsMsg, x, y);
+
+		}
+
+		private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
+			var x: number = 10;
+			var y: number = this.canvas.height - 30;
+			ctx.font = '10pt Arial';
+			ctx.fillStyle = this._statusMessageColor;
+			ctx.fillText(this._statusMessage, x, y);
+		}
+
+		/**
+		 * Resets the "playtime in milliseconds" timer back to <code>0</code>.
+		 *
+		 * @see playTimeMillis
+		 */
+		resetPlayTime() {
+			this._gameTimer.resetPlayTime();
+		}
+
+      /**
+       * Sets whether the game is paused.  The game is still told to handle
+       * input, update itself and render.  This is simply a flag that should
+       * be set whenever a "pause" screen is displayed.  It stops the "in-game
+       * timer" until the game is unpaused.
+       *
+       * @param paused Whether the game should be paused.
+       */
+		set paused(paused: boolean) {
+			this._gameTimer.paused = paused;
+		}
+
+		setState(state: gtp.State) {
+			if (this.state) {
+				this.state.leaving(this);
+			}
+			this.state = state;
+			this.state.init();
+		}
+
+		setStatusMessage(message: string) {
+			this._statusMessage = message;
+			this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
+			this._statusMessageTime = new Date().getTime() + 100;
 		}
 
 		/**
@@ -68,22 +193,23 @@ module gtp {
 		 */
 		start() {
 			// e.g. Dojo's lang.hitch()
-			var self = this;
-			var callback = function() {
-				self._gameTime += self._interval;
+			var self: Game = this;
+			var callback: Function = function() {
 				self._tick.apply(self);
 			};
+
+			this._gameTimer.start();
 			setInterval(callback, this._interval);
 		}
 
 		private _tick() {
 
 			if (this._statusMessage) {
-				var time = new Date().getTime();
+				var time: number = new Date().getTime();
 				if (time > this._statusMessageTime) {
 					this._statusMessageTime = time + 100;
 					this._statusMessageAlpha -= 0.1;
-					var alpha = Math.min(1, this._statusMessageAlpha);
+					var alpha: number = Math.min(1, this._statusMessageAlpha);
 					this._statusMessageColor = 'rgba(' + this.statusMessageRGB + ',' + alpha + ')';
 					if (this._statusMessageAlpha <= 0) {
 						this._statusMessage = null;
@@ -95,6 +221,17 @@ module gtp {
 			this.render();
 		}
 
+    toggleMuted(): boolean {
+      var muted: boolean = this.audio.toggleMuted();
+      this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
+      return muted;
+    }
+
+		toggleShowFps() {
+			this.showFps = !this.showFps;
+			this.setStatusMessage('FPS display: ' + (this.showFps ? 'on' : 'off'));
+		}
+
 		/**
 		 * Called during each tick to update game logic.  The default implementation
 		 * checks for a shortcut key to toggle the FPS display before delegating to
@@ -103,7 +240,7 @@ module gtp {
 		 */
 		update() {
 
-			var im = this.inputManager;
+			var im: InputManager = this.inputManager;
 			if (im.isKeyDown(gtp.Keys.KEY_SHIFT)) {
 
 				if (im.isKeyDown(gtp.Keys.KEY_F, true)) {
@@ -115,95 +252,5 @@ module gtp {
 
 		}
 
-		render() {
-
-			var ctx = this.canvas.getContext('2d');
-			this.state.render(ctx);
-
-			if (this.showFps) {
-				this._renderFps(ctx);
-			}
-			if (this._statusMessage && this._statusMessageAlpha > 0) {
-				this._renderStatusMessage(ctx);
-			}
-		}
-
-		clearScreen(clearScreenColor: string = this.clearScreenColor) {
-			var ctx = this.canvas.getContext('2d');
-			ctx.fillStyle = clearScreenColor;
-			ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
-		}
-		
-		getGameTime() : number {
-			return this._gameTime;
-		}
-
-		getHeight() : number {
-			return this.canvas.height;
-		}
-
-		getWidth() : number {
-			return this.canvas.width;
-		}
-
-		randomInt(max: number) : number {
-			var min = 0;
-			// Using Math.round() would give a non-uniform distribution!
-			return Math.floor(Math.random() * (max - min + 1) + min);
-		}
-
-		setState(state: gtp.State) {
-			if (this.state) {
-				this.state.leaving(this);
-			}
-			this.state = state;
-			this.state.init();
-		}
-
-		private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
-			var x = 10;
-			var y = this.canvas.height - 30;
-			ctx.font = 'Dragon Warrior 2';//'10pt Arial';
-			ctx.fillStyle = this._statusMessageColor;
-			ctx.fillText(this._statusMessage, x, y);
-		}
-
-		private _renderFps(ctx: CanvasRenderingContext2D) {
-
-			this.frames++;
-			var now = new Date().getTime();
-			if (this.lastTime === null) {
-				this.lastTime = now;
-			}
-			else if (now - this.lastTime >= 1000) {
-				this._fpsMsg = this.frames + ' fps';
-				this.frames = 0;
-				this.lastTime = now;
-			}
-
-			var x = 10;
-			var y = 15;
-			ctx.font = '10pt Arial';
-			ctx.fillStyle = this.fpsColor;
-			ctx.fillText(this._fpsMsg, x, y);
-
-		}
-
-		setStatusMessage(message: string) {
-			this._statusMessage = message;
-			this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
-			this._statusMessageTime = new Date().getTime() + 100;
-		}
-
-    toggleMuted(): boolean {
-      var muted = this.audio.toggleMuted();
-      this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
-      return muted;
-    }
-
-		toggleShowFps() {
-			this.showFps = !this.showFps;
-			this.setStatusMessage('FPS display: ' + (this.showFps ? 'on' : 'off'));
-		}
 	}
 }

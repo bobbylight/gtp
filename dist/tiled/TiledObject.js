@@ -15,7 +15,8 @@ var tiled;
         }
         TiledObject.prototype.intersects = function (ox, oy, ow, oh) {
             'use strict';
-            //console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh + ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
+            //console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh +
+            //      ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
             var tw = this.width;
             var th = this.height;
             var rw = ow;

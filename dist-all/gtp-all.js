@@ -1,12 +1,31 @@
 var gtp;
 (function (gtp) {
     'use strict';
+    /**
+     * Loads resources for a game.  All games have to load resources such as
+     * images, sound effects, JSON data, sprite sheets, etc.  This class provides
+     * a wrapper around the loading of such resources, as well as a callback
+     * mechanism to know when loading completes.  Games can use this class in a
+     * "loading" state, for example.<p>
+     *
+     * Currently supported resources include:
+     * <ul>
+     *   <li>Images
+     *   <li>Sound effects
+     *   <li>JSON data
+     *   <li>Sprite sheets
+     *   <li>TMX maps
+     * </ul>
+     */
     var AssetLoader = (function () {
         /**
          * Provides methods to load images, sounds, and Tiled maps.
          *
-         * @param scale How much to scale image resources.
-         * @param audio A web audio context.
+         * @param {number} scale How much to scale image resources.
+         * @param {gtp.AudioSystem} audio A web audio context.
+         * @param {string} [assetRoot] If specified, this is the implicit root
+         *        directory for all assets to load.  Use this if all assets are
+         *        in a subfolder or different hierarchy than the project itself.
          * @constructor
          */
         function AssetLoader(scale, audio, assetRoot) {
@@ -20,8 +39,9 @@ var gtp;
         }
         /**
          * Starts loading a JSON resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param url {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} [url=id] The URL of the resource, defaulting to
+         *        {@code id} if not specified.
          */
         AssetLoader.prototype.addJson = function (id, url) {
             if (url === void 0) { url = id; }
@@ -241,14 +261,16 @@ var gtp;
             }
             this.responses[res] = response;
             delete this.loadingAssetData[res];
-            console.log('Completed: ' + res + ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) + ', callback == ' + (this.callback !== null));
+            console.log('Completed: ' + res + ', remaining == ' +
+                gtp.Utils.getObjectSize(this.loadingAssetData) +
+                ', callback == ' + (this.callback !== null));
             if (this.isDoneLoading() && this.callback) {
                 this.callback.call();
                 delete this.callback;
                 console.log('... Callback called and deleted (callback == ' + (this.callback !== null) + ')');
                 if (this.nextCallback) {
                     this.callback = this.nextCallback;
-                    delete this.nextCallback; //this.nextCallback = null;
+                    delete this.nextCallback;
                 }
             }
             else {
@@ -769,7 +791,6 @@ var gtp;
             this.canvas = gtp.ImageUtils.createCanvas(args.width, args.height, args.parent);
             this.inputManager = new gtp.InputManager(args.keyRefreshMillis || 0);
             this.inputManager.install();
-            this._gameTime = 0;
             this._targetFps = args.targetFps || 30;
             this._interval = 1000 / this._targetFps;
             this.lastTime = 0;
@@ -786,50 +807,70 @@ var gtp;
             this._fpsMsg = this._targetFps + ' fps';
             this._statusMessage = null;
             this._statusMessageAlpha = 0;
+            this._gameTimer = new gtp._GameTimer();
             this.timer = new gtp.Timer();
         }
-        /**
-         * Starts the game loop.
-         */
-        Game.prototype.start = function () {
-            // e.g. Dojo's lang.hitch()
-            var self = this;
-            var callback = function () {
-                self._gameTime += self._interval;
-                self._tick.apply(self);
-            };
-            setInterval(callback, this._interval);
+        Game.prototype.clearScreen = function (clearScreenColor) {
+            if (clearScreenColor === void 0) { clearScreenColor = this.clearScreenColor; }
+            var ctx = this.canvas.getContext('2d');
+            ctx.fillStyle = clearScreenColor;
+            ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
         };
-        Game.prototype._tick = function () {
-            if (this._statusMessage) {
-                var time = new Date().getTime();
-                if (time > this._statusMessageTime) {
-                    this._statusMessageTime = time + 100;
-                    this._statusMessageAlpha -= 0.1;
-                    var alpha = Math.min(1, this._statusMessageAlpha);
-                    this._statusMessageColor = 'rgba(' + this.statusMessageRGB + ',' + alpha + ')';
-                    if (this._statusMessageAlpha <= 0) {
-                        this._statusMessage = null;
-                    }
-                }
-            }
-            this.update();
-            this.render();
+        Game.prototype.getHeight = function () {
+            return this.canvas.height;
         };
+        Game.prototype.getWidth = function () {
+            return this.canvas.width;
+        };
+        Object.defineProperty(Game.prototype, "paused", {
+            /**
+             * Returns whether this game is paused.
+             * @return {boolean} Whether this game is paused.
+             */
+            get: function () {
+                return this._gameTimer.paused;
+            },
+            /**
+             * Sets whether the game is paused.  The game is still told to handle
+             * input, update itself and render.  This is simply a flag that should
+             * be set whenever a "pause" screen is displayed.  It stops the "in-game
+             * timer" until the game is unpaused.
+             *
+             * @param paused Whether the game should be paused.
+             */
+            set: function (paused) {
+                this._gameTimer.paused = paused;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Game.prototype, "playTime", {
+            /**
+             * Returns the length of time the game has been played so far.  This is
+             * "playable time;" that is, time in which the user is playing, and the
+             * game is not paused or in a "not updating" state (such as the main
+             * frame not having focus).
+             *
+             * @return The amount of time the game has been played, in milliseconds.
+             * @see resetPlayTime
+             */
+            get: function () {
+                return this._gameTimer.playTime;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
-         * Called during each tick to update game logic.  The default implementation
-         * checks for a shortcut key to toggle the FPS display before delegating to
-         * the current game state.  Subclasses can override, but typically update
-         * logic is handled by game states.
+         * Returns a random number between <code>0</code> and
+         * <code>number</code>, exclusive.
+         *
+         * @param max {number} The upper bound, exclusive.
+         * @return {number} The random number.
          */
-        Game.prototype.update = function () {
-            var im = this.inputManager;
-            if (im.isKeyDown(gtp.Keys.KEY_SHIFT)) {
-                if (im.isKeyDown(gtp.Keys.KEY_F, true)) {
-                    this.toggleShowFps();
-                }
-            }
-            this.state.update(this._interval);
+        Game.prototype.randomInt = function (max) {
+            var min = 0;
+            // Using Math.round() would give a non-uniform distribution!
+            return Math.floor(Math.random() * (max - min + 1) + min);
         };
         Game.prototype.render = function () {
             var ctx = this.canvas.getContext('2d');
@@ -840,40 +881,6 @@ var gtp;
             if (this._statusMessage && this._statusMessageAlpha > 0) {
                 this._renderStatusMessage(ctx);
             }
-        };
-        Game.prototype.clearScreen = function (clearScreenColor) {
-            if (clearScreenColor === void 0) { clearScreenColor = this.clearScreenColor; }
-            var ctx = this.canvas.getContext('2d');
-            ctx.fillStyle = clearScreenColor;
-            ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
-        };
-        Game.prototype.getGameTime = function () {
-            return this._gameTime;
-        };
-        Game.prototype.getHeight = function () {
-            return this.canvas.height;
-        };
-        Game.prototype.getWidth = function () {
-            return this.canvas.width;
-        };
-        Game.prototype.randomInt = function (max) {
-            var min = 0;
-            // Using Math.round() would give a non-uniform distribution!
-            return Math.floor(Math.random() * (max - min + 1) + min);
-        };
-        Game.prototype.setState = function (state) {
-            if (this.state) {
-                this.state.leaving(this);
-            }
-            this.state = state;
-            this.state.init();
-        };
-        Game.prototype._renderStatusMessage = function (ctx) {
-            var x = 10;
-            var y = this.canvas.height - 30;
-            ctx.font = 'Dragon Warrior 2'; //'10pt Arial';
-            ctx.fillStyle = this._statusMessageColor;
-            ctx.fillText(this._statusMessage, x, y);
         };
         Game.prototype._renderFps = function (ctx) {
             this.frames++;
@@ -892,10 +899,60 @@ var gtp;
             ctx.fillStyle = this.fpsColor;
             ctx.fillText(this._fpsMsg, x, y);
         };
+        Game.prototype._renderStatusMessage = function (ctx) {
+            var x = 10;
+            var y = this.canvas.height - 30;
+            ctx.font = '10pt Arial';
+            ctx.fillStyle = this._statusMessageColor;
+            ctx.fillText(this._statusMessage, x, y);
+        };
+        /**
+         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
+         *
+         * @see playTimeMillis
+         */
+        Game.prototype.resetPlayTime = function () {
+            this._gameTimer.resetPlayTime();
+        };
+        Game.prototype.setState = function (state) {
+            if (this.state) {
+                this.state.leaving(this);
+            }
+            this.state = state;
+            this.state.init();
+        };
         Game.prototype.setStatusMessage = function (message) {
             this._statusMessage = message;
             this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
             this._statusMessageTime = new Date().getTime() + 100;
+        };
+        /**
+         * Starts the game loop.
+         */
+        Game.prototype.start = function () {
+            // e.g. Dojo's lang.hitch()
+            var self = this;
+            var callback = function () {
+                self._tick.apply(self);
+            };
+            this._gameTimer.start();
+            setInterval(callback, this._interval);
+        };
+        Game.prototype._tick = function () {
+            if (this._statusMessage) {
+                var time = new Date().getTime();
+                if (time > this._statusMessageTime) {
+                    this._statusMessageTime = time + 100;
+                    this._statusMessageAlpha -= 0.1;
+                    var alpha = Math.min(1, this._statusMessageAlpha);
+                    this._statusMessageColor = 'rgba(' + this.statusMessageRGB + ',' + alpha + ')';
+                    if (this._statusMessageAlpha <= 0) {
+                        this._statusMessage = null;
+                    }
+                }
+            }
+            this.update();
+            this.render();
         };
         Game.prototype.toggleMuted = function () {
             var muted = this.audio.toggleMuted();
@@ -905,6 +962,21 @@ var gtp;
         Game.prototype.toggleShowFps = function () {
             this.showFps = !this.showFps;
             this.setStatusMessage('FPS display: ' + (this.showFps ? 'on' : 'off'));
+        };
+        /**
+         * Called during each tick to update game logic.  The default implementation
+         * checks for a shortcut key to toggle the FPS display before delegating to
+         * the current game state.  Subclasses can override, but typically update
+         * logic is handled by game states.
+         */
+        Game.prototype.update = function () {
+            var im = this.inputManager;
+            if (im.isKeyDown(gtp.Keys.KEY_SHIFT)) {
+                if (im.isKeyDown(gtp.Keys.KEY_F, true)) {
+                    this.toggleShowFps();
+                }
+            }
+            this.state.update(this._interval);
         };
         return Game;
     })();
@@ -1450,8 +1522,8 @@ var gtp;
         /**
          * Returns whether this rectangle intersects another.
          *
-         * @param {gtp.Rectangle} rect2 Another rectangle to compare against.  This
-         *        should not be null.
+         * @param {gtp.Rectangle} rect2 Another rectangle to compare against.
+         *        This should not be null.
          * @return {boolean} Whether the two rectangles intersect.
          */
         Rectangle.prototype.intersects = function (rect2) {
@@ -1802,13 +1874,146 @@ var gtp;
                 window.console = {
                     log: noOp,
                     warn: noOp,
-                    error: noOp
+                    'error': noOp
                 };
             }
         };
         return Utils;
     })();
     gtp.Utils = Utils;
+})(gtp || (gtp = {}));
+var gtp;
+(function (gtp) {
+    'use strict';
+    /**
+     * This class keeps track of game time.  That includes both total running
+     * time, and "active time" (time not spent on paused screens, etc.).
+     * @constructor
+     */
+    var _GameTimer = (function () {
+        function _GameTimer() {
+            this._paused = false;
+            this._pauseStart = 0;
+            this._updating = true;
+            this._notUpdatingStart = 0;
+        }
+        _GameTimer.prototype._getMillis = function () {
+            return window.performance.now();
+        };
+        Object.defineProperty(_GameTimer.prototype, "paused", {
+            /**
+             * Returns whether this game is paused.
+             * @return {boolean} Whether this game is paused.
+             */
+            get: function () {
+                return this._paused;
+            },
+            /**
+             * Sets whether the game is paused.  The game is still told to handle
+             * input, update itself and render.  This is simply a flag that should
+             * be set whenever a "pause" screen is displayed.  It stops the "in-game
+             * timer" until the game is unpaused.
+             *
+             * @param paused Whether the game should be paused.
+             * @see setUpdating
+             */
+            set: function (paused) {
+                // Cannot pause while !updating, so this is okay
+                if (this._paused !== paused) {
+                    this._paused = paused;
+                    if (paused) {
+                        this._pauseStart = this._getMillis();
+                    }
+                    else {
+                        var pauseTime = this._getMillis() - this._pauseStart;
+                        this._startShift += pauseTime;
+                        this._pauseStart = 0;
+                    }
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(_GameTimer.prototype, "playTime", {
+            /**
+             * Returns the length of time the game has been played so far.  This is
+             * "playable time;" that is, time in which the user is playing, and the
+             * game is not paused or in a "not updating" state (such as the main
+             * frame not having focus).
+             *
+             * @return {number} The amount of time the game has been played, in
+             *         milliseconds.
+             * @see resetPlayTime
+             */
+            get: function () {
+                if (this._pauseStart !== 0) {
+                    return this._pauseStart - this._startShift;
+                }
+                else if (this._notUpdatingStart !== 0) {
+                    return this._notUpdatingStart - this._startShift;
+                }
+                return this._getMillis() - this._startShift;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(_GameTimer.prototype, "updating", {
+            /**
+             * Returns whether this game is updating itself each frame.
+             *
+             * @return {boolean} Whether this game is updating itself.
+             */
+            get: function () {
+                return this._updating;
+            },
+            /**
+             * Sets whether the game should be "updating" itself.  If a game is not
+             * "updating" itself, then it is effectively "paused," and will not accept
+             * any input from the user.<p>
+             *
+             * This method can be used to temporarily "pause" a game when the game
+             * window loses focus, for example.
+             *
+             * @param updating {boolean} Whether the game should be updating itself.
+             */
+            set: function (updating) {
+                if (this._updating !== updating) {
+                    this._updating = updating;
+                    if (!this.paused) {
+                        if (!this._updating) {
+                            this._notUpdatingStart = this._getMillis();
+                        }
+                        else {
+                            var notUpdatingTime = this._getMillis() - this._notUpdatingStart;
+                            this._startShift += notUpdatingTime;
+                            this._notUpdatingStart = 0;
+                        }
+                    }
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
+         *
+         * @see playTime
+         */
+        _GameTimer.prototype.resetPlayTime = function () {
+            if (this.paused || !this.updating) {
+                throw 'Cannot reset playtime millis when paused or not updating';
+            }
+            this._startShift = this._getMillis();
+        };
+        /**
+         * Resets this timer.  This should be called when a new game is started.
+         */
+        _GameTimer.prototype.start = function () {
+            this._startShift = this._getMillis();
+        };
+        return _GameTimer;
+    })();
+    gtp._GameTimer = _GameTimer;
 })(gtp || (gtp = {}));
 var tiled;
 (function (tiled) {
@@ -1962,7 +2167,7 @@ var tiled;
             if ((y0 % tileSize) < 0) {
                 topLeftRow--;
             }
-            var tileEdgeY = topLeftRow * tileH; //getTileEdge(topLeftY);
+            var tileEdgeY = topLeftRow * tileH; // getTileEdge(topLeftY);
             // The view coordinates at which to start painting.
             var startX = tileEdgeX - x0;
             var _x = startX;
@@ -2144,7 +2349,8 @@ var tiled;
         }
         TiledObject.prototype.intersects = function (ox, oy, ow, oh) {
             'use strict';
-            //console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh + ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
+            //console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh +
+            //      ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
             var tw = this.width;
             var th = this.height;
             var rw = ow;

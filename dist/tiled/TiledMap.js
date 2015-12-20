@@ -83,7 +83,7 @@ var tiled;
             if ((y0 % tileSize) < 0) {
                 topLeftRow--;
             }
-            var tileEdgeY = topLeftRow * tileH; //getTileEdge(topLeftY);
+            var tileEdgeY = topLeftRow * tileH; // getTileEdge(topLeftY);
             // The view coordinates at which to start painting.
             var startX = tileEdgeX - x0;
             var _x = startX;

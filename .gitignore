@@ -1,5 +1,4 @@
 .DS_Store
-doc
 node_modules
 .tmp
 example/rpg/dist

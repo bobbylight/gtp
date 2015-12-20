@@ -1,12 +1,3 @@
-/**
- * Extending TypeScript's Window definition so we can check for browser support of
- * AudioContext.
- */
-interface Window {
-	AudioContext: any;
-	webkitAudioContext: any;
-}
-
 module gtp {
 	'use strict';
 	export class AudioSystem {
@@ -74,7 +65,7 @@ module gtp {
 						this._musicFaderGain.gain.setValueAtTime(this._musicFaderGain.gain.value, this.context.currentTime);
 						this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
 					}
-					var that = this;
+					var that: AudioSystem = this;
 					setTimeout(function() {
 						that.playMusic(newMusicId);
 					}, this._musicFade * 1000);
@@ -90,7 +81,7 @@ module gtp {
 		 * 
 		 * @return {string} The current music's ID.
 		 */
-		getCurrentMusic() : string {
+		getCurrentMusic(): string {
 			return this.currentMusicId;
 		}
    
@@ -99,7 +90,7 @@ module gtp {
 		 * false if the user's browser does not support the web audio API.
 		 * @return {boolean} Whether the sound system is initialized
 		 */
-		isInitialized() : boolean {
+		isInitialized(): boolean {
 			return this._initialized;
 		}
    
@@ -127,7 +118,7 @@ module gtp {
 				if (!id) {
 					return; // null id => don't play any music
 				}
-				var sound = this._sounds[id];
+				var sound: Sound = this._sounds[id];
 				if (typeof loop === 'undefined') {
 					loop = sound.getLoopsByDefaultIfMusic();
 				}
@@ -157,7 +148,7 @@ module gtp {
 		 */
 		playSound(id: string) {
 			if (this.context) {
-				var source = this.context.createBufferSource();
+				var source: AudioBufferSourceNode = this.context.createBufferSource();
 				source.buffer = this._sounds[id].getBuffer();
 				source.connect(this._volumeFaderGain);
 				source.start(0);
@@ -181,10 +172,10 @@ module gtp {
 			}
 		}
    
-		toggleMuted() : boolean {
+		toggleMuted(): boolean {
 			this._muted = !this._muted;
 			if (this.context) {
-				var initialValue = this._muted ? 0 : 1;
+				var initialValue: number = this._muted ? 0 : 1;
 				this._volumeFaderGain.gain.setValueAtTime(initialValue, this.context.currentTime);
 				this._volumeFaderGain.gain.value = initialValue;
 			}

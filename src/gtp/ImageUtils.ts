@@ -34,18 +34,18 @@ module gtp {
 				return orig; // No reason to scale
 			}
 
-			var origPixels = origCtx.getImageData(0, 0, img.width, img.height);
+			var origPixels: ImageData = origCtx.getImageData(0, 0, img.width, img.height);
 
-			var widthScaled = img.width * scale;
-			var heightScaled = img.height * scale;
-			var scaled = gtp.ImageUtils.createCanvas(widthScaled, heightScaled);
-			var scaledCtx = scaled.getContext('2d');
-			var scaledPixels = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
+			var widthScaled: number = img.width * scale;
+			var heightScaled: number = img.height * scale;
+			var scaled: HTMLCanvasElement = gtp.ImageUtils.createCanvas(widthScaled, heightScaled);
+			var scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d');
+			var scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
 
-			for (var y = 0; y < heightScaled; y++) {
-				for (var x = 0; x < widthScaled; x++) {
-					var index = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
-					var indexScaled = (y * widthScaled + x) * 4;
+			for (var y: number = 0; y < heightScaled; y++) {
+				for (var x: number = 0; x < widthScaled; x++) {
+					var index: number = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
+					var indexScaled: number = (y * widthScaled + x) * 4;
 					scaledPixels.data[indexScaled] = origPixels.data[index];
 					scaledPixels.data[indexScaled + 1] = origPixels.data[index + 1];
 					scaledPixels.data[indexScaled + 2] = origPixels.data[index + 2];
@@ -59,7 +59,7 @@ module gtp {
 
 		static createCanvas(width: number, height: number, parentDiv?: HTMLElement|string) {
 
-			var canvas = document.createElement('canvas');
+			var canvas: HTMLCanvasElement = document.createElement('canvas');
 			canvas.width = width;
 			canvas.height = height;
 			gtp.ImageUtils.prepCanvas(canvas);
@@ -105,20 +105,20 @@ module gtp {
 		 */
 		static makeColorTranslucent(canvas: HTMLCanvasElement, x: number = 0, y: number = 0) {
 
-			var ctx = canvas.getContext('2d');
-			var w = canvas.width;
-			var h = canvas.height;
-			var pixels = ctx.getImageData(0, 0, w, h);
+			var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+			var w: number = canvas.width;
+			var h: number = canvas.height;
+			var pixels: ImageData = ctx.getImageData(0, 0, w, h);
 
 			var color: number[] = [];
-			var offs = (y * w + x) * 4;
-			for (var i = 0; i < 4; i++) {
+			var offs: number = (y * w + x) * 4;
+			for (var i: number = 0; i < 4; i++) {
 				color[i] = pixels.data[offs + i];
 			}
 
 			for (y = 0; y < h; y++) {
 				for (x = 0; x < w; x++) {
-					var index = (y * w + x) * 4;
+					var index: number = (y * w + x) * 4;
 					if (pixels.data[index] === color[0] && pixels.data[index + 1] === color[1] &&
 						pixels.data[index + 2] === color[2] && pixels.data[index + 3] === color[3]) {
 						pixels.data[index] = 0;

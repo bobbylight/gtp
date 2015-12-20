@@ -1,11 +1,3 @@
-/**
- * Extending TypeScript's Window definition so we can check for browser support of
- * AudioContext.
- */
-interface Window {
-    AudioContext: any;
-    webkitAudioContext: any;
-}
 declare module gtp {
     class AudioSystem {
         private _currentMusic;

@@ -9,12 +9,12 @@ module gtp {
 
 		drawString(str: string, x: number, y: number) {
 
-			var glyphCount = this.size;
-			var ctx = window.game.canvas.getContext('2d');
-			var charWidth = this.cellW;
+			var glyphCount: number = this.size;
+			var ctx: CanvasRenderingContext2D = window.game.canvas.getContext('2d');
+			var charWidth: number = this.cellW;
 
-			for (var i = 0; i < str.length; i++) {
-				var ch = str.charCodeAt(i) - 0x20;
+			for (var i: number = 0; i < str.length; i++) {
+				var ch: number = str.charCodeAt(i) - 0x20;
 				if (ch < 0 || ch >= glyphCount) {
 					ch = 0;
 				}

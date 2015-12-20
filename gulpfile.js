@@ -13,6 +13,7 @@
    var concatCss = require('gulp-concat-css');
    var cssmin = require('gulp-cssmin');
    var rev = require('gulp-rev');
+   var typedoc = require('gulp-typedoc');
    var jshint = require('gulp-jshint');
    var stylish = require('jshint-stylish');
    var tsc = require('gulp-typescript');
@@ -58,39 +59,50 @@
          .pipe(gulp.dest('example/rpg/dist/res/'));
    });
    gulp.task('demo-build', function() {
-      runSequence('tslint', 'compile-ts', 'clean', 'demo-usemin',
+      runSequence('tslint', 'clean', 'compile', 'compile-concat', 'demo-usemin',
                 'demo-cssmin', 'demo-copy-extra-files');
    });
    
-   gulp.task('compile-ts', function() {
-        
-        // Generate concatenated stuff first
-        var tsconfigConcatenated = {
-            target: tsconfig.target || 'es5',
-            declaration: true,
-            outFile: 'gtp-all.js'
-        };
-        var tsResult = gulp.src([ 'src/**/*.ts' ])
-            .pipe(sourcemaps.init())
-            .pipe(tsc(tsconfigConcatenated));
-        tsResult.dts.pipe(gulp.dest('dist-all/'));
-        /*return */tsResult.js
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest('dist-all/'));
-        
-        tsResult = gulp.src([ 'src/**/*.ts' ])
-            .pipe(sourcemaps.init())
-            .pipe(tsc(tsconfig));
-        tsResult.dts.pipe(gulp.dest('dist/'));
-        return tsResult.js
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest('dist/'));
-        
-   });
    gulp.task('tslint', function() {
     return gulp.src([ 'src/**/*.ts' ])
         .pipe(tslint())
         .pipe(tslint.report('prose'));
+   });
+   gulp.task('compile', function() {
+     var tsResult = gulp.src([ 'src/**/*.ts' ])
+         .pipe(sourcemaps.init())
+         .pipe(tsc(tsconfig));
+     tsResult.dts.pipe(gulp.dest('dist/'));
+     return tsResult.js
+         .pipe(sourcemaps.write('.'))
+         .pipe(gulp.dest('dist/'));
+   });
+   gulp.task('compile-concat', function() {
+     var tsconfigConcatenated = {
+         target: tsconfig.target || 'es5',
+         declaration: true,
+         outFile: 'gtp-all.js'
+     };
+     var tsResult = gulp.src([ 'src/**/*.ts' ])
+         .pipe(sourcemaps.init())
+         .pipe(tsc(tsconfigConcatenated));
+     tsResult.dts.pipe(gulp.dest('dist-all/'));
+     return tsResult.js
+         .pipe(sourcemaps.write('.'))
+         .pipe(gulp.dest('dist-all/'));
+   });
+   
+   gulp.task('typedoc', function() {
+      return gulp.src([ 'dist-all/gtp-all.d.ts' ])
+         .pipe(typedoc({
+            target: 'es5',
+            includeDeclarations: true,
+            mode: 'file',
+            out: 'doc/',
+            name: 'gtp',
+            ignoreCompilerErrors: false,
+            version: true
+         }));
    });
    
    // Our demo game is pure JS, so it still uses jshint
@@ -103,7 +115,9 @@
    
    // Lints and builds the library and demo source when changes occur.
    gulp.task('watch', function() {
-      gulp.watch('src/**/*.ts', [ 'tslint', 'compile-ts' ]);
+      // NOTE: typedoc does not seem to work in a watch - only runs the first
+      // time; subsequent times it fails to generate sub-pages.
+      gulp.watch('src/**/*.ts', [ 'tslint', 'compile', 'compile-concat' ]);
       gulp.watch('example/rpg/src/js/**/*.js', [ 'jshint' ]);
    });
    
@@ -133,8 +147,8 @@
    
    gulp.task('default', function() {
       // We build the minified demo game too, just so Travis CI does it as well
-      runSequence('tslint', 'clean', 'compile-ts', 'test',
-            'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
+      runSequence('tslint', 'clean', 'compile', 'compile-concat', 'test',
+            'typedoc', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
    });
    
    gulp.task('upload-coverage-data', function() {
@@ -148,7 +162,7 @@
       // first task in the "child" runSequence
       //runSequence('default', 'upload-coverage-data');
       runSequence('tslint', 'jshint',
-                  'clean', 'compile-ts', 'test',
+                  'clean', 'compile', 'compile-concat', 'test', 'typedoc',
                   'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files',
                   'upload-coverage-data');
    });

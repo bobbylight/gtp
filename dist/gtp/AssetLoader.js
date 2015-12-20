@@ -1,12 +1,31 @@
 var gtp;
 (function (gtp) {
     'use strict';
+    /**
+     * Loads resources for a game.  All games have to load resources such as
+     * images, sound effects, JSON data, sprite sheets, etc.  This class provides
+     * a wrapper around the loading of such resources, as well as a callback
+     * mechanism to know when loading completes.  Games can use this class in a
+     * "loading" state, for example.<p>
+     *
+     * Currently supported resources include:
+     * <ul>
+     *   <li>Images
+     *   <li>Sound effects
+     *   <li>JSON data
+     *   <li>Sprite sheets
+     *   <li>TMX maps
+     * </ul>
+     */
     var AssetLoader = (function () {
         /**
          * Provides methods to load images, sounds, and Tiled maps.
          *
-         * @param scale How much to scale image resources.
-         * @param audio A web audio context.
+         * @param {number} scale How much to scale image resources.
+         * @param {gtp.AudioSystem} audio A web audio context.
+         * @param {string} [assetRoot] If specified, this is the implicit root
+         *        directory for all assets to load.  Use this if all assets are
+         *        in a subfolder or different hierarchy than the project itself.
          * @constructor
          */
         function AssetLoader(scale, audio, assetRoot) {
@@ -20,8 +39,9 @@ var gtp;
         }
         /**
          * Starts loading a JSON resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param url {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} [url=id] The URL of the resource, defaulting to
+         *        {@code id} if not specified.
          */
         AssetLoader.prototype.addJson = function (id, url) {
             if (url === void 0) { url = id; }
@@ -241,14 +261,16 @@ var gtp;
             }
             this.responses[res] = response;
             delete this.loadingAssetData[res];
-            console.log('Completed: ' + res + ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) + ', callback == ' + (this.callback !== null));
+            console.log('Completed: ' + res + ', remaining == ' +
+                gtp.Utils.getObjectSize(this.loadingAssetData) +
+                ', callback == ' + (this.callback !== null));
             if (this.isDoneLoading() && this.callback) {
                 this.callback.call();
                 delete this.callback;
                 console.log('... Callback called and deleted (callback == ' + (this.callback !== null) + ')');
                 if (this.nextCallback) {
                     this.callback = this.nextCallback;
-                    delete this.nextCallback; //this.nextCallback = null;
+                    delete this.nextCallback;
                 }
             }
             else {

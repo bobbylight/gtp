@@ -9,12 +9,12 @@ module gtp {
 
 		/**
 		 * Handles input for games.<p>
-		 * 
+		 *
 		 * For keyboards, allows polling of individual key presses, both with and
 		 * without the keyboard repeat delay.<p>
-		 * 
+		 *
 		 * Touch and mouse input are currently not supported.
-		 * 
+		 *
 		 * @constructor
 		 * @param {int} [keyRefireMillis=0] What the key refiring time should be, in
 		 *        milliseconds.  A value of 0 means to take the operating system
@@ -28,7 +28,7 @@ module gtp {
 
 		/**
 		 * Resets a specific key to its "not depressed" state.
-		 * 
+		 *
 		 * @param {int} key The key to reset.
 		 * @see clearKeyStates
 		 */
@@ -44,7 +44,7 @@ module gtp {
 		 * Resets all keys to be in their "not depressed" states.
 		 */
 		clearKeyStates() {
-			for (var i = 0; i < this.keys.length; i++) {
+			for (var i: number = 0; i < this.keys.length; i++) {
 				this.clearKeyState(i);
 			}
 		}
@@ -70,7 +70,7 @@ module gtp {
 		down(clear: boolean = false) {
 			return this.isKeyDown(gtp.Keys.KEY_DOWN_ARROW, clear);
 		}
-   
+
 		/**
 		 * Returns whether enter is pressed.
 		 * @param clear {boolean} Whether the key's state should be reset to "not
@@ -87,9 +87,9 @@ module gtp {
 		 * initialization.
 		 */
 		install() {
-			var self = this;
-			document.onkeydown = function(e) { self._keyDown(e); };
-			document.onkeyup = function(e) { self._keyUp(e); };
+			var self: InputManager = this;
+			document.onkeydown = function(e: KeyboardEvent) { self._keyDown(e); };
+			document.onkeyup = function(e:  KeyboardEvent) { self._keyUp(e); };
 		}
 
 		/**
@@ -101,22 +101,22 @@ module gtp {
 		 * @return {boolean} Whether the key was pressed.
 		 */
 		isKeyDown(keyCode: number, clear: boolean = false) {
-			var down = this.keys[keyCode];
+			var down: boolean = this.keys[keyCode];
 			if (down && clear) {
 				this.keys[keyCode] = false;
 			}
 			return down;
 		}
-   
+
 		_keyDown(e: KeyboardEvent) {
-			var keyCode = e.keyCode;
+			var keyCode: number = e.keyCode;
 			if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) { // An arrow key or space
 				e.preventDefault();
 			}
 			if (this._refireMillis) {
 				if (!this._repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
 					this.keys[keyCode] = true;
-					var self = this;
+					var self: InputManager = this;
 					this._repeatTimers[keyCode] = setInterval(function() {
 						//console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
 						self.keys[keyCode] = true;
@@ -130,7 +130,7 @@ module gtp {
 		}
 
 		_keyUp(e: KeyboardEvent) {
-			var key = e.keyCode;
+			var key: number = e.keyCode;
 			if (this._refireMillis) {
 				if (this._repeatTimers[key]) { // Should always be true
 					this.keys[key] = false;
@@ -146,7 +146,7 @@ module gtp {
 			}
 			e.stopPropagation();
 		}
-   
+
 		/**
 		 * Returns whether left is pressed.
 		 * @param clear {boolean} Whether the key's state should be reset to "not
@@ -157,7 +157,7 @@ module gtp {
 		left(clear: boolean = false) {
 			return this.isKeyDown(gtp.Keys.KEY_LEFT_ARROW, clear);
 		}
-   
+
 		/**
 		 * Returns whether right is pressed.
 		 * @param clear {boolean} Whether the key's state should be reset to "not
@@ -168,7 +168,7 @@ module gtp {
 		right(clear: boolean = false) {
 			return this.isKeyDown(gtp.Keys.KEY_RIGHT_ARROW, clear);
 		}
-   
+
 
 		/**
 		 * Returns whether shift is pressed.
@@ -180,7 +180,7 @@ module gtp {
 		shift(clear: boolean = false) {
 			return this.isKeyDown(gtp.Keys.KEY_SHIFT, clear);
 		}
-   
+
 		/**
 		 * Returns whether up is pressed.
 		 * @param clear {boolean} Whether the key's state should be reset to "not

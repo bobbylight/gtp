@@ -11,7 +11,7 @@ module tiled {
 		screenHeight: number;
 		screenRows: number;
 		screenCols: number;
-		imagePathModifier: Function
+		imagePathModifier: Function;
 		layers: TiledLayer[];
 		layersByName: { [name: string]: TiledLayer };
 		objectGroups: TiledLayer[];
@@ -35,12 +35,12 @@ module tiled {
 			this.screenHeight = args.screenHeight;
 			this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
 			this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-			var imagePathModifier = args ? args.imagePathModifier : null;
+			let imagePathModifier: Function = args ? args.imagePathModifier : null;
 
 			this.layers = [];
 			this.layersByName = {};
 			this.objectGroups = [];
-			for (var i = 0; i < data.layers.length; i++) {
+			for (var i: number = 0; i < data.layers.length; i++) {
 				this.addLayer(data.layers[i]);
 			}
 
@@ -64,7 +64,7 @@ module tiled {
 		 * @method
 		 */
 		addLayer(layerData: any) {
-			var layer = new tiled.TiledLayer(this, layerData);
+			var layer: TiledLayer = new tiled.TiledLayer(this, layerData);
 			this.layers.push(layer);
 			this.layersByName[layer.name] = layer;
 			if (layer.isObjectGroup()) {
@@ -75,51 +75,51 @@ module tiled {
 		draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number,
 				dx: number = 0, dy: number = 0) {
 
-			var colCount = this.colCount;
-			var rowCount = this.rowCount;
+			var colCount: number = this.colCount;
+			var rowCount: number = this.rowCount;
 
-			var screenCols = this.screenRows;
-			var screenRows = this.screenCols;
-			var tileW = this.tileWidth;
-			var tileH = this.tileHeight;
-			var tileSize = tileW; // Assumes square tiles (!).  Fix me one day
-			var screenWidth = this.screenWidth;
-			var screenHeight = this.screenHeight;
+			var screenCols: number = this.screenRows;
+			var screenRows: number = this.screenCols;
+			var tileW: number = this.tileWidth;
+			var tileH: number = this.tileHeight;
+			var tileSize: number = tileW; // Assumes square tiles (!).  Fix me one day
+			var screenWidth: number = this.screenWidth;
+			var screenHeight: number = this.screenHeight;
 
-			var col0 = centerCol - Math.floor(screenCols / 2);
+			var col0: number = centerCol - Math.floor(screenCols / 2);
 			if (col0 < 0) {
 				col0 += colCount;
 			}
-			var row0 = centerRow - Math.floor(screenRows / 2);
+			var row0: number = centerRow - Math.floor(screenRows / 2);
 			if (row0 < 0) {
 				row0 += rowCount;
 			}
       
 			// Center point of screen, in map x,y coordinates.
-			var cx = centerCol * tileW + dx + tileW / 2;
-			var cy = centerRow * tileH + dy + tileH / 2;
+			var cx: number = centerCol * tileW + dx + tileW / 2;
+			var cy: number = centerRow * tileH + dy + tileH / 2;
       
 			// Top-left of screen, in map x,y coordinates.
-			var x0 = cx - screenWidth / 2;
-			var y0 = cy - screenHeight / 2;
+			var x0: number = cx - screenWidth / 2;
+			var y0: number = cy - screenHeight / 2;
 
-			var topLeftCol = Math.floor(x0 / tileW);
+			var topLeftCol: number = Math.floor(x0 / tileW);
 			if ((x0 % tileSize) < 0) {
 				topLeftCol--;
 			}
-			var tileEdgeX = topLeftCol * tileW;
+			var tileEdgeX: number = topLeftCol * tileW;
 
-			var topLeftRow = Math.floor(y0 / tileH);
+			var topLeftRow: number = Math.floor(y0 / tileH);
 			if ((y0 % tileSize) < 0) { // e.g. is < 0 and not a multiple of tileSize
 				topLeftRow--;
 			}
-			var tileEdgeY = topLeftRow * tileH;//getTileEdge(topLeftY);
+			var tileEdgeY: number = topLeftRow * tileH; // getTileEdge(topLeftY);
       
 			// The view coordinates at which to start painting.
-			var startX = tileEdgeX - x0;
-			var _x = startX;
-			var startY = tileEdgeY - y0;
-			var _y = startY;
+			var startX: number = tileEdgeX - x0;
+			var _x: number = startX;
+			var startY: number = tileEdgeY - y0;
+			var _y: number = startY;
 
 			if (topLeftCol < 0) {
 				topLeftCol += colCount;
@@ -129,26 +129,26 @@ module tiled {
 			}
       
 			// Paint until the end of the screen
-			var row = topLeftRow;
-			var layerCount = this.getLayerCount();
-			var tileCount = 0;
+			var row: number = topLeftRow;
+			var layerCount: number = this.getLayerCount();
+			var tileCount: number = 0;
 			while (_y < screenHeight) {
-				for (var l = 0; l < layerCount; l++) {
+				for (var l: number = 0; l < layerCount; l++) {
 
-					var col = topLeftCol;
+					var col: number = topLeftCol;
 					_x = startX;
 
-					var layer = this.getLayerByIndex(l);
+					var layer: TiledLayer = this.getLayerByIndex(l);
 					if (layer.visible) {
 
-						var prevOpacity : number;
+						var prevOpacity: number;
 						if (layer.opacity < 1) {
 							prevOpacity = ctx.globalAlpha;
 							ctx.globalAlpha = prevOpacity * layer.opacity;
 						}
 
 						while (_x < screenWidth) {
-							var value = layer.getData(row % rowCount, col % colCount);
+							var value: number = layer.getData(row % rowCount, col % colCount);
 							this.drawTile(ctx, _x, _y, value, layer);
 							tileCount++;
 							_x += tileW;
@@ -179,7 +179,7 @@ module tiled {
 		 *         that name.
 		 * @method
 		 */
-		getLayer(name: string) : TiledLayer {
+		getLayer(name: string): TiledLayer {
 			return this.layersByName[name];
 		}
    
@@ -191,7 +191,7 @@ module tiled {
 		 *         that index.
 		 * @method
 		 */
-		getLayerByIndex(index: number) : TiledLayer {
+		getLayerByIndex(index: number): TiledLayer {
 			return this.layers[index];
 		}
    
@@ -200,13 +200,13 @@ module tiled {
 		 * 
 		 * @return {int} The number of layers in this map.
 		 */
-		getLayerCount() : number {
+		getLayerCount(): number {
 			return this.layers.length;
 		}
    
-		private _getImageForGid(gid: number) : TiledTileset {
-			var tilesetCount = this.tilesets.length;
-			for (var i = 0; i < tilesetCount; i++) {
+		private _getImageForGid(gid: number): TiledTileset {
+			var tilesetCount: number = this.tilesets.length;
+			for (var i: number = 0; i < tilesetCount; i++) {
 				if (this.tilesets[i].firstgid > gid) {
 					return this.tilesets[i - 1];
 				}
@@ -221,7 +221,7 @@ module tiled {
 				return;
 			}
 
-			var tileset = this._getImageForGid(value);
+			var tileset: TiledTileset = this._getImageForGid(value);
 			if (!tileset) {
 				console.log('null tileset for: ' + value + ' (layer ' + layer.name + ')');
 				return;
@@ -232,21 +232,21 @@ module tiled {
 				return;
 			}
 
-			var game = window.game;
-			var img = game.assets.getTmxTilesetImage(tileset);
+			var game: gtp.Game = window.game;
+			var img: gtp.Image = game.assets.getTmxTilesetImage(tileset);
 
-			var tileW = this.tileWidth;
-			var sw = tileW + tileset.spacing;
-			var tileH = this.tileHeight;
-			var sh = tileH + tileset.spacing;
+			var tileW: number = this.tileWidth;
+			var sw: number = tileW + tileset.spacing;
+			var tileH: number = this.tileHeight;
+			var sh: number = tileH + tileset.spacing;
       
 			// TODO: "+ 1" is based on extra space at end of image.  Should be configured/calculated
-			var imgColCount = Math.floor(img.width / sw);
+			var imgColCount: number = Math.floor(img.width / sw);
 			if (tileset.spacing > 0 && ((img.width % sw) === tileW)) {
 				imgColCount++;
 			}
-			var imgY = Math.floor(value / imgColCount) * sh;
-			var imgX = (value % imgColCount) * sw;
+			var imgY: number = Math.floor(value / imgColCount) * sh;
+			var imgX: number = (value % imgColCount) * sw;
       
 			//ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
 			img.drawScaled2(ctx, imgX, imgY, tileW, tileH, x, y, tileW, tileH);
@@ -258,8 +258,8 @@ module tiled {
 			this.tileHeight *= scale;
 			this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
 			this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-			var tilesetCount = this.tilesets.length;
-			for (var i = 0; i < tilesetCount; i++) {
+			var tilesetCount: number = this.tilesets.length;
+			for (let i: number = 0; i < tilesetCount; i++) {
 				return this.tilesets[i].setScale(scale);
 			}
 		}
@@ -270,7 +270,7 @@ module tiled {
 		 * @return {int} The pixel width of this map.
 		 * @method
 		 */
-		getPixelWidth() : number {
+		getPixelWidth(): number {
 			return this.colCount * this.tileWidth;
 		}
    
@@ -280,7 +280,7 @@ module tiled {
 		 * @return {int} The pixel height of this map.
 		 * @method
 		 */
-		getPixelHeight() : number {
+		getPixelHeight(): number {
 			return this.rowCount * this.tileHeight;
 		}
    
@@ -290,12 +290,12 @@ module tiled {
 		 * @return {boolean} Whether a layer by that name was found.
 		 * @method
 		 */
-		removeLayer(layerName: string) : boolean {
-			for (var i = 0; i < this.layers.length; i++) {
+		removeLayer(layerName: string): boolean {
+			for (let i: number = 0; i < this.layers.length; i++) {
 				if (this.layers[i].name === layerName) {
 					this.layers.splice(i, 1);
 					delete this.layersByName[layerName];
-					for (var j = 0; j < this.objectGroups.length; j++) {
+					for (let j: number = 0; j < this.objectGroups.length; j++) {
 						if (this.objectGroups[j].name === layerName) {
 							delete this.objectGroups[j];
 						}

@@ -24,8 +24,8 @@ var gtp;
         /**
          * Returns whether this rectangle intersects another.
          *
-         * @param {gtp.Rectangle} rect2 Another rectangle to compare against.  This
-         *        should not be null.
+         * @param {gtp.Rectangle} rect2 Another rectangle to compare against.
+         *        This should not be null.
          * @return {boolean} Whether the two rectangles intersect.
          */
         Rectangle.prototype.intersects = function (rect2) {

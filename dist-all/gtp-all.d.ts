@@ -1,4 +1,20 @@
 declare module gtp {
+    /**
+     * Loads resources for a game.  All games have to load resources such as
+     * images, sound effects, JSON data, sprite sheets, etc.  This class provides
+     * a wrapper around the loading of such resources, as well as a callback
+     * mechanism to know when loading completes.  Games can use this class in a
+     * "loading" state, for example.<p>
+     *
+     * Currently supported resources include:
+     * <ul>
+     *   <li>Images
+     *   <li>Sound effects
+     *   <li>JSON data
+     *   <li>Sprite sheets
+     *   <li>TMX maps
+     * </ul>
+     */
     class AssetLoader {
         private _scale;
         private loadingAssetData;
@@ -10,15 +26,19 @@ declare module gtp {
         /**
          * Provides methods to load images, sounds, and Tiled maps.
          *
-         * @param scale How much to scale image resources.
-         * @param audio A web audio context.
+         * @param {number} scale How much to scale image resources.
+         * @param {gtp.AudioSystem} audio A web audio context.
+         * @param {string} [assetRoot] If specified, this is the implicit root
+         *        directory for all assets to load.  Use this if all assets are
+         *        in a subfolder or different hierarchy than the project itself.
          * @constructor
          */
         constructor(scale: number, audio: gtp.AudioSystem, assetRoot?: string);
         /**
          * Starts loading a JSON resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param url {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} [url=id] The URL of the resource, defaulting to
+         *        {@code id} if not specified.
          */
         addJson(id: string, url?: string): void;
         /**
@@ -103,14 +123,6 @@ declare module gtp {
         AUDIO = 2,
         JSON = 3,
     }
-}
-/**
- * Extending TypeScript's Window definition so we can check for browser support of
- * AudioContext.
- */
-interface Window {
-    AudioContext: any;
-    webkitAudioContext: any;
 }
 declare module gtp {
     class AudioSystem {
@@ -345,7 +357,6 @@ declare module gtp {
         _scale: number;
         canvas: HTMLCanvasElement;
         inputManager: gtp.InputManager;
-        _gameTime: number;
         _targetFps: number;
         _interval: number;
         lastTime: number;
@@ -362,13 +373,61 @@ declare module gtp {
         private _statusMessageAlpha;
         private _statusMessageTime;
         state: gtp.State;
+        private _gameTimer;
         timer: gtp.Timer;
         constructor(args?: any);
+        clearScreen(clearScreenColor?: string): void;
+        getHeight(): number;
+        getWidth(): number;
+        /**
+         * Returns whether this game is paused.
+         * @return {boolean} Whether this game is paused.
+         */
+        /**
+         * Sets whether the game is paused.  The game is still told to handle
+         * input, update itself and render.  This is simply a flag that should
+         * be set whenever a "pause" screen is displayed.  It stops the "in-game
+         * timer" until the game is unpaused.
+         *
+         * @param paused Whether the game should be paused.
+         */
+        paused: boolean;
+        /**
+         * Returns the length of time the game has been played so far.  This is
+         * "playable time;" that is, time in which the user is playing, and the
+         * game is not paused or in a "not updating" state (such as the main
+         * frame not having focus).
+         *
+         * @return The amount of time the game has been played, in milliseconds.
+         * @see resetPlayTime
+         */
+        playTime: number;
+        /**
+         * Returns a random number between <code>0</code> and
+         * <code>number</code>, exclusive.
+         *
+         * @param max {number} The upper bound, exclusive.
+         * @return {number} The random number.
+         */
+        randomInt(max: number): number;
+        render(): void;
+        private _renderFps(ctx);
+        private _renderStatusMessage(ctx);
+        /**
+         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
+         *
+         * @see playTimeMillis
+         */
+        resetPlayTime(): void;
+        setState(state: gtp.State): void;
+        setStatusMessage(message: string): void;
         /**
          * Starts the game loop.
          */
         start(): void;
         private _tick();
+        toggleMuted(): boolean;
+        toggleShowFps(): void;
         /**
          * Called during each tick to update game logic.  The default implementation
          * checks for a shortcut key to toggle the FPS display before delegating to
@@ -376,19 +435,19 @@ declare module gtp {
          * logic is handled by game states.
          */
         update(): void;
-        render(): void;
-        clearScreen(clearScreenColor?: string): void;
-        getGameTime(): number;
-        getHeight(): number;
-        getWidth(): number;
-        randomInt(max: number): number;
-        setState(state: gtp.State): void;
-        private _renderStatusMessage(ctx);
-        private _renderFps(ctx);
-        setStatusMessage(message: string): void;
-        toggleMuted(): boolean;
-        toggleShowFps(): void;
     }
+}
+/**
+ * Extending TypeScript's Window definition with miscellaneous properties it
+ * is not aware of.
+ */
+interface Window {
+    AudioContext: any;
+    webkitAudioContext: any;
+    /**
+     * The singleton game instance as a global variable.
+     */
+    game: gtp.Game;
 }
 declare module gtp {
     class Image {
@@ -669,8 +728,8 @@ declare module gtp {
         /**
          * Returns whether this rectangle intersects another.
          *
-         * @param {gtp.Rectangle} rect2 Another rectangle to compare against.  This
-         *        should not be null.
+         * @param {gtp.Rectangle} rect2 Another rectangle to compare against.
+         *        This should not be null.
          * @return {boolean} Whether the two rectangles intersect.
          */
         intersects(rect2: gtp.Rectangle): boolean;
@@ -859,6 +918,73 @@ declare module gtp {
         static initConsole(): void;
     }
 }
+declare module gtp {
+    /**
+     * This class keeps track of game time.  That includes both total running
+     * time, and "active time" (time not spent on paused screens, etc.).
+     * @constructor
+     */
+    class _GameTimer {
+        private _startShift;
+        private _paused;
+        private _pauseStart;
+        private _updating;
+        private _notUpdatingStart;
+        constructor();
+        private _getMillis();
+        /**
+         * Returns whether this game is paused.
+         * @return {boolean} Whether this game is paused.
+         */
+        /**
+         * Sets whether the game is paused.  The game is still told to handle
+         * input, update itself and render.  This is simply a flag that should
+         * be set whenever a "pause" screen is displayed.  It stops the "in-game
+         * timer" until the game is unpaused.
+         *
+         * @param paused Whether the game should be paused.
+         * @see setUpdating
+         */
+        paused: boolean;
+        /**
+         * Returns the length of time the game has been played so far.  This is
+         * "playable time;" that is, time in which the user is playing, and the
+         * game is not paused or in a "not updating" state (such as the main
+         * frame not having focus).
+         *
+         * @return {number} The amount of time the game has been played, in
+         *         milliseconds.
+         * @see resetPlayTime
+         */
+        playTime: number;
+        /**
+         * Returns whether this game is updating itself each frame.
+         *
+         * @return {boolean} Whether this game is updating itself.
+         */
+        /**
+         * Sets whether the game should be "updating" itself.  If a game is not
+         * "updating" itself, then it is effectively "paused," and will not accept
+         * any input from the user.<p>
+         *
+         * This method can be used to temporarily "pause" a game when the game
+         * window loses focus, for example.
+         *
+         * @param updating {boolean} Whether the game should be updating itself.
+         */
+        updating: boolean;
+        /**
+         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
+         *
+         * @see playTime
+         */
+        resetPlayTime(): void;
+        /**
+         * Resets this timer.  This should be called when a new game is started.
+         */
+        start(): void;
+    }
+}
 declare module tiled {
     class TiledLayer {
         map: any;
@@ -969,9 +1095,6 @@ declare module tiled {
          */
         removeLayer(layerName: string): boolean;
     }
-}
-interface Window {
-    game: any;
 }
 declare module tiled {
     class TiledObject {

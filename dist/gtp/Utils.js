@@ -107,7 +107,7 @@ var gtp;
                 window.console = {
                     log: noOp,
                     warn: noOp,
-                    error: noOp
+                    'error': noOp
                 };
             }
         };

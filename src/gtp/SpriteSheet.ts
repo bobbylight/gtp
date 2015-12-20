@@ -53,10 +53,10 @@ module gtp {
 		 * @param {int} col The column in the sprite sheet of the sprite to draw.
 		 */
 		drawSprite(ctx: CanvasRenderingContext2D, x: number, y: number, row: number, col: number) {
-			var cellW = this.cellW;
-			var cellH = this.cellH;
-			var srcX = (cellW + this.spacingX) * col;//(col-1);
-			var srcY = (cellH + this.spacingY) * row;//(row-1);
+			var cellW: number = this.cellW;
+			var cellH: number = this.cellH;
+			var srcX: number = (cellW + this.spacingX) * col; //(col-1);
+			var srcY: number = (cellH + this.spacingY) * row; //(row-1);
 			//ctx.drawImage(this.gtpImage.canvas, srcX,srcY,cellW,cellH, x,y,cellW,cellH);
 			this.gtpImage.drawScaled2(ctx, srcX, srcY, cellW, cellH, x, y, cellW, cellH);
 		}
@@ -70,8 +70,8 @@ module gtp {
 		 * @param {int} index The index in the sprite sheet of the sprite to draw.
 		 */
 		drawByIndex(ctx: CanvasRenderingContext2D, x: number, y: number, index: number) {
-			var row = Math.floor(index / this.colCount);
-			var col = Math.floor(index % this.colCount);
+			var row: number = Math.floor(index / this.colCount);
+			var col: number = Math.floor(index % this.colCount);
 			this.drawSprite(ctx, x, y, row, col);
 		}
 

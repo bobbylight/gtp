@@ -17,7 +17,7 @@ module gtp {
 		parse() {
 
 			var images: { [id: string]: gtp.Image } = {};
-			var self = this;
+			var self: ImageAtlas = this;
 
 			this._atlasInfo.images.forEach(function(imgInfo: any) {
 

@@ -14,7 +14,7 @@ module gtp {
 		 * @return {int} The number of elements in the object.
 		 */
 		static getObjectSize(obj: Object): number {
-			var size = 0;
+			var size: number = 0;
 			for (var key in obj) {
 				if (obj.hasOwnProperty(key)) {
 					size++;
@@ -33,15 +33,15 @@ module gtp {
 		static getRequestParam(param: string): string {
 
 			// Replace leading '?' with '&'
-			var params = '&' + gtp.BrowserUtil.getWindowLocationSearch().substring(1);
+			var params: string = '&' + gtp.BrowserUtil.getWindowLocationSearch().substring(1);
 
-			var searchFor = '&' + param;
-			var index = params.indexOf(searchFor);
+			var searchFor: string = '&' + param;
+			var index: number = params.indexOf(searchFor);
 			if (index >= -1) {
-				var start = index + searchFor.length;
+				var start: number = index + searchFor.length;
 				if (params.charAt(start) === '=') {
 					start++;
-					var end = params.indexOf('&', start); // &foo=val1&bar=val2
+					var end: number = params.indexOf('&', start); // &foo=val1&bar=val2
 					if (end === -1) {
 						end = params.length; // &foo=val1
 					}
@@ -66,7 +66,7 @@ module gtp {
 		 * @return {function} A function that does the same thing as 'func', but in the
 		 *         specified scope.
 		 */
-		static hitch(scope: any, func: Function) : Function {
+		static hitch(scope: any, func: Function): Function {
 			return function() {
 				func.apply(scope, arguments);
 			};
@@ -97,7 +97,7 @@ module gtp {
 		 * @param {int} [max] The maximum possible value, exclusive.
 		 * @return {int} The random integer value.
 		 */
-		static randomInt(min: number = 0, max: number) : number {
+		static randomInt(min: number = 0, max: number): number {
 			'use strict';
 			// Using Math.round() will give you a non-uniform distribution!
 			return Math.floor(Math.random() * (max - min)) + min;
@@ -109,11 +109,11 @@ module gtp {
 		static initConsole() {
 			'use strict';
 			if (!window.console) {
-				var noOp = function() { };
+				var noOp: Function = function() {};
 				window.console = <any>{
 					log: noOp,
 					warn: noOp,
-					error: noOp
+					'error': noOp
 				};
 			}
 		}

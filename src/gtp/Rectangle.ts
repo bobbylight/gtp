@@ -27,23 +27,23 @@ module gtp {
 		/**
 		 * Returns whether this rectangle intersects another.
 		 * 
-		 * @param {gtp.Rectangle} rect2 Another rectangle to compare against.  This
-		 *        should not be null.
+		 * @param {gtp.Rectangle} rect2 Another rectangle to compare against.
+		 *        This should not be null.
 		 * @return {boolean} Whether the two rectangles intersect.
 		 */
-		intersects(rect2: gtp.Rectangle) {
+		intersects(rect2: gtp.Rectangle): boolean {
 
-			var tw = this.w;
-			var th = this.h;
-			var rw = rect2.w;
-			var rh = rect2.h;
+			var tw: number = this.w;
+			var th: number = this.h;
+			var rw: number = rect2.w;
+			var rh: number = rect2.h;
 			if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
 				return false;
 			}
-			var tx = this.x;
-			var ty = this.y;
-			var rx = rect2.x;
-			var ry = rect2.y;
+			var tx: number = this.x;
+			var ty: number = this.y;
+			var rx: number = rect2.x;
+			var ry: number = rect2.y;
 			rw += rx;
 			rh += ry;
 			tw += tx;

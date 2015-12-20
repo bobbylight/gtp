@@ -33,7 +33,7 @@ module gtp {
 			super.update(delta);
 			//         console.log('delta === ' + delta);
 			this._curTime += delta;
-			if(this._curTime >= this._halfTime) {
+			if (this._curTime >= this._halfTime) {
 				this._curTime -= this._halfTime;
 				if (this._fadingOut) {
 					this._fadingOut = false;
@@ -60,7 +60,7 @@ module gtp {
 			super.render(ctx);
 			this.game.clearScreen();
 
-			var previousAlpha = ctx.globalAlpha;
+			var previousAlpha: number = ctx.globalAlpha;
 			ctx.globalAlpha = this._alpha;
 			if (this._fadingOut) {
 	            this._leavingState.render(ctx);

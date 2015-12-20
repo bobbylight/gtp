@@ -24,10 +24,11 @@ Next, check out the project and install all dependencies:
     cd gtp
     npm install
 
-The TypeScript code lives in `src/`, and is transpiled into 'dist/'.  An example
-game (itself a WIP also) lives in `example/`.  Both the library and the example
-game can be built via running gulp:
+The TypeScript code lives in `src/`, and is transpiled into `dist/`.  A single
+file containing all transpiled content is also created in `dist-all/`.  An
+example game (itself a WIP also) lives in `example/`.  Both the library and the
+example game can be built via running gulp:
 
     gulp
 
-Tasks are also provided for running unit tests, linting, etc.
+Tasks are also provided for individually running unit tests, linting, etc.
