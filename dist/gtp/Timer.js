@@ -25,7 +25,7 @@ var gtp;
          * @param {String} key A unique key for the thing being timed.
          */
         Timer.prototype.start = function (key) {
-            this._startTimes[key] = new Date().getTime();
+            this._startTimes[key] = gtp.Utils.timestamp();
         };
         /**
          * Stops timing something.
@@ -38,7 +38,7 @@ var gtp;
                 console.error('Cannot end timer for "' + key + '" as it was never started');
                 return -1;
             }
-            var time = new Date().getTime() - start;
+            var time = gtp.Utils.timestamp() - start;
             delete this._startTimes[key];
             return time;
         };

@@ -810,6 +810,11 @@ var gtp;
             this._gameTimer = new gtp._GameTimer();
             this.timer = new gtp.Timer();
         }
+        /**
+         * Clears the screen.
+         * @param {string} clearScreenColor The color to clear the screen with.
+         *        If unspecified, <code>this.clearScreenColor</code> is used.
+         */
         Game.prototype.clearScreen = function (clearScreenColor) {
             if (clearScreenColor === void 0) { clearScreenColor = this.clearScreenColor; }
             var ctx = this.canvas.getContext('2d');
@@ -884,7 +889,7 @@ var gtp;
         };
         Game.prototype._renderFps = function (ctx) {
             this.frames++;
-            var now = new Date().getTime();
+            var now = gtp.Utils.timestamp();
             if (this.lastTime === null) {
                 this.lastTime = now;
             }
@@ -924,7 +929,7 @@ var gtp;
         Game.prototype.setStatusMessage = function (message) {
             this._statusMessage = message;
             this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
-            this._statusMessageTime = new Date().getTime() + 100;
+            this._statusMessageTime = gtp.Utils.timestamp() + 100;
         };
         /**
          * Starts the game loop.
@@ -940,7 +945,7 @@ var gtp;
         };
         Game.prototype._tick = function () {
             if (this._statusMessage) {
-                var time = new Date().getTime();
+                var time = gtp.Utils.timestamp();
                 if (time > this._statusMessageTime) {
                     this._statusMessageTime = time + 100;
                     this._statusMessageAlpha -= 0.1;
@@ -1733,7 +1738,7 @@ var gtp;
          * @param {String} key A unique key for the thing being timed.
          */
         Timer.prototype.start = function (key) {
-            this._startTimes[key] = new Date().getTime();
+            this._startTimes[key] = gtp.Utils.timestamp();
         };
         /**
          * Stops timing something.
@@ -1746,7 +1751,7 @@ var gtp;
                 console.error('Cannot end timer for "' + key + '" as it was never started');
                 return -1;
             }
-            var time = new Date().getTime() - start;
+            var time = gtp.Utils.timestamp() - start;
             delete this._startTimes[key];
             return time;
         };
@@ -1849,20 +1854,30 @@ var gtp;
                 }
             }
         };
-        /**
-         * Returns a random integer between min (inclusive) and max (exclusive).  If
-         * max is omitted, the single parameter is treated as the maximum value, and
-         * an integer is returned in the range 0 - value.
-         *
-         * @param {int} [min=0] The minimum possible value, inclusive.
-         * @param {int} [max] The maximum possible value, exclusive.
-         * @return {int} The random integer value.
-         */
         Utils.randomInt = function (min, max) {
-            'use strict';
-            if (min === void 0) { min = 0; }
+            var realMin, realMax;
+            if (typeof max === 'undefined') {
+                realMin = 0;
+                realMax = min;
+            }
+            else {
+                realMin = min;
+                realMax = max;
+            }
             // Using Math.round() will give you a non-uniform distribution!
-            return Math.floor(Math.random() * (max - min)) + min;
+            return Math.floor(Math.random() * (realMax - realMin)) + realMin;
+        };
+        /**
+         * Returns a time in milliseconds.  This will be high resolution, if
+         * possible.  This method should be used to implement constructs like
+         * delays.
+         * @return {number} A time, in milliseconds.
+         */
+        Utils.timestamp = function () {
+            if (window.performance && window.performance.now) {
+                return window.performance.now();
+            }
+            return Date.now(); // IE < 10, PhantomJS 1.x, which is used by unit tests
         };
         /**
          * Defines console functions for IE9 and other braindead browsers.
@@ -1872,6 +1887,7 @@ var gtp;
             if (!window.console) {
                 var noOp = function () { };
                 window.console = {
+                    info: noOp,
                     log: noOp,
                     warn: noOp,
                     'error': noOp
@@ -1897,9 +1913,6 @@ var gtp;
             this._updating = true;
             this._notUpdatingStart = 0;
         }
-        _GameTimer.prototype._getMillis = function () {
-            return window.performance.now();
-        };
         Object.defineProperty(_GameTimer.prototype, "paused", {
             /**
              * Returns whether this game is paused.
@@ -1922,10 +1935,10 @@ var gtp;
                 if (this._paused !== paused) {
                     this._paused = paused;
                     if (paused) {
-                        this._pauseStart = this._getMillis();
+                        this._pauseStart = gtp.Utils.timestamp();
                     }
                     else {
-                        var pauseTime = this._getMillis() - this._pauseStart;
+                        var pauseTime = gtp.Utils.timestamp() - this._pauseStart;
                         this._startShift += pauseTime;
                         this._pauseStart = 0;
                     }
@@ -1952,7 +1965,7 @@ var gtp;
                 else if (this._notUpdatingStart !== 0) {
                     return this._notUpdatingStart - this._startShift;
                 }
-                return this._getMillis() - this._startShift;
+                return gtp.Utils.timestamp() - this._startShift;
             },
             enumerable: true,
             configurable: true
@@ -1981,10 +1994,10 @@ var gtp;
                     this._updating = updating;
                     if (!this.paused) {
                         if (!this._updating) {
-                            this._notUpdatingStart = this._getMillis();
+                            this._notUpdatingStart = gtp.Utils.timestamp();
                         }
                         else {
-                            var notUpdatingTime = this._getMillis() - this._notUpdatingStart;
+                            var notUpdatingTime = gtp.Utils.timestamp() - this._notUpdatingStart;
                             this._startShift += notUpdatingTime;
                             this._notUpdatingStart = 0;
                         }
@@ -2003,13 +2016,13 @@ var gtp;
             if (this.paused || !this.updating) {
                 throw 'Cannot reset playtime millis when paused or not updating';
             }
-            this._startShift = this._getMillis();
+            this._startShift = gtp.Utils.timestamp();
         };
         /**
          * Resets this timer.  This should be called when a new game is started.
          */
         _GameTimer.prototype.start = function () {
-            this._startShift = this._getMillis();
+            this._startShift = gtp.Utils.timestamp();
         };
         return _GameTimer;
     })();

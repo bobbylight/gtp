@@ -23,25 +23,25 @@ module gtp {
 
 		/**
 		 * Sets the prefix to prepend to each line printed to the console.
-		 * 
+		 *
 		 * @param {String} prefix The new prefix.  'DEBUG' is used if not defined.
 		 */
 		setLogPrefix(prefix: string = 'DEBUG') {
 			this._prefix = prefix;
 		}
-   
+
 		/**
 		 * Starts timing something.
-		 * 
+		 *
 		 * @param {String} key A unique key for the thing being timed.
 		 */
 		start(key: string) {
-			this._startTimes[key] = new Date().getTime();
+			this._startTimes[key] = Utils.timestamp();
 		}
-   
+
 		/**
 		 * Stops timing something.
-		 * 
+		 *
 		 * @param {String} key The key of the thing being timed.
 		 */
 		end(key: string) {
@@ -50,11 +50,11 @@ module gtp {
 				console.error('Cannot end timer for "' + key + '" as it was never started');
 				return -1;
 			}
-			var time: number = new Date().getTime() - start;
+			var time: number = Utils.timestamp() - start;
 			delete this._startTimes[key];
 			return time;
 		}
-   
+
 		/**
 		 * Stops timing something and logs its runtime to the console.
 		 * 
@@ -66,7 +66,7 @@ module gtp {
 				console.log(this._prefix + ': ' + key + ': ' + time + ' ms');
 			}
 		}
-   
+
 
 	}
 }

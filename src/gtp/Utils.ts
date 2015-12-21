@@ -9,7 +9,7 @@ module gtp {
 
 		/**
 		 * Returns the number of elements in an object.
-		 * 
+		 *
 		 * @param {object} obj The object.
 		 * @return {int} The number of elements in the object.
 		 */
@@ -25,7 +25,7 @@ module gtp {
 
 		/**
 		 * Returns the value of a request parameter.
-		 * 
+		 *
 		 * @param {string} param The name of the request parameter.
 		 * @return {string} The value of the request parameter, or <code>null</code>
 		 *         if it was not specified.
@@ -59,7 +59,7 @@ module gtp {
 
 		/**
 		 * Equivlaent to dojo/_base/hitch, returns a function in a specific scope.
-		 * 
+		 *
 		 * @param {object} scope The scope to run the function in (e.g. the value of
 		 *        "this").
 		 * @param {function} func The function.
@@ -74,7 +74,7 @@ module gtp {
 
 		/**
 		 * Adds the properties of one element into another.
-		 * 
+		 *
 		 * @param {object} source The object with properties to mix into another object.
 		 * @param {object} target The object that will receive the new properties.
 		 */
@@ -92,18 +92,42 @@ module gtp {
 		 * Returns a random integer between min (inclusive) and max (exclusive).  If
 		 * max is omitted, the single parameter is treated as the maximum value, and
 		 * an integer is returned in the range 0 - value.
-		 * 
+		 *
 		 * @param {int} [min=0] The minimum possible value, inclusive.
-		 * @param {int} [max] The maximum possible value, exclusive.
+		 * @param {int} max The maximum possible value, exclusive.
 		 * @return {int} The random integer value.
 		 */
-		static randomInt(min: number = 0, max: number): number {
-			'use strict';
+		static randomInt(min: number, max: number): number;
+		static randomInt(max: number): number;
+		static randomInt(min: number, max?: number): number {
+			var realMin: number,
+			    realMax: number;
+			if (typeof max === 'undefined') {
+				realMin = 0;
+				realMax = min;
+			}
+			else {
+				realMin = min;
+				realMax = max;
+			}
 			// Using Math.round() will give you a non-uniform distribution!
-			return Math.floor(Math.random() * (max - min)) + min;
+			return Math.floor(Math.random() * (realMax - realMin)) + realMin;
 		}
 
-		/** 
+		/**
+		 * Returns a time in milliseconds.  This will be high resolution, if
+		 * possible.  This method should be used to implement constructs like
+		 * delays.
+		 * @return {number} A time, in milliseconds.
+		 */
+		static timestamp(): number {
+			if (window.performance && window.performance.now) {
+				return window.performance.now();
+			}
+			return Date.now(); // IE < 10, PhantomJS 1.x, which is used by unit tests
+		}
+
+		/**
 		 * Defines console functions for IE9 and other braindead browsers.
 		 */
 		static initConsole() {
@@ -111,6 +135,7 @@ module gtp {
 			if (!window.console) {
 				var noOp: Function = function() {};
 				window.console = <any>{
+					info: noOp,
 					log: noOp,
 					warn: noOp,
 					'error': noOp

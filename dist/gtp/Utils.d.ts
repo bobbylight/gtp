@@ -42,10 +42,18 @@ declare module gtp {
          * an integer is returned in the range 0 - value.
          *
          * @param {int} [min=0] The minimum possible value, inclusive.
-         * @param {int} [max] The maximum possible value, exclusive.
+         * @param {int} max The maximum possible value, exclusive.
          * @return {int} The random integer value.
          */
         static randomInt(min: number, max: number): number;
+        static randomInt(max: number): number;
+        /**
+         * Returns a time in milliseconds.  This will be high resolution, if
+         * possible.  This method should be used to implement constructs like
+         * delays.
+         * @return {number} A time, in milliseconds.
+         */
+        static timestamp(): number;
         /**
          * Defines console functions for IE9 and other braindead browsers.
          */

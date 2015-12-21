@@ -63,6 +63,11 @@ module gtp {
 			this.timer = new gtp.Timer();
 		}
 
+		/**
+		 * Clears the screen.
+		 * @param {string} clearScreenColor The color to clear the screen with.
+		 *        If unspecified, <code>this.clearScreenColor</code> is used.
+		 */
 		clearScreen(clearScreenColor: string = this.clearScreenColor) {
 			var ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
 			ctx.fillStyle = clearScreenColor;
@@ -127,7 +132,7 @@ module gtp {
 		private _renderFps(ctx: CanvasRenderingContext2D) {
 
 			this.frames++;
-			var now: number = new Date().getTime();
+			var now: number = Utils.timestamp();
 			if (this.lastTime === null) {
 				this.lastTime = now;
 			}
@@ -185,7 +190,7 @@ module gtp {
 		setStatusMessage(message: string) {
 			this._statusMessage = message;
 			this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
-			this._statusMessageTime = new Date().getTime() + 100;
+			this._statusMessageTime = Utils.timestamp() + 100;
 		}
 
 		/**
@@ -205,7 +210,7 @@ module gtp {
 		private _tick() {
 
 			if (this._statusMessage) {
-				var time: number = new Date().getTime();
+				var time: number = Utils.timestamp();
 				if (time > this._statusMessageTime) {
 					this._statusMessageTime = time + 100;
 					this._statusMessageAlpha -= 0.1;

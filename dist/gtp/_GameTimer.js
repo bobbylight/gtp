@@ -13,9 +13,6 @@ var gtp;
             this._updating = true;
             this._notUpdatingStart = 0;
         }
-        _GameTimer.prototype._getMillis = function () {
-            return window.performance.now();
-        };
         Object.defineProperty(_GameTimer.prototype, "paused", {
             /**
              * Returns whether this game is paused.
@@ -38,10 +35,10 @@ var gtp;
                 if (this._paused !== paused) {
                     this._paused = paused;
                     if (paused) {
-                        this._pauseStart = this._getMillis();
+                        this._pauseStart = gtp.Utils.timestamp();
                     }
                     else {
-                        var pauseTime = this._getMillis() - this._pauseStart;
+                        var pauseTime = gtp.Utils.timestamp() - this._pauseStart;
                         this._startShift += pauseTime;
                         this._pauseStart = 0;
                     }
@@ -68,7 +65,7 @@ var gtp;
                 else if (this._notUpdatingStart !== 0) {
                     return this._notUpdatingStart - this._startShift;
                 }
-                return this._getMillis() - this._startShift;
+                return gtp.Utils.timestamp() - this._startShift;
             },
             enumerable: true,
             configurable: true
@@ -97,10 +94,10 @@ var gtp;
                     this._updating = updating;
                     if (!this.paused) {
                         if (!this._updating) {
-                            this._notUpdatingStart = this._getMillis();
+                            this._notUpdatingStart = gtp.Utils.timestamp();
                         }
                         else {
-                            var notUpdatingTime = this._getMillis() - this._notUpdatingStart;
+                            var notUpdatingTime = gtp.Utils.timestamp() - this._notUpdatingStart;
                             this._startShift += notUpdatingTime;
                             this._notUpdatingStart = 0;
                         }
@@ -119,13 +116,13 @@ var gtp;
             if (this.paused || !this.updating) {
                 throw 'Cannot reset playtime millis when paused or not updating';
             }
-            this._startShift = this._getMillis();
+            this._startShift = gtp.Utils.timestamp();
         };
         /**
          * Resets this timer.  This should be called when a new game is started.
          */
         _GameTimer.prototype.start = function () {
-            this._startShift = this._getMillis();
+            this._startShift = gtp.Utils.timestamp();
         };
         return _GameTimer;
     })();

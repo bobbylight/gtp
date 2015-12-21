@@ -376,6 +376,11 @@ declare module gtp {
         private _gameTimer;
         timer: gtp.Timer;
         constructor(args?: any);
+        /**
+         * Clears the screen.
+         * @param {string} clearScreenColor The color to clear the screen with.
+         *        If unspecified, <code>this.clearScreenColor</code> is used.
+         */
         clearScreen(clearScreenColor?: string): void;
         getHeight(): number;
         getWidth(): number;
@@ -908,10 +913,18 @@ declare module gtp {
          * an integer is returned in the range 0 - value.
          *
          * @param {int} [min=0] The minimum possible value, inclusive.
-         * @param {int} [max] The maximum possible value, exclusive.
+         * @param {int} max The maximum possible value, exclusive.
          * @return {int} The random integer value.
          */
         static randomInt(min: number, max: number): number;
+        static randomInt(max: number): number;
+        /**
+         * Returns a time in milliseconds.  This will be high resolution, if
+         * possible.  This method should be used to implement constructs like
+         * delays.
+         * @return {number} A time, in milliseconds.
+         */
+        static timestamp(): number;
         /**
          * Defines console functions for IE9 and other braindead browsers.
          */
@@ -931,7 +944,6 @@ declare module gtp {
         private _updating;
         private _notUpdatingStart;
         constructor();
-        private _getMillis();
         /**
          * Returns whether this game is paused.
          * @return {boolean} Whether this game is paused.

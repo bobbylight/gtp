@@ -35,6 +35,11 @@ var gtp;
             this._gameTimer = new gtp._GameTimer();
             this.timer = new gtp.Timer();
         }
+        /**
+         * Clears the screen.
+         * @param {string} clearScreenColor The color to clear the screen with.
+         *        If unspecified, <code>this.clearScreenColor</code> is used.
+         */
         Game.prototype.clearScreen = function (clearScreenColor) {
             if (clearScreenColor === void 0) { clearScreenColor = this.clearScreenColor; }
             var ctx = this.canvas.getContext('2d');
@@ -109,7 +114,7 @@ var gtp;
         };
         Game.prototype._renderFps = function (ctx) {
             this.frames++;
-            var now = new Date().getTime();
+            var now = gtp.Utils.timestamp();
             if (this.lastTime === null) {
                 this.lastTime = now;
             }
@@ -149,7 +154,7 @@ var gtp;
         Game.prototype.setStatusMessage = function (message) {
             this._statusMessage = message;
             this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
-            this._statusMessageTime = new Date().getTime() + 100;
+            this._statusMessageTime = gtp.Utils.timestamp() + 100;
         };
         /**
          * Starts the game loop.
@@ -165,7 +170,7 @@ var gtp;
         };
         Game.prototype._tick = function () {
             if (this._statusMessage) {
-                var time = new Date().getTime();
+                var time = gtp.Utils.timestamp();
                 if (time > this._statusMessageTime) {
                     this._statusMessageTime = time + 100;
                     this._statusMessageAlpha -= 0.1;

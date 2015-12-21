@@ -11,7 +11,6 @@ declare module gtp {
         private _updating;
         private _notUpdatingStart;
         constructor();
-        private _getMillis();
         /**
          * Returns whether this game is paused.
          * @return {boolean} Whether this game is paused.

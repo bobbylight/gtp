@@ -21,10 +21,6 @@ module gtp {
       this._notUpdatingStart = 0;
     }
 
-    private _getMillis(): number {
-      return window.performance.now();
-    }
-
     /**
      * Returns whether this game is paused.
      * @return {boolean} Whether this game is paused.
@@ -50,7 +46,7 @@ module gtp {
       else if (this._notUpdatingStart !== 0) {
       	return this._notUpdatingStart - this._startShift;
       }
-      return this._getMillis() - this._startShift;
+      return Utils.timestamp() - this._startShift;
     }
 
     /**
@@ -71,7 +67,7 @@ module gtp {
       if (this.paused || !this.updating) {
         throw 'Cannot reset playtime millis when paused or not updating';
       }
-      this._startShift = this._getMillis();
+      this._startShift = Utils.timestamp();
     }
 
     /**
@@ -88,10 +84,10 @@ module gtp {
       if (this._paused !== paused) {
         this._paused = paused;
         if (paused) {
-          this._pauseStart = this._getMillis();
+          this._pauseStart = Utils.timestamp();
         }
         else {
-          var pauseTime: number = this._getMillis() - this._pauseStart;
+          var pauseTime: number = Utils.timestamp() - this._pauseStart;
           this._startShift += pauseTime;
           this._pauseStart = 0;
         }
@@ -113,10 +109,10 @@ module gtp {
       	this._updating = updating;
       	if (!this.paused) { // "pause" state "encompasses" update state.
       		if (!this._updating) {
-      			this._notUpdatingStart = this._getMillis();
+      			this._notUpdatingStart = Utils.timestamp();
       		}
       		else {
-      			var notUpdatingTime: number = this._getMillis() - this._notUpdatingStart;
+      			var notUpdatingTime: number = Utils.timestamp() - this._notUpdatingStart;
       			this._startShift += notUpdatingTime;
       			this._notUpdatingStart = 0;
       		}
@@ -128,7 +124,7 @@ module gtp {
      * Resets this timer.  This should be called when a new game is started.
      */
     start() {
-      this._startShift = this._getMillis();
+      this._startShift = Utils.timestamp();
     }
 
   }

@@ -27,6 +27,11 @@ declare module gtp {
         private _gameTimer;
         timer: gtp.Timer;
         constructor(args?: any);
+        /**
+         * Clears the screen.
+         * @param {string} clearScreenColor The color to clear the screen with.
+         *        If unspecified, <code>this.clearScreenColor</code> is used.
+         */
         clearScreen(clearScreenColor?: string): void;
         getHeight(): number;
         getWidth(): number;

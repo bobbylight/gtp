@@ -82,20 +82,30 @@ var gtp;
                 }
             }
         };
-        /**
-         * Returns a random integer between min (inclusive) and max (exclusive).  If
-         * max is omitted, the single parameter is treated as the maximum value, and
-         * an integer is returned in the range 0 - value.
-         *
-         * @param {int} [min=0] The minimum possible value, inclusive.
-         * @param {int} [max] The maximum possible value, exclusive.
-         * @return {int} The random integer value.
-         */
         Utils.randomInt = function (min, max) {
-            'use strict';
-            if (min === void 0) { min = 0; }
+            var realMin, realMax;
+            if (typeof max === 'undefined') {
+                realMin = 0;
+                realMax = min;
+            }
+            else {
+                realMin = min;
+                realMax = max;
+            }
             // Using Math.round() will give you a non-uniform distribution!
-            return Math.floor(Math.random() * (max - min)) + min;
+            return Math.floor(Math.random() * (realMax - realMin)) + realMin;
+        };
+        /**
+         * Returns a time in milliseconds.  This will be high resolution, if
+         * possible.  This method should be used to implement constructs like
+         * delays.
+         * @return {number} A time, in milliseconds.
+         */
+        Utils.timestamp = function () {
+            if (window.performance && window.performance.now) {
+                return window.performance.now();
+            }
+            return Date.now(); // IE < 10, PhantomJS 1.x, which is used by unit tests
         };
         /**
          * Defines console functions for IE9 and other braindead browsers.
@@ -105,6 +115,7 @@ var gtp;
             if (!window.console) {
                 var noOp = function () { };
                 window.console = {
+                    info: noOp,
                     log: noOp,
                     warn: noOp,
                     'error': noOp
