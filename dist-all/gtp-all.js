@@ -314,6 +314,19 @@ var gtp;
 var gtp;
 (function (gtp) {
     'use strict';
+    /**
+     * A sound effect that is currently being played.
+     */
+    var PlayingSound = (function () {
+        function PlayingSound(id, source) {
+            this.soundId = id;
+            this.source = source;
+        }
+        PlayingSound.prototype.start = function () {
+            this.source.start(0);
+        };
+        return PlayingSound;
+    })();
     var AudioSystem = (function () {
         /**
          * A wrapper around web audio for games.
@@ -326,7 +339,22 @@ var gtp;
             this._musicFade = 0.3; // seconds
             this._fadeMusic = true;
             this._muted = false;
+            this._playingSounds = [];
+            this._soundEffectIdGenerator = 0;
         }
+        AudioSystem.prototype._createPlayingSound = function (id, loop) {
+            if (loop === void 0) { loop = false; }
+            var source = this.context.createBufferSource();
+            source.loop = loop;
+            source.buffer = this._sounds[id].getBuffer();
+            source.connect(this._volumeFaderGain);
+            var soundEffect = new PlayingSound(id, source);
+            soundEffect.id = this._createSoundEffectId();
+            return soundEffect;
+        };
+        AudioSystem.prototype._createSoundEffectId = function () {
+            return this._soundEffectIdGenerator++;
+        };
         /**
          * Initializes the audio system.
          */
@@ -376,6 +404,8 @@ var gtp;
          * Returns the ID of the current music being played.
          *
          * @return {string} The current music's ID.
+         * @see playMusic
+         * @see stopMusic
          */
         AudioSystem.prototype.getCurrentMusic = function () {
             return this.currentMusicId;
@@ -432,14 +462,41 @@ var gtp;
         /**
          * Plays the sound with the given ID.
          * @param {string} id The ID of the resource to play.
+         * @param {boolean} loop Whether the music should loop.
+         * @return {number} An ID for the playing sound.  This can be used to
+         *          stop a looping sound via <code>stopSound(id)</code>.
+         * @see stopSound
          */
-        AudioSystem.prototype.playSound = function (id) {
+        AudioSystem.prototype.playSound = function (id, loop) {
+            if (loop === void 0) { loop = false; }
             if (this.context) {
-                var source = this.context.createBufferSource();
-                source.buffer = this._sounds[id].getBuffer();
-                source.connect(this._volumeFaderGain);
-                source.start(0);
+                var playingSound = this._createPlayingSound(id, loop);
+                this._playingSounds.push(playingSound);
+                if (!loop) {
+                    var self_1 = this;
+                    playingSound.source.onended = function () {
+                        self_1._removePlayingSound(playingSound.id);
+                    };
+                }
+                playingSound.start();
+                return playingSound.id;
             }
+            return -1;
+        };
+        /**
+         * Removes a sound from our list of currently-being-played sound effects.
+         * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.
+         * @return The sound just removed.
+         */
+        AudioSystem.prototype._removePlayingSound = function (id) {
+            for (var i = 0; i < this._playingSounds.length; i++) {
+                if (this._playingSounds[i].id === id) {
+                    var sound = this._playingSounds[i];
+                    this._playingSounds.splice(i, 1);
+                    return sound;
+                }
+            }
+            return null;
         };
         /**
          * Stops the currently playing music, if any.
@@ -457,6 +514,22 @@ var gtp;
                 delete this._currentMusic;
                 delete this._musicFaderGain;
             }
+        };
+        /**
+         * Stops a playing sound, by ID.
+         * @param {number} id The sound effect to stop.
+         * @return {boolean} Whether the sound effect was stopped.  This will be
+         *         <code>false</code> if the sound effect specified is no longer
+         *         playing.
+         * @see playSound
+         */
+        AudioSystem.prototype.stopSound = function (id) {
+            var sound = this._removePlayingSound(id);
+            if (sound) {
+                sound.source.stop();
+                return true;
+            }
+            return false;
         };
         AudioSystem.prototype.toggleMuted = function () {
             this._muted = !this._muted;
@@ -1500,6 +1573,37 @@ var gtp;
         Keys[Keys["KEY_Z"] = 90] = "KEY_Z";
     })(gtp.Keys || (gtp.Keys = {}));
     var Keys = gtp.Keys;
+})(gtp || (gtp = {}));
+var gtp;
+(function (gtp) {
+    'use strict';
+    /**
+     * A simple x-y coordinate.
+     */
+    var Point = (function () {
+        /**
+         * Creates a <code>Point</code> instance.
+         * @param {number} x The x-coordinate, or <code>0</code> if unspecified.
+         * @param {number} y The y-coordinate, or <code>0</code> if unspecified.
+         */
+        function Point(x, y) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            this.x = x;
+            this.y = y;
+        }
+        /**
+         * Returns whether this point is equal to another one.
+         * @param {Point} other The point to compare to, which may be
+         *        <code>null</code>.
+         * @return Whether the two points are equal.
+         */
+        Point.prototype.equals = function (other) {
+            return other != null && this.x === other.x && this.y === other.y;
+        };
+        return Point;
+    })();
+    gtp.Point = Point;
 })(gtp || (gtp = {}));
 var gtp;
 (function (gtp) {

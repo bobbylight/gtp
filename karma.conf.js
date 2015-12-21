@@ -3,7 +3,7 @@
 
 module.exports = function(config) {
   'use strict';
-  
+
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -20,7 +20,10 @@ module.exports = function(config) {
     // wildcard all JS files in a folder, due to dependencies (!)
     // See also:  http://karma-runner.github.io/0.13/config/files.html
     files: [
+      'dist/gtp/GtpBase.js',
+      'dist/gtp/_GameTimer.js',
       'dist/gtp/Keys.js',
+      'dist/gtp/Point.js',
       'dist/gtp/Rectangle.js',
       'dist/gtp/BrowserUtil.js',
       'dist/gtp/Utils.js',
@@ -48,14 +51,14 @@ module.exports = function(config) {
     exclude: [
     ],
 
-    
+
     // Plugins need to be explicitly specified for tests to run in actual
     // browsers
     plugins: [ 'karma-jasmine', 'karma-coverage',
                'karma-phantomjs-launcher', 'karma-chrome-launcher',
                'karma-firefox-launcher'
     ],
-    
+
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
@@ -76,7 +79,7 @@ module.exports = function(config) {
         },
         type: 'lcov' // Generates lcov and HTML (lcov for coveralls.io)
     },
-    
+
     // web server port
     port: 9876,
 

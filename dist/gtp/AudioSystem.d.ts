@@ -12,11 +12,24 @@ declare module gtp {
         private currentMusicId;
         private _musicLoopStart;
         /**
+         * A list of all sound effects currently being played.  If a sound effect
+         * is not looping (which is likely typical), it will be removed from this
+         * list when it completes.  This data structure allows us to pause all sound
+         * effects at the same time.
+         */
+        private _playingSounds;
+        /**
+         * Used to give all playing sound effects unique ids.
+         */
+        private _soundEffectIdGenerator;
+        /**
          * A wrapper around web audio for games.
          *
          * @constructor
          */
         constructor();
+        private _createPlayingSound(id, loop?);
+        private _createSoundEffectId();
         /**
          * Initializes the audio system.
          */
@@ -31,6 +44,8 @@ declare module gtp {
          * Returns the ID of the current music being played.
          *
          * @return {string} The current music's ID.
+         * @see playMusic
+         * @see stopMusic
          */
         getCurrentMusic(): string;
         /**
@@ -53,8 +68,18 @@ declare module gtp {
         /**
          * Plays the sound with the given ID.
          * @param {string} id The ID of the resource to play.
+         * @param {boolean} loop Whether the music should loop.
+         * @return {number} An ID for the playing sound.  This can be used to
+         *          stop a looping sound via <code>stopSound(id)</code>.
+         * @see stopSound
          */
-        playSound(id: string): void;
+        playSound(id: string, loop?: boolean): number;
+        /**
+         * Removes a sound from our list of currently-being-played sound effects.
+         * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.
+         * @return The sound just removed.
+         */
+        private _removePlayingSound(id);
         /**
          * Stops the currently playing music, if any.
          * @param {boolean} pause If <code>true</code>, the music is only paused;
@@ -63,6 +88,15 @@ declare module gtp {
          * @see playMusic
          */
         stopMusic(pause?: boolean): void;
+        /**
+         * Stops a playing sound, by ID.
+         * @param {number} id The sound effect to stop.
+         * @return {boolean} Whether the sound effect was stopped.  This will be
+         *         <code>false</code> if the sound effect specified is no longer
+         *         playing.
+         * @see playSound
+         */
+        stopSound(id: number): boolean;
         toggleMuted(): boolean;
         fadeMusic: boolean;
         musicFadeSeconds: number;
