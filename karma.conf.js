@@ -26,6 +26,7 @@ module.exports = function(config) {
       'dist/gtp/Point.js',
       'dist/gtp/Rectangle.js',
       'dist/gtp/BrowserUtil.js',
+      'dist/gtp/Pool.js',
       'dist/gtp/Utils.js',
       'dist/gtp/Delay.js',
       'dist/gtp/Keys.js',
