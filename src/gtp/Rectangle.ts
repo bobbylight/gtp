@@ -10,23 +10,20 @@ module gtp {
 
 		/**
 		 * A simple rectangle class, containing some useful utility methods.
-		 * 
+		 *
 		 * @constructor
-		 * @param {int} [x=0] The x-coordinate.
-		 * @param {int} [y=0] The y-coordinate.
-		 * @param {int} [w=0] The width of the rectangle.
-		 * @param {int} [h=0] The height of the rectangle.
+		 * @param {int} x The x-coordinate, defaulting to <code>0</code>.
+		 * @param {int} y The y-coordinate, defaulting to <code>0</code>.
+		 * @param {int} w The width of the rectangle, defaulting to <code>0</code>.
+		 * @param {int} h The height of the rectangle, defaulting to <code>0</code>.
 		 */
 		constructor(x: number = 0, y: number = 0, w: number = 0, h: number = 0) {
-			this.x = x;
-			this.y = y;
-			this.w = w;
-			this.h = h;
+			this.set(x, y, w, h);
 		}
 
 		/**
 		 * Returns whether this rectangle intersects another.
-		 * 
+		 *
 		 * @param {gtp.Rectangle} rect2 Another rectangle to compare against.
 		 *        This should not be null.
 		 * @return {boolean} Whether the two rectangles intersect.
@@ -48,12 +45,25 @@ module gtp {
 			rh += ry;
 			tw += tx;
 			th += ty;
-			console.log(rx, ry, rw, rh, tx, ty, tw, th);
 			//      overflow || intersect
 			return ((rw < rx || rw > tx) &&
 				(rh < ry || rh > ty) &&
 				(tw < tx || tw > rx) &&
 				(th < ty || th > ry));
+		}
+
+		/**
+		 * Sets the bounds of this rectangle.
+		 * @param {number} x The new x-coordinate.
+		 * @param {number} y The new y-coordinate.
+		 * @param {number} w The new width.
+		 * @param {number} h The new height.
+		 */
+		set(x: number, y: number, w: number, h: number) {
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
 		}
 	}
 }

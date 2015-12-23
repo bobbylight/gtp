@@ -8,10 +8,10 @@ declare module gtp {
          * A simple rectangle class, containing some useful utility methods.
          *
          * @constructor
-         * @param {int} [x=0] The x-coordinate.
-         * @param {int} [y=0] The y-coordinate.
-         * @param {int} [w=0] The width of the rectangle.
-         * @param {int} [h=0] The height of the rectangle.
+         * @param {int} x The x-coordinate, defaulting to <code>0</code>.
+         * @param {int} y The y-coordinate, defaulting to <code>0</code>.
+         * @param {int} w The width of the rectangle, defaulting to <code>0</code>.
+         * @param {int} h The height of the rectangle, defaulting to <code>0</code>.
          */
         constructor(x?: number, y?: number, w?: number, h?: number);
         /**
@@ -22,5 +22,13 @@ declare module gtp {
          * @return {boolean} Whether the two rectangles intersect.
          */
         intersects(rect2: gtp.Rectangle): boolean;
+        /**
+         * Sets the bounds of this rectangle.
+         * @param {number} x The new x-coordinate.
+         * @param {number} y The new y-coordinate.
+         * @param {number} w The new width.
+         * @param {number} h The new height.
+         */
+        set(x: number, y: number, w: number, h: number): void;
     }
 }
