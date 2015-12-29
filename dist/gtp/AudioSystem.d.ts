@@ -28,7 +28,7 @@ declare module gtp {
          * @constructor
          */
         constructor();
-        private _createPlayingSound(id, loop?);
+        private _createPlayingSound(id, loop?, startOffset?);
         private _createSoundEffectId();
         /**
          * Initializes the audio system.
@@ -55,6 +55,11 @@ declare module gtp {
          */
         isInitialized(): boolean;
         /**
+         * Pauses all music and sound effects.
+         * @see resumeAll
+         */
+        pauseAll(): void;
+        /**
          * Plays a specific sound as background music.  Only one "music" can play
          * at a time, as opposed to "sounds," of which multiple can be playing at
          * one time.
@@ -68,9 +73,10 @@ declare module gtp {
         /**
          * Plays the sound with the given ID.
          * @param {string} id The ID of the resource to play.
-         * @param {boolean} loop Whether the music should loop.
+         * @param {boolean} loop Whether the music should loop.  Defaults to
+         *        <code>false</code>.
          * @return {number} An ID for the playing sound.  This can be used to
-         *          stop a looping sound via <code>stopSound(id)</code>.
+         *         stop a looping sound via <code>stopSound(id)</code>.
          * @see stopSound
          */
         playSound(id: string, loop?: boolean): number;
@@ -80,6 +86,11 @@ declare module gtp {
          * @return The sound just removed.
          */
         private _removePlayingSound(id);
+        /**
+         * Resumes all music and sound effects.
+         * @see pauseAll
+         */
+        resumeAll(): void;
         /**
          * Stops the currently playing music, if any.
          * @param {boolean} pause If <code>true</code>, the music is only paused;

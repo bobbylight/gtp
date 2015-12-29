@@ -9,14 +9,32 @@ module gtp {
 		id: number;
 		soundId: string;
 		source: AudioBufferSourceNode;
+		_startOffset: number;
+		_paused: boolean;
+		_start: number;
+		_playedTime: number;
 
-		constructor(id: string, source: AudioBufferSourceNode) {
+		constructor(id: string, source: AudioBufferSourceNode,
+				startOffset: number = 0) {
 			this.soundId = id;
 			this.source = source;
+			this._paused = false;
+			this._startOffset = 0;
+		}
+
+		pause() {
+			if (!this._paused) {
+				this.source.stop();
+				this._paused = true;
+				this._playedTime += this.source.context.currentTime - this._start;
+				this._start = 0;
+			}
 		}
 
 		start() {
-			this.source.start(0);
+			this.source.start(this._startOffset);
+			this._start = this.source.context.currentTime;
+			this._playedTime = 0;
 		}
 	}
 
@@ -63,14 +81,15 @@ module gtp {
 			this._soundEffectIdGenerator = 0;
 		}
 
-		private _createPlayingSound(id: string, loop: boolean = false): PlayingSound {
+		private _createPlayingSound(id: string, loop: boolean = false,
+				startOffset: number = 0): PlayingSound {
 
 			var source: AudioBufferSourceNode = this.context.createBufferSource();
 			source.loop = loop;
 			source.buffer = this._sounds[id].getBuffer();
 			source.connect(this._volumeFaderGain);
 
-			var soundEffect: PlayingSound = new PlayingSound(id, source);
+			var soundEffect: PlayingSound = new PlayingSound(id, source, startOffset);
 			soundEffect.id = this._createSoundEffectId();
 			return soundEffect;
 		}
@@ -148,6 +167,17 @@ module gtp {
 		}
 
 		/**
+		 * Pauses all music and sound effects.
+		 * @see resumeAll
+		 */
+		pauseAll() {
+
+			this._playingSounds.forEach(function(sound: PlayingSound) {
+				sound.pause();
+			});
+		}
+
+		/**
 		 * Plays a specific sound as background music.  Only one "music" can play
 		 * at a time, as opposed to "sounds," of which multiple can be playing at
 		 * one time.
@@ -198,9 +228,10 @@ module gtp {
 		/**
 		 * Plays the sound with the given ID.
 		 * @param {string} id The ID of the resource to play.
-		 * @param {boolean} loop Whether the music should loop.
+		 * @param {boolean} loop Whether the music should loop.  Defaults to
+		 *        <code>false</code>.
 		 * @return {number} An ID for the playing sound.  This can be used to
-		 *          stop a looping sound via <code>stopSound(id)</code>.
+		 *         stop a looping sound via <code>stopSound(id)</code>.
 		 * @see stopSound
 		 */
 		playSound(id: string, loop: boolean = false): number {
@@ -227,14 +258,30 @@ module gtp {
 		 * @return The sound just removed.
 		 */
 		private _removePlayingSound(id: number): PlayingSound {
-			for (var i: number = 0; i < this._playingSounds.length; i++) {
+			for (let i: number = 0; i < this._playingSounds.length; i++) {
 				if (this._playingSounds[i].id === id) {
-					var sound: PlayingSound = this._playingSounds[i];
+					let sound: PlayingSound = this._playingSounds[i];
 					this._playingSounds.splice(i, 1);
 					return sound;
 				}
 			}
 			return null;
+		}
+
+		/**
+		 * Resumes all music and sound effects.
+		 * @see pauseAll
+		 */
+		resumeAll() {
+
+			for (let i: number = 0; i < this._playingSounds.length; i++) {
+				let sound1: PlayingSound = this._playingSounds[i];
+				if (sound1._paused) {
+					let sound2: PlayingSound = new PlayingSound(sound1.soundId,
+							sound1.source, sound1._playedTime);
+					this._playingSounds[i] = sound2;
+				}
+			}
 		}
 
 		/**

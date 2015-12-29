@@ -152,7 +152,7 @@ module gtp {
 
 		private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
 			var x: number = 10;
-			var y: number = this.canvas.height - 30;
+			var y: number = this.canvas.height - 6;
 			ctx.font = '10pt Arial';
 			ctx.fillStyle = this._statusMessageColor;
 			ctx.fillText(this._statusMessage, x, y);
@@ -176,6 +176,12 @@ module gtp {
        * @param paused Whether the game should be paused.
        */
 		set paused(paused: boolean) {
+			if (paused) {
+				this.audio.pauseAll();
+			}
+			else {
+				this.audio.resumeAll();
+			}
 			this._gameTimer.paused = paused;
 		}
 

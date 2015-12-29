@@ -5,12 +5,25 @@ var gtp;
      * A sound effect that is currently being played.
      */
     var PlayingSound = (function () {
-        function PlayingSound(id, source) {
+        function PlayingSound(id, source, startOffset) {
+            if (startOffset === void 0) { startOffset = 0; }
             this.soundId = id;
             this.source = source;
+            this._paused = false;
+            this._startOffset = 0;
         }
+        PlayingSound.prototype.pause = function () {
+            if (!this._paused) {
+                this.source.stop();
+                this._paused = true;
+                this._playedTime += this.source.context.currentTime - this._start;
+                this._start = 0;
+            }
+        };
         PlayingSound.prototype.start = function () {
-            this.source.start(0);
+            this.source.start(this._startOffset);
+            this._start = this.source.context.currentTime;
+            this._playedTime = 0;
         };
         return PlayingSound;
     })();
@@ -29,13 +42,14 @@ var gtp;
             this._playingSounds = [];
             this._soundEffectIdGenerator = 0;
         }
-        AudioSystem.prototype._createPlayingSound = function (id, loop) {
+        AudioSystem.prototype._createPlayingSound = function (id, loop, startOffset) {
             if (loop === void 0) { loop = false; }
+            if (startOffset === void 0) { startOffset = 0; }
             var source = this.context.createBufferSource();
             source.loop = loop;
             source.buffer = this._sounds[id].getBuffer();
             source.connect(this._volumeFaderGain);
-            var soundEffect = new PlayingSound(id, source);
+            var soundEffect = new PlayingSound(id, source, startOffset);
             soundEffect.id = this._createSoundEffectId();
             return soundEffect;
         };
@@ -106,6 +120,15 @@ var gtp;
             return this._initialized;
         };
         /**
+         * Pauses all music and sound effects.
+         * @see resumeAll
+         */
+        AudioSystem.prototype.pauseAll = function () {
+            this._playingSounds.forEach(function (sound) {
+                sound.pause();
+            });
+        };
+        /**
          * Plays a specific sound as background music.  Only one "music" can play
          * at a time, as opposed to "sounds," of which multiple can be playing at
          * one time.
@@ -149,9 +172,10 @@ var gtp;
         /**
          * Plays the sound with the given ID.
          * @param {string} id The ID of the resource to play.
-         * @param {boolean} loop Whether the music should loop.
+         * @param {boolean} loop Whether the music should loop.  Defaults to
+         *        <code>false</code>.
          * @return {number} An ID for the playing sound.  This can be used to
-         *          stop a looping sound via <code>stopSound(id)</code>.
+         *         stop a looping sound via <code>stopSound(id)</code>.
          * @see stopSound
          */
         AudioSystem.prototype.playSound = function (id, loop) {
@@ -184,6 +208,19 @@ var gtp;
                 }
             }
             return null;
+        };
+        /**
+         * Resumes all music and sound effects.
+         * @see pauseAll
+         */
+        AudioSystem.prototype.resumeAll = function () {
+            for (var i = 0; i < this._playingSounds.length; i++) {
+                var sound1 = this._playingSounds[i];
+                if (sound1._paused) {
+                    var sound2 = new PlayingSound(sound1.soundId, sound1.source, sound1._playedTime);
+                    this._playingSounds[i] = sound2;
+                }
+            }
         };
         /**
          * Stops the currently playing music, if any.

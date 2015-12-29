@@ -69,6 +69,12 @@ var gtp;
              * @param paused Whether the game should be paused.
              */
             set: function (paused) {
+                if (paused) {
+                    this.audio.pauseAll();
+                }
+                else {
+                    this.audio.resumeAll();
+                }
                 this._gameTimer.paused = paused;
             },
             enumerable: true,
@@ -131,7 +137,7 @@ var gtp;
         };
         Game.prototype._renderStatusMessage = function (ctx) {
             var x = 10;
-            var y = this.canvas.height - 30;
+            var y = this.canvas.height - 6;
             ctx.font = '10pt Arial';
             ctx.fillStyle = this._statusMessageColor;
             ctx.fillText(this._statusMessage, x, y);
