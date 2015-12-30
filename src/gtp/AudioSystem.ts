@@ -1,6 +1,17 @@
 module gtp {
 	'use strict';
 
+	interface _PlayingSoundConfig {
+		audioSystem: AudioSystem;
+		id: number;
+		soundId: string;
+		loop: boolean;
+		buffer: AudioBuffer;
+		connectTo: AudioNode|AudioNode[];
+		onendedGenerator: Function;
+		startOffset?: number;
+	}
+
 	/**
 	 * A sound effect that is currently being played.
 	 */
@@ -9,33 +20,76 @@ module gtp {
 		id: number;
 		soundId: string;
 		source: AudioBufferSourceNode;
+		_config: _PlayingSoundConfig;
 		_startOffset: number;
 		_paused: boolean;
 		_start: number;
 		_playedTime: number;
 
-		constructor(id: string, source: AudioBufferSourceNode,
-				startOffset: number = 0) {
-			this.soundId = id;
-			this.source = source;
+		constructor(config: _PlayingSoundConfig) {
+			this._config = config;
 			this._paused = false;
-			this._startOffset = 0;
+		}
+
+		private _initFromConfig() {
+
+			this.id = this._config.id;
+			this.soundId = this._config.soundId;
+
+			this.source = this._config.audioSystem.context.createBufferSource();
+			this.source.loop = this._config.loop;
+			this.source.buffer = this._config.buffer;
+			if (this._config.connectTo instanceof AudioNode) {
+				this.source.connect(<AudioNode>this._config.connectTo);
+			}
+			else {
+				let nodes: AudioNode[] = <AudioNode[]>this._config.connectTo;
+				nodes.forEach(function(node: AudioNode) {
+					this.source.connect(node);
+				});
+			}
+
+			this._startOffset = this._config.startOffset || 0;
+
+			if (!this._config.loop) {
+				let self: PlayingSound = this;
+				let audioSystem: AudioSystem = this._config.audioSystem;
+				this.source.onended = this._config.onendedGenerator(self.id);
+			}
 		}
 
 		pause() {
 			if (!this._paused) {
 				this.source.stop();
-				this._paused = true;
 				this._playedTime += this.source.context.currentTime - this._start;
+				this._paused = true;
 				this._start = 0;
 			}
 		}
 
+		resume() {
+			if (this._paused) {
+				this._paused = false;
+				let prevStartOffset: number = this._startOffset;
+				this._initFromConfig();
+				this._startOffset = prevStartOffset + this._playedTime;
+				this._startOffset = this._startOffset % this.source.buffer.duration;
+				let curAudioTime: number = this.source.context.currentTime;
+				this.source.start(curAudioTime, this._startOffset);
+				this._start = curAudioTime;
+				this._playedTime = 0;
+			}
+		}
+
 		start() {
-			this.source.start(this._startOffset);
-			this._start = this.source.context.currentTime;
+			this._paused = false;
+			this._initFromConfig();
+			let curAudioTime: number = this.source.context.currentTime;
+			this.source.start(curAudioTime, this._startOffset);
+			this._start = curAudioTime;
 			this._playedTime = 0;
 		}
+
 	}
 
 	export class AudioSystem {
@@ -82,15 +136,29 @@ module gtp {
 		}
 
 		private _createPlayingSound(id: string, loop: boolean = false,
-				startOffset: number = 0): PlayingSound {
+				startOffset: number = 0, doneCallback: Function = null): PlayingSound {
 
-			var source: AudioBufferSourceNode = this.context.createBufferSource();
-			source.loop = loop;
-			source.buffer = this._sounds[id].getBuffer();
-			source.connect(this._volumeFaderGain);
+			let self: AudioSystem = this;
 
-			var soundEffect: PlayingSound = new PlayingSound(id, source, startOffset);
-			soundEffect.id = this._createSoundEffectId();
+			let soundEffectId: number = this._createSoundEffectId();
+
+			let soundEffect: PlayingSound = new PlayingSound({
+				audioSystem: this,
+				buffer: this._sounds[id].getBuffer(),
+				connectTo: this._volumeFaderGain,
+				id: soundEffectId,
+				loop: loop,
+				onendedGenerator: function(playingSoundId: number) {
+					return function() {
+						self._removePlayingSound(playingSoundId);
+						if (doneCallback) {
+							doneCallback(soundEffectId, id);
+						}
+					};
+				},
+				soundId: id,
+				startOffset: startOffset,
+			});
 			return soundEffect;
 		}
 
@@ -230,21 +298,20 @@ module gtp {
 		 * @param {string} id The ID of the resource to play.
 		 * @param {boolean} loop Whether the music should loop.  Defaults to
 		 *        <code>false</code>.
+		 * @param {Function} doneCallback An optional callback to call when the
+		 *        sound completes. This callback will receive the returned numeric
+		 *        ID as a parameter.  This parameter is ignored if <code>loop</code>
+		 *        is <code>true</code>.
 		 * @return {number} An ID for the playing sound.  This can be used to
 		 *         stop a looping sound via <code>stopSound(id)</code>.
 		 * @see stopSound
 		 */
-		playSound(id: string, loop: boolean = false): number {
+		playSound(id: string, loop: boolean = false, doneCallback: Function = null): number {
 			if (this.context) {
 
-				let playingSound: PlayingSound = this._createPlayingSound(id, loop);
+				let playingSound: PlayingSound = this._createPlayingSound(id, loop, 0,
+						doneCallback);
 				this._playingSounds.push(playingSound);
-				if (!loop) {
-					let self: AudioSystem = this;
-					playingSound.source.onended = function() {
-						self._removePlayingSound(playingSound.id);
-					};
-				}
 				playingSound.start();
 				return playingSound.id;
 			}
@@ -275,11 +342,9 @@ module gtp {
 		resumeAll() {
 
 			for (let i: number = 0; i < this._playingSounds.length; i++) {
-				let sound1: PlayingSound = this._playingSounds[i];
-				if (sound1._paused) {
-					let sound2: PlayingSound = new PlayingSound(sound1.soundId,
-							sound1.source, sound1._playedTime);
-					this._playingSounds[i] = sound2;
+				let sound: PlayingSound = this._playingSounds[i];
+				if (sound._paused) {
+					sound.resume();
 				}
 			}
 		}

@@ -28,7 +28,7 @@ declare module gtp {
          * @constructor
          */
         constructor();
-        private _createPlayingSound(id, loop?, startOffset?);
+        private _createPlayingSound(id, loop?, startOffset?, doneCallback?);
         private _createSoundEffectId();
         /**
          * Initializes the audio system.
@@ -75,11 +75,15 @@ declare module gtp {
          * @param {string} id The ID of the resource to play.
          * @param {boolean} loop Whether the music should loop.  Defaults to
          *        <code>false</code>.
+         * @param {Function} doneCallback An optional callback to call when the
+         *        sound completes. This callback will receive the returned numeric
+         *        ID as a parameter.  This parameter is ignored if <code>loop</code>
+         *        is <code>true</code>.
          * @return {number} An ID for the playing sound.  This can be used to
          *         stop a looping sound via <code>stopSound(id)</code>.
          * @see stopSound
          */
-        playSound(id: string, loop?: boolean): number;
+        playSound(id: string, loop?: boolean, doneCallback?: Function): number;
         /**
          * Removes a sound from our list of currently-being-played sound effects.
          * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.

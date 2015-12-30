@@ -5,24 +5,59 @@ var gtp;
      * A sound effect that is currently being played.
      */
     var PlayingSound = (function () {
-        function PlayingSound(id, source, startOffset) {
-            if (startOffset === void 0) { startOffset = 0; }
-            this.soundId = id;
-            this.source = source;
+        function PlayingSound(config) {
+            this._config = config;
             this._paused = false;
-            this._startOffset = 0;
         }
+        PlayingSound.prototype._initFromConfig = function () {
+            this.id = this._config.id;
+            this.soundId = this._config.soundId;
+            this.source = this._config.audioSystem.context.createBufferSource();
+            this.source.loop = this._config.loop;
+            this.source.buffer = this._config.buffer;
+            if (this._config.connectTo instanceof AudioNode) {
+                this.source.connect(this._config.connectTo);
+            }
+            else {
+                var nodes = this._config.connectTo;
+                nodes.forEach(function (node) {
+                    this.source.connect(node);
+                });
+            }
+            this._startOffset = this._config.startOffset || 0;
+            if (!this._config.loop) {
+                var self_1 = this;
+                var audioSystem = this._config.audioSystem;
+                this.source.onended = this._config.onendedGenerator(self_1.id);
+            }
+        };
         PlayingSound.prototype.pause = function () {
             if (!this._paused) {
                 this.source.stop();
-                this._paused = true;
                 this._playedTime += this.source.context.currentTime - this._start;
+                this._paused = true;
                 this._start = 0;
             }
         };
+        PlayingSound.prototype.resume = function () {
+            if (this._paused) {
+                this._paused = false;
+                var prevStartOffset = this._startOffset;
+                this._initFromConfig();
+                this._startOffset = prevStartOffset + this._playedTime;
+                this._startOffset = this._startOffset % this.source.buffer.duration;
+                var curAudioTime = this.source.context.currentTime;
+                this.source.start(curAudioTime, this._startOffset);
+                this._start = curAudioTime;
+                this._playedTime = 0;
+            }
+        };
         PlayingSound.prototype.start = function () {
-            this.source.start(this._startOffset);
-            this._start = this.source.context.currentTime;
+            this._paused = false;
+            this._initFromConfig();
+            var curAudioTime = this.source.context.currentTime;
+            this.source.start(curAudioTime, this._startOffset);
+            this._start = curAudioTime;
             this._playedTime = 0;
         };
         return PlayingSound;
@@ -42,15 +77,29 @@ var gtp;
             this._playingSounds = [];
             this._soundEffectIdGenerator = 0;
         }
-        AudioSystem.prototype._createPlayingSound = function (id, loop, startOffset) {
+        AudioSystem.prototype._createPlayingSound = function (id, loop, startOffset, doneCallback) {
             if (loop === void 0) { loop = false; }
             if (startOffset === void 0) { startOffset = 0; }
-            var source = this.context.createBufferSource();
-            source.loop = loop;
-            source.buffer = this._sounds[id].getBuffer();
-            source.connect(this._volumeFaderGain);
-            var soundEffect = new PlayingSound(id, source, startOffset);
-            soundEffect.id = this._createSoundEffectId();
+            if (doneCallback === void 0) { doneCallback = null; }
+            var self = this;
+            var soundEffectId = this._createSoundEffectId();
+            var soundEffect = new PlayingSound({
+                audioSystem: this,
+                buffer: this._sounds[id].getBuffer(),
+                connectTo: this._volumeFaderGain,
+                id: soundEffectId,
+                loop: loop,
+                onendedGenerator: function (playingSoundId) {
+                    return function () {
+                        self._removePlayingSound(playingSoundId);
+                        if (doneCallback) {
+                            doneCallback(soundEffectId, id);
+                        }
+                    };
+                },
+                soundId: id,
+                startOffset: startOffset,
+            });
             return soundEffect;
         };
         AudioSystem.prototype._createSoundEffectId = function () {
@@ -174,21 +223,20 @@ var gtp;
          * @param {string} id The ID of the resource to play.
          * @param {boolean} loop Whether the music should loop.  Defaults to
          *        <code>false</code>.
+         * @param {Function} doneCallback An optional callback to call when the
+         *        sound completes. This callback will receive the returned numeric
+         *        ID as a parameter.  This parameter is ignored if <code>loop</code>
+         *        is <code>true</code>.
          * @return {number} An ID for the playing sound.  This can be used to
          *         stop a looping sound via <code>stopSound(id)</code>.
          * @see stopSound
          */
-        AudioSystem.prototype.playSound = function (id, loop) {
+        AudioSystem.prototype.playSound = function (id, loop, doneCallback) {
             if (loop === void 0) { loop = false; }
+            if (doneCallback === void 0) { doneCallback = null; }
             if (this.context) {
-                var playingSound = this._createPlayingSound(id, loop);
+                var playingSound = this._createPlayingSound(id, loop, 0, doneCallback);
                 this._playingSounds.push(playingSound);
-                if (!loop) {
-                    var self_1 = this;
-                    playingSound.source.onended = function () {
-                        self_1._removePlayingSound(playingSound.id);
-                    };
-                }
                 playingSound.start();
                 return playingSound.id;
             }
@@ -215,10 +263,9 @@ var gtp;
          */
         AudioSystem.prototype.resumeAll = function () {
             for (var i = 0; i < this._playingSounds.length; i++) {
-                var sound1 = this._playingSounds[i];
-                if (sound1._paused) {
-                    var sound2 = new PlayingSound(sound1.soundId, sound1.source, sound1._playedTime);
-                    this._playingSounds[i] = sound2;
+                var sound = this._playingSounds[i];
+                if (sound._paused) {
+                    sound.resume();
                 }
             }
         };
