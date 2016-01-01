@@ -63,10 +63,10 @@ module gtp {
 			var previousAlpha: number = ctx.globalAlpha;
 			ctx.globalAlpha = this._alpha;
 			if (this._fadingOut) {
-	            this._leavingState.render(ctx);
+				this._leavingState.render(ctx);
 			}
 			else {
-	            this._enteringState.render(ctx);
+				this._enteringState.render(ctx);
 			}
 			ctx.globalAlpha = previousAlpha;
 		}

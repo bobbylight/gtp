@@ -100,8 +100,7 @@ module gtp {
 		static randomInt(min: number, max: number): number;
 		static randomInt(max: number): number;
 		static randomInt(min: number, max?: number): number {
-			var realMin: number,
-			    realMax: number;
+			var realMin: number, realMax: number;
 			if (typeof max === 'undefined') {
 				realMin = 0;
 				realMax = min;

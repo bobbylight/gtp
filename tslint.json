@@ -10,7 +10,7 @@
     "curly": true,
     "forin": false,
     "indent": [
-      false,
+      true,
       "tabs"
     ],
     "jsdoc-format": true,

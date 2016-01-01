@@ -232,11 +232,11 @@ module gtp {
 			this.render();
 		}
 
-    toggleMuted(): boolean {
-      var muted: boolean = this.audio.toggleMuted();
-      this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
-      return muted;
-    }
+		toggleMuted(): boolean {
+			let muted: boolean = this.audio.toggleMuted();
+			this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
+			return muted;
+		}
 
 		toggleShowFps() {
 			this.showFps = !this.showFps;

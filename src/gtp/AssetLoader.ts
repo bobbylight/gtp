@@ -317,8 +317,8 @@ module gtp {
 			this.responses[res] = response;
 			delete this.loadingAssetData[res];
 			console.log('Completed: ' + res + ', remaining == ' +
-			      gtp.Utils.getObjectSize(this.loadingAssetData) +
-			      ', callback == ' + (this.callback !== null));
+					gtp.Utils.getObjectSize(this.loadingAssetData) +
+					', callback == ' + (this.callback !== null));
 			if (this.isDoneLoading() && this.callback) {
 				this.callback.call();
 				delete this.callback;

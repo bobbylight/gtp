@@ -1,142 +1,3 @@
-declare module tiled {
-    class TiledLayer {
-        map: any;
-        name: string;
-        width: number;
-        height: number;
-        data: number[];
-        opacity: number;
-        visible: boolean;
-        type: string;
-        x: number;
-        y: number;
-        objects: TiledObject[];
-        objectsByName: {
-            [name: string]: TiledObject;
-        };
-        constructor(map: any, data: any);
-        getData(row: number, col: number): number;
-        setData(row: number, col: number, value: number): boolean;
-        private _getIndex(row, col);
-        getObjectByName(name: string): TiledObject;
-        getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject;
-        isObjectGroup(): boolean;
-        private _setObjects(objects);
-    }
-}
-declare module tiled {
-    class TiledMap {
-        rowCount: number;
-        colCount: number;
-        tileWidth: number;
-        tileHeight: number;
-        screenWidth: number;
-        screenHeight: number;
-        screenRows: number;
-        screenCols: number;
-        imagePathModifier: Function;
-        layers: TiledLayer[];
-        layersByName: {
-            [name: string]: TiledLayer;
-        };
-        objectGroups: TiledLayer[];
-        tilesets: TiledTileset[];
-        properties: any;
-        version: number;
-        orientation: string;
-        /**
-         * A 2d game map, generated in Tiled.
-         *
-         * @constructor
-         */
-        constructor(data: any, args: any);
-        /**
-         * Adds a layer to this map.  This method is called internally by the library
-         * and the programmer typically does not need to call it.
-         *
-         * @param {object} layerData The raw layer data.
-         * @method
-         */
-        addLayer(layerData: any): void;
-        draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number, dx?: number, dy?: number): void;
-        /**
-         * Returns a layer by name.
-         *
-         * @param {string} name The name of the layer.
-         * @return {tiled.TiledLayer} The layer, or null if there is no layer with
-         *         that name.
-         * @method
-         */
-        getLayer(name: string): TiledLayer;
-        /**
-         * Returns a layer by index.
-         *
-         * @param {int} index The index of the layer.
-         * @return {tiled.TiledLayer} The layer, or null if there is no layer at
-         *         that index.
-         * @method
-         */
-        getLayerByIndex(index: number): TiledLayer;
-        /**
-         * Returns the number of layers in this map.
-         *
-         * @return {int} The number of layers in this map.
-         */
-        getLayerCount(): number;
-        private _getImageForGid(gid);
-        drawTile(ctx: CanvasRenderingContext2D, x: number, y: number, value: number, layer: TiledLayer): void;
-        setScale(scale: number): void;
-        /**
-         * Returns the pixel width of this map.
-         *
-         * @return {int} The pixel width of this map.
-         * @method
-         */
-        getPixelWidth(): number;
-        /**
-         * Returns the pixel height of this map.
-         *
-         * @return {int} The pixel height of this map.
-         * @method
-         */
-        getPixelHeight(): number;
-        /**
-         * Removes a layer from this map.
-         * @param {string} layerName The name of the layer to remove.
-         * @return {boolean} Whether a layer by that name was found.
-         * @method
-         */
-        removeLayer(layerName: string): boolean;
-    }
-}
-declare module tiled {
-    class TiledObject {
-        gid: number;
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-        properties: {};
-        constructor(data: any);
-        intersects(ox: number, oy: number, ow: number, oh: number): boolean;
-    }
-}
-declare module tiled {
-    class TiledTileset {
-        firstgid: number;
-        image: string;
-        imageWidth: number;
-        imageHeight: number;
-        margin: number;
-        name: string;
-        properties: {};
-        spacing: number;
-        tileWidth: number;
-        tileHeight: number;
-        constructor(data: any, imagePathModifier?: Function);
-        setScale(scale: number): void;
-    }
-}
 declare module gtp {
     /**
      * Loads resources for a game.  All games have to load resources such as
@@ -929,7 +790,7 @@ declare module gtp {
 }
 declare module gtp {
     /**
-     * An object pool.  Useful if your game creates lots of very small
+     * An object pool.	Useful if your game creates lots of very small
      * objects of the same type each frame, such as a path-finding algorithm.
      * <p>
      * NOTE: The <code>returnObj()</code> method may take linear time;
@@ -965,7 +826,7 @@ declare module gtp {
          */
         borrowedCount: number;
         /**
-         * Acts as if all objects have been returned to this pool.  This method
+         * Acts as if all objects have been returned to this pool.	This method
          * should be used if you're implementing an algorithm that uses an
          * arbitrary number of objects, and just want to return them all when you
          * are done.
@@ -976,7 +837,7 @@ declare module gtp {
          * Returns an object to this pool.
          * @param {T} obj The object to return.
          * @return {boolean} <code>true</code>, assuming the object was actually
-         *         from this pool, and not previously returned.  In other words,
+         *         from this pool, and not previously returned.	In other words,
          *         this method will only return <code>false</code> if you try to
          *         incorrectly return an object.
          * @see borrowObj
@@ -990,7 +851,7 @@ declare module gtp {
          */
         length: number;
         /**
-         * Returns this object as a string.  Useful for debugging.
+         * Returns this object as a string.	Useful for debugging.
          * @return {string} A string representation of this pool.
          */
         toString(): string;
@@ -1285,5 +1146,144 @@ declare module gtp {
          * Resets this timer.  This should be called when a new game is started.
          */
         start(): void;
+    }
+}
+declare module tiled {
+    class TiledLayer {
+        map: any;
+        name: string;
+        width: number;
+        height: number;
+        data: number[];
+        opacity: number;
+        visible: boolean;
+        type: string;
+        x: number;
+        y: number;
+        objects: TiledObject[];
+        objectsByName: {
+            [name: string]: TiledObject;
+        };
+        constructor(map: any, data: any);
+        getData(row: number, col: number): number;
+        setData(row: number, col: number, value: number): boolean;
+        private _getIndex(row, col);
+        getObjectByName(name: string): TiledObject;
+        getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject;
+        isObjectGroup(): boolean;
+        private _setObjects(objects);
+    }
+}
+declare module tiled {
+    class TiledMap {
+        rowCount: number;
+        colCount: number;
+        tileWidth: number;
+        tileHeight: number;
+        screenWidth: number;
+        screenHeight: number;
+        screenRows: number;
+        screenCols: number;
+        imagePathModifier: Function;
+        layers: TiledLayer[];
+        layersByName: {
+            [name: string]: TiledLayer;
+        };
+        objectGroups: TiledLayer[];
+        tilesets: TiledTileset[];
+        properties: any;
+        version: number;
+        orientation: string;
+        /**
+         * A 2d game map, generated in Tiled.
+         *
+         * @constructor
+         */
+        constructor(data: any, args: any);
+        /**
+         * Adds a layer to this map.  This method is called internally by the library
+         * and the programmer typically does not need to call it.
+         *
+         * @param {object} layerData The raw layer data.
+         * @method
+         */
+        addLayer(layerData: any): void;
+        draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number, dx?: number, dy?: number): void;
+        /**
+         * Returns a layer by name.
+         *
+         * @param {string} name The name of the layer.
+         * @return {tiled.TiledLayer} The layer, or null if there is no layer with
+         *         that name.
+         * @method
+         */
+        getLayer(name: string): TiledLayer;
+        /**
+         * Returns a layer by index.
+         *
+         * @param {int} index The index of the layer.
+         * @return {tiled.TiledLayer} The layer, or null if there is no layer at
+         *         that index.
+         * @method
+         */
+        getLayerByIndex(index: number): TiledLayer;
+        /**
+         * Returns the number of layers in this map.
+         *
+         * @return {int} The number of layers in this map.
+         */
+        getLayerCount(): number;
+        private _getImageForGid(gid);
+        drawTile(ctx: CanvasRenderingContext2D, x: number, y: number, value: number, layer: TiledLayer): void;
+        setScale(scale: number): void;
+        /**
+         * Returns the pixel width of this map.
+         *
+         * @return {int} The pixel width of this map.
+         * @method
+         */
+        getPixelWidth(): number;
+        /**
+         * Returns the pixel height of this map.
+         *
+         * @return {int} The pixel height of this map.
+         * @method
+         */
+        getPixelHeight(): number;
+        /**
+         * Removes a layer from this map.
+         * @param {string} layerName The name of the layer to remove.
+         * @return {boolean} Whether a layer by that name was found.
+         * @method
+         */
+        removeLayer(layerName: string): boolean;
+    }
+}
+declare module tiled {
+    class TiledObject {
+        gid: number;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        properties: {};
+        constructor(data: any);
+        intersects(ox: number, oy: number, ow: number, oh: number): boolean;
+    }
+}
+declare module tiled {
+    class TiledTileset {
+        firstgid: number;
+        image: string;
+        imageWidth: number;
+        imageHeight: number;
+        margin: number;
+        name: string;
+        properties: {};
+        spacing: number;
+        tileWidth: number;
+        tileHeight: number;
+        constructor(data: any, imagePathModifier?: Function);
+        setScale(scale: number): void;
     }
 }

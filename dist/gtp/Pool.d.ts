@@ -1,6 +1,6 @@
 declare module gtp {
     /**
-     * An object pool.  Useful if your game creates lots of very small
+     * An object pool.	Useful if your game creates lots of very small
      * objects of the same type each frame, such as a path-finding algorithm.
      * <p>
      * NOTE: The <code>returnObj()</code> method may take linear time;
@@ -36,7 +36,7 @@ declare module gtp {
          */
         borrowedCount: number;
         /**
-         * Acts as if all objects have been returned to this pool.  This method
+         * Acts as if all objects have been returned to this pool.	This method
          * should be used if you're implementing an algorithm that uses an
          * arbitrary number of objects, and just want to return them all when you
          * are done.
@@ -47,7 +47,7 @@ declare module gtp {
          * Returns an object to this pool.
          * @param {T} obj The object to return.
          * @return {boolean} <code>true</code>, assuming the object was actually
-         *         from this pool, and not previously returned.  In other words,
+         *         from this pool, and not previously returned.	In other words,
          *         this method will only return <code>false</code> if you try to
          *         incorrectly return an object.
          * @see borrowObj
@@ -61,7 +61,7 @@ declare module gtp {
          */
         length: number;
         /**
-         * Returns this object as a string.  Useful for debugging.
+         * Returns this object as a string.	Useful for debugging.
          * @return {string} A string representation of this pool.
          */
         toString(): string;
