@@ -1,3 +1,395 @@
+var tiled;
+(function (tiled) {
+    'use strict';
+    var TiledLayer = (function () {
+        function TiledLayer(map, data) {
+            this.map = map;
+            this.name = data.name;
+            this.width = data.width;
+            this.height = data.height;
+            this.data = data.data;
+            this.opacity = data.opacity;
+            this.visible = data.visible;
+            this.type = data.type;
+            this.x = data.x;
+            this.y = data.y;
+            this._setObjects(data.objects);
+        }
+        TiledLayer.prototype.getData = function (row, col) {
+            if (!this.data) {
+                return -1;
+            }
+            var index = this._getIndex(row, col);
+            return this.data[index];
+        };
+        TiledLayer.prototype.setData = function (row, col, value) {
+            if (!this.data) {
+                return false;
+            }
+            var index = this._getIndex(row, col);
+            this.data[index] = value;
+        };
+        TiledLayer.prototype._getIndex = function (row, col) {
+            return row * this.map.colCount + col;
+        };
+        TiledLayer.prototype.getObjectByName = function (name) {
+            return this.objectsByName ? this.objectsByName[name] : null;
+        };
+        TiledLayer.prototype.getObjectIntersecting = function (x, y, w, h) {
+            if (this.objects) {
+                for (var i = 0; i < this.objects.length; i++) {
+                    var obj = this.objects[i];
+                    if (obj.intersects(x, y, w, h)) {
+                        return obj;
+                    }
+                }
+            }
+            return null;
+        };
+        TiledLayer.prototype.isObjectGroup = function () {
+            return this.type === 'objectgroup';
+        };
+        TiledLayer.prototype._setObjects = function (objects) {
+            'use strict';
+            if (objects) {
+                this.objects = [];
+                this.objectsByName = {};
+                for (var i = 0; i < objects.length; i++) {
+                    var obj = new tiled.TiledObject(objects[i]);
+                    this.objects.push(obj);
+                    this.objectsByName[objects[i].name] = obj;
+                }
+            }
+        };
+        return TiledLayer;
+    })();
+    tiled.TiledLayer = TiledLayer;
+})(tiled || (tiled = {}));
+var tiled;
+(function (tiled) {
+    'use strict';
+    var TiledMap = (function () {
+        /**
+         * A 2d game map, generated in Tiled.
+         *
+         * @constructor
+         */
+        function TiledMap(data, args) {
+            this.rowCount = data.height;
+            this.colCount = data.width;
+            this.tileWidth = args.tileWidth;
+            this.tileHeight = args.tileHeight;
+            this.screenWidth = args.screenWidth;
+            this.screenHeight = args.screenHeight;
+            this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
+            this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
+            var imagePathModifier = args ? args.imagePathModifier : null;
+            this.layers = [];
+            this.layersByName = {};
+            this.objectGroups = [];
+            for (var i = 0; i < data.layers.length; i++) {
+                this.addLayer(data.layers[i]);
+            }
+            this.tilesets = [];
+            if (data.tilesets && data.tilesets.length) {
+                for (i = 0; i < data.tilesets.length; i++) {
+                    this.tilesets.push(new tiled.TiledTileset(data.tilesets[i], imagePathModifier));
+                }
+            }
+            this.properties = data.properties;
+            this.version = data.version;
+            this.orientation = data.orientation;
+        }
+        /**
+         * Adds a layer to this map.  This method is called internally by the library
+         * and the programmer typically does not need to call it.
+         *
+         * @param {object} layerData The raw layer data.
+         * @method
+         */
+        TiledMap.prototype.addLayer = function (layerData) {
+            var layer = new tiled.TiledLayer(this, layerData);
+            this.layers.push(layer);
+            this.layersByName[layer.name] = layer;
+            if (layer.isObjectGroup()) {
+                this.objectGroups.push(layer);
+            }
+        };
+        TiledMap.prototype.draw = function (ctx, centerRow, centerCol, dx, dy) {
+            if (dx === void 0) { dx = 0; }
+            if (dy === void 0) { dy = 0; }
+            var colCount = this.colCount;
+            var rowCount = this.rowCount;
+            var screenCols = this.screenRows;
+            var screenRows = this.screenCols;
+            var tileW = this.tileWidth;
+            var tileH = this.tileHeight;
+            var tileSize = tileW; // Assumes square tiles (!).  Fix me one day
+            var screenWidth = this.screenWidth;
+            var screenHeight = this.screenHeight;
+            var col0 = centerCol - Math.floor(screenCols / 2);
+            if (col0 < 0) {
+                col0 += colCount;
+            }
+            var row0 = centerRow - Math.floor(screenRows / 2);
+            if (row0 < 0) {
+                row0 += rowCount;
+            }
+            // Center point of screen, in map x,y coordinates.
+            var cx = centerCol * tileW + dx + tileW / 2;
+            var cy = centerRow * tileH + dy + tileH / 2;
+            // Top-left of screen, in map x,y coordinates.
+            var x0 = cx - screenWidth / 2;
+            var y0 = cy - screenHeight / 2;
+            var topLeftCol = Math.floor(x0 / tileW);
+            if ((x0 % tileSize) < 0) {
+                topLeftCol--;
+            }
+            var tileEdgeX = topLeftCol * tileW;
+            var topLeftRow = Math.floor(y0 / tileH);
+            if ((y0 % tileSize) < 0) {
+                topLeftRow--;
+            }
+            var tileEdgeY = topLeftRow * tileH; // getTileEdge(topLeftY);
+            // The view coordinates at which to start painting.
+            var startX = tileEdgeX - x0;
+            var _x = startX;
+            var startY = tileEdgeY - y0;
+            var _y = startY;
+            if (topLeftCol < 0) {
+                topLeftCol += colCount;
+            }
+            if (topLeftRow < 0) {
+                topLeftRow += rowCount;
+            }
+            // Paint until the end of the screen
+            var row = topLeftRow;
+            var layerCount = this.getLayerCount();
+            var tileCount = 0;
+            while (_y < screenHeight) {
+                for (var l = 0; l < layerCount; l++) {
+                    var col = topLeftCol;
+                    _x = startX;
+                    var layer = this.getLayerByIndex(l);
+                    if (layer.visible) {
+                        var prevOpacity;
+                        if (layer.opacity < 1) {
+                            prevOpacity = ctx.globalAlpha;
+                            ctx.globalAlpha = prevOpacity * layer.opacity;
+                        }
+                        while (_x < screenWidth) {
+                            var value = layer.getData(row % rowCount, col % colCount);
+                            this.drawTile(ctx, _x, _y, value, layer);
+                            tileCount++;
+                            _x += tileW;
+                            col++;
+                        }
+                        if (layer.opacity < 1) {
+                            ctx.globalAlpha = prevOpacity;
+                        }
+                    }
+                }
+                _y += tileH;
+                row++;
+            }
+            //console.log('tileCount === ' + tileCount);
+        };
+        /**
+         * Returns a layer by name.
+         *
+         * @param {string} name The name of the layer.
+         * @return {tiled.TiledLayer} The layer, or null if there is no layer with
+         *         that name.
+         * @method
+         */
+        TiledMap.prototype.getLayer = function (name) {
+            return this.layersByName[name];
+        };
+        /**
+         * Returns a layer by index.
+         *
+         * @param {int} index The index of the layer.
+         * @return {tiled.TiledLayer} The layer, or null if there is no layer at
+         *         that index.
+         * @method
+         */
+        TiledMap.prototype.getLayerByIndex = function (index) {
+            return this.layers[index];
+        };
+        /**
+         * Returns the number of layers in this map.
+         *
+         * @return {int} The number of layers in this map.
+         */
+        TiledMap.prototype.getLayerCount = function () {
+            return this.layers.length;
+        };
+        TiledMap.prototype._getImageForGid = function (gid) {
+            var tilesetCount = this.tilesets.length;
+            for (var i = 0; i < tilesetCount; i++) {
+                if (this.tilesets[i].firstgid > gid) {
+                    return this.tilesets[i - 1];
+                }
+            }
+            return this.tilesets[tilesetCount - 1];
+        };
+        TiledMap.prototype.drawTile = function (ctx, x, y, value, layer) {
+            if (value <= 0) {
+                return;
+            }
+            var tileset = this._getImageForGid(value);
+            if (!tileset) {
+                console.log('null tileset for: ' + value + ' (layer ' + layer.name + ')');
+                return;
+            }
+            value -= tileset.firstgid;
+            if (value < 0) {
+                return;
+            }
+            var game = window.game;
+            var img = game.assets.getTmxTilesetImage(tileset);
+            var tileW = this.tileWidth;
+            var sw = tileW + tileset.spacing;
+            var tileH = this.tileHeight;
+            var sh = tileH + tileset.spacing;
+            // TODO: "+ 1" is based on extra space at end of image.  Should be configured/calculated
+            var imgColCount = Math.floor(img.width / sw);
+            if (tileset.spacing > 0 && ((img.width % sw) === tileW)) {
+                imgColCount++;
+            }
+            var imgY = Math.floor(value / imgColCount) * sh;
+            var imgX = (value % imgColCount) * sw;
+            //ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
+            img.drawScaled2(ctx, imgX, imgY, tileW, tileH, x, y, tileW, tileH);
+        };
+        TiledMap.prototype.setScale = function (scale) {
+            this.tileWidth *= scale;
+            this.tileHeight *= scale;
+            this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
+            this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
+            var tilesetCount = this.tilesets.length;
+            for (var i = 0; i < tilesetCount; i++) {
+                return this.tilesets[i].setScale(scale);
+            }
+        };
+        /**
+         * Returns the pixel width of this map.
+         *
+         * @return {int} The pixel width of this map.
+         * @method
+         */
+        TiledMap.prototype.getPixelWidth = function () {
+            return this.colCount * this.tileWidth;
+        };
+        /**
+         * Returns the pixel height of this map.
+         *
+         * @return {int} The pixel height of this map.
+         * @method
+         */
+        TiledMap.prototype.getPixelHeight = function () {
+            return this.rowCount * this.tileHeight;
+        };
+        /**
+         * Removes a layer from this map.
+         * @param {string} layerName The name of the layer to remove.
+         * @return {boolean} Whether a layer by that name was found.
+         * @method
+         */
+        TiledMap.prototype.removeLayer = function (layerName) {
+            for (var i = 0; i < this.layers.length; i++) {
+                if (this.layers[i].name === layerName) {
+                    this.layers.splice(i, 1);
+                    delete this.layersByName[layerName];
+                    for (var j = 0; j < this.objectGroups.length; j++) {
+                        if (this.objectGroups[j].name === layerName) {
+                            delete this.objectGroups[j];
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        };
+        return TiledMap;
+    })();
+    tiled.TiledMap = TiledMap;
+})(tiled || (tiled = {}));
+var tiled;
+(function (tiled) {
+    'use strict';
+    var TiledObject = (function () {
+        function TiledObject(data) {
+            gtp.Utils.mixin(data, this);
+            this.properties = this.properties || {};
+            this.gid = this.gid || -1;
+            // TODO: Remove
+            var game = window.game;
+            this.x *= game._scale;
+            this.y *= game._scale;
+            this.width *= game._scale;
+            this.height *= game._scale;
+        }
+        TiledObject.prototype.intersects = function (ox, oy, ow, oh) {
+            'use strict';
+            //console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh +
+            //      ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
+            var tw = this.width;
+            var th = this.height;
+            var rw = ow;
+            var rh = oh;
+            if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
+                return false;
+            }
+            var tx = this.x;
+            var ty = this.y;
+            var rx = ox;
+            var ry = oy;
+            rw += rx;
+            rh += ry;
+            tw += tx;
+            th += ty;
+            //      overflow || intersect
+            return ((rw < rx || rw > tx) &&
+                (rh < ry || rh > ty) &&
+                (tw < tx || tw > rx) &&
+                (th < ty || th > ry));
+        };
+        return TiledObject;
+    })();
+    tiled.TiledObject = TiledObject;
+})(tiled || (tiled = {}));
+var tiled;
+(function (tiled) {
+    'use strict';
+    var TiledTileset = (function () {
+        function TiledTileset(data, imagePathModifier) {
+            this.firstgid = data.firstgid;
+            this.image = data.image;
+            if (imagePathModifier) {
+                this.image = imagePathModifier(this.image);
+            }
+            this.imageWidth = data.imagewidth;
+            this.imageHeight = data.imageheight;
+            this.margin = data.margin;
+            this.name = data.name;
+            this.properties = data.properties; // TODO
+            this.spacing = data.spacing;
+            this.tileWidth = data.tilewidth;
+            this.tileHeight = data.tileheight;
+        }
+        TiledTileset.prototype.setScale = function (scale) {
+            this.imageWidth *= scale;
+            this.imageHeight *= scale;
+            this.tileWidth *= scale;
+            this.tileHeight *= scale;
+            this.margin *= scale;
+            this.spacing *= scale;
+        };
+        return TiledTileset;
+    })();
+    tiled.TiledTileset = TiledTileset;
+})(tiled || (tiled = {}));
 var gtp;
 (function (gtp) {
     'use strict';
@@ -68,8 +460,8 @@ var gtp;
         };
         /**
          * Starts loading a canvas resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param imageSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} imageSrc The URL of the resource.
          */
         AssetLoader.prototype.addCanvas = function (id, imageSrc) {
             if (this._assetRoot) {
@@ -92,10 +484,14 @@ var gtp;
         };
         /**
          * Starts loading an image resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param imageSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} imageSrc The URL of the resource.
+         * @param {boolean} firstPixelTranslucent If truthy, the pixel at (0, 0)
+         *        is made translucent, along with all other pixels of the same
+         *        color.  The default value is <code>false</code>.
          */
-        AssetLoader.prototype.addImage = function (id, imageSrc) {
+        AssetLoader.prototype.addImage = function (id, imageSrc, firstPixelTranslucent) {
+            if (firstPixelTranslucent === void 0) { firstPixelTranslucent = false; }
             if (this._assetRoot) {
                 imageSrc = this._assetRoot + imageSrc;
             }
@@ -111,14 +507,17 @@ var gtp;
             image.addEventListener('load', function () {
                 var canvas = gtp.ImageUtils.resize(image, self._scale);
                 var gtpImage = new gtp.Image(canvas);
+                if (firstPixelTranslucent) {
+                    gtpImage.makeColorTranslucent(0, 0);
+                }
                 self._completed(id, gtpImage);
             });
             image.src = imageSrc;
         };
         /**
          * Starts loading a sound resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param soundSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} soundSrc The URL of the resource.
          * @param {number} [loopStart=0] Where to start, in seconds, if/when this
          *        sound loops (which is typical when using a sound as music).
          * @param {boolean} [loopByDefaultIfMusic=true] Whether this sound should
@@ -155,8 +554,8 @@ var gtp;
         };
         /**
          * Starts loading a sprite sheet resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param imageSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} imageSrc The URL of the resource.
          * @param {int} cellW The width of a cell.
          * @param {int} cellH The height of a cell.
          * @param {int} spacingX The horizontal spacing between cells.  Assumed to
@@ -220,14 +619,14 @@ var gtp;
          * application.
          *
          * @param {tiled.TiledTileset} tileset The tile set.
-         * @return The canvas.
+         * @return {gtp.Image} The tileset image.
          */
         AssetLoader.prototype.getTmxTilesetImage = function (tileset) {
             return this.responses['_tilesetImage_' + tileset.name];
         };
         /**
          * Retrieves a resource by ID.
-         * @param res {string} The ID of the resource.
+         * @param {string} res The ID of the resource.
          * @return The resource, or null if not found.
          */
         AssetLoader.prototype.get = function (res) {
@@ -245,8 +644,8 @@ var gtp;
         };
         /**
          * Adds a resource.
-         * @param res {string} The ID for the resource.
-         * @param value {any} The resource value.
+         * @param {string} res The ID for the resource.
+         * @param {any} value The resource value.
          */
         AssetLoader.prototype.set = function (res, value) {
             this.responses[res] = value;
@@ -2352,397 +2751,5 @@ var gtp;
     })();
     gtp._GameTimer = _GameTimer;
 })(gtp || (gtp = {}));
-var tiled;
-(function (tiled) {
-    'use strict';
-    var TiledLayer = (function () {
-        function TiledLayer(map, data) {
-            this.map = map;
-            this.name = data.name;
-            this.width = data.width;
-            this.height = data.height;
-            this.data = data.data;
-            this.opacity = data.opacity;
-            this.visible = data.visible;
-            this.type = data.type;
-            this.x = data.x;
-            this.y = data.y;
-            this._setObjects(data.objects);
-        }
-        TiledLayer.prototype.getData = function (row, col) {
-            if (!this.data) {
-                return -1;
-            }
-            var index = this._getIndex(row, col);
-            return this.data[index];
-        };
-        TiledLayer.prototype.setData = function (row, col, value) {
-            if (!this.data) {
-                return false;
-            }
-            var index = this._getIndex(row, col);
-            this.data[index] = value;
-        };
-        TiledLayer.prototype._getIndex = function (row, col) {
-            return row * this.map.colCount + col;
-        };
-        TiledLayer.prototype.getObjectByName = function (name) {
-            return this.objectsByName ? this.objectsByName[name] : null;
-        };
-        TiledLayer.prototype.getObjectIntersecting = function (x, y, w, h) {
-            if (this.objects) {
-                for (var i = 0; i < this.objects.length; i++) {
-                    var obj = this.objects[i];
-                    if (obj.intersects(x, y, w, h)) {
-                        return obj;
-                    }
-                }
-            }
-            return null;
-        };
-        TiledLayer.prototype.isObjectGroup = function () {
-            return this.type === 'objectgroup';
-        };
-        TiledLayer.prototype._setObjects = function (objects) {
-            'use strict';
-            if (objects) {
-                this.objects = [];
-                this.objectsByName = {};
-                for (var i = 0; i < objects.length; i++) {
-                    var obj = new tiled.TiledObject(objects[i]);
-                    this.objects.push(obj);
-                    this.objectsByName[objects[i].name] = obj;
-                }
-            }
-        };
-        return TiledLayer;
-    })();
-    tiled.TiledLayer = TiledLayer;
-})(tiled || (tiled = {}));
-var tiled;
-(function (tiled) {
-    'use strict';
-    var TiledMap = (function () {
-        /**
-         * A 2d game map, generated in Tiled.
-         *
-         * @constructor
-         */
-        function TiledMap(data, args) {
-            this.rowCount = data.height;
-            this.colCount = data.width;
-            this.tileWidth = args.tileWidth;
-            this.tileHeight = args.tileHeight;
-            this.screenWidth = args.screenWidth;
-            this.screenHeight = args.screenHeight;
-            this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
-            this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-            var imagePathModifier = args ? args.imagePathModifier : null;
-            this.layers = [];
-            this.layersByName = {};
-            this.objectGroups = [];
-            for (var i = 0; i < data.layers.length; i++) {
-                this.addLayer(data.layers[i]);
-            }
-            this.tilesets = [];
-            if (data.tilesets && data.tilesets.length) {
-                for (i = 0; i < data.tilesets.length; i++) {
-                    this.tilesets.push(new tiled.TiledTileset(data.tilesets[i], imagePathModifier));
-                }
-            }
-            this.properties = data.properties;
-            this.version = data.version;
-            this.orientation = data.orientation;
-        }
-        /**
-         * Adds a layer to this map.  This method is called internally by the library
-         * and the programmer typically does not need to call it.
-         *
-         * @param {object} layerData The raw layer data.
-         * @method
-         */
-        TiledMap.prototype.addLayer = function (layerData) {
-            var layer = new tiled.TiledLayer(this, layerData);
-            this.layers.push(layer);
-            this.layersByName[layer.name] = layer;
-            if (layer.isObjectGroup()) {
-                this.objectGroups.push(layer);
-            }
-        };
-        TiledMap.prototype.draw = function (ctx, centerRow, centerCol, dx, dy) {
-            if (dx === void 0) { dx = 0; }
-            if (dy === void 0) { dy = 0; }
-            var colCount = this.colCount;
-            var rowCount = this.rowCount;
-            var screenCols = this.screenRows;
-            var screenRows = this.screenCols;
-            var tileW = this.tileWidth;
-            var tileH = this.tileHeight;
-            var tileSize = tileW; // Assumes square tiles (!).  Fix me one day
-            var screenWidth = this.screenWidth;
-            var screenHeight = this.screenHeight;
-            var col0 = centerCol - Math.floor(screenCols / 2);
-            if (col0 < 0) {
-                col0 += colCount;
-            }
-            var row0 = centerRow - Math.floor(screenRows / 2);
-            if (row0 < 0) {
-                row0 += rowCount;
-            }
-            // Center point of screen, in map x,y coordinates.
-            var cx = centerCol * tileW + dx + tileW / 2;
-            var cy = centerRow * tileH + dy + tileH / 2;
-            // Top-left of screen, in map x,y coordinates.
-            var x0 = cx - screenWidth / 2;
-            var y0 = cy - screenHeight / 2;
-            var topLeftCol = Math.floor(x0 / tileW);
-            if ((x0 % tileSize) < 0) {
-                topLeftCol--;
-            }
-            var tileEdgeX = topLeftCol * tileW;
-            var topLeftRow = Math.floor(y0 / tileH);
-            if ((y0 % tileSize) < 0) {
-                topLeftRow--;
-            }
-            var tileEdgeY = topLeftRow * tileH; // getTileEdge(topLeftY);
-            // The view coordinates at which to start painting.
-            var startX = tileEdgeX - x0;
-            var _x = startX;
-            var startY = tileEdgeY - y0;
-            var _y = startY;
-            if (topLeftCol < 0) {
-                topLeftCol += colCount;
-            }
-            if (topLeftRow < 0) {
-                topLeftRow += rowCount;
-            }
-            // Paint until the end of the screen
-            var row = topLeftRow;
-            var layerCount = this.getLayerCount();
-            var tileCount = 0;
-            while (_y < screenHeight) {
-                for (var l = 0; l < layerCount; l++) {
-                    var col = topLeftCol;
-                    _x = startX;
-                    var layer = this.getLayerByIndex(l);
-                    if (layer.visible) {
-                        var prevOpacity;
-                        if (layer.opacity < 1) {
-                            prevOpacity = ctx.globalAlpha;
-                            ctx.globalAlpha = prevOpacity * layer.opacity;
-                        }
-                        while (_x < screenWidth) {
-                            var value = layer.getData(row % rowCount, col % colCount);
-                            this.drawTile(ctx, _x, _y, value, layer);
-                            tileCount++;
-                            _x += tileW;
-                            col++;
-                        }
-                        if (layer.opacity < 1) {
-                            ctx.globalAlpha = prevOpacity;
-                        }
-                    }
-                }
-                _y += tileH;
-                row++;
-            }
-            //console.log('tileCount === ' + tileCount);
-        };
-        /**
-         * Returns a layer by name.
-         *
-         * @param {string} name The name of the layer.
-         * @return {tiled.TiledLayer} The layer, or null if there is no layer with
-         *         that name.
-         * @method
-         */
-        TiledMap.prototype.getLayer = function (name) {
-            return this.layersByName[name];
-        };
-        /**
-         * Returns a layer by index.
-         *
-         * @param {int} index The index of the layer.
-         * @return {tiled.TiledLayer} The layer, or null if there is no layer at
-         *         that index.
-         * @method
-         */
-        TiledMap.prototype.getLayerByIndex = function (index) {
-            return this.layers[index];
-        };
-        /**
-         * Returns the number of layers in this map.
-         *
-         * @return {int} The number of layers in this map.
-         */
-        TiledMap.prototype.getLayerCount = function () {
-            return this.layers.length;
-        };
-        TiledMap.prototype._getImageForGid = function (gid) {
-            var tilesetCount = this.tilesets.length;
-            for (var i = 0; i < tilesetCount; i++) {
-                if (this.tilesets[i].firstgid > gid) {
-                    return this.tilesets[i - 1];
-                }
-            }
-            return this.tilesets[tilesetCount - 1];
-        };
-        TiledMap.prototype.drawTile = function (ctx, x, y, value, layer) {
-            if (value <= 0) {
-                return;
-            }
-            var tileset = this._getImageForGid(value);
-            if (!tileset) {
-                console.log('null tileset for: ' + value + ' (layer ' + layer.name + ')');
-                return;
-            }
-            value -= tileset.firstgid;
-            if (value < 0) {
-                return;
-            }
-            var game = window.game;
-            var img = game.assets.getTmxTilesetImage(tileset);
-            var tileW = this.tileWidth;
-            var sw = tileW + tileset.spacing;
-            var tileH = this.tileHeight;
-            var sh = tileH + tileset.spacing;
-            // TODO: "+ 1" is based on extra space at end of image.  Should be configured/calculated
-            var imgColCount = Math.floor(img.width / sw);
-            if (tileset.spacing > 0 && ((img.width % sw) === tileW)) {
-                imgColCount++;
-            }
-            var imgY = Math.floor(value / imgColCount) * sh;
-            var imgX = (value % imgColCount) * sw;
-            //ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
-            img.drawScaled2(ctx, imgX, imgY, tileW, tileH, x, y, tileW, tileH);
-        };
-        TiledMap.prototype.setScale = function (scale) {
-            this.tileWidth *= scale;
-            this.tileHeight *= scale;
-            this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
-            this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-            var tilesetCount = this.tilesets.length;
-            for (var i = 0; i < tilesetCount; i++) {
-                return this.tilesets[i].setScale(scale);
-            }
-        };
-        /**
-         * Returns the pixel width of this map.
-         *
-         * @return {int} The pixel width of this map.
-         * @method
-         */
-        TiledMap.prototype.getPixelWidth = function () {
-            return this.colCount * this.tileWidth;
-        };
-        /**
-         * Returns the pixel height of this map.
-         *
-         * @return {int} The pixel height of this map.
-         * @method
-         */
-        TiledMap.prototype.getPixelHeight = function () {
-            return this.rowCount * this.tileHeight;
-        };
-        /**
-         * Removes a layer from this map.
-         * @param {string} layerName The name of the layer to remove.
-         * @return {boolean} Whether a layer by that name was found.
-         * @method
-         */
-        TiledMap.prototype.removeLayer = function (layerName) {
-            for (var i = 0; i < this.layers.length; i++) {
-                if (this.layers[i].name === layerName) {
-                    this.layers.splice(i, 1);
-                    delete this.layersByName[layerName];
-                    for (var j = 0; j < this.objectGroups.length; j++) {
-                        if (this.objectGroups[j].name === layerName) {
-                            delete this.objectGroups[j];
-                        }
-                    }
-                }
-                return true;
-            }
-            return false;
-        };
-        return TiledMap;
-    })();
-    tiled.TiledMap = TiledMap;
-})(tiled || (tiled = {}));
-var tiled;
-(function (tiled) {
-    'use strict';
-    var TiledObject = (function () {
-        function TiledObject(data) {
-            gtp.Utils.mixin(data, this);
-            this.properties = this.properties || {};
-            this.gid = this.gid || -1;
-            // TODO: Remove
-            var game = window.game;
-            this.x *= game._scale;
-            this.y *= game._scale;
-            this.width *= game._scale;
-            this.height *= game._scale;
-        }
-        TiledObject.prototype.intersects = function (ox, oy, ow, oh) {
-            'use strict';
-            //console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh +
-            //      ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
-            var tw = this.width;
-            var th = this.height;
-            var rw = ow;
-            var rh = oh;
-            if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
-                return false;
-            }
-            var tx = this.x;
-            var ty = this.y;
-            var rx = ox;
-            var ry = oy;
-            rw += rx;
-            rh += ry;
-            tw += tx;
-            th += ty;
-            //      overflow || intersect
-            return ((rw < rx || rw > tx) &&
-                (rh < ry || rh > ty) &&
-                (tw < tx || tw > rx) &&
-                (th < ty || th > ry));
-        };
-        return TiledObject;
-    })();
-    tiled.TiledObject = TiledObject;
-})(tiled || (tiled = {}));
-var tiled;
-(function (tiled) {
-    'use strict';
-    var TiledTileset = (function () {
-        function TiledTileset(data, imagePathModifier) {
-            this.firstgid = data.firstgid;
-            this.image = data.image;
-            if (imagePathModifier) {
-                this.image = imagePathModifier(this.image);
-            }
-            this.imageWidth = data.imagewidth;
-            this.imageHeight = data.imageheight;
-            this.margin = data.margin;
-            this.name = data.name;
-            this.properties = data.properties; // TODO
-            this.spacing = data.spacing;
-            this.tileWidth = data.tilewidth;
-            this.tileHeight = data.tileheight;
-        }
-        TiledTileset.prototype.setScale = function (scale) {
-            this.imageWidth *= scale;
-            this.imageHeight *= scale;
-            this.tileWidth *= scale;
-            this.tileHeight *= scale;
-            this.margin *= scale;
-            this.spacing *= scale;
-        };
-        return TiledTileset;
-    })();
-    tiled.TiledTileset = TiledTileset;
-})(tiled || (tiled = {}));
 
 //# sourceMappingURL=gtp-all.js.map

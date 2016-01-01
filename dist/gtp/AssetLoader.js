@@ -68,8 +68,8 @@ var gtp;
         };
         /**
          * Starts loading a canvas resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param imageSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} imageSrc The URL of the resource.
          */
         AssetLoader.prototype.addCanvas = function (id, imageSrc) {
             if (this._assetRoot) {
@@ -92,10 +92,14 @@ var gtp;
         };
         /**
          * Starts loading an image resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param imageSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} imageSrc The URL of the resource.
+         * @param {boolean} firstPixelTranslucent If truthy, the pixel at (0, 0)
+         *        is made translucent, along with all other pixels of the same
+         *        color.  The default value is <code>false</code>.
          */
-        AssetLoader.prototype.addImage = function (id, imageSrc) {
+        AssetLoader.prototype.addImage = function (id, imageSrc, firstPixelTranslucent) {
+            if (firstPixelTranslucent === void 0) { firstPixelTranslucent = false; }
             if (this._assetRoot) {
                 imageSrc = this._assetRoot + imageSrc;
             }
@@ -111,14 +115,17 @@ var gtp;
             image.addEventListener('load', function () {
                 var canvas = gtp.ImageUtils.resize(image, self._scale);
                 var gtpImage = new gtp.Image(canvas);
+                if (firstPixelTranslucent) {
+                    gtpImage.makeColorTranslucent(0, 0);
+                }
                 self._completed(id, gtpImage);
             });
             image.src = imageSrc;
         };
         /**
          * Starts loading a sound resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param soundSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} soundSrc The URL of the resource.
          * @param {number} [loopStart=0] Where to start, in seconds, if/when this
          *        sound loops (which is typical when using a sound as music).
          * @param {boolean} [loopByDefaultIfMusic=true] Whether this sound should
@@ -155,8 +162,8 @@ var gtp;
         };
         /**
          * Starts loading a sprite sheet resource.
-         * @param id {string} The ID to use when retrieving this resource.
-         * @param imageSrc {string} The URL of the resource.
+         * @param {string} id The ID to use when retrieving this resource.
+         * @param {string} imageSrc The URL of the resource.
          * @param {int} cellW The width of a cell.
          * @param {int} cellH The height of a cell.
          * @param {int} spacingX The horizontal spacing between cells.  Assumed to
@@ -220,14 +227,14 @@ var gtp;
          * application.
          *
          * @param {tiled.TiledTileset} tileset The tile set.
-         * @return The canvas.
+         * @return {gtp.Image} The tileset image.
          */
         AssetLoader.prototype.getTmxTilesetImage = function (tileset) {
             return this.responses['_tilesetImage_' + tileset.name];
         };
         /**
          * Retrieves a resource by ID.
-         * @param res {string} The ID of the resource.
+         * @param {string} res The ID of the resource.
          * @return The resource, or null if not found.
          */
         AssetLoader.prototype.get = function (res) {
@@ -245,8 +252,8 @@ var gtp;
         };
         /**
          * Adds a resource.
-         * @param res {string} The ID for the resource.
-         * @param value {any} The resource value.
+         * @param {string} res The ID for the resource.
+         * @param {any} value The resource value.
          */
         AssetLoader.prototype.set = function (res, value) {
             this.responses[res] = value;
