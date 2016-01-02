@@ -5,6 +5,11 @@ declare module gtp {
      */
     class ImageUtils {
         /**
+         * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and
+         * y-coordinates are rounded to the nearest integer when rendering images.
+         */
+        static allowSubpixelImageRendering: boolean;
+        /**
          * Takes an img/canvas and a scaling factor and returns the scaled image.
          * @method
          */

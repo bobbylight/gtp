@@ -45,6 +45,10 @@ var gtp;
          * @param {int} y The y-coordinate at which to draw.
          */
         Image.prototype.draw = function (ctx, x, y) {
+            if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+                x = Math.round(x);
+                y = Math.round(y);
+            }
             ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height, x, y, this._width, this._height);
         };
         /**
@@ -59,6 +63,10 @@ var gtp;
          *              drawing.
          */
         Image.prototype.drawScaled = function (ctx, x, y, w, h) {
+            if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+                x = Math.round(x);
+                y = Math.round(y);
+            }
             ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height, x, y, w, h);
         };
         /**
@@ -77,6 +85,12 @@ var gtp;
          *              drawing.
          */
         Image.prototype.drawScaled2 = function (ctx, srcX, srcY, srcW, srcH, destX, destY, destW, destH) {
+            if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+                srcX = Math.round(srcX);
+                srcY = Math.round(srcY);
+                destX = Math.round(destX);
+                destY = Math.round(destY);
+            }
             srcX = this.x + srcX;
             srcY = this.y + srcY;
             ctx.drawImage(this._canvas, srcX, srcY, srcW, srcH, destX, destY, destW, destH);

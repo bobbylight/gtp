@@ -1202,6 +1202,10 @@ var gtp;
          * @param {int} y The y-coordinate at which to draw.
          */
         Image.prototype.draw = function (ctx, x, y) {
+            if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+                x = Math.round(x);
+                y = Math.round(y);
+            }
             ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height, x, y, this._width, this._height);
         };
         /**
@@ -1216,6 +1220,10 @@ var gtp;
          *              drawing.
          */
         Image.prototype.drawScaled = function (ctx, x, y, w, h) {
+            if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+                x = Math.round(x);
+                y = Math.round(y);
+            }
             ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height, x, y, w, h);
         };
         /**
@@ -1234,6 +1242,12 @@ var gtp;
          *              drawing.
          */
         Image.prototype.drawScaled2 = function (ctx, srcX, srcY, srcW, srcH, destX, destY, destW, destH) {
+            if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+                srcX = Math.round(srcX);
+                srcY = Math.round(srcY);
+                destX = Math.round(destX);
+                destY = Math.round(destY);
+            }
             srcX = this.x + srcX;
             srcY = this.y + srcY;
             ctx.drawImage(this._canvas, srcX, srcY, srcW, srcH, destX, destY, destW, destH);
@@ -1326,7 +1340,7 @@ var gtp;
          */
         ImageUtils.resize = function (img, scale) {
             // The original image is drawn into an offscreen canvas of the same size
-            // and copied, pixel by pixel into another offscreen canvas with the 
+            // and copied, pixel by pixel into another offscreen canvas with the
             // new size.
             if (scale === void 0) { scale = 1; }
             var orig, origCtx;
@@ -1428,6 +1442,11 @@ var gtp;
             ctx.putImageData(pixels, 0, 0);
             return canvas;
         };
+        /**
+         * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and
+         * y-coordinates are rounded to the nearest integer when rendering images.
+         */
+        ImageUtils.allowSubpixelImageRendering = false;
         return ImageUtils;
     })();
     gtp.ImageUtils = ImageUtils;

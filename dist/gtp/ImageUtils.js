@@ -14,7 +14,7 @@ var gtp;
          */
         ImageUtils.resize = function (img, scale) {
             // The original image is drawn into an offscreen canvas of the same size
-            // and copied, pixel by pixel into another offscreen canvas with the 
+            // and copied, pixel by pixel into another offscreen canvas with the
             // new size.
             if (scale === void 0) { scale = 1; }
             var orig, origCtx;
@@ -116,6 +116,11 @@ var gtp;
             ctx.putImageData(pixels, 0, 0);
             return canvas;
         };
+        /**
+         * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and
+         * y-coordinates are rounded to the nearest integer when rendering images.
+         */
+        ImageUtils.allowSubpixelImageRendering = false;
         return ImageUtils;
     })();
     gtp.ImageUtils = ImageUtils;

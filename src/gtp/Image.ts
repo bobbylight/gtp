@@ -45,22 +45,26 @@ module gtp {
 				this._canvas = canvas2;
 			}
 		}
-   
+
 		/**
 		 * Draws this image.
-		 * 
+		 *
 		 * @param {CanvasRenderingContext2D} ctx A canvas' graphics context.
 		 * @param {int} x The x-coordinate at which to draw.
 		 * @param {int} y The y-coordinate at which to draw.
 		 */
 		draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
+			if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+				x = Math.round(x);
+				y = Math.round(y);
+			}
 			ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height,
 				x, y, this._width, this._height);
 		}
-   
+
 		/**
 		 * Draws this image.
-		 * 
+		 *
 		 * @param {CanvasRenderingContext2D} ctx A canvas' graphics context.
 		 * @param {int} x The x-coordinate at which to draw.
 		 * @param {int} y The y-coordinate at which to draw.
@@ -70,13 +74,17 @@ module gtp {
 		 *              drawing.
 		 */
 		drawScaled(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+			if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+				x = Math.round(x);
+				y = Math.round(y);
+			}
 			ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height,
 				x, y, w, h);
 		}
-   
+
 		/**
 		 * Draws this image.
-		 * 
+		 *
 		 * @param {CanvasRenderingContext2D} ctx A canvas' graphics context.
 		 * @param {int} srcX The x-coordinate at which to draw.
 		 * @param {int} srcY The y-coordinate at which to draw.
@@ -89,18 +97,27 @@ module gtp {
 		 * @param {int} destH The height to (possibly) stretch the image to when
 		 *              drawing.
 		 */
-		drawScaled2(ctx: CanvasRenderingContext2D, srcX: number, srcY: number, srcW: number, srcH: number,
-			destX: number, destY: number, destW: number, destH: number) {
+		drawScaled2(ctx: CanvasRenderingContext2D, srcX: number, srcY: number,
+				srcW: number, srcH: number,
+				destX: number, destY: number, destW: number, destH: number) {
+
+			if (!gtp.ImageUtils.allowSubpixelImageRendering) {
+				srcX = Math.round(srcX);
+				srcY = Math.round(srcY);
+				destX = Math.round(destX);
+				destY = Math.round(destY);
+			}
 			srcX = this.x + srcX;
 			srcY = this.y + srcY;
+
 			ctx.drawImage(this._canvas, srcX, srcY, srcW, srcH,
 				destX, destY, destW, destH);
 		}
-   
+
 		/**
 		 * Converts a color of a particular type to completely transparent in this
 		 * image.
-		 * 
+		 *
 		 * @param {int} x The x-coordinate of the pixel whose color to change.  0 will
 		 *        be used if this parameter is undefined.
 		 * @param {int} y The y-coordinate of the pixel whose color to change.  0 will
@@ -111,11 +128,11 @@ module gtp {
 		makeColorTranslucent(x: number = 0, y: number = 0) {
 			gtp.ImageUtils.makeColorTranslucent(this._canvas, x, y);
 		}
-   
+
 		get width(): number {
 			return this._width;
 		}
-   
+
 		get height(): number {
 			return this._height;
 		}

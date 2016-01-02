@@ -7,16 +7,22 @@ module gtp {
 	 */
 	export class ImageUtils {
 
-		/** 
+		/**
+		 * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and
+		 * y-coordinates are rounded to the nearest integer when rendering images.
+		 */
+		static allowSubpixelImageRendering: boolean = false;
+
+		/**
 		 * Takes an img/canvas and a scaling factor and returns the scaled image.
 		 * @method
 		 */
 		static resize(img: HTMLImageElement|HTMLCanvasElement, scale: number = 1): HTMLCanvasElement {
 
 			// The original image is drawn into an offscreen canvas of the same size
-			// and copied, pixel by pixel into another offscreen canvas with the 
+			// and copied, pixel by pixel into another offscreen canvas with the
 			// new size.
-   
+
 			var orig: HTMLCanvasElement,
 				origCtx: CanvasRenderingContext2D;
 
@@ -94,7 +100,7 @@ module gtp {
 
 		/**
 		 * Converts a color of a particular type to completely transparent in a canvas.
-		 * 
+		 *
 		 * @param {Canvas} canvas The canvas to operate on.
 		 * @param {int} x The x-coordinate of the pixel whose color to change.  0 will
 		 *        be used if this parameter is undefined.
