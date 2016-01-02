@@ -190,7 +190,7 @@ module gtp {
 				this.state.leaving(this);
 			}
 			this.state = state;
-			this.state.init();
+			this.state.enter(this);
 		}
 
 		setStatusMessage(message: string) {

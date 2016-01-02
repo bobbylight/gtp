@@ -70,6 +70,18 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A base class for game states.  Basically just an interface with callbacks
+						for updating and rendering, along with other lifecycle-ish methods.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>class</dt>
+						<dd></dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -102,7 +114,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.state.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.state.html#enter" class="tsd-kind-icon">enter</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.state.html#leaving" class="tsd-kind-icon">leaving</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.state.html#render" class="tsd-kind-icon">render</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.state.html#update" class="tsd-kind-icon">update</a></li>
@@ -123,7 +135,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in gtp-all.d.ts:956</li>
+									<li>Defined in gtp-all.d.ts:964</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -132,6 +144,8 @@
 									for updating and rendering, along with other lifecycle-ish methods.</p>
 								</div>
 								<dl class="tsd-comment-tags">
+									<dt>class</dt>
+									<dd></dd>
 									<dt>constructor</dt>
 									<dd></dd>
 								</dl>
@@ -140,6 +154,11 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> args: <a href="gtp.game.html" class="tsd-signature-type">Game</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/gtp.basestateargs.html" class="tsd-signature-type">BaseStateArgs</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Arguments to the game state.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="gtp.state.html" class="tsd-signature-type">State</a></h4>
@@ -155,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">game<span class="tsd-signature-symbol">:</span> <a href="gtp.game.html" class="tsd-signature-type">Game</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in gtp-all.d.ts:956</li>
+							<li>Defined in gtp-all.d.ts:964</li>
 						</ul>
 					</aside>
 				</section>
@@ -163,16 +182,16 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-					<a name="init" class="tsd-anchor"></a>
-					<h3>init</h3>
+					<a name="enter" class="tsd-anchor"></a>
+					<h3>enter</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">enter<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="gtp.game.html" class="tsd-signature-type">Game</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in gtp-all.d.ts:968</li>
+									<li>Defined in gtp-all.d.ts:979</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -180,7 +199,21 @@
 									<p>Called right before a state starts.  Subclasses can do any needed
 									initialization here.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p>leaving</p>
+									</dd>
+								</dl>
 							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>game: <a href="gtp.game.html" class="tsd-signature-type">Game</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The game being played.</p>
+									</div>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -189,24 +222,32 @@
 					<a name="leaving" class="tsd-anchor"></a>
 					<h3>leaving</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">leaving<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">leaving<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="gtp.game.html" class="tsd-signature-type">Game</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in gtp-all.d.ts:972</li>
+									<li>Defined in gtp-all.d.ts:985</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Called when this state is being left for another one.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p>enter</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>game: <span class="tsd-signature-type">any</span></h5>
+									<h5>game: <a href="gtp.game.html" class="tsd-signature-type">Game</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The game being played.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -223,7 +264,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in gtp-all.d.ts:985</li>
+									<li>Defined in gtp-all.d.ts:998</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -254,7 +295,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in gtp-all.d.ts:979</li>
+									<li>Defined in gtp-all.d.ts:992</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -360,7 +401,7 @@
 								<a href="gtp.state.html#game" class="tsd-kind-icon">game</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-								<a href="gtp.state.html#init" class="tsd-kind-icon">init</a>
+								<a href="gtp.state.html#enter" class="tsd-kind-icon">enter</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 								<a href="gtp.state.html#leaving" class="tsd-kind-icon">leaving</a>

@@ -155,7 +155,7 @@ var gtp;
                 this.state.leaving(this);
             }
             this.state = state;
-            this.state.init();
+            this.state.enter(this);
         };
         Game.prototype.setStatusMessage = function (message) {
             this._statusMessage = message;

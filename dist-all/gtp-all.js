@@ -1094,7 +1094,7 @@ var gtp;
                 this.state.leaving(this);
             }
             this.state = state;
-            this.state.init();
+            this.state.enter(this);
         };
         Game.prototype.setStatusMessage = function (message) {
             this._statusMessage = message;
@@ -1991,12 +1991,18 @@ var gtp;
 var gtp;
 (function (gtp) {
     'use strict';
+    /**
+     * A base class for game states.  Basically just an interface with callbacks
+     * for updating and rendering, along with other lifecycle-ish methods.
+     * @class
+     */
     var State = (function () {
         /**
          * A base class for game states.  Basically just an interface with callbacks
          * for updating and rendering, along with other lifecycle-ish methods.
-         *
+         * @class
          * @constructor
+         * @param args Arguments to the game state.
          */
         function State(args) {
             if (args instanceof gtp.Game) {
@@ -2012,12 +2018,16 @@ var gtp;
         /**
          * Called right before a state starts.  Subclasses can do any needed
          * initialization here.
+         * @param {Game} game The game being played.
+         * @see leaving
          */
-        State.prototype.init = function () {
+        State.prototype.enter = function (game) {
             // Subclasses can override
         };
         /**
          * Called when this state is being left for another one.
+         * @param {Game} game The game being played.
+         * @see enter
          */
         State.prototype.leaving = function (game) {
         };
