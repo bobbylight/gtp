@@ -20,8 +20,8 @@ module gtp {
 		fpsColor: string;
 		statusMessageRGB: string;
 		private _statusMessageColor: string;
-		showFps: boolean = true;
-		frames: number = 0;
+		showFps: boolean;
+		frames: number;
 		private _fpsMsg: string;
 		private _statusMessage: string;
 		private _statusMessageAlpha: number;
@@ -53,7 +53,7 @@ module gtp {
 			this.fpsColor = 'rgb(255,255,255)';
 			this.statusMessageRGB = '255,255,255';
 			this._statusMessageColor = null;
-			this.showFps = true;
+			this.showFps = false;
 			this.frames = 0;
 			this._fpsMsg = this._targetFps + ' fps';
 			this._statusMessage = null;

@@ -948,8 +948,6 @@ var gtp;
     var Game = (function () {
         function Game(args) {
             if (args === void 0) { args = {}; }
-            this.showFps = true;
-            this.frames = 0;
             gtp.Utils.initConsole();
             this._scale = args.scale || 1;
             this.canvas = gtp.ImageUtils.createCanvas(args.width, args.height, args.parent);
@@ -966,7 +964,7 @@ var gtp;
             this.fpsColor = 'rgb(255,255,255)';
             this.statusMessageRGB = '255,255,255';
             this._statusMessageColor = null;
-            this.showFps = true;
+            this.showFps = false;
             this.frames = 0;
             this._fpsMsg = this._targetFps + ' fps';
             this._statusMessage = null;
