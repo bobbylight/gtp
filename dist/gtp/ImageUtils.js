@@ -77,6 +77,7 @@ var gtp;
             ctx.oImageSmoothingEnabled = false;
             ctx.webkitImageSmoothingEnabled = false;
             ctx.msImageSmoothingEnabled = false;
+            /* TODO: set imageRendering CSS properties based on some gtp.Game config property */
         };
         /**
          * Converts a color of a particular type to completely transparent in a canvas.

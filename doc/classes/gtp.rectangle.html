@@ -100,6 +100,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.rectangle.html#containsrect" class="tsd-kind-icon">contains<wbr>Rect</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.rectangle.html#intersects" class="tsd-kind-icon">intersects</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="gtp.rectangle.html#set" class="tsd-kind-icon">set</a></li>
 							</ul>
@@ -217,6 +218,60 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+					<a name="containsrect" class="tsd-anchor"></a>
+					<h3>contains<wbr>Rect</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">contains<wbr>Rect<span class="tsd-signature-symbol">(</span>x2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="gtp.rectangle.html" class="tsd-signature-type">Rectangle</a>, y2<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, w2<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, h2<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in gtp-all.d.ts:894</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns whether one rectangle contains another.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x2: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="gtp.rectangle.html" class="tsd-signature-type">Rectangle</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Either a second rectangle, or the
+										x-coordinate of the second rectangle.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> y2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The y-coordinate of the second rectangle, if
+										specifying the dimensions as separate arguments.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> w2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The width of the second rectangle, if
+										specifying the dimensions as separate arguments.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> h2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The height of the second rectangle, if
+										specifying the dimensions as separate arguments.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<p>Whether this rectangle contains the specified rectangle.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 					<a name="intersects" class="tsd-anchor"></a>
 					<h3>intersects</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
@@ -226,7 +281,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in gtp-all.d.ts:888</li>
+									<li>Defined in gtp-all.d.ts:902</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -259,7 +314,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in gtp-all.d.ts:896</li>
+									<li>Defined in gtp-all.d.ts:910</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -380,6 +435,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-not-exported">
 								<a href="gtp.rectangle.html#y" class="tsd-kind-icon">y</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
+								<a href="gtp.rectangle.html#containsrect" class="tsd-kind-icon">contains<wbr>Rect</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
 								<a href="gtp.rectangle.html#intersects" class="tsd-kind-icon">intersects</a>

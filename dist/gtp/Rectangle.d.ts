@@ -15,6 +15,20 @@ declare module gtp {
          */
         constructor(x?: number, y?: number, w?: number, h?: number);
         /**
+         * Returns whether one rectangle contains another.
+         *
+         * @param {number|Rectangle} x2 Either a second rectangle, or the
+         *        x-coordinate of the second rectangle.
+         * @param {number} y2 The y-coordinate of the second rectangle, if
+         *        specifying the dimensions as separate arguments.
+         * @param {number} w2 The width of the second rectangle, if
+         *        specifying the dimensions as separate arguments.
+         * @param {number} h2 The height of the second rectangle, if
+         *        specifying the dimensions as separate arguments.
+         * @return Whether this rectangle contains the specified rectangle.
+         */
+        containsRect(x2: number | Rectangle, y2?: number, w2?: number, h2?: number): boolean;
+        /**
          * Returns whether this rectangle intersects another.
          *
          * @param {gtp.Rectangle} rect2 Another rectangle to compare against.

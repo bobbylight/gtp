@@ -1,7 +1,6 @@
-// TODO: jsdoc generation?  Or alternatives???
 (function() {
    'use strict';
-   
+
    var gulp = require('gulp');
    var debug = require('gulp-debug');
    var del = require('del');
@@ -22,7 +21,7 @@
    var tslint = require('gulp-tslint');
    var KarmaServer = require('karma').Server;
    var coveralls = require('gulp-coveralls');
-   
+
    gulp.task('clean', function() {
       return del([
          './dist',
@@ -31,7 +30,7 @@
          './coverage'
       ]);
    });
-   
+
    // Tasks to build a minified version of the demo (run "gulp demo-build")
    gulp.task('demo-usemin', function() {
       return gulp.src([ 'example/rpg/src/index.html' ])
@@ -54,7 +53,7 @@
       gulp.src('example/rpg/src/maps/*.json')
          .pipe(jsonMinify())
          .pipe(gulp.dest('example/rpg/dist/maps/'));
-      
+
       gulp.src('example/rpg/src/res/*')
          .pipe(gulp.dest('example/rpg/dist/res/'));
    });
@@ -62,7 +61,7 @@
       runSequence('tslint', 'clean', 'compile', 'compile-concat', 'demo-usemin',
                 'demo-cssmin', 'demo-copy-extra-files');
    });
-   
+
    gulp.task('tslint', function() {
     return gulp.src([ 'src/**/*.ts' ])
         .pipe(tslint())
@@ -91,7 +90,7 @@
          .pipe(sourcemaps.write('.'))
          .pipe(gulp.dest('dist-all/'));
    });
-   
+
    gulp.task('typedoc', function() {
       return gulp.src([ 'dist-all/gtp-all.d.ts' ])
          .pipe(typedoc({
@@ -104,7 +103,7 @@
             version: true
          }));
    });
-   
+
    // Our demo game is pure JS, so it still uses jshint
    gulp.task('jshint', function() {
       return gulp.src([ 'example/rpg/src/js/**/*.js' ])
@@ -112,7 +111,7 @@
          .pipe(jshint.reporter(stylish))
          .pipe(jshint.reporter('fail'));
    });
-   
+
    // Lints and builds the library and demo source when changes occur.
    gulp.task('watch', function() {
       // NOTE: typedoc does not seem to work in a watch - only runs the first
@@ -120,14 +119,14 @@
       gulp.watch('src/**/*.ts', [ 'tslint', 'compile', 'compile-concat' ]);
       gulp.watch('example/rpg/src/js/**/*.js', [ 'jshint' ]);
    });
-   
+
    gulp.task('test', function(done) {
       new KarmaServer({
          configFile: __dirname + '/karma.conf.js',
          singleRun: true
       }, done).start();
    });
-   
+
    // By default we only test on PhantomJS for CI builds
    gulp.task('test-all-browsers', function(done) {
       new KarmaServer({
@@ -136,7 +135,7 @@
          browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ]
       }, done).start();
    });
-   
+
    gulp.task('watch-test', function(done) {
       new KarmaServer({
          configFile: __dirname + '/karma.conf.js',
@@ -144,18 +143,18 @@
          browsers: [ 'PhantomJS' ]
       }, done).start();
    });
-   
+
    gulp.task('default', function() {
       // We build the minified demo game too, just so Travis CI does it as well
       runSequence('tslint', 'clean', 'compile', 'compile-concat', 'test',
             'typedoc', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
    });
-   
+
    gulp.task('upload-coverage-data', function() {
       gulp.src('coverage/**/lcov.info')
           .pipe(coveralls());
    });
-   
+
    gulp.task('ci-build', function() {
       // runSequence does not appear to work when calling another task that
       // has a runSequence in it!  It will run the second task after the
@@ -166,5 +165,5 @@
                   'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files',
                   'upload-coverage-data');
    });
-   
+
 })();

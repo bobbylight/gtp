@@ -65,7 +65,7 @@ module gtp {
 
 		static createCanvas(width: number, height: number, parentDiv?: HTMLElement|string) {
 
-			var canvas: HTMLCanvasElement = document.createElement('canvas');
+			const canvas: HTMLCanvasElement = document.createElement('canvas');
 			canvas.width = width;
 			canvas.height = height;
 			gtp.ImageUtils.prepCanvas(canvas);
@@ -90,12 +90,14 @@ module gtp {
 		static prepCanvas(canvas: HTMLCanvasElement) {
 			// Use "any" instead of "CanvasRenderingContext2D" since  the TypeScript definition
 			// files don't like the experimental *imageSmoothingEnabled properties
-			var ctx: any = canvas.getContext('2d');
+			const ctx: any = canvas.getContext('2d');
 			ctx.imageSmoothingEnabled = false;
 			ctx.mozImageSmoothingEnabled = false;
 			ctx.oImageSmoothingEnabled = false;
 			ctx.webkitImageSmoothingEnabled = false;
 			ctx.msImageSmoothingEnabled = false;
+
+			/* TODO: set imageRendering CSS properties based on some gtp.Game config property */
 		}
 
 		/**
