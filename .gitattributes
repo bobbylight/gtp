@@ -3,3 +3,5 @@ dist/gtp/* linguist-vendored
 dist/tiled/* linguist-vendored
 dist-all/* linguist-vendored
 doc/* linguist-vendored
+doc/assets/js/*.js linguist-vendored
+
