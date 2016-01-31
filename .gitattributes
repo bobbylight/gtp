@@ -1,6 +1,5 @@
 dist/* linguist-vendored
-dist/**/*.js linguist-vendored
 dist/gtp/* linguist-vendored
 dist/tiled/* linguist-vendored
 dist-all/* linguist-vendored
-
+doc/* linguist-vendored
