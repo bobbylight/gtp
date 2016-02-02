@@ -142,17 +142,17 @@ var gtp;
                 if (this._assetRoot) {
                     soundSrc = this._assetRoot + soundSrc;
                 }
-                var self = this;
+                var self_1 = this;
                 var xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     // TODO: Clean up this API
-                    self.audio.context.decodeAudioData(xhr.response, function (buffer) {
+                    self_1.audio.context.decodeAudioData(xhr.response, function (buffer) {
                         var sound = new gtp.Sound(id, buffer, loopStart || 0);
                         if (typeof loopByDefaultIfMusic !== 'undefined') {
                             sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
                         }
-                        self.audio.addSound(sound);
-                        self._completed(id, buffer);
+                        self_1.audio.addSound(sound);
+                        self_1._completed(id, buffer);
                     });
                 };
                 xhr.open('GET', soundSrc, true);

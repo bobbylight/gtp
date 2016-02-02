@@ -70,11 +70,11 @@ module gtp {
 				', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
 				', callback == ' + (this.callback !== null));
 
-			var that: AssetLoader = this;
-			var xhr: XMLHttpRequest = new XMLHttpRequest();
+			const that: AssetLoader = this;
+			const xhr: XMLHttpRequest = new XMLHttpRequest();
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
-					var response: string = xhr.responseText;
+					const response: string = xhr.responseText;
 					that._completed(id, response);
 				}
 			};
@@ -96,9 +96,9 @@ module gtp {
 				imageSrc = this._assetRoot + imageSrc;
 			}
 
-			var self: AssetLoader = this;
+			const self: AssetLoader = this;
 
-			var image: HTMLImageElement = document.createElement('img'); //new Image();
+			const  image: HTMLImageElement = document.createElement('img'); //new Image();
 			if (this._isAlreadyTracked(id)) {
 				return;
 			}
@@ -106,8 +106,8 @@ module gtp {
 			console.log('Adding: ' + id + ' => ' + imageSrc +
 				', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
 				', callback == ' + (this.callback !== null));
-			image.addEventListener('load', function() {
-				var canvas: HTMLCanvasElement = gtp.ImageUtils.resize(image, self._scale);
+			image.addEventListener('load', () => {
+				const canvas: HTMLCanvasElement = gtp.ImageUtils.resize(image, self._scale);
 				self._completed(id, canvas);
 			});
 
@@ -130,9 +130,9 @@ module gtp {
 				imageSrc = this._assetRoot + imageSrc;
 			}
 
-			var self: AssetLoader = this;
+			const self: AssetLoader = this;
 
-			var image: HTMLImageElement = document.createElement('img'); //new Image();
+			const image: HTMLImageElement = document.createElement('img'); //new Image();
 			if (this._isAlreadyTracked(id)) {
 				return;
 			}
@@ -140,9 +140,9 @@ module gtp {
 			console.log('Adding: ' + id + ' => ' + imageSrc +
 				', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
 				', callback == ' + (this.callback !== null));
-			image.addEventListener('load', function() {
-				var canvas: HTMLCanvasElement = gtp.ImageUtils.resize(image, self._scale);
-				var gtpImage: gtp.Image = new gtp.Image(canvas);
+			image.addEventListener('load', () => {
+				const canvas: HTMLCanvasElement = gtp.ImageUtils.resize(image, self._scale);
+				const gtpImage: gtp.Image = new gtp.Image(canvas);
 				if (firstPixelTranslucent) {
 					gtpImage.makeColorTranslucent(0, 0);
 				}
@@ -176,12 +176,12 @@ module gtp {
 					soundSrc = this._assetRoot + soundSrc;
 				}
 
-				var self: AssetLoader = this;
-				var xhr: XMLHttpRequest = new XMLHttpRequest();
+				const self: AssetLoader = this;
+				const xhr: XMLHttpRequest = new XMLHttpRequest();
 				xhr.onload = function() {
 					// TODO: Clean up this API
-					self.audio.context.decodeAudioData(xhr.response, function(buffer: AudioBuffer) {
-						var sound: gtp.Sound = new gtp.Sound(id, buffer, loopStart || 0);
+					self.audio.context.decodeAudioData(xhr.response, (buffer: AudioBuffer) => {
+						const sound: gtp.Sound = new gtp.Sound(id, buffer, loopStart || 0);
 						if (typeof loopByDefaultIfMusic !== 'undefined') {
 							sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
 						}
@@ -215,7 +215,7 @@ module gtp {
 				spacingX: number = 0, spacingY: number = 0,
 				firstPixelTranslucent: boolean = false) {
 
-			var self: AssetLoader = this;
+			const self: AssetLoader = this;
 			spacingX = spacingX || 0;
 			spacingY = spacingY || 0;
 			cellW *= self._scale;
@@ -227,7 +227,7 @@ module gtp {
 				imageSrc = this._assetRoot + imageSrc;
 			}
 
-			var image: HTMLImageElement = document.createElement('img'); //new Image();
+			const image: HTMLImageElement = document.createElement('img'); //new Image();
 			if (this._isAlreadyTracked(id)) {
 				return;
 			}
@@ -235,13 +235,13 @@ module gtp {
 			console.log('Adding: ' + id + ' => ' + imageSrc +
 				', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
 				', callback == ' + (this.callback !== null));
-			image.addEventListener('load', function() {
-				var canvas: HTMLCanvasElement = gtp.ImageUtils.resize(image, self._scale);
-				var gtpImage: gtp.Image = new gtp.Image(canvas);
+			image.addEventListener('load', () => {
+				const canvas: HTMLCanvasElement = gtp.ImageUtils.resize(image, self._scale);
+				const gtpImage: gtp.Image = new gtp.Image(canvas);
 				if (firstPixelTranslucent) {
 					gtpImage.makeColorTranslucent(0, 0);
 				}
-				var ss: SpriteSheet = new gtp.SpriteSheet(gtpImage, cellW, cellH, spacingX, spacingY);
+				const ss: SpriteSheet = new gtp.SpriteSheet(gtpImage, cellW, cellH, spacingX, spacingY);
 				self._completed(id, ss);
 			});
 
@@ -257,9 +257,9 @@ module gtp {
 		 */
 		addTmxMap(map: tiled.TiledMap) {
 			if (map.tilesets && map.tilesets.length) {
-				for (var i: number = 0; i < map.tilesets.length; i++) {
-					var tileset: tiled.TiledTileset = map.tilesets[i];
-					var id: string = '_tilesetImage_' + tileset.name;
+				for (let i: number = 0; i < map.tilesets.length; i++) {
+					const tileset: tiled.TiledTileset = map.tilesets[i];
+					const id: string = '_tilesetImage_' + tileset.name;
 					this.addImage(id, tileset.image);
 				}
 			}

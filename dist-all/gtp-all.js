@@ -142,17 +142,17 @@ var gtp;
                 if (this._assetRoot) {
                     soundSrc = this._assetRoot + soundSrc;
                 }
-                var self = this;
+                var self_1 = this;
                 var xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     // TODO: Clean up this API
-                    self.audio.context.decodeAudioData(xhr.response, function (buffer) {
+                    self_1.audio.context.decodeAudioData(xhr.response, function (buffer) {
                         var sound = new gtp.Sound(id, buffer, loopStart || 0);
                         if (typeof loopByDefaultIfMusic !== 'undefined') {
                             sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
                         }
-                        self.audio.addSound(sound);
-                        self._completed(id, buffer);
+                        self_1.audio.addSound(sound);
+                        self_1._completed(id, buffer);
                     });
                 };
                 xhr.open('GET', soundSrc, true);
@@ -330,6 +330,7 @@ var gtp;
             this._paused = false;
         }
         PlayingSound.prototype._initFromConfig = function () {
+            var _this = this;
             this.id = this._config.id;
             this.soundId = this._config.soundId;
             this.source = this._config.audioSystem.context.createBufferSource();
@@ -341,14 +342,14 @@ var gtp;
             else {
                 var nodes = this._config.connectTo;
                 nodes.forEach(function (node) {
-                    this.source.connect(node);
+                    _this.source.connect(node);
                 });
             }
             this._startOffset = this._config.startOffset || 0;
             if (!this._config.loop) {
-                var self_1 = this;
+                var self_2 = this;
                 var audioSystem = this._config.audioSystem;
-                this.source.onended = this._config.onendedGenerator(self_1.id);
+                this.source.onended = this._config.onendedGenerator(self_2.id);
             }
         };
         PlayingSound.prototype.pause = function () {

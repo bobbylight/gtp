@@ -44,7 +44,7 @@ module gtp {
 			}
 			else {
 				let nodes: AudioNode[] = <AudioNode[]>this._config.connectTo;
-				nodes.forEach(function(node: AudioNode) {
+				nodes.forEach((node: AudioNode) => {
 					this.source.connect(node);
 				});
 			}
@@ -204,7 +204,7 @@ module gtp {
 						this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
 					}
 					var that: AudioSystem = this;
-					setTimeout(function() {
+					setTimeout(() => {
 						that.playMusic(newMusicId);
 					}, this._musicFade * 1000);
 				}
@@ -239,8 +239,7 @@ module gtp {
 		 * @see resumeAll
 		 */
 		pauseAll() {
-
-			this._playingSounds.forEach(function(sound: PlayingSound) {
+			this._playingSounds.forEach((sound: PlayingSound) => {
 				sound.pause();
 			});
 		}

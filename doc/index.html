@@ -79,17 +79,20 @@
 				</ul>
 				<h2 id="hacking">Hacking</h2>
 				<p>First, install <code>gulp</code> using <code>npm</code> if you do not already have it:</p>
-				<pre><code>npm <span class="hljs-operator"><span class="hljs-keyword">install</span> -<span class="hljs-keyword">g</span> gulp</span>
-</code></pre><p>Next, check out the project and install all dependencies:</p>
-				<pre><code>git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://github.com/bobbylight/gtp.git
-cd gtp
+				<pre><code class="lang-bash">npm install -g gulp
+</code></pre>
+				<p>Next, check out the project and install all dependencies:</p>
+				<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/bobbylight/gtp.git
+<span class="hljs-built_in">cd</span> gtp
 npm install
-</code></pre><p>The TypeScript code lives in <code>src/</code>, and is transpiled into <code>dist/</code>.  A single
+</code></pre>
+				<p>The TypeScript code lives in <code>src/</code>, and is transpiled into <code>dist/</code>.  A single
 					file containing all transpiled content is also created in <code>dist-all/</code>.  An
 					example game (itself a WIP also) lives in <code>example/</code>.  Both the library and the
 				example game can be built via running gulp:</p>
-				<pre><code>gulp
-</code></pre><p>Tasks are also provided for individually running unit tests, linting, etc.</p>
+				<pre><code class="lang-bash">gulp
+</code></pre>
+				<p>Tasks are also provided for individually running unit tests, linting, etc.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">

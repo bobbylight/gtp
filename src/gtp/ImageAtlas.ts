@@ -19,7 +19,7 @@ module gtp {
 			var images: { [id: string]: gtp.Image } = {};
 			var self: ImageAtlas = this;
 
-			this._atlasInfo.images.forEach(function(imgInfo: any) {
+			this._atlasInfo.images.forEach((imgInfo: any) => {
 
 				var id: string = imgInfo.id;
 				var dim: any;
@@ -34,7 +34,7 @@ module gtp {
 					dim.push(imgInfo.x, imgInfo.y, imgInfo.w, imgInfo.h);
 				}
 
-				dim = dim.map(function(str: string) {
+				dim = dim.map((str: string) => {
 					return parseInt(str, 10) * 2;
 				});
 

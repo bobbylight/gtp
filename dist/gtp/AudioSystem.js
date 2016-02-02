@@ -10,6 +10,7 @@ var gtp;
             this._paused = false;
         }
         PlayingSound.prototype._initFromConfig = function () {
+            var _this = this;
             this.id = this._config.id;
             this.soundId = this._config.soundId;
             this.source = this._config.audioSystem.context.createBufferSource();
@@ -21,7 +22,7 @@ var gtp;
             else {
                 var nodes = this._config.connectTo;
                 nodes.forEach(function (node) {
-                    this.source.connect(node);
+                    _this.source.connect(node);
                 });
             }
             this._startOffset = this._config.startOffset || 0;
