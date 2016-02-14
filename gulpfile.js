@@ -113,7 +113,7 @@
    });
 
    // Lints and builds the library and demo source when changes occur.
-   gulp.task('watch', function() {
+   gulp.task('watch', [ 'tslint', 'compile', 'compile-concat', 'jshint' ], function() {
       // NOTE: typedoc does not seem to work in a watch - only runs the first
       // time; subsequent times it fails to generate sub-pages.
       gulp.watch('src/**/*.ts', [ 'tslint', 'compile', 'compile-concat' ]);

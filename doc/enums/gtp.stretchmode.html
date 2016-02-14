@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>BaseStateArgs | gtp</title>
+	<title>StretchMode | gtp</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,10 +60,10 @@
 					<a href="../modules/gtp.html">gtp</a>
 				</li>
 				<li>
-					<a href="gtp.basestateargs.html">BaseStateArgs</a>
+					<a href="gtp.stretchmode.html">StretchMode</a>
 				</li>
 			</ul>
-			<h1>Interface BaseStateArgs</h1>
+			<h1>Enumeration StretchMode</h1>
 		</div>
 	</div>
 </header>
@@ -73,42 +73,97 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Arguments to pass to a state&#39;s constructor.</p>
+						<p>An enum of available stretch modes for games.  While typically used in desktop games, this can be used
+							in the browser as well, to allow the game to resize as the window is resized, according to their personal
+							preferences.<p></p>
 					</div>
+					<p>Note that for stretch modes to work, it is assumed that CSS is set up for the application similar to the
+					following, to allow stretching:</p>
+					<pre>
+* {
+   margin: 0;
+   padding: 0;
+}
+html, body {
+   width: 100%;
+   height: 100%;
+}
+</pre>
+					<ul>
+						<li><code>STRETCH_NONE</code> renders the game in its &quot;native&quot; resolution.
+							<li><code>STRETCH_FILL</code> makes the canvas fill the parent document.
+								<li><code>STRETCH_PROPORTIONAL</code> stretches the canvas so it is as large as possible in the
+									parent document, while maintaining its original aspect ratio.
+					</ul>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">BaseStateArgs</span>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Properties</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="gtp.basestateargs.html#game" class="tsd-kind-icon">game</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="gtp.stretchmode.html#stretch_fill" class="tsd-kind-icon">STRETCH_<wbr>FILL</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="gtp.stretchmode.html#stretch_none" class="tsd-kind-icon">STRETCH_<wbr>NONE</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="gtp.stretchmode.html#stretch_proportional" class="tsd-kind-icon">STRETCH_<wbr>PROPORTIONAL</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="game" class="tsd-anchor"></a>
-					<h3>game</h3>
-					<div class="tsd-signature tsd-kind-icon">game<span class="tsd-signature-symbol">:</span> <a href="../classes/gtp.game.html" class="tsd-signature-type">Game</a></div>
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+					<a name="stretch_fill" class="tsd-anchor"></a>
+					<h3>STRETCH_<wbr>FILL</h3>
+					<div class="tsd-signature tsd-kind-icon">STRETCH_<wbr>FILL<span class="tsd-signature-symbol">:</span> </div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in gtp-all.d.ts:975</li>
+							<li>Defined in gtp-all.d.ts:1059</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The game&#39;s graphics are stretched to completely fill the window in
+							which they are being displayed.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+					<a name="stretch_none" class="tsd-anchor"></a>
+					<h3>STRETCH_<wbr>NONE</h3>
+					<div class="tsd-signature tsd-kind-icon">STRETCH_<wbr>NONE<span class="tsd-signature-symbol">:</span> </div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in gtp-all.d.ts:1054</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>No stretching is done.  If the area to paint in is smaller than
+								the game&#39;s native resolution, the area painted is clipped.  If the
+								area to paint is larger than the game&#39;s native resolution, then
+							the extra area is filled with some solid color (e.g. black or white).</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+					<a name="stretch_proportional" class="tsd-anchor"></a>
+					<h3>STRETCH_<wbr>PROPORTIONAL</h3>
+					<div class="tsd-signature tsd-kind-icon">STRETCH_<wbr>PROPORTIONAL<span class="tsd-signature-symbol">:</span> </div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in gtp-all.d.ts:1065</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The game&#39;s graphics are stretched so that they fill as much as possible
+								of the window in which they&#39;re being displayed, while maintaining their
+							proper aspect ratio.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -129,14 +184,29 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../enums/gtp.assettype.html" class="tsd-kind-icon">Asset<wbr>Type</a>
+						<a href="gtp.assettype.html" class="tsd-kind-icon">Asset<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../enums/gtp.keys.html" class="tsd-kind-icon">Keys</a>
+						<a href="gtp.keys.html" class="tsd-kind-icon">Keys</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../enums/gtp.stretchmode.html" class="tsd-kind-icon">Stretch<wbr>Mode</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
+						<a href="gtp.stretchmode.html" class="tsd-kind-icon">Stretch<wbr>Mode</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+								<a href="gtp.stretchmode.html#stretch_fill" class="tsd-kind-icon">STRETCH_<wbr>FILL</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+								<a href="gtp.stretchmode.html#stretch_none" class="tsd-kind-icon">STRETCH_<wbr>NONE</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+								<a href="gtp.stretchmode.html#stretch_proportional" class="tsd-kind-icon">STRETCH_<wbr>PROPORTIONAL</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../classes/gtp.assetloader.html" class="tsd-kind-icon">Asset<wbr>Loader</a>
 					</li>
@@ -200,20 +270,11 @@
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../classes/gtp._gametimer.html" class="tsd-kind-icon">_<wbr>Game<wbr>Timer</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="gtp.basestateargs.html" class="tsd-kind-icon">Base<wbr>State<wbr>Args</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="gtp.basestateargs.html#game" class="tsd-kind-icon">game</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="gtp.delayargs.html" class="tsd-kind-icon">Delay<wbr>Args</a>
+						<a href="../interfaces/gtp.basestateargs.html" class="tsd-kind-icon">Base<wbr>State<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../interfaces/gtp.delayargs.html" class="tsd-kind-icon">Delay<wbr>Args</a>
 					</li>
 				</ul>
 			</nav>
