@@ -123,7 +123,7 @@ var gtp;
             }
         };
         return Utils;
-    })();
+    }());
     gtp.Utils = Utils;
 })(gtp || (gtp = {}));
 

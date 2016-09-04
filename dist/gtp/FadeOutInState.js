@@ -70,7 +70,7 @@ var gtp;
             this.game.setState(this._enteringState);
         };
         return FadeOutInState;
-    })(gtp.State);
+    }(gtp.State));
     gtp.FadeOutInState = FadeOutInState;
 })(gtp || (gtp = {}));
 

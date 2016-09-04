@@ -25,7 +25,7 @@ module gtp {
 		 * @param args Arguments to the game state.
 		 */
 		constructor(args?: Game|BaseStateArgs) {
-			if (args instanceof Game) {
+			if (args && args instanceof Game) {
 				this.game = args;
 			}
 			else if (args) {

@@ -138,11 +138,11 @@ module gtp {
 		private _createPlayingSound(id: string, loop: boolean = false,
 				startOffset: number = 0, doneCallback: Function = null): PlayingSound {
 
-			let self: AudioSystem = this;
+			const self: AudioSystem = this;
 
-			let soundEffectId: number = this._createSoundEffectId();
+			const soundEffectId: number = this._createSoundEffectId();
 
-			let soundEffect: PlayingSound = new PlayingSound({
+			const soundEffect: PlayingSound = new PlayingSound({
 				audioSystem: this,
 				buffer: this._sounds[id].getBuffer(),
 				connectTo: this._volumeFaderGain,

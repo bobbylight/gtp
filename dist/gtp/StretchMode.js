@@ -99,7 +99,7 @@ var gtp;
             }
         };
         return CanvasResizer;
-    })();
+    }());
     gtp.CanvasResizer = CanvasResizer;
 })(gtp || (gtp = {}));
 

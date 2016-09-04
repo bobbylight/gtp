@@ -245,7 +245,7 @@ var tiled;
             return false;
         };
         return TiledMap;
-    })();
+    }());
     tiled.TiledMap = TiledMap;
 })(tiled || (tiled = {}));
 

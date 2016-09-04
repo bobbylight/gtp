@@ -28,7 +28,7 @@ describe('Timer', function() {
       timer.start('work');
       timer.endAndLog('work');
       
-      expect(debugContent).toMatch(/^DEBUG: work: \d+ ms/);
+      expect(debugContent).toMatch(/^DEBUG: work: [\d.]+ ms/);
    });
    
    it('logging, unknown key passed to endAndLog', function() {
@@ -50,7 +50,7 @@ describe('Timer', function() {
       timer.start('work');
       timer.endAndLog('work');
       
-      expect(debugContent).toMatch(/^TEST: work: \d+ ms/);
+      expect(debugContent).toMatch(/^TEST: work: [\d.]+ ms/);
    });
    
    it('setLogPrefix, resetting to default', function() {
@@ -61,14 +61,14 @@ describe('Timer', function() {
       timer.start('work');
       timer.endAndLog('work');
       
-      expect(debugContent).toMatch(/^TEST: work: \d+ ms/);
+      expect(debugContent).toMatch(/^TEST: work: [\d.]+ ms/);
       
       timer.setLogPrefix(); // Should reset
       
       timer.start('work2');
       timer.endAndLog('work2');
       
-      expect(debugContent).toMatch(/^TEST: work: \d+ ms\nDEBUG: work2: \d+ ms/);
+      expect(debugContent).toMatch(/^TEST: work: [\d.]+ ms\nDEBUG: work2: [\d.]+ ms/);
    });
 
 });

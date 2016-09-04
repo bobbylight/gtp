@@ -153,7 +153,7 @@ var gtp;
                 ']';
         };
         return Delay;
-    })();
+    }());
     gtp.Delay = Delay;
 })(gtp || (gtp = {}));
 

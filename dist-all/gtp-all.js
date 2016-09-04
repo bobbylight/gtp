@@ -1,3 +1,8 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var gtp;
 (function (gtp) {
     'use strict';
@@ -143,10 +148,10 @@ var gtp;
                     soundSrc = this._assetRoot + soundSrc;
                 }
                 var self_1 = this;
-                var xhr = new XMLHttpRequest();
-                xhr.onload = function () {
+                var xhr_1 = new XMLHttpRequest();
+                xhr_1.onload = function () {
                     // TODO: Clean up this API
-                    self_1.audio.context.decodeAudioData(xhr.response, function (buffer) {
+                    self_1.audio.context.decodeAudioData(xhr_1.response, function (buffer) {
                         var sound = new gtp.Sound(id, buffer, loopStart || 0);
                         if (typeof loopByDefaultIfMusic !== 'undefined') {
                             sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
@@ -155,9 +160,9 @@ var gtp;
                         self_1._completed(id, buffer);
                     });
                 };
-                xhr.open('GET', soundSrc, true);
-                xhr.responseType = 'arraybuffer';
-                xhr.send(null);
+                xhr_1.open('GET', soundSrc, true);
+                xhr_1.responseType = 'arraybuffer';
+                xhr_1.send(null);
             }
         };
         /**
@@ -304,7 +309,7 @@ var gtp;
             }
         };
         return AssetLoader;
-    })();
+    }());
     gtp.AssetLoader = AssetLoader;
 })(gtp || (gtp = {}));
 var gtp;
@@ -382,7 +387,7 @@ var gtp;
             this._playedTime = 0;
         };
         return PlayingSound;
-    })();
+    }());
     var AudioSystem = (function () {
         /**
          * A wrapper around web audio for games.
@@ -654,14 +659,9 @@ var gtp;
             configurable: true
         });
         return AudioSystem;
-    })();
+    }());
     gtp.AudioSystem = AudioSystem;
 })(gtp || (gtp = {}));
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var gtp;
 (function (gtp) {
     'use strict';
@@ -684,7 +684,7 @@ var gtp;
             }
         };
         return BitmapFont;
-    })(gtp.SpriteSheet);
+    }(gtp.SpriteSheet));
     gtp.BitmapFont = BitmapFont;
 })(gtp || (gtp = {}));
 var gtp;
@@ -707,7 +707,7 @@ var gtp;
             return window.location.search;
         };
         return BrowserUtil;
-    })();
+    }());
     gtp.BrowserUtil = BrowserUtil;
 })(gtp || (gtp = {}));
 var gtp;
@@ -865,7 +865,7 @@ var gtp;
                 ']';
         };
         return Delay;
-    })();
+    }());
     gtp.Delay = Delay;
 })(gtp || (gtp = {}));
 var gtp;
@@ -935,7 +935,7 @@ var gtp;
             this.game.setState(this._enteringState);
         };
         return FadeOutInState;
-    })(gtp.State);
+    }(gtp.State));
     gtp.FadeOutInState = FadeOutInState;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1153,7 +1153,7 @@ var gtp;
             this.state.update(this._interval);
         };
         return Game;
-    })();
+    }());
     gtp.Game = Game;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1284,7 +1284,7 @@ var gtp;
             configurable: true
         });
         return Image;
-    })();
+    }());
     gtp.Image = Image;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1322,7 +1322,7 @@ var gtp;
             return images;
         };
         return ImageAtlas;
-    })();
+    }());
     gtp.ImageAtlas = ImageAtlas;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1450,7 +1450,7 @@ var gtp;
          */
         ImageUtils.allowSubpixelImageRendering = false;
         return ImageUtils;
-    })();
+    }());
     gtp.ImageUtils = ImageUtils;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1636,7 +1636,7 @@ var gtp;
             return this.isKeyDown(gtp.Keys.KEY_UP_ARROW, clear);
         };
         return InputManager;
-    })();
+    }());
     gtp.InputManager = InputManager;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1718,7 +1718,7 @@ var gtp;
             return other != null && this.x === other.x && this.y === other.y;
         };
         return Point;
-    })();
+    }());
     gtp.Point = Point;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1839,7 +1839,7 @@ var gtp;
                 ']';
         };
         return Pool;
-    })();
+    }());
     gtp.Pool = Pool;
 })(gtp || (gtp = {}));
 var gtp;
@@ -1974,7 +1974,7 @@ var gtp;
             this.h = h;
         };
         return Rectangle;
-    })();
+    }());
     gtp.Rectangle = Rectangle;
 })(gtp || (gtp = {}));
 var gtp;
@@ -2007,7 +2007,7 @@ var gtp;
             this._loopStart = loopStart;
         };
         return Sound;
-    })();
+    }());
     gtp.Sound = Sound;
 })(gtp || (gtp = {}));
 var gtp;
@@ -2073,7 +2073,7 @@ var gtp;
             this.drawSprite(ctx, x, y, row, col);
         };
         return SpriteSheet;
-    })();
+    }());
     gtp.SpriteSheet = SpriteSheet;
 })(gtp || (gtp = {}));
 var gtp;
@@ -2093,7 +2093,7 @@ var gtp;
          * @param args Arguments to the game state.
          */
         function State(args) {
-            if (args instanceof gtp.Game) {
+            if (args && args instanceof gtp.Game) {
                 this.game = args;
             }
             else if (args) {
@@ -2137,7 +2137,7 @@ var gtp;
             // Subclasses should override
         };
         return State;
-    })();
+    }());
     gtp.State = State;
 })(gtp || (gtp = {}));
 var gtp;
@@ -2241,7 +2241,7 @@ var gtp;
             }
         };
         return CanvasResizer;
-    })();
+    }());
     gtp.CanvasResizer = CanvasResizer;
 })(gtp || (gtp = {}));
 var gtp;
@@ -2300,7 +2300,7 @@ var gtp;
             }
         };
         return Timer;
-    })();
+    }());
     gtp.Timer = Timer;
 })(gtp || (gtp = {}));
 var gtp;
@@ -2428,7 +2428,7 @@ var gtp;
             }
         };
         return Utils;
-    })();
+    }());
     gtp.Utils = Utils;
 })(gtp || (gtp = {}));
 var gtp;
@@ -2558,7 +2558,7 @@ var gtp;
             this._startShift = gtp.Utils.timestamp();
         };
         return _GameTimer;
-    })();
+    }());
     gtp._GameTimer = _GameTimer;
 })(gtp || (gtp = {}));
 var tiled;
@@ -2625,7 +2625,7 @@ var tiled;
             }
         };
         return TiledLayer;
-    })();
+    }());
     tiled.TiledLayer = TiledLayer;
 })(tiled || (tiled = {}));
 var tiled;
@@ -2875,7 +2875,7 @@ var tiled;
             return false;
         };
         return TiledMap;
-    })();
+    }());
     tiled.TiledMap = TiledMap;
 })(tiled || (tiled = {}));
 var tiled;
@@ -2919,7 +2919,7 @@ var tiled;
                 (th < ty || th > ry));
         };
         return TiledObject;
-    })();
+    }());
     tiled.TiledObject = TiledObject;
 })(tiled || (tiled = {}));
 var tiled;
@@ -2950,7 +2950,7 @@ var tiled;
             this.spacing *= scale;
         };
         return TiledTileset;
-    })();
+    }());
     tiled.TiledTileset = TiledTileset;
 })(tiled || (tiled = {}));
 

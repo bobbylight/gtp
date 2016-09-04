@@ -213,7 +213,7 @@ var gtp;
             this.state.update(this._interval);
         };
         return Game;
-    })();
+    }());
     gtp.Game = Game;
 })(gtp || (gtp = {}));
 

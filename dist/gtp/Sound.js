@@ -28,7 +28,7 @@ var gtp;
             this._loopStart = loopStart;
         };
         return Sound;
-    })();
+    }());
     gtp.Sound = Sound;
 })(gtp || (gtp = {}));
 

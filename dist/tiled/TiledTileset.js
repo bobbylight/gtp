@@ -26,7 +26,7 @@ var tiled;
             this.spacing *= scale;
         };
         return TiledTileset;
-    })();
+    }());
     tiled.TiledTileset = TiledTileset;
 })(tiled || (tiled = {}));
 

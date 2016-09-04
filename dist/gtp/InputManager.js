@@ -181,7 +181,7 @@ var gtp;
             return this.isKeyDown(gtp.Keys.KEY_UP_ARROW, clear);
         };
         return InputManager;
-    })();
+    }());
     gtp.InputManager = InputManager;
 })(gtp || (gtp = {}));
 

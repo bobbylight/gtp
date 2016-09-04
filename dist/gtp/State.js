@@ -15,7 +15,7 @@ var gtp;
          * @param args Arguments to the game state.
          */
         function State(args) {
-            if (args instanceof gtp.Game) {
+            if (args && args instanceof gtp.Game) {
                 this.game = args;
             }
             else if (args) {
@@ -59,7 +59,7 @@ var gtp;
             // Subclasses should override
         };
         return State;
-    })();
+    }());
     gtp.State = State;
 })(gtp || (gtp = {}));
 

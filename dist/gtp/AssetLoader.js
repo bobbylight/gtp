@@ -143,10 +143,10 @@ var gtp;
                     soundSrc = this._assetRoot + soundSrc;
                 }
                 var self_1 = this;
-                var xhr = new XMLHttpRequest();
-                xhr.onload = function () {
+                var xhr_1 = new XMLHttpRequest();
+                xhr_1.onload = function () {
                     // TODO: Clean up this API
-                    self_1.audio.context.decodeAudioData(xhr.response, function (buffer) {
+                    self_1.audio.context.decodeAudioData(xhr_1.response, function (buffer) {
                         var sound = new gtp.Sound(id, buffer, loopStart || 0);
                         if (typeof loopByDefaultIfMusic !== 'undefined') {
                             sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
@@ -155,9 +155,9 @@ var gtp;
                         self_1._completed(id, buffer);
                     });
                 };
-                xhr.open('GET', soundSrc, true);
-                xhr.responseType = 'arraybuffer';
-                xhr.send(null);
+                xhr_1.open('GET', soundSrc, true);
+                xhr_1.responseType = 'arraybuffer';
+                xhr_1.send(null);
             }
         };
         /**
@@ -304,7 +304,7 @@ var gtp;
             }
         };
         return AssetLoader;
-    })();
+    }());
     gtp.AssetLoader = AssetLoader;
 })(gtp || (gtp = {}));
 

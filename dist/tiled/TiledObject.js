@@ -39,7 +39,7 @@ var tiled;
                 (th < ty || th > ry));
         };
         return TiledObject;
-    })();
+    }());
     tiled.TiledObject = TiledObject;
 })(tiled || (tiled = {}));
 

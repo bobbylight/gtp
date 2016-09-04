@@ -126,7 +126,7 @@ var gtp;
             configurable: true
         });
         return Image;
-    })();
+    }());
     gtp.Image = Image;
 })(gtp || (gtp = {}));
 

@@ -54,7 +54,7 @@ var gtp;
             }
         };
         return Timer;
-    })();
+    }());
     gtp.Timer = Timer;
 })(gtp || (gtp = {}));
 

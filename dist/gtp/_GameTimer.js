@@ -125,7 +125,7 @@ var gtp;
             this._startShift = gtp.Utils.timestamp();
         };
         return _GameTimer;
-    })();
+    }());
     gtp._GameTimer = _GameTimer;
 })(gtp || (gtp = {}));
 

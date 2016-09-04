@@ -26,7 +26,7 @@ var gtp;
             return other != null && this.x === other.x && this.y === other.y;
         };
         return Point;
-    })();
+    }());
     gtp.Point = Point;
 })(gtp || (gtp = {}));
 

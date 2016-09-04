@@ -25,7 +25,7 @@ var gtp;
             }
         };
         return BitmapFont;
-    })(gtp.SpriteSheet);
+    }(gtp.SpriteSheet));
     gtp.BitmapFont = BitmapFont;
 })(gtp || (gtp = {}));
 

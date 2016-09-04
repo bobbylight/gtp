@@ -116,7 +116,7 @@ var gtp;
                 ']';
         };
         return Pool;
-    })();
+    }());
     gtp.Pool = Pool;
 })(gtp || (gtp = {}));
 

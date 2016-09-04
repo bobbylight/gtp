@@ -33,7 +33,7 @@ var gtp;
             return images;
         };
         return ImageAtlas;
-    })();
+    }());
     gtp.ImageAtlas = ImageAtlas;
 })(gtp || (gtp = {}));
 

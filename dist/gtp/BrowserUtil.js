@@ -18,7 +18,7 @@ var gtp;
             return window.location.search;
         };
         return BrowserUtil;
-    })();
+    }());
     gtp.BrowserUtil = BrowserUtil;
 })(gtp || (gtp = {}));
 

@@ -5,4 +5,5 @@ example/rpg/dist
 Thumbs.db
 coverage
 npm-debug.log
-
+.idea
+gtp.iml

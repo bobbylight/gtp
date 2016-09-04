@@ -123,7 +123,7 @@ var gtp;
          */
         ImageUtils.allowSubpixelImageRendering = false;
         return ImageUtils;
-    })();
+    }());
     gtp.ImageUtils = ImageUtils;
 })(gtp || (gtp = {}));
 

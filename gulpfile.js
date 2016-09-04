@@ -64,8 +64,8 @@
 
    gulp.task('tslint', function() {
     return gulp.src([ 'src/**/*.ts' ])
-        .pipe(tslint())
-        .pipe(tslint.report('prose'));
+        .pipe(tslint({ formatter: 'prose' }))
+        .pipe(tslint.report());
    });
    gulp.task('compile', function() {
      var tsResult = gulp.src([ 'src/**/*.ts' ])

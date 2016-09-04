@@ -62,7 +62,7 @@ var tiled;
             }
         };
         return TiledLayer;
-    })();
+    }());
     tiled.TiledLayer = TiledLayer;
 })(tiled || (tiled = {}));
 

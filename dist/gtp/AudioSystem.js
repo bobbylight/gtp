@@ -62,7 +62,7 @@ var gtp;
             this._playedTime = 0;
         };
         return PlayingSound;
-    })();
+    }());
     var AudioSystem = (function () {
         /**
          * A wrapper around web audio for games.
@@ -334,7 +334,7 @@ var gtp;
             configurable: true
         });
         return AudioSystem;
-    })();
+    }());
     gtp.AudioSystem = AudioSystem;
 })(gtp || (gtp = {}));
 

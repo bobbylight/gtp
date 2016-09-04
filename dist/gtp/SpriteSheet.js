@@ -61,7 +61,7 @@ var gtp;
             this.drawSprite(ctx, x, y, row, col);
         };
         return SpriteSheet;
-    })();
+    }());
     gtp.SpriteSheet = SpriteSheet;
 })(gtp || (gtp = {}));
 

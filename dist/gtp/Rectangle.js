@@ -130,7 +130,7 @@ var gtp;
             this.h = h;
         };
         return Rectangle;
-    })();
+    }());
     gtp.Rectangle = Rectangle;
 })(gtp || (gtp = {}));
 
