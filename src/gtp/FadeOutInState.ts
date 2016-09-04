@@ -29,7 +29,7 @@ module gtp {
 		}
 
 		update(delta: number) {
-        
+
 			super.update(delta);
 			//         console.log('delta === ' + delta);
 			this._curTime += delta;
@@ -54,13 +54,13 @@ module gtp {
 				this._alpha = (this._curTime / this._halfTime);
 			}
 		}
-   
+
 		render(ctx: CanvasRenderingContext2D) {
 
 			super.render(ctx);
 			this.game.clearScreen();
 
-			var previousAlpha: number = ctx.globalAlpha;
+			const previousAlpha: number = ctx.globalAlpha;
 			ctx.globalAlpha = this._alpha;
 			if (this._fadingOut) {
 				this._leavingState.render(ctx);

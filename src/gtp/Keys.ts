@@ -11,7 +11,7 @@ module gtp {
 		KEY_UP_ARROW = 38,
 		KEY_RIGHT_ARROW = 39,
 		KEY_DOWN_ARROW = 40,
-		
+
 		KEY_0 = 48,
 		KEY_1 = 49,
 		KEY_2 = 50,
@@ -22,7 +22,7 @@ module gtp {
 		KEY_7 = 55,
 		KEY_8 = 56,
 		KEY_9 = 57,
-		
+
 		KEY_A = 65,
 		KEY_B = 66,
 		KEY_C = 67,
@@ -49,6 +49,6 @@ module gtp {
 		KEY_X = 88,
 		KEY_Y = 89,
 		KEY_Z = 90
-		
+
 	}
 }

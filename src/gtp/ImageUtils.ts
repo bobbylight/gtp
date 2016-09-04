@@ -23,7 +23,7 @@ module gtp {
 			// and copied, pixel by pixel into another offscreen canvas with the
 			// new size.
 
-			var orig: HTMLCanvasElement,
+			let orig: HTMLCanvasElement,
 				origCtx: CanvasRenderingContext2D;
 
 			if (img instanceof HTMLImageElement) {
@@ -40,18 +40,18 @@ module gtp {
 				return orig; // No reason to scale
 			}
 
-			var origPixels: ImageData = origCtx.getImageData(0, 0, img.width, img.height);
+			const origPixels: ImageData = origCtx.getImageData(0, 0, img.width, img.height);
 
-			var widthScaled: number = img.width * scale;
-			var heightScaled: number = img.height * scale;
-			var scaled: HTMLCanvasElement = gtp.ImageUtils.createCanvas(widthScaled, heightScaled);
-			var scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d');
-			var scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
+			const widthScaled: number = img.width * scale;
+			const heightScaled: number = img.height * scale;
+			const scaled: HTMLCanvasElement = gtp.ImageUtils.createCanvas(widthScaled, heightScaled);
+			const scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d');
+			const scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
 
-			for (var y: number = 0; y < heightScaled; y++) {
-				for (var x: number = 0; x < widthScaled; x++) {
-					var index: number = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
-					var indexScaled: number = (y * widthScaled + x) * 4;
+			for (let y: number = 0; y < heightScaled; y++) {
+				for (let x: number = 0; x < widthScaled; x++) {
+					const index: number = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
+					const indexScaled: number = (y * widthScaled + x) * 4;
 					scaledPixels.data[indexScaled] = origPixels.data[index];
 					scaledPixels.data[indexScaled + 1] = origPixels.data[index + 1];
 					scaledPixels.data[indexScaled + 2] = origPixels.data[index + 2];
@@ -72,7 +72,7 @@ module gtp {
 
 			if (parentDiv) {
 
-				var actualParent: HTMLElement;
+				let actualParent: HTMLElement;
 				if (typeof parentDiv === 'string') {
 					actualParent = document.getElementById(parentDiv);
 				}
@@ -113,20 +113,20 @@ module gtp {
 		 */
 		static makeColorTranslucent(canvas: HTMLCanvasElement, x: number = 0, y: number = 0) {
 
-			var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
-			var w: number = canvas.width;
-			var h: number = canvas.height;
-			var pixels: ImageData = ctx.getImageData(0, 0, w, h);
+			const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+			const w: number = canvas.width;
+			const h: number = canvas.height;
+			const pixels: ImageData = ctx.getImageData(0, 0, w, h);
 
-			var color: number[] = [];
-			var offs: number = (y * w + x) * 4;
-			for (var i: number = 0; i < 4; i++) {
+			const color: number[] = [];
+			const offs: number = (y * w + x) * 4;
+			for (let i: number = 0; i < 4; i++) {
 				color[i] = pixels.data[offs + i];
 			}
 
 			for (y = 0; y < h; y++) {
 				for (x = 0; x < w; x++) {
-					var index: number = (y * w + x) * 4;
+					const index: number = (y * w + x) * 4;
 					if (pixels.data[index] === color[0] && pixels.data[index + 1] === color[1] &&
 						pixels.data[index + 2] === color[2] && pixels.data[index + 3] === color[3]) {
 						pixels.data[index] = 0;

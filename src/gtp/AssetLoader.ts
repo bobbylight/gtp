@@ -70,12 +70,11 @@ module gtp {
 				', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
 				', callback == ' + (this.callback !== null));
 
-			const that: AssetLoader = this;
 			const xhr: XMLHttpRequest = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4) {
 					const response: string = xhr.responseText;
-					that._completed(id, response);
+					this._completed(id, response);
 				}
 			};
 
@@ -90,7 +89,6 @@ module gtp {
 		 * @param {string} imageSrc The URL of the resource.
 		 */
 		addCanvas(id: string, imageSrc: string) {
-
 
 			if (this._assetRoot) {
 				imageSrc = this._assetRoot + imageSrc;
@@ -176,17 +174,16 @@ module gtp {
 					soundSrc = this._assetRoot + soundSrc;
 				}
 
-				const self: AssetLoader = this;
 				const xhr: XMLHttpRequest = new XMLHttpRequest();
-				xhr.onload = function() {
+				xhr.onload = () => {
 					// TODO: Clean up this API
-					self.audio.context.decodeAudioData(xhr.response, (buffer: AudioBuffer) => {
+					this.audio.context.decodeAudioData(xhr.response, (buffer: AudioBuffer) => {
 						const sound: gtp.Sound = new gtp.Sound(id, buffer, loopStart || 0);
 						if (typeof loopByDefaultIfMusic !== 'undefined') {
 							sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
 						}
-						self.audio.addSound(sound);
-						self._completed(id, buffer);
+						this.audio.addSound(sound);
+						this._completed(id, buffer);
 					});
 				};
 

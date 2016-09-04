@@ -64,6 +64,7 @@ var gtp;
          *         specified scope.
          */
         Utils.hitch = function (scope, func) {
+            // "arguments" cannot be referenced in arrow functions
             return function () {
                 func.apply(scope, arguments);
             };

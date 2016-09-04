@@ -16,13 +16,13 @@ module gtp {
 
 		parse() {
 
-			var images: { [id: string]: gtp.Image } = {};
-			var self: ImageAtlas = this;
+			const images: { [id: string]: gtp.Image } = {};
+			const self: ImageAtlas = this;
 
 			this._atlasInfo.images.forEach((imgInfo: any) => {
 
-				var id: string = imgInfo.id;
-				var dim: any;
+				const id: string = imgInfo.id;
+				let dim: any;
 				if (imgInfo.dim) {
 					dim = imgInfo.dim.split(/,\s*/);
 					if (dim.length !== 4) {

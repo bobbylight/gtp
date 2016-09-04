@@ -37,13 +37,11 @@ module gtp {
 		 */
 		STRETCH_NONE,
 
-
 		/**
 		 * The game's graphics are stretched to completely fill the window in
 		 * which they are being displayed.
 		 */
 		STRETCH_FILL,
-
 
 		/**
 		 * The game's graphics are stretched so that they fill as much as possible

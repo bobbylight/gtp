@@ -55,7 +55,7 @@ var gtp;
             canvas.height = height;
             gtp.ImageUtils.prepCanvas(canvas);
             if (parentDiv) {
-                var actualParent;
+                var actualParent = void 0;
                 if (typeof parentDiv === 'string') {
                     actualParent = document.getElementById(parentDiv);
                 }

@@ -14,8 +14,8 @@ module gtp {
 		 * @return {int} The number of elements in the object.
 		 */
 		static getObjectSize(obj: Object): number {
-			var size: number = 0;
-			for (var key in obj) {
+			let size: number = 0;
+			for (let key in obj) {
 				if (obj.hasOwnProperty(key)) {
 					size++;
 				}
@@ -33,15 +33,15 @@ module gtp {
 		static getRequestParam(param: string): string {
 
 			// Replace leading '?' with '&'
-			var params: string = '&' + gtp.BrowserUtil.getWindowLocationSearch().substring(1);
+			const params: string = '&' + gtp.BrowserUtil.getWindowLocationSearch().substring(1);
 
-			var searchFor: string = '&' + param;
-			var index: number = params.indexOf(searchFor);
+			const searchFor: string = '&' + param;
+			const index: number = params.indexOf(searchFor);
 			if (index >= -1) {
-				var start: number = index + searchFor.length;
+				let start: number = index + searchFor.length;
 				if (params.charAt(start) === '=') {
 					start++;
-					var end: number = params.indexOf('&', start); // &foo=val1&bar=val2
+					let end: number = params.indexOf('&', start); // &foo=val1&bar=val2
 					if (end === -1) {
 						end = params.length; // &foo=val1
 					}
@@ -67,7 +67,8 @@ module gtp {
 		 *         specified scope.
 		 */
 		static hitch(scope: any, func: Function): Function {
-			return function() {
+			// "arguments" cannot be referenced in arrow functions
+			return function() { // tslint:disable-line:only-arrow-functions
 				func.apply(scope, arguments);
 			};
 		}
@@ -79,7 +80,7 @@ module gtp {
 		 * @param {object} target The object that will receive the new properties.
 		 */
 		static mixin(source: any, target: any) {
-			for (var prop in source) {
+			for (let prop in source) {
 				if (source.hasOwnProperty(prop)) {
 					//if (!target[prop]) {
 					target[prop] = source[prop];
@@ -100,7 +101,7 @@ module gtp {
 		static randomInt(min: number, max: number): number;
 		static randomInt(max: number): number;
 		static randomInt(min: number, max?: number): number {
-			var realMin: number, realMax: number;
+			let realMin: number, realMax: number;
 			if (typeof max === 'undefined') {
 				realMin = 0;
 				realMax = min;
@@ -132,7 +133,7 @@ module gtp {
 		static initConsole() {
 			'use strict';
 			if (!window.console) {
-				var noOp: Function = function() {};
+				const noOp: Function = () => {};
 				window.console = <any>{
 					info: noOp,
 					log: noOp,

@@ -45,12 +45,12 @@ module gtp {
 		 * @param {String} key The key of the thing being timed.
 		 */
 		end(key: string) {
-			var start: number = this._startTimes[key];
+			const start: number = this._startTimes[key];
 			if (!start) {
 				console.error('Cannot end timer for "' + key + '" as it was never started');
 				return -1;
 			}
-			var time: number = Utils.timestamp() - start;
+			const time: number = Utils.timestamp() - start;
 			delete this._startTimes[key];
 			return time;
 		}
@@ -61,12 +61,11 @@ module gtp {
 		 * @param {String} key The key of the thing being timed.
 		 */
 		endAndLog(key: string) {
-			var time: number = this.end(key);
+			const time: number = this.end(key);
 			if (time > -1) {
 				console.log(this._prefix + ': ' + key + ': ' + time + ' ms');
 			}
 		}
-
 
 	}
 }

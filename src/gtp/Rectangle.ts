@@ -44,15 +44,15 @@ module gtp {
 				x2 = r.x;
 			}
 
-			var w: number = this.w;
-			var h: number = this.h;
+			let w: number = this.w;
+			let h: number = this.h;
 			if ((w | h | w2 | h2) < 0) {
 					// At least one of the dimensions is negative...
 					return false;
 			}
 			// Note: if any dimension is zero, tests below must return false...
-			var x: number = this.x;
-			var y: number = this.y;
+			let x: number = this.x;
+			let y: number = this.y;
 			if (x2 < x || y2 < y) {
 					return false;
 			}
@@ -89,17 +89,17 @@ module gtp {
 		 */
 		intersects(rect2: gtp.Rectangle): boolean {
 
-			var tw: number = this.w;
-			var th: number = this.h;
-			var rw: number = rect2.w;
-			var rh: number = rect2.h;
+			let tw: number = this.w;
+			let th: number = this.h;
+			let rw: number = rect2.w;
+			let rh: number = rect2.h;
 			if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
 				return false;
 			}
-			var tx: number = this.x;
-			var ty: number = this.y;
-			var rx: number = rect2.x;
-			var ry: number = rect2.y;
+			let tx: number = this.x;
+			let ty: number = this.y;
+			let rx: number = rect2.x;
+			let ry: number = rect2.y;
 			rw += rx;
 			rh += ry;
 			tw += tx;

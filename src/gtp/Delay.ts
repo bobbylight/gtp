@@ -169,7 +169,7 @@ module gtp {
 
 		reset(smooth?: boolean) {
 			smooth = !!smooth;
-			var prevRemaining: number = this._remaining;
+			const prevRemaining: number = this._remaining;
 			this._curInitial = this._remaining = this._initial[this._initialIndex];
 			if (smooth && prevRemaining < 0) {
 				this._remaining += prevRemaining; // Subtract how much we went over

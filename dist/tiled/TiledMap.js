@@ -25,7 +25,7 @@ var tiled;
             }
             this.tilesets = [];
             if (data.tilesets && data.tilesets.length) {
-                for (i = 0; i < data.tilesets.length; i++) {
+                for (var i = 0; i < data.tilesets.length; i++) {
                     this.tilesets.push(new tiled.TiledTileset(data.tilesets[i], imagePathModifier));
                 }
             }
@@ -105,7 +105,7 @@ var tiled;
                     _x = startX;
                     var layer = this.getLayerByIndex(l);
                     if (layer.visible) {
-                        var prevOpacity;
+                        var prevOpacity = void 0;
                         if (layer.opacity < 1) {
                             prevOpacity = ctx.globalAlpha;
                             ctx.globalAlpha = prevOpacity * layer.opacity;

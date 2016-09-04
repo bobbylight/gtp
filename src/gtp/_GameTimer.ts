@@ -87,7 +87,7 @@ module gtp {
 					this._pauseStart = Utils.timestamp();
 				}
 				else {
-					var pauseTime: number = Utils.timestamp() - this._pauseStart;
+					const pauseTime: number = Utils.timestamp() - this._pauseStart;
 					this._startShift += pauseTime;
 					this._pauseStart = 0;
 				}
@@ -112,7 +112,7 @@ module gtp {
 						this._notUpdatingStart = Utils.timestamp();
 					}
 					else {
-						var notUpdatingTime: number = Utils.timestamp() - this._notUpdatingStart;
+						const notUpdatingTime: number = Utils.timestamp() - this._notUpdatingStart;
 						this._startShift += notUpdatingTime;
 						this._notUpdatingStart = 0;
 					}

@@ -52,9 +52,7 @@ module gtp {
 			this._startOffset = this._config.startOffset || 0;
 
 			if (!this._config.loop) {
-				let self: PlayingSound = this;
-				let audioSystem: AudioSystem = this._config.audioSystem;
-				this.source.onended = this._config.onendedGenerator(self.id);
+				this.source.onended = this._config.onendedGenerator(this.id);
 			}
 		}
 
@@ -138,8 +136,6 @@ module gtp {
 		private _createPlayingSound(id: string, loop: boolean = false,
 				startOffset: number = 0, doneCallback: Function = null): PlayingSound {
 
-			const self: AudioSystem = this;
-
 			const soundEffectId: number = this._createSoundEffectId();
 
 			const soundEffect: PlayingSound = new PlayingSound({
@@ -148,9 +144,9 @@ module gtp {
 				connectTo: this._volumeFaderGain,
 				id: soundEffectId,
 				loop: loop,
-				onendedGenerator: function(playingSoundId: number) {
-					return function() {
-						self._removePlayingSound(playingSoundId);
+				onendedGenerator: (playingSoundId: number) => {
+					return () => {
+						this._removePlayingSound(playingSoundId);
 						if (doneCallback) {
 							doneCallback(soundEffectId, id);
 						}
@@ -203,7 +199,7 @@ module gtp {
 						this._musicFaderGain.gain.setValueAtTime(this._musicFaderGain.gain.value, this.context.currentTime);
 						this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
 					}
-					var that: AudioSystem = this;
+					const that: AudioSystem = this;
 					setTimeout(() => {
 						that.playMusic(newMusicId);
 					}, this._musicFade * 1000);
@@ -268,7 +264,7 @@ module gtp {
 				if (!id) {
 					return; // null id => don't play any music
 				}
-				var sound: Sound = this._sounds[id];
+				const sound: Sound = this._sounds[id];
 				if (typeof loop === 'undefined') {
 					loop = sound.getLoopsByDefaultIfMusic();
 				}
@@ -374,7 +370,7 @@ module gtp {
 		 * @see playSound
 		 */
 		stopSound(id: number): boolean {
-			var sound: PlayingSound = this._removePlayingSound(id);
+			const sound: PlayingSound = this._removePlayingSound(id);
 			if (sound) {
 				sound.source.stop();
 				return true;
@@ -385,7 +381,7 @@ module gtp {
 		toggleMuted(): boolean {
 			this._muted = !this._muted;
 			if (this.context) {
-				var initialValue: number = this._muted ? 0 : 1;
+				const initialValue: number = this._muted ? 0 : 1;
 				this._volumeFaderGain.gain.setValueAtTime(initialValue, this.context.currentTime);
 				this._volumeFaderGain.gain.value = initialValue;
 			}

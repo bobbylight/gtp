@@ -164,11 +164,7 @@ var gtp;
          * Starts the game loop.
          */
         Game.prototype.start = function () {
-            // e.g. Dojo's lang.hitch()
-            var self = this;
-            var callback = function () {
-                self._tick.apply(self);
-            };
+            var callback = gtp.Utils.hitch(this, this._tick);
             this._gameTimer.start();
             setInterval(callback, this._interval);
         };

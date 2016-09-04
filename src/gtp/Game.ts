@@ -45,7 +45,7 @@ module gtp {
 
 			this.audio = new gtp.AudioSystem();
 			this.audio.init();
-			var assetPrefix: string = args.assetRoot || null;
+			const assetPrefix: string = args.assetRoot || null;
 			this.assets = new gtp.AssetLoader(this._scale, this.audio, assetPrefix);
 
 			this.clearScreenColor = 'rgb(0,0,0)';
@@ -69,7 +69,7 @@ module gtp {
 		 *        If unspecified, <code>this.clearScreenColor</code> is used.
 		 */
 		clearScreen(clearScreenColor: string = this.clearScreenColor) {
-			var ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
+			const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
 			ctx.fillStyle = clearScreenColor;
 			ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
 		}
@@ -111,14 +111,14 @@ module gtp {
 		 * @return {number} The random number.
 		 */
 		randomInt(max: number): number {
-			var min: number = 0;
+			const min: number = 0;
 			// Using Math.round() would give a non-uniform distribution!
 			return Math.floor(Math.random() * (max - min + 1) + min);
 		}
 
 		render() {
 
-			var ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
+			const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
 			this.state.render(ctx);
 
 			if (this.showFps) {
@@ -132,7 +132,7 @@ module gtp {
 		private _renderFps(ctx: CanvasRenderingContext2D) {
 
 			this.frames++;
-			var now: number = Utils.timestamp();
+			const now: number = Utils.timestamp();
 			if (this.lastTime === null) {
 				this.lastTime = now;
 			}
@@ -142,8 +142,8 @@ module gtp {
 				this.lastTime = now;
 			}
 
-			var x: number = 10;
-			var y: number = 15;
+			const x: number = 10;
+			const y: number = 15;
 			ctx.font = '10pt Arial';
 			ctx.fillStyle = this.fpsColor;
 			ctx.fillText(this._fpsMsg, x, y);
@@ -151,8 +151,8 @@ module gtp {
 		}
 
 		private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
-			var x: number = 10;
-			var y: number = this.canvas.height - 6;
+			const x: number = 10;
+			const y: number = this.canvas.height - 6;
 			ctx.font = '10pt Arial';
 			ctx.fillStyle = this._statusMessageColor;
 			ctx.fillText(this._statusMessage, x, y);
@@ -203,12 +203,7 @@ module gtp {
 		 * Starts the game loop.
 		 */
 		start() {
-			// e.g. Dojo's lang.hitch()
-			var self: Game = this;
-			var callback: Function = function() {
-				self._tick.apply(self);
-			};
-
+			const callback: Function = Utils.hitch(this, this._tick);
 			this._gameTimer.start();
 			setInterval(callback, this._interval);
 		}
@@ -216,11 +211,11 @@ module gtp {
 		private _tick() {
 
 			if (this._statusMessage) {
-				var time: number = Utils.timestamp();
+				const time: number = Utils.timestamp();
 				if (time > this._statusMessageTime) {
 					this._statusMessageTime = time + 100;
 					this._statusMessageAlpha -= 0.1;
-					var alpha: number = Math.min(1, this._statusMessageAlpha);
+					const alpha: number = Math.min(1, this._statusMessageAlpha);
 					this._statusMessageColor = 'rgba(' + this.statusMessageRGB + ',' + alpha + ')';
 					if (this._statusMessageAlpha <= 0) {
 						this._statusMessage = null;
@@ -251,7 +246,7 @@ module gtp {
 		 */
 		update() {
 
-			var im: InputManager = this.inputManager;
+			const im: InputManager = this.inputManager;
 			if (im.isKeyDown(gtp.Keys.KEY_SHIFT)) {
 
 				if (im.isKeyDown(gtp.Keys.KEY_F, true)) {

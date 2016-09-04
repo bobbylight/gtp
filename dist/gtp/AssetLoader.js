@@ -44,6 +44,7 @@ var gtp;
          *        {@code id} if not specified.
          */
         AssetLoader.prototype.addJson = function (id, url) {
+            var _this = this;
             if (url === void 0) { url = id; }
             if (this._assetRoot) {
                 url = this._assetRoot + url;
@@ -55,12 +56,11 @@ var gtp;
             console.log('Adding: ' + id + ' => ' + url +
                 ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
                 ', callback == ' + (this.callback !== null));
-            var that = this;
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     var response = xhr.responseText;
-                    that._completed(id, response);
+                    _this._completed(id, response);
                 }
             };
             xhr.open('GET', url, true);
@@ -132,6 +132,7 @@ var gtp;
          *        loop by default when it is played as music.
          */
         AssetLoader.prototype.addSound = function (id, soundSrc, loopStart, loopByDefaultIfMusic) {
+            var _this = this;
             if (loopStart === void 0) { loopStart = 0; }
             if (loopByDefaultIfMusic === void 0) { loopByDefaultIfMusic = true; }
             if (this.audio.isInitialized()) {
@@ -142,17 +143,16 @@ var gtp;
                 if (this._assetRoot) {
                     soundSrc = this._assetRoot + soundSrc;
                 }
-                var self_1 = this;
                 var xhr_1 = new XMLHttpRequest();
                 xhr_1.onload = function () {
                     // TODO: Clean up this API
-                    self_1.audio.context.decodeAudioData(xhr_1.response, function (buffer) {
+                    _this.audio.context.decodeAudioData(xhr_1.response, function (buffer) {
                         var sound = new gtp.Sound(id, buffer, loopStart || 0);
                         if (typeof loopByDefaultIfMusic !== 'undefined') {
                             sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
                         }
-                        self_1.audio.addSound(sound);
-                        self_1._completed(id, buffer);
+                        _this.audio.addSound(sound);
+                        _this._completed(id, buffer);
                     });
                 };
                 xhr_1.open('GET', soundSrc, true);

@@ -44,7 +44,7 @@ module gtp {
 		 * Resets all keys to be in their "not depressed" states.
 		 */
 		clearKeyStates() {
-			for (var i: number = 0; i < this.keys.length; i++) {
+			for (let i: number = 0; i < this.keys.length; i++) {
 				this.clearKeyState(i);
 			}
 		}
@@ -87,9 +87,8 @@ module gtp {
 		 * initialization.
 		 */
 		install() {
-			var self: InputManager = this;
-			document.onkeydown = function(e: KeyboardEvent) { self._keyDown(e); };
-			document.onkeyup = function(e:  KeyboardEvent) { self._keyUp(e); };
+			document.onkeydown = (e: KeyboardEvent) => { this._keyDown(e); };
+			document.onkeyup = (e:  KeyboardEvent) => { this._keyUp(e); };
 		}
 
 		/**
@@ -101,7 +100,7 @@ module gtp {
 		 * @return {boolean} Whether the key was pressed.
 		 */
 		isKeyDown(keyCode: number, clear: boolean = false) {
-			var down: boolean = this.keys[keyCode];
+			const down: boolean = this.keys[keyCode];
 			if (down && clear) {
 				this.keys[keyCode] = false;
 			}
@@ -109,18 +108,17 @@ module gtp {
 		}
 
 		_keyDown(e: KeyboardEvent) {
-			var keyCode: number = e.keyCode;
+			const keyCode: number = e.keyCode;
 			if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) { // An arrow key or space
 				e.preventDefault();
 			}
 			if (this._refireMillis) {
 				if (!this._repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
 					this.keys[keyCode] = true;
-					var self: InputManager = this;
-					this._repeatTimers[keyCode] = setInterval(function() {
+					this._repeatTimers[keyCode] = setInterval(() => {
 						//console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
-						self.keys[keyCode] = true;
-					}, self._refireMillis);
+						this.keys[keyCode] = true;
+					}, this._refireMillis);
 				}
 			}
 			else {
@@ -130,7 +128,7 @@ module gtp {
 		}
 
 		_keyUp(e: KeyboardEvent) {
-			var key: number = e.keyCode;
+			const key: number = e.keyCode;
 			if (this._refireMillis) {
 				if (this._repeatTimers[key]) { // Should always be true
 					this.keys[key] = false;
@@ -168,7 +166,6 @@ module gtp {
 		right(clear: boolean = false) {
 			return this.isKeyDown(gtp.Keys.KEY_RIGHT_ARROW, clear);
 		}
-
 
 		/**
 		 * Returns whether shift is pressed.

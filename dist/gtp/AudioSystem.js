@@ -27,9 +27,7 @@ var gtp;
             }
             this._startOffset = this._config.startOffset || 0;
             if (!this._config.loop) {
-                var self_1 = this;
-                var audioSystem = this._config.audioSystem;
-                this.source.onended = this._config.onendedGenerator(self_1.id);
+                this.source.onended = this._config.onendedGenerator(this.id);
             }
         };
         PlayingSound.prototype.pause = function () {
@@ -79,10 +77,10 @@ var gtp;
             this._soundEffectIdGenerator = 0;
         }
         AudioSystem.prototype._createPlayingSound = function (id, loop, startOffset, doneCallback) {
+            var _this = this;
             if (loop === void 0) { loop = false; }
             if (startOffset === void 0) { startOffset = 0; }
             if (doneCallback === void 0) { doneCallback = null; }
-            var self = this;
             var soundEffectId = this._createSoundEffectId();
             var soundEffect = new PlayingSound({
                 audioSystem: this,
@@ -92,7 +90,7 @@ var gtp;
                 loop: loop,
                 onendedGenerator: function (playingSoundId) {
                     return function () {
-                        self._removePlayingSound(playingSoundId);
+                        _this._removePlayingSound(playingSoundId);
                         if (doneCallback) {
                             doneCallback(soundEffectId, id);
                         }
@@ -141,9 +139,9 @@ var gtp;
                         this._musicFaderGain.gain.setValueAtTime(this._musicFaderGain.gain.value, this.context.currentTime);
                         this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
                     }
-                    var that = this;
+                    var that_1 = this;
                     setTimeout(function () {
-                        that.playMusic(newMusicId);
+                        that_1.playMusic(newMusicId);
                     }, this._musicFade * 1000);
                 }
                 else {

@@ -34,30 +34,30 @@ module tiled {
 			if (!this.data) { // An object layer
 				return -1;
 			}
-			var index: number = this._getIndex(row, col);
+			const index: number = this._getIndex(row, col);
 			return this.data[index];
 		}
-   
+
 		setData(row: number, col: number, value: number) {
 			if (!this.data) { // An object layer
 				return false;
 			}
-			var index: number = this._getIndex(row, col);
+			const index: number = this._getIndex(row, col);
 			this.data[index] = value;
 		}
-   
+
 		private _getIndex(row: number, col: number): number {
 			return row * this.map.colCount + col;
 		}
-   
+
 		getObjectByName(name: string): TiledObject {
 			return this.objectsByName ? this.objectsByName[name] : null;
 		}
-   
+
 		getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject {
 			if (this.objects) {
-				for (var i: number = 0; i < this.objects.length; i++) {
-					var obj: TiledObject = this.objects[i];
+				for (let i: number = 0; i < this.objects.length; i++) {
+					const obj: TiledObject = this.objects[i];
 					if (obj.intersects(x, y, w, h)) {
 						return obj;
 					}
@@ -65,18 +65,18 @@ module tiled {
 			}
 			return null;
 		}
-   
+
 		isObjectGroup(): boolean {
 			return this.type === 'objectgroup';
 		}
-   
+
 		private _setObjects(objects: any) {
 			'use strict';
 			if (objects) {
 				this.objects = [];
 				this.objectsByName = {};
-				for (var i: number = 0; i < objects.length; i++) {
-					var obj: TiledObject = new tiled.TiledObject(objects[i]);
+				for (let i: number = 0; i < objects.length; i++) {
+					const obj: TiledObject = new tiled.TiledObject(objects[i]);
 					this.objects.push(obj);
 					this.objectsByName[objects[i].name] = obj;
 				}

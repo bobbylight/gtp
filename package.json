@@ -1,6 +1,6 @@
 {
   "name": "gtp",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "gulp-typescript": "2.13.6",
     "gulp-uglify": "2.0.0",
     "gulp-usemin": "0.3.24",
-    "jasmine-ajax": "^3.2.0",
+    "jasmine-ajax": "3.2.0",
     "jasmine-core": "2.5.0",
     "jshint": "2.9.3",
     "jshint-stylish": "2.2.1",
@@ -32,12 +32,12 @@
     "karma-firefox-launcher": "1.0.0",
     "karma-ie-launcher": "1.0.0",
     "karma-jasmine": "1.0.2",
-    "karma-jasmine-ajax": "^0.1.13",
+    "karma-jasmine-ajax": "0.1.13",
     "karma-phantomjs-launcher": "1.0.2",
     "phantomjs-prebuilt": "2.1.7",
     "run-sequence": "1.2.2",
     "tslint": "3.15.1",
-    "typedoc": "^0.4.5",
+    "typedoc": "0.4.5",
     "typescript": "1.8.10"
   }
 }

@@ -49,6 +49,7 @@ var gtp;
          *        {@code id} if not specified.
          */
         AssetLoader.prototype.addJson = function (id, url) {
+            var _this = this;
             if (url === void 0) { url = id; }
             if (this._assetRoot) {
                 url = this._assetRoot + url;
@@ -60,12 +61,11 @@ var gtp;
             console.log('Adding: ' + id + ' => ' + url +
                 ', remaining == ' + gtp.Utils.getObjectSize(this.loadingAssetData) +
                 ', callback == ' + (this.callback !== null));
-            var that = this;
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     var response = xhr.responseText;
-                    that._completed(id, response);
+                    _this._completed(id, response);
                 }
             };
             xhr.open('GET', url, true);
@@ -137,6 +137,7 @@ var gtp;
          *        loop by default when it is played as music.
          */
         AssetLoader.prototype.addSound = function (id, soundSrc, loopStart, loopByDefaultIfMusic) {
+            var _this = this;
             if (loopStart === void 0) { loopStart = 0; }
             if (loopByDefaultIfMusic === void 0) { loopByDefaultIfMusic = true; }
             if (this.audio.isInitialized()) {
@@ -147,17 +148,16 @@ var gtp;
                 if (this._assetRoot) {
                     soundSrc = this._assetRoot + soundSrc;
                 }
-                var self_1 = this;
                 var xhr_1 = new XMLHttpRequest();
                 xhr_1.onload = function () {
                     // TODO: Clean up this API
-                    self_1.audio.context.decodeAudioData(xhr_1.response, function (buffer) {
+                    _this.audio.context.decodeAudioData(xhr_1.response, function (buffer) {
                         var sound = new gtp.Sound(id, buffer, loopStart || 0);
                         if (typeof loopByDefaultIfMusic !== 'undefined') {
                             sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
                         }
-                        self_1.audio.addSound(sound);
-                        self_1._completed(id, buffer);
+                        _this.audio.addSound(sound);
+                        _this._completed(id, buffer);
                     });
                 };
                 xhr_1.open('GET', soundSrc, true);
@@ -352,9 +352,7 @@ var gtp;
             }
             this._startOffset = this._config.startOffset || 0;
             if (!this._config.loop) {
-                var self_2 = this;
-                var audioSystem = this._config.audioSystem;
-                this.source.onended = this._config.onendedGenerator(self_2.id);
+                this.source.onended = this._config.onendedGenerator(this.id);
             }
         };
         PlayingSound.prototype.pause = function () {
@@ -404,10 +402,10 @@ var gtp;
             this._soundEffectIdGenerator = 0;
         }
         AudioSystem.prototype._createPlayingSound = function (id, loop, startOffset, doneCallback) {
+            var _this = this;
             if (loop === void 0) { loop = false; }
             if (startOffset === void 0) { startOffset = 0; }
             if (doneCallback === void 0) { doneCallback = null; }
-            var self = this;
             var soundEffectId = this._createSoundEffectId();
             var soundEffect = new PlayingSound({
                 audioSystem: this,
@@ -417,7 +415,7 @@ var gtp;
                 loop: loop,
                 onendedGenerator: function (playingSoundId) {
                     return function () {
-                        self._removePlayingSound(playingSoundId);
+                        _this._removePlayingSound(playingSoundId);
                         if (doneCallback) {
                             doneCallback(soundEffectId, id);
                         }
@@ -466,9 +464,9 @@ var gtp;
                         this._musicFaderGain.gain.setValueAtTime(this._musicFaderGain.gain.value, this.context.currentTime);
                         this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
                     }
-                    var that = this;
+                    var that_1 = this;
                     setTimeout(function () {
-                        that.playMusic(newMusicId);
+                        that_1.playMusic(newMusicId);
                     }, this._musicFade * 1000);
                 }
                 else {
@@ -1104,11 +1102,7 @@ var gtp;
          * Starts the game loop.
          */
         Game.prototype.start = function () {
-            // e.g. Dojo's lang.hitch()
-            var self = this;
-            var callback = function () {
-                self._tick.apply(self);
-            };
+            var callback = gtp.Utils.hitch(this, this._tick);
             this._gameTimer.start();
             setInterval(callback, this._interval);
         };
@@ -1382,7 +1376,7 @@ var gtp;
             canvas.height = height;
             gtp.ImageUtils.prepCanvas(canvas);
             if (parentDiv) {
-                var actualParent;
+                var actualParent = void 0;
                 if (typeof parentDiv === 'string') {
                     actualParent = document.getElementById(parentDiv);
                 }
@@ -1534,9 +1528,9 @@ var gtp;
          * initialization.
          */
         InputManager.prototype.install = function () {
-            var self = this;
-            document.onkeydown = function (e) { self._keyDown(e); };
-            document.onkeyup = function (e) { self._keyUp(e); };
+            var _this = this;
+            document.onkeydown = function (e) { _this._keyDown(e); };
+            document.onkeyup = function (e) { _this._keyUp(e); };
         };
         /**
          * Returns whether a specific key is pressed.
@@ -1555,6 +1549,7 @@ var gtp;
             return down;
         };
         InputManager.prototype._keyDown = function (e) {
+            var _this = this;
             var keyCode = e.keyCode;
             if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) {
                 e.preventDefault();
@@ -1562,11 +1557,10 @@ var gtp;
             if (this._refireMillis) {
                 if (!this._repeatTimers[keyCode]) {
                     this.keys[keyCode] = true;
-                    var self = this;
                     this._repeatTimers[keyCode] = setInterval(function () {
                         //console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
-                        self.keys[keyCode] = true;
-                    }, self._refireMillis);
+                        _this.keys[keyCode] = true;
+                    }, this._refireMillis);
                 }
             }
             else {
@@ -2369,6 +2363,7 @@ var gtp;
          *         specified scope.
          */
         Utils.hitch = function (scope, func) {
+            // "arguments" cannot be referenced in arrow functions
             return function () {
                 func.apply(scope, arguments);
             };
@@ -2655,7 +2650,7 @@ var tiled;
             }
             this.tilesets = [];
             if (data.tilesets && data.tilesets.length) {
-                for (i = 0; i < data.tilesets.length; i++) {
+                for (var i = 0; i < data.tilesets.length; i++) {
                     this.tilesets.push(new tiled.TiledTileset(data.tilesets[i], imagePathModifier));
                 }
             }
@@ -2735,7 +2730,7 @@ var tiled;
                     _x = startX;
                     var layer = this.getLayerByIndex(l);
                     if (layer.visible) {
-                        var prevOpacity;
+                        var prevOpacity = void 0;
                         if (layer.opacity < 1) {
                             prevOpacity = ctx.globalAlpha;
                             ctx.globalAlpha = prevOpacity * layer.opacity;

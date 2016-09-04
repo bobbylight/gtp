@@ -6,7 +6,7 @@ interface Window {
 
 	AudioContext: any;
 	webkitAudioContext: any;
-	
+
 	/**
 	 * The singleton game instance as a global variable.
 	 */

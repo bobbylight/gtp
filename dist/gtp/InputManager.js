@@ -79,9 +79,9 @@ var gtp;
          * initialization.
          */
         InputManager.prototype.install = function () {
-            var self = this;
-            document.onkeydown = function (e) { self._keyDown(e); };
-            document.onkeyup = function (e) { self._keyUp(e); };
+            var _this = this;
+            document.onkeydown = function (e) { _this._keyDown(e); };
+            document.onkeyup = function (e) { _this._keyUp(e); };
         };
         /**
          * Returns whether a specific key is pressed.
@@ -100,6 +100,7 @@ var gtp;
             return down;
         };
         InputManager.prototype._keyDown = function (e) {
+            var _this = this;
             var keyCode = e.keyCode;
             if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) {
                 e.preventDefault();
@@ -107,11 +108,10 @@ var gtp;
             if (this._refireMillis) {
                 if (!this._repeatTimers[keyCode]) {
                     this.keys[keyCode] = true;
-                    var self = this;
                     this._repeatTimers[keyCode] = setInterval(function () {
                         //console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
-                        self.keys[keyCode] = true;
-                    }, self._refireMillis);
+                        _this.keys[keyCode] = true;
+                    }, this._refireMillis);
                 }
             }
             else {

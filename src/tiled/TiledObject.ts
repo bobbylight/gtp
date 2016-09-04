@@ -16,7 +16,7 @@ module tiled {
 			this.gid = this.gid || -1;
 
 			// TODO: Remove
-			var game: gtp.Game = window.game;
+			const game: gtp.Game = window.game;
 			this.x *= game._scale;
 			this.y  *= game._scale;
 			this.width *= game._scale;
@@ -27,17 +27,17 @@ module tiled {
 			'use strict';
 			//console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh +
 			//      ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
-			var tw: number = this.width;
-			var th: number = this.height;
-			var rw: number = ow;
-			var rh: number = oh;
+			let tw: number = this.width;
+			let th: number = this.height;
+			let rw: number = ow;
+			let rh: number = oh;
 			if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
 				return false;
 			}
-			var tx: number = this.x;
-			var ty: number = this.y;
-			var rx: number = ox;
-			var ry: number = oy;
+			const tx: number = this.x;
+			const ty: number = this.y;
+			const rx: number = ox;
+			const ry: number = oy;
 			rw += rx;
 			rh += ry;
 			tw += tx;
