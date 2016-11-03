@@ -1,3 +1,4 @@
+/// <reference path="SpriteSheet.d.ts" />
 declare module gtp {
     class BitmapFont extends SpriteSheet {
         constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number);

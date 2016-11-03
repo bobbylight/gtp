@@ -283,7 +283,7 @@ module gtp {
 			return this.responses[res];
 		}
 
-		_isAlreadyTracked(id: string) {
+		_isAlreadyTracked(id: string): boolean {
 			if (this.loadingAssetData[id]) {
 				console.log('A resource with id ' + id + ' is already loading.  Assuming they are the same');
 				return true;
@@ -292,6 +292,7 @@ module gtp {
 				console.log('A resource with id ' + id + ' has already been loaded.');
 				return true;
 			}
+			return false;
 		}
 
 		/**

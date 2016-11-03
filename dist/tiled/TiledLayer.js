@@ -28,6 +28,7 @@ var tiled;
             }
             var index = this._getIndex(row, col);
             this.data[index] = value;
+            return true;
         };
         TiledLayer.prototype._getIndex = function (row, col) {
             return row * this.map.colCount + col;

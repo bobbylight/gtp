@@ -1,3 +1,5 @@
+/// <reference path="SpriteSheet.ts" />
+
 module gtp {
 	'use strict';
 

@@ -1,3 +1,5 @@
+/// <reference path="State.ts" />
+
 module gtp {
 	'use strict';
 

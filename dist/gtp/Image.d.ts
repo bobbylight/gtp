@@ -65,7 +65,7 @@ declare module gtp {
          * @method
          */
         makeColorTranslucent(x?: number, y?: number): void;
-        width: number;
-        height: number;
+        readonly width: number;
+        readonly height: number;
     }
 }

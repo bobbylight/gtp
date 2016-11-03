@@ -134,7 +134,7 @@ module gtp {
 			'use strict';
 			if (!window.console) {
 				const noOp: Function = () => {};
-				window.console = <any>{
+				(<any>window).console = <any>{
 					info: noOp,
 					log: noOp,
 					warn: noOp,

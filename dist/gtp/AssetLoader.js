@@ -249,6 +249,7 @@ var gtp;
                 console.log('A resource with id ' + id + ' has already been loaded.');
                 return true;
             }
+            return false;
         };
         /**
          * Adds a resource.

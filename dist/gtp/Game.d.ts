@@ -57,7 +57,7 @@ declare module gtp {
          * @return The amount of time the game has been played, in milliseconds.
          * @see resetPlayTime
          */
-        playTime: number;
+        readonly playTime: number;
         /**
          * Returns a random number between <code>0</code> and
          * <code>number</code>, exclusive.

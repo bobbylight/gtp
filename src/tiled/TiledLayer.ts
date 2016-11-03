@@ -38,12 +38,13 @@ module tiled {
 			return this.data[index];
 		}
 
-		setData(row: number, col: number, value: number) {
+		setData(row: number, col: number, value: number): boolean {
 			if (!this.data) { // An object layer
 				return false;
 			}
 			const index: number = this._getIndex(row, col);
 			this.data[index] = value;
+			return true;
 		}
 
 		private _getIndex(row: number, col: number): number {

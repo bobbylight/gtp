@@ -16,7 +16,9 @@
    var jshint = require('gulp-jshint');
    var stylish = require('jshint-stylish');
    var tsc = require('gulp-typescript');
-   var tsconfig = tsc.createProject('tsconfig.json');
+   var tsProject = tsc.createProject('tsconfig.json');
+   var concatenatedTsProject = tsc.createProject('tsconfig.json', { outFile: 'gtp-all.js' });
+   var merge = require('merge2');
    var sourcemaps = require('gulp-sourcemaps');
    var tslint = require('gulp-tslint');
    var KarmaServer = require('karma').Server;
@@ -63,32 +65,31 @@
    });
 
    gulp.task('tslint', function() {
-    return gulp.src([ 'src/**/*.ts' ])
+    return tsProject.src()//gulp.src([ 'src/**/*.ts' ])
         .pipe(tslint({ formatter: 'prose' }))
         .pipe(tslint.report());
    });
    gulp.task('compile', function() {
-     var tsResult = gulp.src([ 'src/**/*.ts' ])
+     var tsResult = tsProject.src()
          .pipe(sourcemaps.init())
-         .pipe(tsc(tsconfig));
-     tsResult.dts.pipe(gulp.dest('dist/'));
-     return tsResult.js
+         .pipe(tsProject());
+     return merge([
+        tsResult.dts.pipe(gulp.dest('dist/')),
+        tsResult.js
          .pipe(sourcemaps.write('.'))
-         .pipe(gulp.dest('dist/'));
+         .pipe(gulp.dest('dist/'))
+     ]);
    });
    gulp.task('compile-concat', function() {
-     var tsconfigConcatenated = {
-         target: tsconfig.target || 'es5',
-         declaration: true,
-         outFile: 'gtp-all.js'
-     };
-     var tsResult = gulp.src([ 'src/**/*.ts' ])
+     var tsResult = concatenatedTsProject.src()
          .pipe(sourcemaps.init())
-         .pipe(tsc(tsconfigConcatenated));
-     tsResult.dts.pipe(gulp.dest('dist-all/'));
-     return tsResult.js
+         .pipe(concatenatedTsProject());
+     return merge([
+        tsResult.dts.pipe(gulp.dest('dist-all/')),
+        tsResult.js
          .pipe(sourcemaps.write('.'))
-         .pipe(gulp.dest('dist-all/'));
+         .pipe(gulp.dest('dist-all/'))
+     ]);
    });
 
    gulp.task('typedoc', function() {

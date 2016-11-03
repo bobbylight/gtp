@@ -1,18 +1,24 @@
 {
     "compilerOptions": {
-        "target": "es5",
         "declaration": true,
+        "forceConsistentCasingInFileNames": true,
         "noImplicitAny": true,
-        "removeComments": false,
-        "preserveConstEnums": true,
+        "noImplicitReturns": true,
         "outDir": "dist/",
+        "preserveConstEnums": true,
         "rootDir": "src/",
-        "sourceMap": true
+        //"strictNullChecks": true,
+        "sourceMap": true,
+        "target": "es5",
+        "diagnostics": true
     },
-    "exclude": [
-        "node_modules",
-        "bower_components",
-        "dist",
-        "dist-all"
+    "include": [
+        // Order base classes first to appease tsc 2.0
+        "src/gtp/SpriteSheet.ts",
+        "src/gtp/BitmapFont.ts",
+        "src/gtp/State.ts",
+        "src/gtp/FadeOutInState.ts",
+        "src/gtp/**/*.ts",
+        "src/tiled/*.ts"
     ]
 }

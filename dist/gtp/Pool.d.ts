@@ -34,7 +34,7 @@ declare module gtp {
          * Returns the number of currently-borrowed objects.
          * @return {number} The number of currently-borrowed objects.
          */
-        borrowedCount: number;
+        readonly borrowedCount: number;
         /**
          * Acts as if all objects have been returned to this pool.	This method
          * should be used if you're implementing an algorithm that uses an
@@ -59,7 +59,7 @@ declare module gtp {
          * Only really useful for debugging purposes.
          * @return {number} The total number of objects in this pool.
          */
-        length: number;
+        readonly length: number;
         /**
          * Returns this object as a string.	Useful for debugging.
          * @return {string} A string representation of this pool.

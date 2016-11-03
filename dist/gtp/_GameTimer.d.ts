@@ -35,7 +35,7 @@ declare module gtp {
          *         milliseconds.
          * @see resetPlayTime
          */
-        playTime: number;
+        readonly playTime: number;
         /**
          * Returns whether this game is updating itself each frame.
          *

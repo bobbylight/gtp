@@ -1,5 +1,71 @@
 declare module gtp {
     /**
+     * This class keeps track of game time.  That includes both total running
+     * time, and "active time" (time not spent on paused screens, etc.).
+     * @constructor
+     */
+    class _GameTimer {
+        private _startShift;
+        private _paused;
+        private _pauseStart;
+        private _updating;
+        private _notUpdatingStart;
+        constructor();
+        /**
+         * Returns whether this game is paused.
+         * @return {boolean} Whether this game is paused.
+         */
+        /**
+         * Sets whether the game is paused.  The game is still told to handle
+         * input, update itself and render.  This is simply a flag that should
+         * be set whenever a "pause" screen is displayed.  It stops the "in-game
+         * timer" until the game is unpaused.
+         *
+         * @param paused Whether the game should be paused.
+         * @see setUpdating
+         */
+        paused: boolean;
+        /**
+         * Returns the length of time the game has been played so far.  This is
+         * "playable time;" that is, time in which the user is playing, and the
+         * game is not paused or in a "not updating" state (such as the main
+         * frame not having focus).
+         *
+         * @return {number} The amount of time the game has been played, in
+         *         milliseconds.
+         * @see resetPlayTime
+         */
+        readonly playTime: number;
+        /**
+         * Returns whether this game is updating itself each frame.
+         *
+         * @return {boolean} Whether this game is updating itself.
+         */
+        /**
+         * Sets whether the game should be "updating" itself.  If a game is not
+         * "updating" itself, then it is effectively "paused," and will not accept
+         * any input from the user.<p>
+         *
+         * This method can be used to temporarily "pause" a game when the game
+         * window loses focus, for example.
+         *
+         * @param updating {boolean} Whether the game should be updating itself.
+         */
+        updating: boolean;
+        /**
+         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
+         *
+         * @see playTime
+         */
+        resetPlayTime(): void;
+        /**
+         * Resets this timer.  This should be called when a new game is started.
+         */
+        start(): void;
+    }
+}
+declare module gtp {
+    /**
      * Loads resources for a game.  All games have to load resources such as
      * images, sound effects, JSON data, sprite sheets, etc.  This class provides
      * a wrapper around the loading of such resources, as well as a callback
@@ -247,6 +313,48 @@ declare module gtp {
     }
 }
 declare module gtp {
+    class SpriteSheet {
+        gtpImage: gtp.Image;
+        cellW: number;
+        cellH: number;
+        spacingX: number;
+        spacingY: number;
+        rowCount: number;
+        colCount: number;
+        size: number;
+        /**
+         * Creates a sprite sheet.
+         *
+         * @param {gtp.Image} gtpImage A GTP image that is the source for the sprite sheet.
+         * @param {int} cellW The width of a cell in the sprite sheet.
+         * @param {int} cellH The height of a cell in the sprite sheet.
+         * @param {int} [spacing=1] Optional empty space between cells.
+         * @param {int} [spacingY=spacing] Optional vertical empty space between cells.
+         *        Specify only if different than the horizontal spacing.
+         * @constructor
+         */
+        constructor(gtpImage: gtp.Image, cellW: number, cellH: number, spacing?: number, spacingY?: number);
+        /**
+         * Draws a sprite in this sprite sheet by row and column.
+         * @param {CanvasRenderingContext2D} ctx The canvas' context.
+         * @param {int} x The x-coordinate at which to draw.
+         * @param {int} y The y-coordinate at which to draw.
+         * @param {int} row The row in the sprite sheet of the sprite to draw.
+         * @param {int} col The column in the sprite sheet of the sprite to draw.
+         */
+        drawSprite(ctx: CanvasRenderingContext2D, x: number, y: number, row: number, col: number): void;
+        /**
+         * Draws a sprite in this sprite sheet by index
+         * (<code>row*colCount + col</code>).
+         * @param {CanvasRenderingContext2D} ctx The canvas' context.
+         * @param {int} x The x-coordinate at which to draw.
+         * @param {int} y The y-coordinate at which to draw.
+         * @param {int} index The index in the sprite sheet of the sprite to draw.
+         */
+        drawByIndex(ctx: CanvasRenderingContext2D, x: number, y: number, index: number): void;
+    }
+}
+declare module gtp {
     class BitmapFont extends SpriteSheet {
         constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number);
         drawString(str: string, x: number, y: number): void;
@@ -374,6 +482,56 @@ declare module gtp {
     }
 }
 declare module gtp {
+    /**
+     * Arguments to pass to a state's constructor.
+     */
+    interface BaseStateArgs {
+        game: gtp.Game;
+    }
+    /**
+     * A base class for game states.  Basically just an interface with callbacks
+     * for updating and rendering, along with other lifecycle-ish methods.
+     * @class
+     */
+    class State {
+        game: gtp.Game;
+        /**
+         * A base class for game states.  Basically just an interface with callbacks
+         * for updating and rendering, along with other lifecycle-ish methods.
+         * @class
+         * @constructor
+         * @param args Arguments to the game state.
+         */
+        constructor(args?: Game | BaseStateArgs);
+        /**
+         * Called right before a state starts.  Subclasses can do any needed
+         * initialization here.
+         * @param {Game} game The game being played.
+         * @see leaving
+         */
+        enter(game: Game): void;
+        /**
+         * Called when this state is being left for another one.
+         * @param {Game} game The game being played.
+         * @see enter
+         */
+        leaving(game: Game): void;
+        /**
+         * Subclasses should override this method to do necessary update logic.
+         *
+         * @param {float} delta The amount of time that has elapsed since the last
+         *        frame/call to this method.
+         */
+        update(delta: number): void;
+        /**
+         * Subclasses should override this method to render the screen.
+         *
+         * @param {CanvasRenderingContext2D} ctx The graphics context to render onto.
+         */
+        render(ctx: CanvasRenderingContext2D): void;
+    }
+}
+declare module gtp {
     class FadeOutInState extends gtp.State {
         private _leavingState;
         private _enteringState;
@@ -458,7 +616,7 @@ declare module gtp {
          * @return The amount of time the game has been played, in milliseconds.
          * @see resetPlayTime
          */
-        playTime: number;
+        readonly playTime: number;
         /**
          * Returns a random number between <code>0</code> and
          * <code>number</code>, exclusive.
@@ -573,8 +731,8 @@ declare module gtp {
          * @method
          */
         makeColorTranslucent(x?: number, y?: number): void;
-        width: number;
-        height: number;
+        readonly width: number;
+        readonly height: number;
     }
 }
 declare module gtp {
@@ -829,7 +987,7 @@ declare module gtp {
          * Returns the number of currently-borrowed objects.
          * @return {number} The number of currently-borrowed objects.
          */
-        borrowedCount: number;
+        readonly borrowedCount: number;
         /**
          * Acts as if all objects have been returned to this pool.	This method
          * should be used if you're implementing an algorithm that uses an
@@ -854,7 +1012,7 @@ declare module gtp {
          * Only really useful for debugging purposes.
          * @return {number} The total number of objects in this pool.
          */
-        length: number;
+        readonly length: number;
         /**
          * Returns this object as a string.	Useful for debugging.
          * @return {string} A string representation of this pool.
@@ -923,98 +1081,6 @@ declare module gtp {
         setLoopsByDefaultIfMusic(loopsByDefault: boolean): void;
         getLoopStart(): number;
         setLoopStart(loopStart: number): void;
-    }
-}
-declare module gtp {
-    class SpriteSheet {
-        gtpImage: gtp.Image;
-        cellW: number;
-        cellH: number;
-        spacingX: number;
-        spacingY: number;
-        rowCount: number;
-        colCount: number;
-        size: number;
-        /**
-         * Creates a sprite sheet.
-         *
-         * @param {gtp.Image} gtpImage A GTP image that is the source for the sprite sheet.
-         * @param {int} cellW The width of a cell in the sprite sheet.
-         * @param {int} cellH The height of a cell in the sprite sheet.
-         * @param {int} [spacing=1] Optional empty space between cells.
-         * @param {int} [spacingY=spacing] Optional vertical empty space between cells.
-         *        Specify only if different than the horizontal spacing.
-         * @constructor
-         */
-        constructor(gtpImage: gtp.Image, cellW: number, cellH: number, spacing?: number, spacingY?: number);
-        /**
-         * Draws a sprite in this sprite sheet by row and column.
-         * @param {CanvasRenderingContext2D} ctx The canvas' context.
-         * @param {int} x The x-coordinate at which to draw.
-         * @param {int} y The y-coordinate at which to draw.
-         * @param {int} row The row in the sprite sheet of the sprite to draw.
-         * @param {int} col The column in the sprite sheet of the sprite to draw.
-         */
-        drawSprite(ctx: CanvasRenderingContext2D, x: number, y: number, row: number, col: number): void;
-        /**
-         * Draws a sprite in this sprite sheet by index
-         * (<code>row*colCount + col</code>).
-         * @param {CanvasRenderingContext2D} ctx The canvas' context.
-         * @param {int} x The x-coordinate at which to draw.
-         * @param {int} y The y-coordinate at which to draw.
-         * @param {int} index The index in the sprite sheet of the sprite to draw.
-         */
-        drawByIndex(ctx: CanvasRenderingContext2D, x: number, y: number, index: number): void;
-    }
-}
-declare module gtp {
-    /**
-     * Arguments to pass to a state's constructor.
-     */
-    interface BaseStateArgs {
-        game: gtp.Game;
-    }
-    /**
-     * A base class for game states.  Basically just an interface with callbacks
-     * for updating and rendering, along with other lifecycle-ish methods.
-     * @class
-     */
-    class State {
-        game: gtp.Game;
-        /**
-         * A base class for game states.  Basically just an interface with callbacks
-         * for updating and rendering, along with other lifecycle-ish methods.
-         * @class
-         * @constructor
-         * @param args Arguments to the game state.
-         */
-        constructor(args?: Game | BaseStateArgs);
-        /**
-         * Called right before a state starts.  Subclasses can do any needed
-         * initialization here.
-         * @param {Game} game The game being played.
-         * @see leaving
-         */
-        enter(game: Game): void;
-        /**
-         * Called when this state is being left for another one.
-         * @param {Game} game The game being played.
-         * @see enter
-         */
-        leaving(game: Game): void;
-        /**
-         * Subclasses should override this method to do necessary update logic.
-         *
-         * @param {float} delta The amount of time that has elapsed since the last
-         *        frame/call to this method.
-         */
-        update(delta: number): void;
-        /**
-         * Subclasses should override this method to render the screen.
-         *
-         * @param {CanvasRenderingContext2D} ctx The graphics context to render onto.
-         */
-        render(ctx: CanvasRenderingContext2D): void;
     }
 }
 declare module gtp {
@@ -1189,72 +1255,6 @@ declare module gtp {
          * Defines console functions for IE9 and other braindead browsers.
          */
         static initConsole(): void;
-    }
-}
-declare module gtp {
-    /**
-     * This class keeps track of game time.  That includes both total running
-     * time, and "active time" (time not spent on paused screens, etc.).
-     * @constructor
-     */
-    class _GameTimer {
-        private _startShift;
-        private _paused;
-        private _pauseStart;
-        private _updating;
-        private _notUpdatingStart;
-        constructor();
-        /**
-         * Returns whether this game is paused.
-         * @return {boolean} Whether this game is paused.
-         */
-        /**
-         * Sets whether the game is paused.  The game is still told to handle
-         * input, update itself and render.  This is simply a flag that should
-         * be set whenever a "pause" screen is displayed.  It stops the "in-game
-         * timer" until the game is unpaused.
-         *
-         * @param paused Whether the game should be paused.
-         * @see setUpdating
-         */
-        paused: boolean;
-        /**
-         * Returns the length of time the game has been played so far.  This is
-         * "playable time;" that is, time in which the user is playing, and the
-         * game is not paused or in a "not updating" state (such as the main
-         * frame not having focus).
-         *
-         * @return {number} The amount of time the game has been played, in
-         *         milliseconds.
-         * @see resetPlayTime
-         */
-        playTime: number;
-        /**
-         * Returns whether this game is updating itself each frame.
-         *
-         * @return {boolean} Whether this game is updating itself.
-         */
-        /**
-         * Sets whether the game should be "updating" itself.  If a game is not
-         * "updating" itself, then it is effectively "paused," and will not accept
-         * any input from the user.<p>
-         *
-         * This method can be used to temporarily "pause" a game when the game
-         * window loses focus, for example.
-         *
-         * @param updating {boolean} Whether the game should be updating itself.
-         */
-        updating: boolean;
-        /**
-         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
-         *
-         * @see playTime
-         */
-        resetPlayTime(): void;
-        /**
-         * Resets this timer.  This should be called when a new game is started.
-         */
-        start(): void;
     }
 }
 declare module tiled {

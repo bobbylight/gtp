@@ -7,6 +7,136 @@ var gtp;
 (function (gtp) {
     'use strict';
     /**
+     * This class keeps track of game time.  That includes both total running
+     * time, and "active time" (time not spent on paused screens, etc.).
+     * @constructor
+     */
+    var _GameTimer = (function () {
+        function _GameTimer() {
+            this._paused = false;
+            this._pauseStart = 0;
+            this._updating = true;
+            this._notUpdatingStart = 0;
+        }
+        Object.defineProperty(_GameTimer.prototype, "paused", {
+            /**
+             * Returns whether this game is paused.
+             * @return {boolean} Whether this game is paused.
+             */
+            get: function () {
+                return this._paused;
+            },
+            /**
+             * Sets whether the game is paused.  The game is still told to handle
+             * input, update itself and render.  This is simply a flag that should
+             * be set whenever a "pause" screen is displayed.  It stops the "in-game
+             * timer" until the game is unpaused.
+             *
+             * @param paused Whether the game should be paused.
+             * @see setUpdating
+             */
+            set: function (paused) {
+                // Cannot pause while !updating, so this is okay
+                if (this._paused !== paused) {
+                    this._paused = paused;
+                    if (paused) {
+                        this._pauseStart = gtp.Utils.timestamp();
+                    }
+                    else {
+                        var pauseTime = gtp.Utils.timestamp() - this._pauseStart;
+                        this._startShift += pauseTime;
+                        this._pauseStart = 0;
+                    }
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(_GameTimer.prototype, "playTime", {
+            /**
+             * Returns the length of time the game has been played so far.  This is
+             * "playable time;" that is, time in which the user is playing, and the
+             * game is not paused or in a "not updating" state (such as the main
+             * frame not having focus).
+             *
+             * @return {number} The amount of time the game has been played, in
+             *         milliseconds.
+             * @see resetPlayTime
+             */
+            get: function () {
+                if (this._pauseStart !== 0) {
+                    return this._pauseStart - this._startShift;
+                }
+                else if (this._notUpdatingStart !== 0) {
+                    return this._notUpdatingStart - this._startShift;
+                }
+                return gtp.Utils.timestamp() - this._startShift;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(_GameTimer.prototype, "updating", {
+            /**
+             * Returns whether this game is updating itself each frame.
+             *
+             * @return {boolean} Whether this game is updating itself.
+             */
+            get: function () {
+                return this._updating;
+            },
+            /**
+             * Sets whether the game should be "updating" itself.  If a game is not
+             * "updating" itself, then it is effectively "paused," and will not accept
+             * any input from the user.<p>
+             *
+             * This method can be used to temporarily "pause" a game when the game
+             * window loses focus, for example.
+             *
+             * @param updating {boolean} Whether the game should be updating itself.
+             */
+            set: function (updating) {
+                if (this._updating !== updating) {
+                    this._updating = updating;
+                    if (!this.paused) {
+                        if (!this._updating) {
+                            this._notUpdatingStart = gtp.Utils.timestamp();
+                        }
+                        else {
+                            var notUpdatingTime = gtp.Utils.timestamp() - this._notUpdatingStart;
+                            this._startShift += notUpdatingTime;
+                            this._notUpdatingStart = 0;
+                        }
+                    }
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
+         *
+         * @see playTime
+         */
+        _GameTimer.prototype.resetPlayTime = function () {
+            if (this.paused || !this.updating) {
+                throw 'Cannot reset playtime millis when paused or not updating';
+            }
+            this._startShift = gtp.Utils.timestamp();
+        };
+        /**
+         * Resets this timer.  This should be called when a new game is started.
+         */
+        _GameTimer.prototype.start = function () {
+            this._startShift = gtp.Utils.timestamp();
+        };
+        return _GameTimer;
+    }());
+    gtp._GameTimer = _GameTimer;
+})(gtp || (gtp = {}));
+var gtp;
+(function (gtp) {
+    'use strict';
+    /**
      * Loads resources for a game.  All games have to load resources such as
      * images, sound effects, JSON data, sprite sheets, etc.  This class provides
      * a wrapper around the loading of such resources, as well as a callback
@@ -254,6 +384,7 @@ var gtp;
                 console.log('A resource with id ' + id + ' has already been loaded.');
                 return true;
             }
+            return false;
         };
         /**
          * Adds a resource.
@@ -663,6 +794,73 @@ var gtp;
 var gtp;
 (function (gtp) {
     'use strict';
+    var SpriteSheet = (function () {
+        /**
+         * Creates a sprite sheet.
+         *
+         * @param {gtp.Image} gtpImage A GTP image that is the source for the sprite sheet.
+         * @param {int} cellW The width of a cell in the sprite sheet.
+         * @param {int} cellH The height of a cell in the sprite sheet.
+         * @param {int} [spacing=1] Optional empty space between cells.
+         * @param {int} [spacingY=spacing] Optional vertical empty space between cells.
+         *        Specify only if different than the horizontal spacing.
+         * @constructor
+         */
+        function SpriteSheet(gtpImage, cellW, cellH, spacing, spacingY) {
+            if (spacing === void 0) { spacing = 1; }
+            if (spacingY === void 0) { spacingY = spacing; }
+            this.gtpImage = gtpImage;
+            this.cellW = cellW;
+            this.cellH = cellH;
+            this.spacingX = typeof spacing === 'undefined' ? 1 : spacing;
+            this.spacingY = typeof spacingY === 'undefined' ? this.spacingX : spacingY;
+            this.rowCount = Math.floor(gtpImage.height / (cellH + this.spacingY));
+            if ((gtpImage.height - this.rowCount * (cellH + this.spacingY)) >= cellH) {
+                this.rowCount++;
+            }
+            this.colCount = Math.floor(gtpImage.width / (cellW + this.spacingX));
+            if ((gtpImage.width - this.colCount * (cellW + this.spacingX)) >= cellW) {
+                this.colCount++;
+            }
+            this.size = this.rowCount * this.colCount;
+        }
+        /**
+         * Draws a sprite in this sprite sheet by row and column.
+         * @param {CanvasRenderingContext2D} ctx The canvas' context.
+         * @param {int} x The x-coordinate at which to draw.
+         * @param {int} y The y-coordinate at which to draw.
+         * @param {int} row The row in the sprite sheet of the sprite to draw.
+         * @param {int} col The column in the sprite sheet of the sprite to draw.
+         */
+        SpriteSheet.prototype.drawSprite = function (ctx, x, y, row, col) {
+            var cellW = this.cellW;
+            var cellH = this.cellH;
+            var srcX = (cellW + this.spacingX) * col; //(col-1);
+            var srcY = (cellH + this.spacingY) * row; //(row-1);
+            //ctx.drawImage(this.gtpImage.canvas, srcX,srcY,cellW,cellH, x,y,cellW,cellH);
+            this.gtpImage.drawScaled2(ctx, srcX, srcY, cellW, cellH, x, y, cellW, cellH);
+        };
+        /**
+         * Draws a sprite in this sprite sheet by index
+         * (<code>row*colCount + col</code>).
+         * @param {CanvasRenderingContext2D} ctx The canvas' context.
+         * @param {int} x The x-coordinate at which to draw.
+         * @param {int} y The y-coordinate at which to draw.
+         * @param {int} index The index in the sprite sheet of the sprite to draw.
+         */
+        SpriteSheet.prototype.drawByIndex = function (ctx, x, y, index) {
+            var row = Math.floor(index / this.colCount);
+            var col = Math.floor(index % this.colCount);
+            this.drawSprite(ctx, x, y, row, col);
+        };
+        return SpriteSheet;
+    }());
+    gtp.SpriteSheet = SpriteSheet;
+})(gtp || (gtp = {}));
+/// <reference path="SpriteSheet.ts" />
+var gtp;
+(function (gtp) {
+    'use strict';
     var BitmapFont = (function (_super) {
         __extends(BitmapFont, _super);
         function BitmapFont(gtpImage, cellW, cellH, spacing, spacingY) {
@@ -866,6 +1064,71 @@ var gtp;
     }());
     gtp.Delay = Delay;
 })(gtp || (gtp = {}));
+var gtp;
+(function (gtp) {
+    'use strict';
+    /**
+     * A base class for game states.  Basically just an interface with callbacks
+     * for updating and rendering, along with other lifecycle-ish methods.
+     * @class
+     */
+    var State = (function () {
+        /**
+         * A base class for game states.  Basically just an interface with callbacks
+         * for updating and rendering, along with other lifecycle-ish methods.
+         * @class
+         * @constructor
+         * @param args Arguments to the game state.
+         */
+        function State(args) {
+            if (args && args instanceof gtp.Game) {
+                this.game = args;
+            }
+            else if (args) {
+                this.game = args.game;
+            }
+            else {
+                this.game = window.game;
+            }
+        }
+        /**
+         * Called right before a state starts.  Subclasses can do any needed
+         * initialization here.
+         * @param {Game} game The game being played.
+         * @see leaving
+         */
+        State.prototype.enter = function (game) {
+            // Subclasses can override
+        };
+        /**
+         * Called when this state is being left for another one.
+         * @param {Game} game The game being played.
+         * @see enter
+         */
+        State.prototype.leaving = function (game) {
+        };
+        /**
+         * Subclasses should override this method to do necessary update logic.
+         *
+         * @param {float} delta The amount of time that has elapsed since the last
+         *        frame/call to this method.
+         */
+        State.prototype.update = function (delta) {
+            // Subclasses should override
+        };
+        /**
+         * Subclasses should override this method to render the screen.
+         *
+         * @param {CanvasRenderingContext2D} ctx The graphics context to render onto.
+         */
+        State.prototype.render = function (ctx) {
+            // Subclasses should override
+        };
+        return State;
+    }());
+    gtp.State = State;
+})(gtp || (gtp = {}));
+/// <reference path="State.ts" />
 var gtp;
 (function (gtp) {
     'use strict';
@@ -2007,136 +2270,6 @@ var gtp;
 var gtp;
 (function (gtp) {
     'use strict';
-    var SpriteSheet = (function () {
-        /**
-         * Creates a sprite sheet.
-         *
-         * @param {gtp.Image} gtpImage A GTP image that is the source for the sprite sheet.
-         * @param {int} cellW The width of a cell in the sprite sheet.
-         * @param {int} cellH The height of a cell in the sprite sheet.
-         * @param {int} [spacing=1] Optional empty space between cells.
-         * @param {int} [spacingY=spacing] Optional vertical empty space between cells.
-         *        Specify only if different than the horizontal spacing.
-         * @constructor
-         */
-        function SpriteSheet(gtpImage, cellW, cellH, spacing, spacingY) {
-            if (spacing === void 0) { spacing = 1; }
-            if (spacingY === void 0) { spacingY = spacing; }
-            this.gtpImage = gtpImage;
-            this.cellW = cellW;
-            this.cellH = cellH;
-            this.spacingX = typeof spacing === 'undefined' ? 1 : spacing;
-            this.spacingY = typeof spacingY === 'undefined' ? this.spacingX : spacingY;
-            this.rowCount = Math.floor(gtpImage.height / (cellH + this.spacingY));
-            if ((gtpImage.height - this.rowCount * (cellH + this.spacingY)) >= cellH) {
-                this.rowCount++;
-            }
-            this.colCount = Math.floor(gtpImage.width / (cellW + this.spacingX));
-            if ((gtpImage.width - this.colCount * (cellW + this.spacingX)) >= cellW) {
-                this.colCount++;
-            }
-            this.size = this.rowCount * this.colCount;
-        }
-        /**
-         * Draws a sprite in this sprite sheet by row and column.
-         * @param {CanvasRenderingContext2D} ctx The canvas' context.
-         * @param {int} x The x-coordinate at which to draw.
-         * @param {int} y The y-coordinate at which to draw.
-         * @param {int} row The row in the sprite sheet of the sprite to draw.
-         * @param {int} col The column in the sprite sheet of the sprite to draw.
-         */
-        SpriteSheet.prototype.drawSprite = function (ctx, x, y, row, col) {
-            var cellW = this.cellW;
-            var cellH = this.cellH;
-            var srcX = (cellW + this.spacingX) * col; //(col-1);
-            var srcY = (cellH + this.spacingY) * row; //(row-1);
-            //ctx.drawImage(this.gtpImage.canvas, srcX,srcY,cellW,cellH, x,y,cellW,cellH);
-            this.gtpImage.drawScaled2(ctx, srcX, srcY, cellW, cellH, x, y, cellW, cellH);
-        };
-        /**
-         * Draws a sprite in this sprite sheet by index
-         * (<code>row*colCount + col</code>).
-         * @param {CanvasRenderingContext2D} ctx The canvas' context.
-         * @param {int} x The x-coordinate at which to draw.
-         * @param {int} y The y-coordinate at which to draw.
-         * @param {int} index The index in the sprite sheet of the sprite to draw.
-         */
-        SpriteSheet.prototype.drawByIndex = function (ctx, x, y, index) {
-            var row = Math.floor(index / this.colCount);
-            var col = Math.floor(index % this.colCount);
-            this.drawSprite(ctx, x, y, row, col);
-        };
-        return SpriteSheet;
-    }());
-    gtp.SpriteSheet = SpriteSheet;
-})(gtp || (gtp = {}));
-var gtp;
-(function (gtp) {
-    'use strict';
-    /**
-     * A base class for game states.  Basically just an interface with callbacks
-     * for updating and rendering, along with other lifecycle-ish methods.
-     * @class
-     */
-    var State = (function () {
-        /**
-         * A base class for game states.  Basically just an interface with callbacks
-         * for updating and rendering, along with other lifecycle-ish methods.
-         * @class
-         * @constructor
-         * @param args Arguments to the game state.
-         */
-        function State(args) {
-            if (args && args instanceof gtp.Game) {
-                this.game = args;
-            }
-            else if (args) {
-                this.game = args.game;
-            }
-            else {
-                this.game = window.game;
-            }
-        }
-        /**
-         * Called right before a state starts.  Subclasses can do any needed
-         * initialization here.
-         * @param {Game} game The game being played.
-         * @see leaving
-         */
-        State.prototype.enter = function (game) {
-            // Subclasses can override
-        };
-        /**
-         * Called when this state is being left for another one.
-         * @param {Game} game The game being played.
-         * @see enter
-         */
-        State.prototype.leaving = function (game) {
-        };
-        /**
-         * Subclasses should override this method to do necessary update logic.
-         *
-         * @param {float} delta The amount of time that has elapsed since the last
-         *        frame/call to this method.
-         */
-        State.prototype.update = function (delta) {
-            // Subclasses should override
-        };
-        /**
-         * Subclasses should override this method to render the screen.
-         *
-         * @param {CanvasRenderingContext2D} ctx The graphics context to render onto.
-         */
-        State.prototype.render = function (ctx) {
-            // Subclasses should override
-        };
-        return State;
-    }());
-    gtp.State = State;
-})(gtp || (gtp = {}));
-var gtp;
-(function (gtp) {
-    'use strict';
     /**
      * An enum of available stretch modes for games.  While typically used in desktop games, this can be used
      * in the browser as well, to allow the game to resize as the window is resized, according to their personal
@@ -2426,136 +2559,6 @@ var gtp;
     }());
     gtp.Utils = Utils;
 })(gtp || (gtp = {}));
-var gtp;
-(function (gtp) {
-    'use strict';
-    /**
-     * This class keeps track of game time.  That includes both total running
-     * time, and "active time" (time not spent on paused screens, etc.).
-     * @constructor
-     */
-    var _GameTimer = (function () {
-        function _GameTimer() {
-            this._paused = false;
-            this._pauseStart = 0;
-            this._updating = true;
-            this._notUpdatingStart = 0;
-        }
-        Object.defineProperty(_GameTimer.prototype, "paused", {
-            /**
-             * Returns whether this game is paused.
-             * @return {boolean} Whether this game is paused.
-             */
-            get: function () {
-                return this._paused;
-            },
-            /**
-             * Sets whether the game is paused.  The game is still told to handle
-             * input, update itself and render.  This is simply a flag that should
-             * be set whenever a "pause" screen is displayed.  It stops the "in-game
-             * timer" until the game is unpaused.
-             *
-             * @param paused Whether the game should be paused.
-             * @see setUpdating
-             */
-            set: function (paused) {
-                // Cannot pause while !updating, so this is okay
-                if (this._paused !== paused) {
-                    this._paused = paused;
-                    if (paused) {
-                        this._pauseStart = gtp.Utils.timestamp();
-                    }
-                    else {
-                        var pauseTime = gtp.Utils.timestamp() - this._pauseStart;
-                        this._startShift += pauseTime;
-                        this._pauseStart = 0;
-                    }
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(_GameTimer.prototype, "playTime", {
-            /**
-             * Returns the length of time the game has been played so far.  This is
-             * "playable time;" that is, time in which the user is playing, and the
-             * game is not paused or in a "not updating" state (such as the main
-             * frame not having focus).
-             *
-             * @return {number} The amount of time the game has been played, in
-             *         milliseconds.
-             * @see resetPlayTime
-             */
-            get: function () {
-                if (this._pauseStart !== 0) {
-                    return this._pauseStart - this._startShift;
-                }
-                else if (this._notUpdatingStart !== 0) {
-                    return this._notUpdatingStart - this._startShift;
-                }
-                return gtp.Utils.timestamp() - this._startShift;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(_GameTimer.prototype, "updating", {
-            /**
-             * Returns whether this game is updating itself each frame.
-             *
-             * @return {boolean} Whether this game is updating itself.
-             */
-            get: function () {
-                return this._updating;
-            },
-            /**
-             * Sets whether the game should be "updating" itself.  If a game is not
-             * "updating" itself, then it is effectively "paused," and will not accept
-             * any input from the user.<p>
-             *
-             * This method can be used to temporarily "pause" a game when the game
-             * window loses focus, for example.
-             *
-             * @param updating {boolean} Whether the game should be updating itself.
-             */
-            set: function (updating) {
-                if (this._updating !== updating) {
-                    this._updating = updating;
-                    if (!this.paused) {
-                        if (!this._updating) {
-                            this._notUpdatingStart = gtp.Utils.timestamp();
-                        }
-                        else {
-                            var notUpdatingTime = gtp.Utils.timestamp() - this._notUpdatingStart;
-                            this._startShift += notUpdatingTime;
-                            this._notUpdatingStart = 0;
-                        }
-                    }
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * Resets the "playtime in milliseconds" timer back to <code>0</code>.
-         *
-         * @see playTime
-         */
-        _GameTimer.prototype.resetPlayTime = function () {
-            if (this.paused || !this.updating) {
-                throw 'Cannot reset playtime millis when paused or not updating';
-            }
-            this._startShift = gtp.Utils.timestamp();
-        };
-        /**
-         * Resets this timer.  This should be called when a new game is started.
-         */
-        _GameTimer.prototype.start = function () {
-            this._startShift = gtp.Utils.timestamp();
-        };
-        return _GameTimer;
-    }());
-    gtp._GameTimer = _GameTimer;
-})(gtp || (gtp = {}));
 var tiled;
 (function (tiled) {
     'use strict';
@@ -2586,6 +2589,7 @@ var tiled;
             }
             var index = this._getIndex(row, col);
             this.data[index] = value;
+            return true;
         };
         TiledLayer.prototype._getIndex = function (row, col) {
             return row * this.map.colCount + col;

@@ -1,3 +1,4 @@
+/// <reference path="State.d.ts" />
 declare module gtp {
     class FadeOutInState extends gtp.State {
         private _leavingState;
