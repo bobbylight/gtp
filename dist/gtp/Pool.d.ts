@@ -27,7 +27,6 @@ declare module gtp {
          * Gets an object from this pool.
          * @return {T} An object from this pool.
          * @see returnObj
-         * @see returnObj
          */
         borrowObj(): T;
         /**

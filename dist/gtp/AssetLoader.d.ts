@@ -111,7 +111,7 @@ declare module gtp {
         set(res: string, value: any): void;
         _completed(res: string, response: any): void;
         /**
-         * Returns whether all assets in thie loader have successfully loaded.
+         * Returns whether all assets in this loader have successfully loaded.
          *
          * @return {boolean} Whether all assets have loaded.
          */

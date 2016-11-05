@@ -55,7 +55,7 @@ var gtp;
             return null;
         };
         /**
-         * Equivlaent to dojo/_base/hitch, returns a function in a specific scope.
+         * Equivalent to dojo/_base/hitch, returns a function in a specific scope.
          *
          * @param {object} scope The scope to run the function in (e.g. the value of
          *        "this").

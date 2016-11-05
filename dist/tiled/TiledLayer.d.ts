@@ -18,8 +18,8 @@ declare module tiled {
         getData(row: number, col: number): number;
         setData(row: number, col: number, value: number): boolean;
         private _getIndex(row, col);
-        getObjectByName(name: string): TiledObject;
-        getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject;
+        getObjectByName(name: string): TiledObject | null;
+        getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject | null;
         isObjectGroup(): boolean;
         private _setObjects(objects);
     }

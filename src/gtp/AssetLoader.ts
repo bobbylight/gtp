@@ -28,7 +28,7 @@ module gtp {
 		private responses: { [id: string]: any };
 		private callback: any;
 		audio: gtp.AudioSystem;
-		private _assetRoot: string;
+		private _assetRoot: string | undefined;
 		private nextCallback: Function;
 
 		/**
@@ -332,7 +332,7 @@ module gtp {
 		}
 
 		/**
-		 * Returns whether all assets in thie loader have successfully loaded.
+		 * Returns whether all assets in this loader have successfully loaded.
 		 *
 		 * @return {boolean} Whether all assets have loaded.
 		 */

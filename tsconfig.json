@@ -7,18 +7,14 @@
         "outDir": "dist/",
         "preserveConstEnums": true,
         "rootDir": "src/",
-        //"strictNullChecks": true,
+        "strictNullChecks": true,
         "sourceMap": true,
         "target": "es5",
         "diagnostics": true
     },
-    "include": [
-        // Order base classes first to appease tsc 2.0
-        "src/gtp/SpriteSheet.ts",
-        "src/gtp/BitmapFont.ts",
-        "src/gtp/State.ts",
-        "src/gtp/FadeOutInState.ts",
-        "src/gtp/**/*.ts",
-        "src/tiled/*.ts"
+    "exclude": [
+        "node_modules",
+        "dist",
+        "dist-all"
     ]
 }

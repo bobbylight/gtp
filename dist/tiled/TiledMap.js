@@ -105,7 +105,7 @@ var tiled;
                     _x = startX;
                     var layer = this.getLayerByIndex(l);
                     if (layer.visible) {
-                        var prevOpacity = void 0;
+                        var prevOpacity = 1; // Default value needed for strict null checks
                         if (layer.opacity < 1) {
                             prevOpacity = ctx.globalAlpha;
                             ctx.globalAlpha = prevOpacity * layer.opacity;

@@ -33,7 +33,6 @@ var gtp;
          * Gets an object from this pool.
          * @return {T} An object from this pool.
          * @see returnObj
-         * @see returnObj
          */
         Pool.prototype.borrowObj = function () {
             var obj = this._pool[this._index++];

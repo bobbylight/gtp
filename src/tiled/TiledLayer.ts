@@ -51,11 +51,11 @@ module tiled {
 			return row * this.map.colCount + col;
 		}
 
-		getObjectByName(name: string): TiledObject {
+		getObjectByName(name: string): TiledObject | null {
 			return this.objectsByName ? this.objectsByName[name] : null;
 		}
 
-		getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject {
+		getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject | null {
 			if (this.objects) {
 				for (let i: number = 0; i < this.objects.length; i++) {
 					const obj: TiledObject = this.objects[i];

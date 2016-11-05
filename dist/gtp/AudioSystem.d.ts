@@ -86,8 +86,8 @@ declare module gtp {
         playSound(id: string, loop?: boolean, doneCallback?: Function): number;
         /**
          * Removes a sound from our list of currently-being-played sound effects.
-         * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.
-         * @return The sound just removed.
+         * @param {number} id The sound effect to stop playing.
+         * @return The sound just removed, or <code>null</code> if there was no such sound.
          */
         private _removePlayingSound(id);
         /**

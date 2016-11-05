@@ -177,7 +177,7 @@ declare module gtp {
         set(res: string, value: any): void;
         _completed(res: string, response: any): void;
         /**
-         * Returns whether all assets in thie loader have successfully loaded.
+         * Returns whether all assets in this loader have successfully loaded.
          *
          * @return {boolean} Whether all assets have loaded.
          */
@@ -281,8 +281,8 @@ declare module gtp {
         playSound(id: string, loop?: boolean, doneCallback?: Function): number;
         /**
          * Removes a sound from our list of currently-being-played sound effects.
-         * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.
-         * @return The sound just removed.
+         * @param {number} id The sound effect to stop playing.
+         * @return The sound just removed, or <code>null</code> if there was no such sound.
          */
         private _removePlayingSound(id);
         /**
@@ -414,7 +414,7 @@ declare module gtp {
     class Delay {
         _initial: number[];
         _initialIndex: number;
-        _callback: Function;
+        _callback: Function | undefined;
         _loop: boolean;
         _loopCount: number;
         _maxLoopCount: number;
@@ -519,8 +519,8 @@ declare module gtp {
         /**
          * Subclasses should override this method to do necessary update logic.
          *
-         * @param {float} delta The amount of time that has elapsed since the last
-         *        frame/call to this method.
+         * @param {number} delta The amount of time that has elapsed since the last
+         *        frame/call to this method, as a floating point number.
          */
         update(delta: number): void;
         /**
@@ -980,7 +980,6 @@ declare module gtp {
          * Gets an object from this pool.
          * @return {T} An object from this pool.
          * @see returnObj
-         * @see returnObj
          */
         borrowObj(): T;
         /**
@@ -1154,8 +1153,8 @@ declare module gtp {
         /**
          * Resizes a canvas to use the specified stretch mode.
          *
-         * @param {HTMLCanvasElement} The canvas to resize.
-         * @param {gtp.StretchMode} The stretch mode to apply.
+         * @param {HTMLCanvasElement} canvas The canvas to resize.
+         * @param {gtp.StretchMode} stretchMode The stretch mode to apply.
          */
         static resize(canvas: HTMLCanvasElement, stretchMode: StretchMode): void;
     }
@@ -1215,9 +1214,9 @@ declare module gtp {
          * @return {string} The value of the request parameter, or <code>null</code>
          *         if it was not specified.
          */
-        static getRequestParam(param: string): string;
+        static getRequestParam(param: string): string | null;
         /**
-         * Equivlaent to dojo/_base/hitch, returns a function in a specific scope.
+         * Equivalent to dojo/_base/hitch, returns a function in a specific scope.
          *
          * @param {object} scope The scope to run the function in (e.g. the value of
          *        "this").
@@ -1277,8 +1276,8 @@ declare module tiled {
         getData(row: number, col: number): number;
         setData(row: number, col: number, value: number): boolean;
         private _getIndex(row, col);
-        getObjectByName(name: string): TiledObject;
-        getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject;
+        getObjectByName(name: string): TiledObject | null;
+        getObjectIntersecting(x: number, y: number, w: number, h: number): TiledObject | null;
         isObjectGroup(): boolean;
         private _setObjects(objects);
     }

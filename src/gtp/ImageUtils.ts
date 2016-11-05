@@ -28,12 +28,12 @@ module gtp {
 
 			if (img instanceof HTMLImageElement) {
 				orig = gtp.ImageUtils.createCanvas(img.width, img.height);
-				origCtx = orig.getContext('2d');
+				origCtx = orig.getContext('2d')!;
 				origCtx.drawImage(img, 0, 0);
 			}
 			else {
 				orig = <HTMLCanvasElement>img;
-				origCtx = orig.getContext('2d');
+				origCtx = orig.getContext('2d')!;
 			}
 
 			if (scale === 1) {
@@ -45,7 +45,7 @@ module gtp {
 			const widthScaled: number = img.width * scale;
 			const heightScaled: number = img.height * scale;
 			const scaled: HTMLCanvasElement = gtp.ImageUtils.createCanvas(widthScaled, heightScaled);
-			const scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d');
+			const scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d')!;
 			const scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
 
 			for (let y: number = 0; y < heightScaled; y++) {
@@ -74,7 +74,7 @@ module gtp {
 
 				let actualParent: HTMLElement;
 				if (typeof parentDiv === 'string') {
-					actualParent = document.getElementById(parentDiv);
+					actualParent = document.getElementById(parentDiv)!;
 				}
 				else {
 					actualParent = parentDiv;
@@ -113,7 +113,7 @@ module gtp {
 		 */
 		static makeColorTranslucent(canvas: HTMLCanvasElement, x: number = 0, y: number = 0) {
 
-			const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+			const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
 			const w: number = canvas.width;
 			const h: number = canvas.height;
 			const pixels: ImageData = ctx.getImageData(0, 0, w, h);

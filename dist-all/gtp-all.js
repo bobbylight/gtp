@@ -421,7 +421,7 @@ var gtp;
             }
         };
         /**
-         * Returns whether all assets in thie loader have successfully loaded.
+         * Returns whether all assets in this loader have successfully loaded.
          *
          * @return {boolean} Whether all assets have loaded.
          */
@@ -536,7 +536,6 @@ var gtp;
             var _this = this;
             if (loop === void 0) { loop = false; }
             if (startOffset === void 0) { startOffset = 0; }
-            if (doneCallback === void 0) { doneCallback = null; }
             var soundEffectId = this._createSoundEffectId();
             var soundEffect = new PlayingSound({
                 audioSystem: this,
@@ -688,7 +687,6 @@ var gtp;
          */
         AudioSystem.prototype.playSound = function (id, loop, doneCallback) {
             if (loop === void 0) { loop = false; }
-            if (doneCallback === void 0) { doneCallback = null; }
             if (this.context) {
                 var playingSound = this._createPlayingSound(id, loop, 0, doneCallback);
                 this._playingSounds.push(playingSound);
@@ -699,8 +697,8 @@ var gtp;
         };
         /**
          * Removes a sound from our list of currently-being-played sound effects.
-         * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.
-         * @return The sound just removed.
+         * @param {number} id The sound effect to stop playing.
+         * @return The sound just removed, or <code>null</code> if there was no such sound.
          */
         AudioSystem.prototype._removePlayingSound = function (id) {
             for (var i = 0; i < this._playingSounds.length; i++) {
@@ -733,12 +731,14 @@ var gtp;
          */
         AudioSystem.prototype.stopMusic = function (pause) {
             if (pause === void 0) { pause = false; }
-            this._currentMusic.stop();
-            if (!pause) {
-                this._currentMusic.disconnect();
-                this._musicFaderGain.disconnect();
-                delete this._currentMusic;
-                delete this._musicFaderGain;
+            if (this._currentMusic) {
+                this._currentMusic.stop();
+                if (!pause) {
+                    this._currentMusic.disconnect();
+                    this._musicFaderGain.disconnect();
+                    delete this._currentMusic;
+                    delete this._musicFaderGain;
+                }
             }
         };
         /**
@@ -1110,8 +1110,8 @@ var gtp;
         /**
          * Subclasses should override this method to do necessary update logic.
          *
-         * @param {float} delta The amount of time that has elapsed since the last
-         *        frame/call to this method.
+         * @param {number} delta The amount of time that has elapsed since the last
+         *        frame/call to this method, as a floating point number.
          */
         State.prototype.update = function (delta) {
             // Subclasses should override
@@ -1335,11 +1335,13 @@ var gtp;
             ctx.fillText(this._fpsMsg, x, y);
         };
         Game.prototype._renderStatusMessage = function (ctx) {
-            var x = 10;
-            var y = this.canvas.height - 6;
-            ctx.font = '10pt Arial';
-            ctx.fillStyle = this._statusMessageColor;
-            ctx.fillText(this._statusMessage, x, y);
+            if (this._statusMessage) {
+                var x = 10;
+                var y = this.canvas.height - 6;
+                ctx.font = '10pt Arial';
+                ctx.fillStyle = this._statusMessageColor || '#fff';
+                ctx.fillText(this._statusMessage, x, y);
+            }
         };
         /**
          * Resets the "playtime in milliseconds" timer back to <code>0</code>.
@@ -2013,7 +2015,6 @@ var gtp;
          * Gets an object from this pool.
          * @return {T} An object from this pool.
          * @see returnObj
-         * @see returnObj
          */
         Pool.prototype.borrowObj = function () {
             var obj = this._pool[this._index++];
@@ -2343,8 +2344,8 @@ var gtp;
         /**
          * Resizes a canvas to use the specified stretch mode.
          *
-         * @param {HTMLCanvasElement} The canvas to resize.
-         * @param {gtp.StretchMode} The stretch mode to apply.
+         * @param {HTMLCanvasElement} canvas The canvas to resize.
+         * @param {gtp.StretchMode} stretchMode The stretch mode to apply.
          */
         CanvasResizer.resize = function (canvas, stretchMode) {
             switch (stretchMode) {
@@ -2487,7 +2488,7 @@ var gtp;
             return null;
         };
         /**
-         * Equivlaent to dojo/_base/hitch, returns a function in a specific scope.
+         * Equivalent to dojo/_base/hitch, returns a function in a specific scope.
          *
          * @param {object} scope The scope to run the function in (e.g. the value of
          *        "this").
@@ -2734,7 +2735,7 @@ var tiled;
                     _x = startX;
                     var layer = this.getLayerByIndex(l);
                     if (layer.visible) {
-                        var prevOpacity = void 0;
+                        var prevOpacity = 1; // Default value needed for strict null checks
                         if (layer.opacity < 1) {
                             prevOpacity = ctx.globalAlpha;
                             ctx.globalAlpha = prevOpacity * layer.opacity;

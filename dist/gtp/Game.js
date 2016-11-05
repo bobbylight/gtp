@@ -134,11 +134,13 @@ var gtp;
             ctx.fillText(this._fpsMsg, x, y);
         };
         Game.prototype._renderStatusMessage = function (ctx) {
-            var x = 10;
-            var y = this.canvas.height - 6;
-            ctx.font = '10pt Arial';
-            ctx.fillStyle = this._statusMessageColor;
-            ctx.fillText(this._statusMessage, x, y);
+            if (this._statusMessage) {
+                var x = 10;
+                var y = this.canvas.height - 6;
+                ctx.font = '10pt Arial';
+                ctx.fillStyle = this._statusMessageColor || '#fff';
+                ctx.fillText(this._statusMessage, x, y);
+            }
         };
         /**
          * Resets the "playtime in milliseconds" timer back to <code>0</code>.

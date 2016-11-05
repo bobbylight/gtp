@@ -141,7 +141,7 @@ module tiled {
 					const layer: TiledLayer = this.getLayerByIndex(l);
 					if (layer.visible) {
 
-						let prevOpacity: number;
+						let prevOpacity: number = 1; // Default value needed for strict null checks
 						if (layer.opacity < 1) {
 							prevOpacity = ctx.globalAlpha;
 							ctx.globalAlpha = prevOpacity * layer.opacity;

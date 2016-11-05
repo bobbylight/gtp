@@ -18,9 +18,9 @@ declare module gtp {
          * @return {string} The value of the request parameter, or <code>null</code>
          *         if it was not specified.
          */
-        static getRequestParam(param: string): string;
+        static getRequestParam(param: string): string | null;
         /**
-         * Equivlaent to dojo/_base/hitch, returns a function in a specific scope.
+         * Equivalent to dojo/_base/hitch, returns a function in a specific scope.
          *
          * @param {object} scope The scope to run the function in (e.g. the value of
          *        "this").

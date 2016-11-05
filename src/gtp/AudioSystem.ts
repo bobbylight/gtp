@@ -71,7 +71,7 @@ module gtp {
 				let prevStartOffset: number = this._startOffset;
 				this._initFromConfig();
 				this._startOffset = prevStartOffset + this._playedTime;
-				this._startOffset = this._startOffset % this.source.buffer.duration;
+				this._startOffset = this._startOffset % this.source.buffer!.duration;
 				let curAudioTime: number = this.source.context.currentTime;
 				this.source.start(curAudioTime, this._startOffset);
 				this._start = curAudioTime;
@@ -92,7 +92,7 @@ module gtp {
 
 	export class AudioSystem {
 
-		private _currentMusic: AudioBufferSourceNode;
+		private _currentMusic: AudioBufferSourceNode | null;
 		private _sounds: { [id: string]: gtp.Sound };
 		private _musicFade: number;
 		private _fadeMusic: boolean;
@@ -134,7 +134,7 @@ module gtp {
 		}
 
 		private _createPlayingSound(id: string, loop: boolean = false,
-				startOffset: number = 0, doneCallback: Function = null): PlayingSound {
+				startOffset: number = 0, doneCallback?: Function): PlayingSound {
 
 			const soundEffectId: number = this._createSoundEffectId();
 
@@ -277,7 +277,7 @@ module gtp {
 				this._musicLoopStart = sound.getLoopStart() || 0;
 				this._currentMusic.loopStart = this._musicLoopStart;
 				this._currentMusic.buffer = sound.getBuffer();
-				this._currentMusic.loopEnd = this._currentMusic.buffer.duration;
+				this._currentMusic.loopEnd = this._currentMusic.buffer!.duration;
 				this._currentMusic.connect(this._musicFaderGain);
 				this._musicFaderGain.connect(this._volumeFaderGain);
 				this._currentMusic.start(0);
@@ -301,7 +301,7 @@ module gtp {
 		 *         stop a looping sound via <code>stopSound(id)</code>.
 		 * @see stopSound
 		 */
-		playSound(id: string, loop: boolean = false, doneCallback: Function = null): number {
+		playSound(id: string, loop: boolean = false, doneCallback?: Function): number {
 			if (this.context) {
 
 				let playingSound: PlayingSound = this._createPlayingSound(id, loop, 0,
@@ -316,10 +316,10 @@ module gtp {
 
 		/**
 		 * Removes a sound from our list of currently-being-played sound effects.
-		 * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.
-		 * @return The sound just removed.
+		 * @param {number} id The sound effect to stop playing.
+		 * @return The sound just removed, or <code>null</code> if there was no such sound.
 		 */
-		private _removePlayingSound(id: number): PlayingSound {
+		private _removePlayingSound(id: number): PlayingSound | null {
 			for (let i: number = 0; i < this._playingSounds.length; i++) {
 				if (this._playingSounds[i].id === id) {
 					let sound: PlayingSound = this._playingSounds[i];
@@ -352,12 +352,14 @@ module gtp {
 		 * @see playMusic
 		 */
 		stopMusic(pause: boolean = false) {
-			this._currentMusic.stop();
-			if (!pause) {
-				this._currentMusic.disconnect();
-				this._musicFaderGain.disconnect();
-				delete this._currentMusic;
-				delete this._musicFaderGain;
+			if (this._currentMusic) {
+				this._currentMusic.stop();
+				if (!pause) {
+					this._currentMusic.disconnect();
+					this._musicFaderGain.disconnect();
+					delete this._currentMusic;
+					delete this._musicFaderGain;
+				}
 			}
 		}
 
@@ -370,7 +372,7 @@ module gtp {
 		 * @see playSound
 		 */
 		stopSound(id: number): boolean {
-			const sound: PlayingSound = this._removePlayingSound(id);
+			const sound: PlayingSound | null = this._removePlayingSound(id);
 			if (sound) {
 				sound.source.stop();
 				return true;

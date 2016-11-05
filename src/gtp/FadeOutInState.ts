@@ -7,7 +7,7 @@ module gtp {
 
 		private _leavingState: State;
 		private _enteringState: State;
-		private _transitionLogic: Function;
+		private _transitionLogic: Function | undefined;
 		private _fadingOut: boolean;
 		private _alpha: number;
 		private _halfTime: number;

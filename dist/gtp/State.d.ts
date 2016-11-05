@@ -36,8 +36,8 @@ declare module gtp {
         /**
          * Subclasses should override this method to do necessary update logic.
          *
-         * @param {float} delta The amount of time that has elapsed since the last
-         *        frame/call to this method.
+         * @param {number} delta The amount of time that has elapsed since the last
+         *        frame/call to this method, as a floating point number.
          */
         update(delta: number): void;
         /**

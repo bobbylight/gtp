@@ -74,8 +74,8 @@ var gtp;
         /**
          * Resizes a canvas to use the specified stretch mode.
          *
-         * @param {HTMLCanvasElement} The canvas to resize.
-         * @param {gtp.StretchMode} The stretch mode to apply.
+         * @param {HTMLCanvasElement} canvas The canvas to resize.
+         * @param {gtp.StretchMode} stretchMode The stretch mode to apply.
          */
         CanvasResizer.resize = function (canvas, stretchMode) {
             switch (stretchMode) {

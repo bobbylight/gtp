@@ -19,11 +19,11 @@ module gtp {
 		clearScreenColor: string;
 		fpsColor: string;
 		statusMessageRGB: string;
-		private _statusMessageColor: string;
+		private _statusMessageColor: string | null;
 		showFps: boolean;
 		frames: number;
 		private _fpsMsg: string;
-		private _statusMessage: string;
+		private _statusMessage: string | null;
 		private _statusMessageAlpha: number;
 		private _statusMessageTime: number;
 		state: gtp.State;
@@ -69,7 +69,7 @@ module gtp {
 		 *        If unspecified, <code>this.clearScreenColor</code> is used.
 		 */
 		clearScreen(clearScreenColor: string = this.clearScreenColor) {
-			const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
+			const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
 			ctx.fillStyle = clearScreenColor;
 			ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
 		}
@@ -118,7 +118,7 @@ module gtp {
 
 		render() {
 
-			const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d');
+			const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
 			this.state.render(ctx);
 
 			if (this.showFps) {
@@ -151,11 +151,13 @@ module gtp {
 		}
 
 		private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
-			const x: number = 10;
-			const y: number = this.canvas.height - 6;
-			ctx.font = '10pt Arial';
-			ctx.fillStyle = this._statusMessageColor;
-			ctx.fillText(this._statusMessage, x, y);
+			if (this._statusMessage) {
+				const x: number = 10;
+				const y: number = this.canvas.height - 6;
+				ctx.font = '10pt Arial';
+				ctx.fillStyle = this._statusMessageColor || '#fff';
+				ctx.fillText(this._statusMessage, x, y);
+			}
 		}
 
 		/**

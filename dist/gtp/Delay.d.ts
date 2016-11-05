@@ -37,7 +37,7 @@ declare module gtp {
     class Delay {
         _initial: number[];
         _initialIndex: number;
-        _callback: Function;
+        _callback: Function | undefined;
         _loop: boolean;
         _loopCount: number;
         _maxLoopCount: number;

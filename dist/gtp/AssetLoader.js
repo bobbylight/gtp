@@ -286,7 +286,7 @@ var gtp;
             }
         };
         /**
-         * Returns whether all assets in thie loader have successfully loaded.
+         * Returns whether all assets in this loader have successfully loaded.
          *
          * @return {boolean} Whether all assets have loaded.
          */

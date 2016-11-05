@@ -40,7 +40,7 @@ module gtp {
 				const w: number = Math.max(256, this._canvas.width);
 				const h: number = Math.max(256, this._canvas.height);
 				const canvas2: HTMLCanvasElement = gtp.ImageUtils.createCanvas(w, h);
-				const ctx2: CanvasRenderingContext2D = canvas2.getContext('2d');
+				const ctx2: CanvasRenderingContext2D = canvas2.getContext('2d')!;
 				ctx2.drawImage(this._canvas, 0, 0);
 				this._canvas = canvas2;
 			}

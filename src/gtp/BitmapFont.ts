@@ -12,7 +12,7 @@ module gtp {
 		drawString(str: string, x: number, y: number) {
 
 			const glyphCount: number = this.size;
-			const ctx: CanvasRenderingContext2D = window.game.canvas.getContext('2d');
+			const ctx: CanvasRenderingContext2D = window.game.canvas.getContext('2d')!;
 			const charWidth: number = this.cellW;
 
 			for (let i: number = 0; i < str.length; i++) {

@@ -80,7 +80,6 @@ var gtp;
             var _this = this;
             if (loop === void 0) { loop = false; }
             if (startOffset === void 0) { startOffset = 0; }
-            if (doneCallback === void 0) { doneCallback = null; }
             var soundEffectId = this._createSoundEffectId();
             var soundEffect = new PlayingSound({
                 audioSystem: this,
@@ -232,7 +231,6 @@ var gtp;
          */
         AudioSystem.prototype.playSound = function (id, loop, doneCallback) {
             if (loop === void 0) { loop = false; }
-            if (doneCallback === void 0) { doneCallback = null; }
             if (this.context) {
                 var playingSound = this._createPlayingSound(id, loop, 0, doneCallback);
                 this._playingSounds.push(playingSound);
@@ -243,8 +241,8 @@ var gtp;
         };
         /**
          * Removes a sound from our list of currently-being-played sound effects.
-         * @param {gtp.PlayingSound} playingSound The sound effect to stop playing.
-         * @return The sound just removed.
+         * @param {number} id The sound effect to stop playing.
+         * @return The sound just removed, or <code>null</code> if there was no such sound.
          */
         AudioSystem.prototype._removePlayingSound = function (id) {
             for (var i = 0; i < this._playingSounds.length; i++) {
@@ -277,12 +275,14 @@ var gtp;
          */
         AudioSystem.prototype.stopMusic = function (pause) {
             if (pause === void 0) { pause = false; }
-            this._currentMusic.stop();
-            if (!pause) {
-                this._currentMusic.disconnect();
-                this._musicFaderGain.disconnect();
-                delete this._currentMusic;
-                delete this._musicFaderGain;
+            if (this._currentMusic) {
+                this._currentMusic.stop();
+                if (!pause) {
+                    this._currentMusic.disconnect();
+                    this._musicFaderGain.disconnect();
+                    delete this._currentMusic;
+                    delete this._musicFaderGain;
+                }
             }
         };
         /**
