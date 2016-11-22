@@ -1,11 +1,13 @@
 {
   "name": "gtp",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/bobbylight/gtp.git"
   },
+  "main": "./dist-all/gtp-all.js",
+  "types": "./dist-all/gtp-all.d.ts",
   "devDependencies": {
     "del": "2.2.2",
     "gulp": "3.9.1",
