@@ -1,11 +1,12 @@
 .DS_Store
-build
-doc
-node_modules
+build/
+doc/
+node_modules/
 .tmp
 example/rpg/dist
 Thumbs.db
-coverage
+coverage/
 npm-debug.log
 .idea
 gtp.iml
+typings/
