@@ -1,309 +1,312 @@
-module tiled {
-	'use strict';
+import {TiledTileset} from './TiledTileset';
+import {TiledLayer} from './TiledLayer';
+import {Image} from '../gtp/Image';
+import {Game} from '../gtp/Game';
+import {Window} from '../gtp/GtpBase';
 
-	export class TiledMap {
+export class TiledMap {
 
-		rowCount: number;
-		colCount: number;
-		tileWidth: number;
-		tileHeight: number;
-		screenWidth: number;
-		screenHeight: number;
-		screenRows: number;
-		screenCols: number;
-		imagePathModifier: Function;
-		layers: TiledLayer[];
-		layersByName: { [name: string]: TiledLayer };
-		objectGroups: TiledLayer[];
-		tilesets: TiledTileset[];
-		properties: any;
-		version: number;
-		orientation: string;
+	rowCount: number;
+	colCount: number;
+	tileWidth: number;
+	tileHeight: number;
+	screenWidth: number;
+	screenHeight: number;
+	screenRows: number;
+	screenCols: number;
+	imagePathModifier: Function;
+	layers: TiledLayer[];
+	layersByName: { [name: string]: TiledLayer };
+	objectGroups: TiledLayer[];
+	tilesets: TiledTileset[];
+	properties: any;
+	version: number;
+	orientation: string;
 
-		/**
-		 * A 2d game map, generated in Tiled.
-		 * 
-		 * @constructor
-		 */
-		constructor(data: any, args: any) {
+	/**
+	 * A 2d game map, generated in Tiled.
+	 *
+	 * @constructor
+	 */
+	constructor(data: any, args: any) {
 
-			this.rowCount = data.height;
-			this.colCount = data.width;
-			this.tileWidth = args.tileWidth;
-			this.tileHeight = args.tileHeight;
-			this.screenWidth = args.screenWidth;
-			this.screenHeight = args.screenHeight;
-			this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
-			this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-			let imagePathModifier: Function = args ? args.imagePathModifier : null;
+		this.rowCount = data.height;
+		this.colCount = data.width;
+		this.tileWidth = args.tileWidth;
+		this.tileHeight = args.tileHeight;
+		this.screenWidth = args.screenWidth;
+		this.screenHeight = args.screenHeight;
+		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
+		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
+		let imagePathModifier: Function = args ? args.imagePathModifier : null;
 
-			this.layers = [];
-			this.layersByName = {};
-			this.objectGroups = [];
-			for (let i: number = 0; i < data.layers.length; i++) {
-				this.addLayer(data.layers[i]);
-			}
-
-			this.tilesets = [];
-			if (data.tilesets && data.tilesets.length) {
-				for (let i: number = 0; i < data.tilesets.length; i++) {
-					this.tilesets.push(new tiled.TiledTileset(data.tilesets[i], imagePathModifier));
-				}
-			}
-
-			this.properties = data.properties;
-			this.version = data.version;
-			this.orientation = data.orientation;
+		this.layers = [];
+		this.layersByName = {};
+		this.objectGroups = [];
+		for (let i: number = 0; i < data.layers.length; i++) {
+			this.addLayer(data.layers[i]);
 		}
 
-		/**
-		 * Adds a layer to this map.  This method is called internally by the library
-		 * and the programmer typically does not need to call it.
-		 * 
-		 * @param {object} layerData The raw layer data.
-		 * @method
-		 */
-		addLayer(layerData: any) {
-			const layer: TiledLayer = new tiled.TiledLayer(this, layerData);
-			this.layers.push(layer);
-			this.layersByName[layer.name] = layer;
-			if (layer.isObjectGroup()) {
-				this.objectGroups.push(layer);
+		this.tilesets = [];
+		if (data.tilesets && data.tilesets.length) {
+			for (let i: number = 0; i < data.tilesets.length; i++) {
+				this.tilesets.push(new TiledTileset(data.tilesets[i], imagePathModifier));
 			}
 		}
 
-		draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number,
-				dx: number = 0, dy: number = 0) {
+		this.properties = data.properties;
+		this.version = data.version;
+		this.orientation = data.orientation;
+	}
 
-			const colCount: number = this.colCount;
-			const rowCount: number = this.rowCount;
+	/**
+	 * Adds a layer to this map.  This method is called internally by the library
+	 * and the programmer typically does not need to call it.
+	 *
+	 * @param {object} layerData The raw layer data.
+	 * @method
+	 */
+	addLayer(layerData: any) {
+		const layer: TiledLayer = new TiledLayer(this, layerData);
+		this.layers.push(layer);
+		this.layersByName[layer.name] = layer;
+		if (layer.isObjectGroup()) {
+			this.objectGroups.push(layer);
+		}
+	}
 
-			const screenCols: number = this.screenRows;
-			const screenRows: number = this.screenCols;
-			const tileW: number = this.tileWidth;
-			const tileH: number = this.tileHeight;
-			const tileSize: number = tileW; // Assumes square tiles (!).  Fix me one day
-			const screenWidth: number = this.screenWidth;
-			const screenHeight: number = this.screenHeight;
+	draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number,
+			dx: number = 0, dy: number = 0) {
 
-			let col0: number = centerCol - Math.floor(screenCols / 2);
-			if (col0 < 0) {
-				col0 += colCount;
-			}
-			let row0: number = centerRow - Math.floor(screenRows / 2);
-			if (row0 < 0) {
-				row0 += rowCount;
-			}
+		const colCount: number = this.colCount;
+		const rowCount: number = this.rowCount;
 
-			// Center point of screen, in map x,y coordinates.
-			const cx: number = centerCol * tileW + dx + tileW / 2;
-			const cy: number = centerRow * tileH + dy + tileH / 2;
+		const screenCols: number = this.screenRows;
+		const screenRows: number = this.screenCols;
+		const tileW: number = this.tileWidth;
+		const tileH: number = this.tileHeight;
+		const tileSize: number = tileW; // Assumes square tiles (!).  Fix me one day
+		const screenWidth: number = this.screenWidth;
+		const screenHeight: number = this.screenHeight;
 
-			// Top-left of screen, in map x,y coordinates.
-			const x0: number = cx - screenWidth / 2;
-			const y0: number = cy - screenHeight / 2;
+		let col0: number = centerCol - Math.floor(screenCols / 2);
+		if (col0 < 0) {
+			col0 += colCount;
+		}
+		let row0: number = centerRow - Math.floor(screenRows / 2);
+		if (row0 < 0) {
+			row0 += rowCount;
+		}
 
-			let topLeftCol: number = Math.floor(x0 / tileW);
-			if ((x0 % tileSize) < 0) {
-				topLeftCol--;
-			}
-			const tileEdgeX: number = topLeftCol * tileW;
+		// Center point of screen, in map x,y coordinates.
+		const cx: number = centerCol * tileW + dx + tileW / 2;
+		const cy: number = centerRow * tileH + dy + tileH / 2;
 
-			let topLeftRow: number = Math.floor(y0 / tileH);
-			if ((y0 % tileSize) < 0) { // e.g. is < 0 and not a multiple of tileSize
-				topLeftRow--;
-			}
-			const tileEdgeY: number = topLeftRow * tileH; // getTileEdge(topLeftY);
+		// Top-left of screen, in map x,y coordinates.
+		const x0: number = cx - screenWidth / 2;
+		const y0: number = cy - screenHeight / 2;
 
-			// The view coordinates at which to start painting.
-			const startX: number = tileEdgeX - x0;
-			let _x: number = startX;
-			const startY: number = tileEdgeY - y0;
-			let _y: number = startY;
+		let topLeftCol: number = Math.floor(x0 / tileW);
+		if ((x0 % tileSize) < 0) {
+			topLeftCol--;
+		}
+		const tileEdgeX: number = topLeftCol * tileW;
 
-			if (topLeftCol < 0) {
-				topLeftCol += colCount;
-			}
-			if (topLeftRow < 0) {
-				topLeftRow += rowCount;
-			}
+		let topLeftRow: number = Math.floor(y0 / tileH);
+		if ((y0 % tileSize) < 0) { // e.g. is < 0 and not a multiple of tileSize
+			topLeftRow--;
+		}
+		const tileEdgeY: number = topLeftRow * tileH; // getTileEdge(topLeftY);
 
-			// Paint until the end of the screen
-			let row: number = topLeftRow;
-			const layerCount: number = this.getLayerCount();
-			let tileCount: number = 0;
-			while (_y < screenHeight) {
-				for (let l: number = 0; l < layerCount; l++) {
+		// The view coordinates at which to start painting.
+		const startX: number = tileEdgeX - x0;
+		let _x: number = startX;
+		const startY: number = tileEdgeY - y0;
+		let _y: number = startY;
 
-					let col: number = topLeftCol;
-					_x = startX;
+		if (topLeftCol < 0) {
+			topLeftCol += colCount;
+		}
+		if (topLeftRow < 0) {
+			topLeftRow += rowCount;
+		}
 
-					const layer: TiledLayer = this.getLayerByIndex(l);
-					if (layer.visible) {
+		// Paint until the end of the screen
+		let row: number = topLeftRow;
+		const layerCount: number = this.getLayerCount();
+		let tileCount: number = 0;
+		while (_y < screenHeight) {
+			for (let l: number = 0; l < layerCount; l++) {
 
-						let prevOpacity: number = 1; // Default value needed for strict null checks
-						if (layer.opacity < 1) {
-							prevOpacity = ctx.globalAlpha;
-							ctx.globalAlpha = prevOpacity * layer.opacity;
-						}
+				let col: number = topLeftCol;
+				_x = startX;
 
-						while (_x < screenWidth) {
-							const value: number = layer.getData(row % rowCount, col % colCount);
-							this.drawTile(ctx, _x, _y, value, layer);
-							tileCount++;
-							_x += tileW;
-							col++;
-						}
+				const layer: TiledLayer = this.getLayerByIndex(l);
+				if (layer.visible) {
 
-						if (layer.opacity < 1) {
-							ctx.globalAlpha = prevOpacity;
-						}
-
+					let prevOpacity: number = 1; // Default value needed for strict null checks
+					if (layer.opacity < 1) {
+						prevOpacity = ctx.globalAlpha;
+						ctx.globalAlpha = prevOpacity * layer.opacity;
 					}
 
-					// Here we could render sprites in-between layers
+					while (_x < screenWidth) {
+						const value: number = layer.getData(row % rowCount, col % colCount);
+						this.drawTile(ctx, _x, _y, value, layer);
+						tileCount++;
+						_x += tileW;
+						col++;
+					}
+
+					if (layer.opacity < 1) {
+						ctx.globalAlpha = prevOpacity;
+					}
+
 				}
 
-				_y += tileH;
-				row++;
+				// Here we could render sprites in-between layers
 			}
 
-			//console.log('tileCount === ' + tileCount);
+			_y += tileH;
+			row++;
 		}
 
-		/**
-		 * Returns a layer by name.
-		 * 
-		 * @param {string} name The name of the layer.
-		 * @return {tiled.TiledLayer} The layer, or null if there is no layer with
-		 *         that name.
-		 * @method
-		 */
-		getLayer(name: string): TiledLayer {
-			return this.layersByName[name];
-		}
+		//console.log('tileCount === ' + tileCount);
+	}
 
-		/**
-		 * Returns a layer by index.
-		 * 
-		 * @param {int} index The index of the layer.
-		 * @return {tiled.TiledLayer} The layer, or null if there is no layer at
-		 *         that index.
-		 * @method
-		 */
-		getLayerByIndex(index: number): TiledLayer {
-			return this.layers[index];
-		}
+	/**
+	 * Returns a layer by name.
+	 *
+	 * @param {string} name The name of the layer.
+	 * @return {TiledLayer} The layer, or null if there is no layer with
+	 *         that name.
+	 * @method
+	 */
+	getLayer(name: string): TiledLayer {
+		return this.layersByName[name];
+	}
 
-		/**
-		 * Returns the number of layers in this map.
-		 * 
-		 * @return {int} The number of layers in this map.
-		 */
-		getLayerCount(): number {
-			return this.layers.length;
-		}
+	/**
+	 * Returns a layer by index.
+	 *
+	 * @param {int} index The index of the layer.
+	 * @return {TiledLayer} The layer, or null if there is no layer at
+	 *         that index.
+	 * @method
+	 */
+	getLayerByIndex(index: number): TiledLayer {
+		return this.layers[index];
+	}
 
-		private _getImageForGid(gid: number): TiledTileset {
-			const tilesetCount: number = this.tilesets.length;
-			for (let i: number = 0; i < tilesetCount; i++) {
-				if (this.tilesets[i].firstgid > gid) {
-					return this.tilesets[i - 1];
-				}
-			}
-			return this.tilesets[tilesetCount - 1];
-		}
+	/**
+	 * Returns the number of layers in this map.
+	 *
+	 * @return {int} The number of layers in this map.
+	 */
+	getLayerCount(): number {
+		return this.layers.length;
+	}
 
-		drawTile(ctx: CanvasRenderingContext2D, x: number, y: number,
-				value: number, layer: TiledLayer) {
-
-			if (value <= 0) { // 0 => no tile to draw
-				return;
-			}
-
-			const tileset: TiledTileset = this._getImageForGid(value);
-			if (!tileset) {
-				console.log('null tileset for: ' + value + ' (layer ' + layer.name + ')');
-				return;
-			}
-
-			value -= tileset.firstgid;
-			if (value < 0) {
-				return;
-			}
-
-			const game: gtp.Game = window.game;
-			const img: gtp.Image = game.assets.getTmxTilesetImage(tileset);
-
-			const tileW: number = this.tileWidth;
-			const sw: number = tileW + tileset.spacing;
-			const tileH: number = this.tileHeight;
-			const sh: number = tileH + tileset.spacing;
-
-			// TODO: "+ 1" is based on extra space at end of image.  Should be configured/calculated
-			let imgColCount: number = Math.floor(img.width / sw);
-			if (tileset.spacing > 0 && ((img.width % sw) === tileW)) {
-				imgColCount++;
-			}
-			const imgY: number = Math.floor(value / imgColCount) * sh;
-			const imgX: number = (value % imgColCount) * sw;
-
-			//ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
-			img.drawScaled2(ctx, imgX, imgY, tileW, tileH, x, y, tileW, tileH);
-
-		}
-
-		setScale(scale: number) {
-			this.tileWidth *= scale;
-			this.tileHeight *= scale;
-			this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
-			this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-			const tilesetCount: number = this.tilesets.length;
-			for (let i: number = 0; i < tilesetCount; i++) {
-				return this.tilesets[i].setScale(scale);
+	private _getImageForGid(gid: number): TiledTileset {
+		const tilesetCount: number = this.tilesets.length;
+		for (let i: number = 0; i < tilesetCount; i++) {
+			if (this.tilesets[i].firstgid > gid) {
+				return this.tilesets[i - 1];
 			}
 		}
+		return this.tilesets[tilesetCount - 1];
+	}
 
-		/**
-		 * Returns the pixel width of this map.
-		 * 
-		 * @return {int} The pixel width of this map.
-		 * @method
-		 */
-		getPixelWidth(): number {
-			return this.colCount * this.tileWidth;
+	drawTile(ctx: CanvasRenderingContext2D, x: number, y: number,
+			value: number, layer: TiledLayer) {
+
+		if (value <= 0) { // 0 => no tile to draw
+			return;
 		}
 
-		/**
-		 * Returns the pixel height of this map.
-		 * 
-		 * @return {int} The pixel height of this map.
-		 * @method
-		 */
-		getPixelHeight(): number {
-			return this.rowCount * this.tileHeight;
+		const tileset: TiledTileset = this._getImageForGid(value);
+		if (!tileset) {
+			console.log('null tileset for: ' + value + ' (layer ' + layer.name + ')');
+			return;
 		}
 
-		/**
-		 * Removes a layer from this map.
-		 * @param {string} layerName The name of the layer to remove.
-		 * @return {boolean} Whether a layer by that name was found.
-		 * @method
-		 */
-		removeLayer(layerName: string): boolean {
-			for (let i: number = 0; i < this.layers.length; i++) {
-				if (this.layers[i].name === layerName) {
-					this.layers.splice(i, 1);
-					delete this.layersByName[layerName];
-					for (let j: number = 0; j < this.objectGroups.length; j++) {
-						if (this.objectGroups[j].name === layerName) {
-							delete this.objectGroups[j];
-						}
+		value -= tileset.firstgid;
+		if (value < 0) {
+			return;
+		}
+
+		const gameWindow: Window = <any>window;
+		const game: Game = gameWindow.game;
+		const img: Image = game.assets.getTmxTilesetImage(tileset);
+
+		const tileW: number = this.tileWidth;
+		const sw: number = tileW + tileset.spacing;
+		const tileH: number = this.tileHeight;
+		const sh: number = tileH + tileset.spacing;
+
+		// TODO: "+ 1" is based on extra space at end of image.  Should be configured/calculated
+		let imgColCount: number = Math.floor(img.width / sw);
+		if (tileset.spacing > 0 && ((img.width % sw) === tileW)) {
+			imgColCount++;
+		}
+		const imgY: number = Math.floor(value / imgColCount) * sh;
+		const imgX: number = (value % imgColCount) * sw;
+
+		//ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
+		img.drawScaled2(ctx, imgX, imgY, tileW, tileH, x, y, tileW, tileH);
+
+	}
+
+	setScale(scale: number) {
+		this.tileWidth *= scale;
+		this.tileHeight *= scale;
+		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
+		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
+		const tilesetCount: number = this.tilesets.length;
+		for (let i: number = 0; i < tilesetCount; i++) {
+			return this.tilesets[i].setScale(scale);
+		}
+	}
+
+	/**
+	 * Returns the pixel width of this map.
+	 *
+	 * @return {int} The pixel width of this map.
+	 * @method
+	 */
+	getPixelWidth(): number {
+		return this.colCount * this.tileWidth;
+	}
+
+	/**
+	 * Returns the pixel height of this map.
+	 *
+	 * @return {int} The pixel height of this map.
+	 * @method
+	 */
+	getPixelHeight(): number {
+		return this.rowCount * this.tileHeight;
+	}
+
+	/**
+	 * Removes a layer from this map.
+	 * @param {string} layerName The name of the layer to remove.
+	 * @return {boolean} Whether a layer by that name was found.
+	 * @method
+	 */
+	removeLayer(layerName: string): boolean {
+		for (let i: number = 0; i < this.layers.length; i++) {
+			if (this.layers[i].name === layerName) {
+				this.layers.splice(i, 1);
+				delete this.layersByName[layerName];
+				for (let j: number = 0; j < this.objectGroups.length; j++) {
+					if (this.objectGroups[j].name === layerName) {
+						delete this.objectGroups[j];
 					}
 				}
-				return true;
 			}
-			return false;
+			return true;
 		}
+		return false;
 	}
 }

@@ -17,7 +17,7 @@
    var stylish = require('jshint-stylish');
    var tsc = require('gulp-typescript');
    var tsProject = tsc.createProject('tsconfig.json');
-   var concatenatedTsProject = tsc.createProject('tsconfig.json', { outFile: 'gtp-all.js' });
+   var concatenatedTsProject = tsc.createProject('tsconfig.json', { outFile: 'gtp.js' });
    var merge = require('merge2');
    var sourcemaps = require('gulp-sourcemaps');
    var tslint = require('gulp-tslint');
@@ -26,8 +26,8 @@
 
    gulp.task('clean', function() {
       return del([
-         './dist',
-         './dist-all',
+         './build',
+         './lib',
          './example/rpg/dist',
          './coverage'
       ]);
@@ -74,10 +74,10 @@
          .pipe(sourcemaps.init())
          .pipe(tsProject());
      return merge([
-        tsResult.dts.pipe(gulp.dest('dist/')),
+        tsResult.dts.pipe(gulp.dest('build/')),
         tsResult.js
          .pipe(sourcemaps.write('.'))
-         .pipe(gulp.dest('dist/'))
+         .pipe(gulp.dest('build/'))
      ]);
    });
    gulp.task('compile-concat', function() {
@@ -85,19 +85,20 @@
          .pipe(sourcemaps.init())
          .pipe(concatenatedTsProject());
      return merge([
-        tsResult.dts.pipe(gulp.dest('dist-all/')),
+        tsResult.dts.pipe(gulp.dest('lib/')),
         tsResult.js
          .pipe(sourcemaps.write('.'))
-         .pipe(gulp.dest('dist-all/'))
+         .pipe(gulp.dest('lib/'))
      ]);
    });
 
    gulp.task('typedoc', function() {
-      return gulp.src([ 'dist-all/gtp-all.d.ts' ])
+      return gulp.src([ 'lib/gtp.d.ts' ])
          .pipe(typedoc({
             target: 'es5',
             includeDeclarations: true,
-            mode: 'file',
+            mode: 'modules',
+            module: 'amd',
             out: 'doc/',
             name: 'gtp',
             ignoreCompilerErrors: false,

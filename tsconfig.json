@@ -1,20 +1,26 @@
 {
-    "compilerOptions": {
-        "declaration": true,
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "outDir": "dist/",
-        "preserveConstEnums": true,
-        "rootDir": "src/",
-        "strictNullChecks": true,
-        "sourceMap": true,
-        "target": "es5",
-        "diagnostics": true
-    },
-    "exclude": [
-        "node_modules",
-        "dist",
-        "dist-all"
-    ]
+  "compilerOptions": {
+    "allowJs": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    //"noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "module": "amd",
+    "target": "es5",
+    "outDir": "build/",
+    "sourceMap": true,
+    "diagnostics": true
+  },
+  // node_modules/@types support doesn't seem to be working, at least for jasmine/jasmine-ajax, so stick with typings for now
+  "include": [
+    "src/**/*.ts",
+    "typings/index.d.ts"
+  ]
 }

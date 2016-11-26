@@ -12,39 +12,14 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: [ 'jasmine-ajax', 'jasmine' ],
+    frameworks: [ 'jasmine-ajax', 'jasmine', 'requirejs' ],
 
 
     // list of files / patterns to load in the browser.
-    // Note that this is also the order stuff is loaded in, so we cannot just
-    // wildcard all JS files in a folder, due to dependencies (!)
     // See also:  http://karma-runner.github.io/0.13/config/files.html
     files: [
-      'dist/gtp/GtpBase.js',
-      'dist/gtp/_GameTimer.js',
-      'dist/gtp/Keys.js',
-      'dist/gtp/Point.js',
-      'dist/gtp/Rectangle.js',
-      'dist/gtp/BrowserUtil.js',
-      'dist/gtp/Pool.js',
-      'dist/gtp/Utils.js',
-      'dist/gtp/Delay.js',
-      'dist/gtp/Keys.js',
-      'dist/gtp/ImageUtils.js',
-      'dist/gtp/InputManager.js',
-      'dist/gtp/State.js',
-      'dist/gtp/Timer.js',
-      'dist/gtp/AssetType.js',
-      'dist/gtp/AudioSystem.js',
-      'dist/gtp/Image.js',
-      'dist/gtp/ImageAtlas.js',
-      //'dist/gtp/Sound.js',
-      'dist/gtp/AssetLoader.js',
-      'dist/gtp/SpriteSheet.js',
-      'dist/gtp/BitmapFont.js',
-      'dist/gtp/FadeOutInState.js',
-      'dist/tiled/*.js',
-      'test/**/*.js'
+      { pattern: 'build/**/*.js', included: false },
+      'test-main.js'
     ],
 
 
@@ -55,7 +30,7 @@ module.exports = function(config) {
 
     // Plugins need to be explicitly specified for tests to run in actual
     // browsers
-    plugins: [ 'karma-jasmine', 'karma-jasmine-ajax', 'karma-coverage',
+    plugins: [ 'karma-jasmine', 'karma-jasmine-ajax', 'karma-requirejs', 'karma-coverage',
                'karma-phantomjs-launcher', 'karma-chrome-launcher',
                'karma-firefox-launcher'
     ],
@@ -63,8 +38,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'dist/gtp/*.js': 'coverage',
-      'dist/tiled/*.js': 'coverage'
+      'build/gtp/*.js': 'coverage',
+      'build/tiled/*.js': 'coverage'
     },
 
 
