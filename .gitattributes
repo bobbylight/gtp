@@ -1,7 +1,3 @@
-dist/* linguist-vendored
-dist/gtp/* linguist-vendored
-dist/tiled/* linguist-vendored
-dist-all/* linguist-vendored
 doc/* linguist-vendored
 example/* linguist-vendored
-
+lib/* linguist-vendored
