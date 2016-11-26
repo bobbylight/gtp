@@ -1,4 +1,8 @@
 {
   "name": "gtp",
-  "dependencies": {}
+  "dependencies": {},
+  "globalDependencies": {
+    "jasmine": "registry:dt/jasmine#2.5.0+20161025102649",
+    "jasmine-ajax": "registry:dt/jasmine-ajax#3.1.1+20160802133254"
+  }
 }
