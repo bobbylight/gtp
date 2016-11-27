@@ -1,4 +1,4 @@
-import {Timer} from './Timer';
+import {Timer} from '../index';
 
 describe('Timer', () => {
 	'use strict';
@@ -7,7 +7,7 @@ describe('Timer', () => {
 		errorContent: string;
 
 	beforeEach(() => {
-
+		console.log('----------------- ');
 		debugContent = '';
 		errorContent = '';
 

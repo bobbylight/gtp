@@ -2,7 +2,7 @@
  * General-purpose utilities for manipulating images in canvases.
  * @constructor
  */
-export class ImageUtils {
+export default class ImageUtils {
 
 	/**
 	 * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and

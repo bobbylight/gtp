@@ -1,6 +1,6 @@
-import {Image} from './Image';
+import Image from './Image';
 
-export class SpriteSheet {
+export default class SpriteSheet {
 
 	gtpImage: Image;
 	cellW: number;

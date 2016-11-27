@@ -1,4 +1,4 @@
-import {Utils} from './Utils';
+import Utils from './Utils';
 
 /**
  * This class keeps track of game time.  That includes both total running

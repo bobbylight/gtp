@@ -1,6 +1,6 @@
-import {TiledObject} from './TiledObject';
+import TiledObject from './TiledObject';
 
-export class TiledLayer {
+export default class TiledLayer {
 
 	map: any;
 	name: string;

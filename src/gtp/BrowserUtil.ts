@@ -5,7 +5,7 @@
  *
  * @constructor
  */
-export class BrowserUtil {
+export default class BrowserUtil {
 
 	/**
 	 * Returns <code>window.location.search</code>.

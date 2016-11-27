@@ -1,8 +1,8 @@
-import {Game} from '../gtp/Game';
-import {Utils} from '../gtp/Utils';
+import Game from '../gtp/Game';
+import Utils from '../gtp/Utils';
 import {Window} from '../gtp/GtpBase';
 
-export class TiledObject {
+export default class TiledObject {
 
 	gid: number;
 	x: number;

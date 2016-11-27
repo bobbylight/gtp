@@ -1,15 +1,10 @@
 .idea/
-.tmp/
-build/
 coverage/
 doc/
-example/
 src/
-test/
 typings/
 .editorconfig
 .gitattributes
-.jshintrc
 .npmignore
 .travis.yml
 gtp.iml

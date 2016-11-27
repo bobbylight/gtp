@@ -1,4 +1,4 @@
-import {Utils} from './Utils';
+import Utils from './Utils';
 
 /**
  * A mapping from string keys to numbers.  Used to map named events to their
@@ -8,7 +8,7 @@ interface TimeMap {
 	[key: string]: number;
 }
 
-export class Timer {
+export default class Timer {
 
 	private _startTimes: TimeMap = {};
 	private _prefix: string = 'DEBUG';

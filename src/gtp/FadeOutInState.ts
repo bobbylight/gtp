@@ -1,6 +1,6 @@
-import {State} from './State';
+import State from './State';
 
-export class FadeOutInState extends State {
+export default class FadeOutInState extends State {
 
 	private _leavingState: State;
 	private _enteringState: State;

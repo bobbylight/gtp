@@ -1,12 +1,12 @@
-import {SpriteSheet} from './SpriteSheet';
+import SpriteSheet from './SpriteSheet';
 import {AssetType} from './AssetType';
-import {AudioSystem} from './AudioSystem';
-import {Utils} from './Utils';
-import {ImageUtils} from './ImageUtils';
-import {Image} from './Image';
-import {Sound} from './Sound';
-import {TiledTileset} from '../tiled/TiledTileset';
-import {TiledMap} from '../tiled/TiledMap';
+import AudioSystem from './AudioSystem';
+import Utils from './Utils';
+import ImageUtils from './ImageUtils';
+import Image from './Image';
+import Sound from './Sound';
+import TiledTileset from '../tiled/TiledTileset';
+import TiledMap from '../tiled/TiledMap';
 
 interface ResourceType {
 	type: AssetType;
@@ -28,7 +28,7 @@ interface ResourceType {
  *   <li>TMX maps
  * </ul>
  */
-export class AssetLoader {
+export default class AssetLoader {
 
 	private _scale: number;
 	private loadingAssetData: { [id: string]: ResourceType };

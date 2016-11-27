@@ -1,6 +1,6 @@
 import {Keys} from './Keys';
 
-export class InputManager {
+export default class InputManager {
 
 	private keys: boolean[];
 	private _refireMillis: number;

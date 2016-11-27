@@ -1,10 +1,10 @@
-import {TiledTileset} from './TiledTileset';
-import {TiledLayer} from './TiledLayer';
-import {Image} from '../gtp/Image';
-import {Game} from '../gtp/Game';
+import TiledTileset from './TiledTileset';
+import TiledLayer from './TiledLayer';
+import Image from '../gtp/Image';
+import Game from '../gtp/Game';
 import {Window} from '../gtp/GtpBase';
 
-export class TiledMap {
+export default class TiledMap {
 
 	rowCount: number;
 	colCount: number;

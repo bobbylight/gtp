@@ -37,3 +37,7 @@ gulp
 ```
 
 Tasks are also provided for individually running unit tests, linting, etc.
+
+## To-Do
+Unit tests are temporarily disabled as they stopped working when I converted this project
+to commonjs, and I'm having a tough time convincing Karma to run them in this state.

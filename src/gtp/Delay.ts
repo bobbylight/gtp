@@ -34,7 +34,7 @@ export interface DelayArgs {
  *        will be called when this delay fires.
  * @constructor
  */
-export class Delay {
+export default class Delay {
 
 	_initial: number[];
 	_initialIndex: number;

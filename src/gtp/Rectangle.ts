@@ -1,4 +1,4 @@
-export class Rectangle {
+export default class Rectangle {
 
 	x: number;
 	y: number;

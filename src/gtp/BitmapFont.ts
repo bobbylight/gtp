@@ -1,8 +1,8 @@
-import {Image} from './Image';
-import {SpriteSheet} from './SpriteSheet';
+import Image from './Image';
+import SpriteSheet from './SpriteSheet';
 import {Window} from './GtpBase';
 
-export class BitmapFont extends SpriteSheet {
+export default class BitmapFont extends SpriteSheet {
 
 	constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number) {
 		super(gtpImage, cellW, cellH, spacing, spacingY);

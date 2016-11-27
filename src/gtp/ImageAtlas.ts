@@ -1,7 +1,7 @@
-import {Image} from './Image';
-import {ImageUtils} from './ImageUtils';
+import Image from './Image';
+import ImageUtils from './ImageUtils';
 
-export class ImageAtlas {
+export default class ImageAtlas {
 
 	private _atlasInfo: any;
 	private _masterCanvas: HTMLCanvasElement;

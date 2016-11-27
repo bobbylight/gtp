@@ -1,6 +1,6 @@
-import {ImageUtils} from './ImageUtils';
+import ImageUtils from './ImageUtils';
 
-export class Image {
+export default class Image {
 
 	private _canvas: HTMLCanvasElement;
 	x: number;

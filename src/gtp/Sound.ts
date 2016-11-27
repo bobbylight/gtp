@@ -1,4 +1,4 @@
-export class Sound {
+export default class Sound {
 
 	private _id: string;
 	private _buffer: any;

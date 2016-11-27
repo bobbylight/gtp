@@ -1,19 +1,19 @@
 import {Keys} from './Keys';
-import {InputManager} from './InputManager';
-import {State} from './State';
+import InputManager from './InputManager';
+import State from './State';
 import {_GameTimer} from './_GameTimer';
-import {Timer} from './Timer';
-import {ImageUtils} from './ImageUtils';
-import {Utils} from './Utils';
-import {AudioSystem} from './AudioSystem';
-import {AssetLoader} from './AssetLoader';
+import Timer from './Timer';
+import ImageUtils from './ImageUtils';
+import Utils from './Utils';
+import AudioSystem from './AudioSystem';
+import AssetLoader from './AssetLoader';
 
 /**
  * A base class for a game.
  *
  * @constructor
  */
-export class Game {
+export default class Game {
 
 	/*private */_scale: number;
 	canvas: HTMLCanvasElement;

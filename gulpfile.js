@@ -5,19 +5,9 @@
    var debug = require('gulp-debug');
    var del = require('del');
    var runSequence = require('run-sequence');
-   var usemin = require('gulp-usemin');
-   var uglify = require('gulp-uglify');
-   var jsonMinify = require('gulp-jsonminify');
-   //var minifyHtml = require('gulp-minify-html');
-   var concatCss = require('gulp-concat-css');
-   var cssmin = require('gulp-cssmin');
-   var rev = require('gulp-rev');
    var typedoc = require('gulp-typedoc');
-   var jshint = require('gulp-jshint');
-   var stylish = require('jshint-stylish');
    var tsc = require('gulp-typescript');
    var tsProject = tsc.createProject('tsconfig.json');
-   var concatenatedTsProject = tsc.createProject('tsconfig.json', { outFile: 'gtp.js' });
    var merge = require('merge2');
    var sourcemaps = require('gulp-sourcemaps');
    var tslint = require('gulp-tslint');
@@ -26,42 +16,10 @@
 
    gulp.task('clean', function() {
       return del([
-         './build',
          './lib',
-         './example/rpg/dist',
-         './coverage'
+         './coverage',
+          './doc'
       ]);
-   });
-
-   // Tasks to build a minified version of the demo (run "gulp demo-build")
-   gulp.task('demo-usemin', function() {
-      return gulp.src([ 'example/rpg/src/index.html' ])
-         .pipe(debug({ title: 'File going through usemin: ' }))
-         .pipe(usemin({
-            css: [ rev ],
-            js: [ uglify, rev ],
-            inlinejs: [ uglify ]
-            //, html: [ minifyHtml({ empty: true }) ]
-         }))
-         .pipe(gulp.dest('example/rpg/dist/'));
-   });
-   gulp.task('demo-cssmin', function() {
-      gulp.src('example/rpg/src/css/all.css')
-         .pipe(concatCss('all.css'))
-         .pipe(cssmin())
-         .pipe(gulp.dest('example/rpg/dist/css/'));
-   });
-   gulp.task('demo-copy-extra-files', function() {
-      gulp.src('example/rpg/src/maps/*.json')
-         .pipe(jsonMinify())
-         .pipe(gulp.dest('example/rpg/dist/maps/'));
-
-      gulp.src('example/rpg/src/res/*')
-         .pipe(gulp.dest('example/rpg/dist/res/'));
-   });
-   gulp.task('demo-build', function() {
-      runSequence('tslint', 'clean', 'compile', 'compile-concat', 'demo-usemin',
-                'demo-cssmin', 'demo-copy-extra-files');
    });
 
    gulp.task('tslint', function() {
@@ -74,17 +32,6 @@
          .pipe(sourcemaps.init())
          .pipe(tsProject());
      return merge([
-        tsResult.dts.pipe(gulp.dest('build/')),
-        tsResult.js
-         .pipe(sourcemaps.write('.'))
-         .pipe(gulp.dest('build/'))
-     ]);
-   });
-   gulp.task('compile-concat', function() {
-     var tsResult = concatenatedTsProject.src()
-         .pipe(sourcemaps.init())
-         .pipe(concatenatedTsProject());
-     return merge([
         tsResult.dts.pipe(gulp.dest('lib/')),
         tsResult.js
          .pipe(sourcemaps.write('.'))
@@ -93,12 +40,12 @@
    });
 
    gulp.task('typedoc', function() {
-      return gulp.src([ 'lib/gtp.d.ts' ])
+      return gulp.src([ 'src/**/*.ts', '!src/**/*.spec.ts' ])
          .pipe(typedoc({
             target: 'es5',
             includeDeclarations: true,
             mode: 'modules',
-            module: 'amd',
+            module: 'commonjs',
             out: 'doc/',
             name: 'gtp',
             ignoreCompilerErrors: false,
@@ -106,55 +53,44 @@
          }));
    });
 
-   // Our demo game is pure JS, so it still uses jshint
-   gulp.task('jshint', function() {
-      return gulp.src([ 'example/rpg/src/js/**/*.js' ])
-         .pipe(jshint())
-         .pipe(jshint.reporter(stylish))
-         .pipe(jshint.reporter('fail'));
-   });
-
-   // Lints and builds the library and demo source when changes occur.
-   gulp.task('watch', [ 'tslint', 'compile', 'compile-concat', 'jshint' ], function() {
+   // Lints and builds the library source when changes occur.
+   gulp.task('watch', [ 'tslint', 'compile' ], function() {
       // NOTE: typedoc does not seem to work in a watch - only runs the first
       // time; subsequent times it fails to generate sub-pages.
-      gulp.watch('src/**/*.ts', [ 'tslint', 'compile', 'compile-concat' ]);
-      gulp.watch('example/rpg/src/js/**/*.js', [ 'jshint' ]);
+      gulp.watch('src/**/*.ts', [ 'tslint', 'compile' ]);
    });
 
    gulp.task('test', function(done) {
-      new KarmaServer({
-         configFile: __dirname + '/karma.conf.js',
-         singleRun: true
-      }, done).start();
+      // new KarmaServer({
+      //    configFile: __dirname + '/karma.conf.js',
+      //    singleRun: true
+      // }, done).start();
    });
 
    // By default we only test on PhantomJS for CI builds
    gulp.task('test-all-browsers', function(done) {
-      new KarmaServer({
-         configFile: __dirname + '/karma.conf.js',
-         singleRun: true,
-         browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ]
-      }, done).start();
+      // new KarmaServer({
+      //    configFile: __dirname + '/karma.conf.js',
+      //    singleRun: true,
+      //    browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ]
+      // }, done).start();
    });
 
    gulp.task('watch-test', function(done) {
-      new KarmaServer({
-         configFile: __dirname + '/karma.conf.js',
-         singleRun: false,
-         browsers: [ 'PhantomJS' ]
-      }, done).start();
+      // new KarmaServer({
+      //    configFile: __dirname + '/karma.conf.js',
+      //    singleRun: false,
+      //    browsers: [ 'PhantomJS' ]
+      // }, done).start();
    });
 
    gulp.task('default', function() {
-      // We build the minified demo game too, just so Travis CI does it as well
-      runSequence('tslint', 'clean', 'compile', 'compile-concat', 'test',
-            'typedoc', 'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files');
+      runSequence('tslint', 'clean', 'compile', 'test', 'typedoc');
    });
 
    gulp.task('upload-coverage-data', function() {
-      gulp.src('coverage/**/lcov.info')
-          .pipe(coveralls());
+      // gulp.src('coverage/**/lcov.info')
+      //     .pipe(coveralls());
    });
 
    gulp.task('ci-build', function() {
@@ -162,10 +98,7 @@
       // has a runSequence in it!  It will run the second task after the
       // first task in the "child" runSequence
       //runSequence('default', 'upload-coverage-data');
-      runSequence('tslint', 'jshint',
-                  'clean', 'compile', 'compile-concat', 'test', 'typedoc',
-                  'demo-usemin', 'demo-cssmin', 'demo-copy-extra-files',
-                  'upload-coverage-data');
+      runSequence('tslint', 'clean', 'compile', 'test', 'typedoc', 'upload-coverage-data');
    });
 
 })();

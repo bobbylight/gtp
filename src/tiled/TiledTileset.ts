@@ -1,4 +1,4 @@
-export class TiledTileset {
+export default class TiledTileset {
 
 	firstgid: number;
 	image: string;

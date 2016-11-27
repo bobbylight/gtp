@@ -5,7 +5,7 @@
  * NOTE: The <code>returnObj()</code> method may take linear time;
  * it's much more efficient to use <code>reset()</code> if possible.
  */
-export class Pool<T> {
+export default class Pool<T> {
 
 	private _pool: T[];
 	private _index: number;

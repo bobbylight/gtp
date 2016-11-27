@@ -1,10 +1,10 @@
-import {BrowserUtil} from './BrowserUtil';
+import BrowserUtil from './BrowserUtil';
 
 /**
  * Obligatory utility methods for games.
  * @constructor
  */
-export class Utils {
+export default class Utils {
 
 	/**
 	 * Returns the number of elements in an object.

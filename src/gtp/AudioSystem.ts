@@ -1,4 +1,4 @@
-import {Sound} from './Sound';
+import Sound from './Sound';
 import {Window} from './GtpBase';
 
 interface _PlayingSoundConfig {
@@ -90,7 +90,7 @@ class PlayingSound {
 
 }
 
-export class AudioSystem {
+export default class AudioSystem {
 
 	private _currentMusic: AudioBufferSourceNode | null;
 	private _sounds: { [id: string]: Sound };
@@ -254,7 +254,7 @@ export class AudioSystem {
 	 * @param {boolean} loop Whether the music should loop.
 	 * @see stopMusic
 	 */
-	playMusic(id: string, loop?: boolean) {
+	playMusic(id: string, loop: boolean = false) {
 
 		if (this.context) {
 

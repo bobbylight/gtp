@@ -1,4 +1,4 @@
-import {Game} from './Game';
+import Game from './Game';
 import {Window} from './GtpBase';
 
 /**
@@ -74,3 +74,5 @@ export class State {
 		// Subclasses should override
 	}
 }
+
+export default State;

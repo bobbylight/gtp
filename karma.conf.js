@@ -12,14 +12,21 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: [ 'jasmine-ajax', 'jasmine', 'requirejs' ],
+    frameworks: [ 'jasmine-ajax', 'jasmine', 'commonjs' ],
 
 
     // list of files / patterns to load in the browser.
     // See also:  http://karma-runner.github.io/0.13/config/files.html
     files: [
-      { pattern: 'build/**/*.js', included: false },
-      'test-main.js'
+
+        'node_modules/requirejs/require.js',
+      // { pattern: 'build/index.js', included: false },
+      // { pattern: 'build/**/*.js', included: false },
+      // 'test-main.js'
+        //'build/index.js',
+        'lib/**/*!(.spec)+(.js)',
+        'lib/index.js',
+        'lib/**/*.spec.js'
     ],
 
 
@@ -30,16 +37,16 @@ module.exports = function(config) {
 
     // Plugins need to be explicitly specified for tests to run in actual
     // browsers
-    plugins: [ 'karma-jasmine', 'karma-jasmine-ajax', 'karma-requirejs', 'karma-coverage',
+    plugins: [ 'karma-jasmine', 'karma-jasmine-ajax', 'karma-requirejs', 'karma-commonjs', 'karma-coverage',
                'karma-phantomjs-launcher', 'karma-chrome-launcher',
-               'karma-firefox-launcher'
+               'karma-firefox-launcher', 'karma-spec-reporter'
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'build/gtp/*.js': 'coverage',
-      'build/tiled/*.js': 'coverage'
+      'lib/gtp/*.js': [ 'coverage', 'commonjs' ],
+      'lib/tiled/*.js': [ 'coverage', 'commonjs' ]
     },
 
 
@@ -47,7 +54,7 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
 //    reporters: [ 'progress', 'coverage' ],
-    reporters: [ 'dots', 'coverage' ],
+    reporters: [ 'dots', 'coverage', 'spec' ],
 
     coverageReporter: {
         instrumenterOptions: {
@@ -84,4 +91,4 @@ module.exports = function(config) {
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
   });
-}
+};

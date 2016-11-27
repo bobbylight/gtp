@@ -1,24 +1,24 @@
-import {Point} from './Point';
+import {Point} from '../index';
 
 describe('Point', () => {
 	'use strict';
 
 	it('constructor 0-arg', () => {
 		const point: Point = new Point();
-		expect(point.x).toBe(0);
-		expect(point.y).toBe(0);
+		expect(point.x).toEqual(0);
+		expect(point.y).toEqual(0);
 	});
 
 	it('constructor 1-arg', () => {
 		const point: Point = new Point(3);
-		expect(point.x).toBe(3);
-		expect(point.y).toBe(0);
+		expect(point.x).toEqual(3);
+		expect(point.y).toEqual(0);
 	});
 
 	it('constructor 2-arg', () => {
 		const point: Point = new Point(3, 4);
-		expect(point.x).toBe(3);
-		expect(point.y).toBe(4);
+		expect(point.x).toEqual(3);
+		expect(point.y).toEqual(4);
 	});
 
 	it('equals null arg', () => {
