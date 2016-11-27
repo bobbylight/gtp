@@ -2,8 +2,6 @@ language: node_js
 
 node_js:
    - "stable"
-
 before_script:
    - npm install -g gulp
-   - typings install
 script: gulp ci-build
