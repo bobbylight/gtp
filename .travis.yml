@@ -5,4 +5,5 @@ node_js:
 
 before_script:
    - npm install -g gulp
+   - typings install
 script: gulp ci-build
