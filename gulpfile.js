@@ -61,27 +61,27 @@
    });
 
    gulp.task('test', function(done) {
-      // new KarmaServer({
-      //    configFile: __dirname + '/karma.conf.js',
-      //    singleRun: true
-      // }, done).start();
+      new KarmaServer({
+         configFile: __dirname + '/karma.conf.js',
+         singleRun: true
+      }, done).start();
    });
 
    // By default we only test on PhantomJS for CI builds
    gulp.task('test-all-browsers', function(done) {
-      // new KarmaServer({
-      //    configFile: __dirname + '/karma.conf.js',
-      //    singleRun: true,
-      //    browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ]
-      // }, done).start();
+      new KarmaServer({
+         configFile: __dirname + '/karma.conf.js',
+         singleRun: true,
+         browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ]
+      }, done).start();
    });
 
    gulp.task('watch-test', function(done) {
-      // new KarmaServer({
-      //    configFile: __dirname + '/karma.conf.js',
-      //    singleRun: false,
-      //    browsers: [ 'PhantomJS' ]
-      // }, done).start();
+      new KarmaServer({
+         configFile: __dirname + '/karma.conf.js',
+         singleRun: false,
+         browsers: [ 'PhantomJS' ]
+      }, done).start();
    });
 
    gulp.task('default', function() {
@@ -89,8 +89,8 @@
    });
 
    gulp.task('upload-coverage-data', function() {
-      // gulp.src('coverage/**/lcov.info')
-      //     .pipe(coveralls());
+      gulp.src('coverage/**/lcov.info')
+          .pipe(coveralls());
    });
 
    gulp.task('ci-build', function() {

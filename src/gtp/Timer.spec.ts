@@ -7,7 +7,6 @@ describe('Timer', () => {
 		errorContent: string;
 
 	beforeEach(() => {
-		console.log('----------------- ');
 		debugContent = '';
 		errorContent = '';
 

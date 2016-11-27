@@ -27,17 +27,10 @@ cd gtp
 npm install
 ```
 
-The TypeScript code lives in `src/`, and is transpiled into `dist/`.  A single
-file containing all transpiled content is also created in `dist-all/`.  An
-example game (itself a WIP also) lives in `example/`.  Both the library and the
-example game can be built via running gulp:
+The TypeScript code lives in `src/`, and is transpiled into `lib/` by running gulp:
 
 ```bash
 gulp
 ```
 
-Tasks are also provided for individually running unit tests, linting, etc.
-
-## To-Do
-Unit tests are temporarily disabled as they stopped working when I converted this project
-to commonjs, and I'm having a tough time convincing Karma to run them in this state.
+Gulp tasks are also provided for individually running unit tests, linting, etc.

@@ -1,6 +1,6 @@
 {
   "name": "gtp",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -31,7 +31,6 @@
     "karma-jasmine": "1.0.2",
     "karma-jasmine-ajax": "0.1.13",
     "karma-phantomjs-launcher": "1.0.2",
-    "karma-requirejs": "1.1.0",
     "karma-spec-reporter": "0.0.26",
     "merge2": "1.0.2",
     "phantomjs-prebuilt": "2.1.13",

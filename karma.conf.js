@@ -1,6 +1,3 @@
-// Karma configuration
-// Generated on Mon Jul 27 2015 22:55:22 GMT-0400 (Eastern Daylight Time)
-
 module.exports = function(config) {
   'use strict';
 
@@ -18,15 +15,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser.
     // See also:  http://karma-runner.github.io/0.13/config/files.html
     files: [
-
-        'node_modules/requirejs/require.js',
-      // { pattern: 'build/index.js', included: false },
-      // { pattern: 'build/**/*.js', included: false },
-      // 'test-main.js'
-        //'build/index.js',
-        'lib/**/*!(.spec)+(.js)',
-        'lib/index.js',
-        'lib/**/*.spec.js'
+        'lib/**/*.js',
+        'lib/index.js'
     ],
 
 
@@ -37,7 +27,7 @@ module.exports = function(config) {
 
     // Plugins need to be explicitly specified for tests to run in actual
     // browsers
-    plugins: [ 'karma-jasmine', 'karma-jasmine-ajax', 'karma-requirejs', 'karma-commonjs', 'karma-coverage',
+    plugins: [ 'karma-jasmine', 'karma-jasmine-ajax', 'karma-commonjs', 'karma-coverage',
                'karma-phantomjs-launcher', 'karma-chrome-launcher',
                'karma-firefox-launcher', 'karma-spec-reporter'
     ],
@@ -45,16 +35,19 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'lib/gtp/*.js': [ 'coverage', 'commonjs' ],
-      'lib/tiled/*.js': [ 'coverage', 'commonjs' ]
+      'lib/index.js': [ 'coverage', 'commonjs' ],
+      // Tests only get the commonjs preprocessor, source files get coverage too
+      'lib/gtp/!(*.spec).js': [ 'coverage', 'commonjs' ],
+      'lib/tiled/!(*.spec).js': [ 'coverage', 'commonjs' ],
+      'lib/gtp/*.spec.js': [ 'commonjs' ],
+      'lib/tiled/*.spec.js': [ 'commonjs' ]
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-//    reporters: [ 'progress', 'coverage' ],
-    reporters: [ 'dots', 'coverage', 'spec' ],
+    reporters: [ 'progress', 'coverage' ],//, 'spec' ],
 
     coverageReporter: {
         instrumenterOptions: {
