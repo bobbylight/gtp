@@ -8,6 +8,9 @@
   },
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
+  "scripts": {
+    "postinstall": "typings install"
+  },
   "files": [
     "lib/"
   ],
@@ -38,6 +41,7 @@
     "run-sequence": "1.2.2",
     "tslint": "4.0.2",
     "typedoc": "0.5.1",
-    "typescript": "2.0.10"
+    "typescript": "2.0.10",
+    "typings": "2.0.0"
   }
 }
