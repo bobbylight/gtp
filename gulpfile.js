@@ -1,18 +1,18 @@
 (function() {
    'use strict';
 
-   var gulp = require('gulp');
-   var debug = require('gulp-debug');
-   var del = require('del');
-   var runSequence = require('run-sequence');
-   var typedoc = require('gulp-typedoc');
-   var tsc = require('gulp-typescript');
-   var tsProject = tsc.createProject('tsconfig.json');
-   var merge = require('merge2');
-   var sourcemaps = require('gulp-sourcemaps');
-   var tslint = require('gulp-tslint');
-   var KarmaServer = require('karma').Server;
-   var coveralls = require('gulp-coveralls');
+   const gulp = require('gulp');
+   const debug = require('gulp-debug');
+   const del = require('del');
+   const runSequence = require('run-sequence');
+   const typedoc = require('gulp-typedoc');
+   const tsc = require('gulp-typescript');
+   const tsProject = tsc.createProject('tsconfig.json');
+   const merge = require('merge2');
+   const sourcemaps = require('gulp-sourcemaps');
+   const tslint = require('gulp-tslint');
+   const KarmaServer = require('karma').Server;
+   const coveralls = require('gulp-coveralls');
 
    gulp.task('clean', function() {
       return del([
@@ -28,7 +28,7 @@
         .pipe(tslint.report());
    });
    gulp.task('compile', function() {
-     var tsResult = tsProject.src()
+     const tsResult = tsProject.src()
          .pipe(sourcemaps.init())
          .pipe(tsProject());
      return merge([

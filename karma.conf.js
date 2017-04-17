@@ -15,8 +15,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser.
     // See also:  http://karma-runner.github.io/0.13/config/files.html
     files: [
-        'lib/**/*.js',
-        'lib/index.js'
+        'lib/**/*.js'
     ],
 
 

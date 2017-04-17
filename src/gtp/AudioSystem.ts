@@ -1,5 +1,6 @@
 import Sound from './Sound';
 import {Window} from './GtpBase';
+import {SoundCompletedCallback} from './SoundCompletedCallback';
 
 interface _PlayingSoundConfig {
 	audioSystem: AudioSystem;
@@ -134,7 +135,7 @@ export default class AudioSystem {
 	}
 
 	private _createPlayingSound(id: string, loop: boolean = false,
-			startOffset: number = 0, doneCallback?: Function): PlayingSound {
+			startOffset: number = 0, doneCallback?: SoundCompletedCallback): PlayingSound {
 
 		const soundEffectId: number = this._createSoundEffectId();
 
@@ -286,7 +287,7 @@ export default class AudioSystem {
 			this._musicFaderGain.connect(this._volumeFaderGain);
 			this._currentMusic.start(0);
 			this.currentMusicId = id;
-			console.log('Just started new music with id: ' + id + ', loop: ' + loop);
+			console.log(`Just started new music with id: ${id}, loop: ${loop}`);
 
 		}
 
@@ -305,11 +306,10 @@ export default class AudioSystem {
 	 *         stop a looping sound via <code>stopSound(id)</code>.
 	 * @see stopSound
 	 */
-	playSound(id: string, loop: boolean = false, doneCallback?: Function): number {
+	playSound(id: string, loop: boolean = false, doneCallback?: SoundCompletedCallback): number {
 		if (this.context) {
 
-			let playingSound: PlayingSound = this._createPlayingSound(id, loop, 0,
-					doneCallback);
+			let playingSound: PlayingSound = this._createPlayingSound(id, loop, 0, doneCallback);
 			this._playingSounds.push(playingSound);
 			playingSound.start();
 			return playingSound.id;
