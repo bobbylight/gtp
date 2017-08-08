@@ -1,5 +1,5 @@
 import SpriteSheet from './SpriteSheet';
-import {AssetType} from './AssetType';
+import { AssetType } from './AssetType';
 import AudioSystem from './AudioSystem';
 import Utils from './Utils';
 import ImageUtils from './ImageUtils';
@@ -7,6 +7,7 @@ import Image from './Image';
 import Sound from './Sound';
 import TiledTileset from '../tiled/TiledTileset';
 import TiledMap from '../tiled/TiledMap';
+import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
 
 interface ResourceType {
 	type: AssetType;
@@ -152,6 +153,53 @@ export default class AssetLoader {
 				gtpImage.makeColorTranslucent(0, 0);
 			}
 			self._completed(id, gtpImage);
+		});
+
+		image.src = imageSrc;
+
+	}
+
+	/**
+	 * Starts loading all images from an image atlas.
+	 * @param {string} id A unique identifier for this image atlas (probably not used after loading completes).
+	 * @param {string} imageSrc The URL of the resource.
+	 * @param {ImageAtlasInfo} atlasInfo Information about the images in the atlas to parse.
+	 */
+	addImageAtlasContents(id: string, imageSrc: string, atlasInfo: ImageAtlasInfo) {
+
+		if (this._assetRoot) {
+			imageSrc = this._assetRoot + imageSrc;
+		}
+
+		const image: HTMLImageElement = document.createElement('img'); //new Image();
+		if (this._isAlreadyTracked(id)) {
+			return;
+		}
+		this.loadingAssetData[id] = { type: AssetType.IMAGE };
+		console.log(`Adding: ${id} => ${imageSrc}, remaining == ${Utils.getObjectSize(this.loadingAssetData)}, ` +
+			`callback == ${this.callback !== null}`);
+		image.addEventListener('load', () => {
+
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
+			const atlas: ImageAtlas = new ImageAtlas(canvas, atlasInfo);
+
+			let prefix: string;
+			if (typeof atlasInfo.prefix === 'string') {
+				prefix = atlasInfo.prefix as string;
+			}
+			else {
+				prefix = atlasInfo.prefix ? `${id}.` : '';
+			}
+
+			const imageMap: ImageMap = atlas.parse();
+			for (let key in imageMap) {
+				if (imageMap.hasOwnProperty(key)) {
+					// Images in an atlas aren't tracked individually, but as the single atlas (see below)
+					this.responses[prefix + key] = imageMap[key];
+				}
+			}
+
+			this._completed(id, atlas);
 		});
 
 		image.src = imageSrc;

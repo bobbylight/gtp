@@ -2,7 +2,7 @@ import TiledTileset from './TiledTileset';
 import TiledLayer from './TiledLayer';
 import Image from '../gtp/Image';
 import Game from '../gtp/Game';
-import {Window} from '../gtp/GtpBase';
+import { Window } from '../gtp/GtpBase';
 
 export default class TiledMap {
 

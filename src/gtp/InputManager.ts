@@ -1,4 +1,4 @@
-import {Keys} from './Keys';
+import { Keys } from './Keys';
 
 export default class InputManager {
 

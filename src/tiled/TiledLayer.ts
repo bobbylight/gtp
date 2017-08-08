@@ -1,8 +1,9 @@
 import TiledObject from './TiledObject';
+import TiledMap from './TiledMap';
 
 export default class TiledLayer {
 
-	map: any;
+	map: TiledMap;
 	name: string;
 	width: number;
 	height: number;
@@ -15,7 +16,7 @@ export default class TiledLayer {
 	objects: TiledObject[];
 	objectsByName: { [name: string]: TiledObject };
 
-	constructor(map: any, data: any) {
+	constructor(map: TiledMap, data: any) {
 		this.map = map;
 		this.name = data.name;
 		this.width = data.width;

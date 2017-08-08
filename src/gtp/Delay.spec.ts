@@ -1,4 +1,4 @@
-import {Delay} from '../index';
+import { Delay } from '../index';
 
 describe('Delay', () => {
 

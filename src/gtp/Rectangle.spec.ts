@@ -1,4 +1,4 @@
-import {Rectangle} from '../index';
+import { Rectangle } from '../index';
 
 describe('Rectangle', () => {
 	'use strict';

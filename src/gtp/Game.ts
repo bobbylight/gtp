@@ -1,7 +1,7 @@
-import {Keys} from './Keys';
+import { Keys } from './Keys';
 import InputManager from './InputManager';
 import State from './State';
-import {_GameTimer} from './_GameTimer';
+import { _GameTimer } from './_GameTimer';
 import Timer from './Timer';
 import ImageUtils from './ImageUtils';
 import Utils from './Utils';
@@ -176,14 +176,14 @@ export default class Game {
 		this._gameTimer.resetPlayTime();
 	}
 
-  /**
-   * Sets whether the game is paused.  The game is still told to handle
-   * input, update itself and render.  This is simply a flag that should
-   * be set whenever a "pause" screen is displayed.  It stops the "in-game
-   * timer" until the game is unpaused.
-   *
-   * @param paused Whether the game should be paused.
-   */
+	/**
+	 * Sets whether the game is paused.  The game is still told to handle
+	 * input, update itself and render.  This is simply a flag that should
+	 * be set whenever a "pause" screen is displayed.  It stops the "in-game
+	 * timer" until the game is unpaused.
+	 *
+	 * @param paused Whether the game should be paused.
+	 */
 	set paused(paused: boolean) {
 		if (paused) {
 			this.audio.pauseAll();

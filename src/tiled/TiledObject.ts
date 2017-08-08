@@ -1,6 +1,6 @@
 import Game from '../gtp/Game';
 import Utils from '../gtp/Utils';
-import {Window} from '../gtp/GtpBase';
+import { Window } from '../gtp/GtpBase';
 
 export default class TiledObject {
 
@@ -20,13 +20,12 @@ export default class TiledObject {
 		const gameWindow: Window = <any>window;
 		const game: Game = gameWindow.game;
 		this.x *= game._scale;
-		this.y  *= game._scale;
+		this.y *= game._scale;
 		this.width *= game._scale;
 		this.height *= game._scale;
 	}
 
 	intersects(ox: number, oy: number, ow: number, oh: number) {
-		'use strict';
 		//console.log(this.name + ": " + ox + ',' + oy + ',' + ow + ',' + oh +
 		//      ' -> ' + this.x + ',' + this.y + ',' + this.width + ',' + this.height);
 		let tw: number = this.width;

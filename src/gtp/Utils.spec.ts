@@ -1,5 +1,5 @@
-import {Utils} from '../index';
-import {BrowserUtil} from '../index';
+import { Utils } from '../index';
+import { BrowserUtil } from '../index';
 
 describe('Utils', () => {
 	'use strict';

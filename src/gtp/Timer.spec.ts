@@ -1,4 +1,4 @@
-import {Timer} from '../index';
+import { Timer } from '../index';
 
 describe('Timer', () => {
 	'use strict';

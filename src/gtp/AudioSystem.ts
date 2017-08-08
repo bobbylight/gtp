@@ -1,6 +1,6 @@
 import Sound from './Sound';
-import {Window} from './GtpBase';
-import {SoundCompletedCallback} from './SoundCompletedCallback';
+import { Window } from './GtpBase';
+import { SoundCompletedCallback } from './SoundCompletedCallback';
 
 interface _PlayingSoundConfig {
 	audioSystem: AudioSystem;

@@ -1,6 +1,6 @@
 import Image from './Image';
 import SpriteSheet from './SpriteSheet';
-import {Window} from './GtpBase';
+import { Window } from './GtpBase';
 
 export default class BitmapFont extends SpriteSheet {
 

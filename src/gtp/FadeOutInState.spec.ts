@@ -1,5 +1,5 @@
-import {FadeOutInState} from '../index';
-import {State} from '../index';
+import { FadeOutInState } from '../index';
+import { State } from '../index';
 
 describe('FadeOutInState', () => {
 	'use strict';

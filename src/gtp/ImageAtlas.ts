@@ -1,44 +1,123 @@
 import Image from './Image';
 import ImageUtils from './ImageUtils';
 
+/**
+ * Information about a single image in an image atlas.  One of the following sets of optional
+ * parameters must be specified:
+ *
+ * <ul>
+ *     <li><code>x, y, w, h</code></li>
+ *     <li><code>x, y, s</code>, where <code>s</code> is both the width and height</li>
+ *     <li><code>dim</code>, which is a string of the form <code>"x, y, w, h"</code></li>
+ * </ul>
+ */
+export interface ImageInfo {
+	id: string;
+	dim?: string;
+	x?: number;
+	y?: number;
+	s?: number;
+	w?: number;
+	h?: number;
+}
+
+/**
+ * Information about all images in an image atlas.
+ */
+export interface ImageAtlasInfo {
+
+	/**
+	 * The set of images to parse out of the atlas.
+	 */
+	images: ImageInfo[];
+
+	/**
+	 * Whether the pixel color at (0, 0) should be treated as translucent.  Defaults to <code>false</code>.
+	 */
+	firstPixelIsTranslucent?: boolean;
+
+	/**
+	 * Whether to prefix the IDs of the images in <code>images</code> with some prefix.  Use this if you cannot
+	 * control the IDs of the image atlas and need, or just want, the namespacing.  Specifying a value of
+	 * <code>true</code> will use <code>"&lt;id-of-atlas&gt;."</code> as the prefix.  Specifying a string value will
+	 * use that as the prefix.
+	 */
+	prefix?: string | boolean;
+}
+
+/**
+ * A mapping from ID to image of all images parsed out of the image atlas.
+ */
+export interface ImageMap {
+	[ id: string ]: Image;
+}
+
+/**
+ * Parses images out of an image atlas.
+ */
 export default class ImageAtlas {
 
 	private _atlasInfo: any;
 	private _masterCanvas: HTMLCanvasElement;
 
-	constructor(args: any) {
-		this._atlasInfo = args.atlasInfo;
-		this._masterCanvas = args.canvas;
+	/**
+	 * Provides a means of parsing images out of an image atlas.
+	 *
+	 * @param {HTMLCanvasElement} canvas The canvas containing the image atlas's image.
+	 * @param {ImageAtlasInfo} atlasInfo Information on how to parse the individual images out
+	 *        of the atlas.
+	 */
+	constructor(canvas: HTMLCanvasElement, atlasInfo: ImageAtlasInfo) {
+		this._atlasInfo = atlasInfo;
+		this._masterCanvas = canvas;
 		if (this._atlasInfo.firstPixelIsTranslucent) {
 			this._masterCanvas = ImageUtils.makeColorTranslucent(this._masterCanvas);
 		}
 	}
 
-	parse() {
+	/**
+	 * Parses all images out of the atlas.
+	 *
+	 * @returns {ImageMap} The parsed images.
+	 */
+	parse(): ImageMap {
 
-		const images: { [id: string]: Image } = {};
-		const self: ImageAtlas = this;
+		const images: ImageMap = {};
 
-		this._atlasInfo.images.forEach((imgInfo: any) => {
+		this._atlasInfo.images.forEach((imgInfo: ImageInfo) => {
 
 			const id: string = imgInfo.id;
-			let dim: any;
+			let x: number,
+				y: number,
+				w: number,
+				h: number;
+
 			if (imgInfo.dim) {
-				dim = imgInfo.dim.split(/,\s*/);
+				let dim: string[] = imgInfo.dim.split(/,\s*/);
 				if (dim.length !== 4) {
-					throw new Error('Invalid value for imgInfo.dim: ' + imgInfo.dim);
+					throw new Error(`Invalid value for imgInfo ${id}'s dim: ${imgInfo.dim}`);
 				}
+				x = parseInt(dim[0], 10);
+				y = parseInt(dim[1], 10);
+				w = parseInt(dim[2], 10);
+				h = parseInt(dim[3], 10);
 			}
 			else {
-				dim = [];
-				dim.push(imgInfo.x, imgInfo.y, imgInfo.w, imgInfo.h);
+				x = typeof imgInfo.x === 'number' ? imgInfo.x : -1;
+				y = typeof imgInfo.y === 'number' ? imgInfo.y : -1;
+				if (typeof imgInfo.s === 'number') {
+					w = h = imgInfo.s;
+				}
+				else {
+					w = typeof imgInfo.w === 'number' ? imgInfo.w : -1;
+					h = typeof imgInfo.h === 'number' ? imgInfo.h : -1;
+				}
+				if (x < 0 || y < 0 || w < 0 || h < 0) {
+					throw new Error(`x, y, w, h (or s) not specified for imgInfo: ${JSON.stringify(imgInfo)}`);
+				}
 			}
 
-			dim = dim.map((str: string) => {
-				return parseInt(str, 10) * 2;
-			});
-
-			images[id] = new Image(self._masterCanvas, dim[0], dim[1], dim[2], dim[3]);
+			images[id] = new Image(this._masterCanvas, x, y, w, h);
 		});
 
 		return images;
