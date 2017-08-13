@@ -9,6 +9,7 @@
     "ban": false,
     //"class-name": true,
     //"comment-format": [ true, "check-space" ],
+    "completed-docs": [ true, "classes", "enums", "functions" ],
     "curly": true,
     "eofline": true,
     "forin": false,
@@ -24,16 +25,18 @@
       true,
       140
     ],
-    "member-ordering": [
-      true,
-      "variables-before-functions"
-    ],
+    "member-access": [ true, "no-public" ],
+//    "member-ordering": [
+//      true,
+//      { "order": "fields-first" }
+//    ],
     "new-parens": true,
     //"no-any": true,
     "no-arg": true,
-    "no-consecutive-blank-lines": true,
+    "no-consecutive-blank-lines": [ true, 1 ],
     "no-construct": true,
     "no-debugger": true,
+    "no-duplicate-imports": true,
     "no-duplicate-variable": true,
     "no-empty": false,
     "no-eval": true,
@@ -48,7 +51,9 @@
     "no-shadowed-variable": true,
     "no-sparse-arrays": true,
     "no-string-literal": true,
+    "no-submodule-imports": true,
     "no-switch-case-fall-through": false,
+    "no-this-assignment": true,
     "no-trailing-whitespace": true,
     "no-unsafe-finally": true,
     "no-unused-expression": true,
@@ -72,6 +77,7 @@
     "radix": true,
     //"restrict-plus-operands": true,
     "semicolon": true,
+    "space-within-parens": 0,
     "triple-equals": [
       true,
       "allow-null-check"

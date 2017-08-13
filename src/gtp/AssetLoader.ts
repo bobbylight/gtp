@@ -102,8 +102,6 @@ export default class AssetLoader {
 			imageSrc = this._assetRoot + imageSrc;
 		}
 
-		const self: AssetLoader = this;
-
 		const  image: HTMLImageElement = document.createElement('img'); //new Image();
 		if (this._isAlreadyTracked(id)) {
 			return;
@@ -113,8 +111,8 @@ export default class AssetLoader {
 			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
 			', callback == ' + (this.callback !== null));
 		image.addEventListener('load', () => {
-			const canvas: HTMLCanvasElement = ImageUtils.resize(image, self._scale);
-			self._completed(id, canvas);
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
+			this._completed(id, canvas);
 		});
 
 		image.src = imageSrc;
@@ -136,8 +134,6 @@ export default class AssetLoader {
 			imageSrc = this._assetRoot + imageSrc;
 		}
 
-		const self: AssetLoader = this;
-
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
 		if (this._isAlreadyTracked(id)) {
 			return;
@@ -147,12 +143,12 @@ export default class AssetLoader {
 			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
 			', callback == ' + (this.callback !== null));
 		image.addEventListener('load', () => {
-			const canvas: HTMLCanvasElement = ImageUtils.resize(image, self._scale);
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
 			const gtpImage: Image = new Image(canvas);
 			if (firstPixelTranslucent) {
 				gtpImage.makeColorTranslucent(0, 0);
 			}
-			self._completed(id, gtpImage);
+			this._completed(id, gtpImage);
 		});
 
 		image.src = imageSrc;
@@ -267,13 +263,12 @@ export default class AssetLoader {
 			spacingX: number = 0, spacingY: number = 0,
 			firstPixelTranslucent: boolean = false) {
 
-		const self: AssetLoader = this;
 		spacingX = spacingX || 0;
 		spacingY = spacingY || 0;
-		cellW *= self._scale;
-		cellH *= self._scale;
-		spacingX *= self._scale;
-		spacingY *= self._scale;
+		cellW *= this._scale;
+		cellH *= this._scale;
+		spacingX *= this._scale;
+		spacingY *= this._scale;
 
 		if (this._assetRoot) {
 			imageSrc = this._assetRoot + imageSrc;
@@ -288,13 +283,13 @@ export default class AssetLoader {
 			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
 			', callback == ' + (this.callback !== null));
 		image.addEventListener('load', () => {
-			const canvas: HTMLCanvasElement = ImageUtils.resize(image, self._scale);
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
 			const gtpImage: Image = new Image(canvas);
 			if (firstPixelTranslucent) {
 				gtpImage.makeColorTranslucent(0, 0);
 			}
 			const ss: SpriteSheet = new SpriteSheet(gtpImage, cellW, cellH, spacingX, spacingY);
-			self._completed(id, ss);
+			this._completed(id, ss);
 		});
 
 		image.src = imageSrc;

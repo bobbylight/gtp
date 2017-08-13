@@ -3,26 +3,32 @@ import { Pool } from '../index';
 describe('Pool', () => {
 	'use strict';
 
-	function Widget() { // tslint:disable-line
-		this.type = null;
-		this.price = 0;
+	class Widget {
+
+		type: any;
+		price: number;
+
+		constructor() {
+			this.type = null;
+			this.price = 0;
+		}
 	}
 
 	it('constructor, 0-arg', () => {
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor);
+		const pool: Pool<any> = new Pool<any>(Widget);
 		expect(pool.borrowedCount).toBe(0);
 		expect(pool.length).toBe(20);
 	});
 
 	it('constructor, 1-arg', () => {
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor, 50);
+		const pool: Pool<any> = new Pool<any>(Widget, 50);
 		expect(pool.borrowedCount).toBe(0);
 		expect(pool.length).toBe(50);
 	});
 
 	it('borrowObj() happy path', () => {
 
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor);
+		const pool: Pool<any> = new Pool<any>(Widget);
 		expect(pool.borrowedCount).toBe(0);
 
 		const widget: any = pool.borrowObj();
@@ -37,7 +43,7 @@ describe('Pool', () => {
 	it('borrowObj() until pool grown', () => {
 
 		const growCount: number = 7;
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor, 3, growCount);
+		const pool: Pool<any> = new Pool<any>(Widget, 3, growCount);
 		expect(pool.borrowedCount).toBe(0);
 
 		pool.borrowObj();
@@ -49,7 +55,7 @@ describe('Pool', () => {
 
 	it('returnObj() happy path', () => {
 
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor);
+		const pool: Pool<any> = new Pool<any>(Widget);
 		expect(pool.borrowedCount).toBe(0);
 
 		const widget: any = pool.borrowObj();
@@ -64,7 +70,7 @@ describe('Pool', () => {
 
 	it('returnObj() invalid object', () => {
 
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor);
+		const pool: Pool<any> = new Pool<any>(Widget);
 		expect(pool.borrowedCount).toBe(0);
 
 		const result: any = pool.returnObj('hello world');
@@ -74,7 +80,7 @@ describe('Pool', () => {
 
 	it('reset() happy path', () => {
 
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor);
+		const pool: Pool<any> = new Pool<any>(Widget);
 		expect(pool.borrowedCount).toBe(0);
 
 		pool.borrowObj();
@@ -87,7 +93,7 @@ describe('Pool', () => {
 	});
 
 	it('toString()', () => {
-		const pool: Pool<any> = new Pool<any>(Widget.prototype.constructor);
+		const pool: Pool<any> = new Pool<any>(Widget);
 		const actual: string = pool.toString();
 		expect(actual).toBe('[Pool: borrowed=0, size=20]');
 	});

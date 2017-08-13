@@ -204,9 +204,8 @@ export default class AudioSystem {
 					this._musicFaderGain.gain.setValueAtTime(this._musicFaderGain.gain.value, this.context.currentTime);
 					this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
 				}
-				const that: AudioSystem = this;
 				setTimeout(() => {
-					that.playMusic(newMusicId);
+					this.playMusic(newMusicId);
 				}, this._musicFade * 1000);
 			}
 			else {
