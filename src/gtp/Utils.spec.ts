@@ -96,17 +96,17 @@ describe('Utils', () => {
 			'error': 4
 		};
 		const origConsole: Console = window.console;
-		(<any>window).console = mockConsole;
+		(window as any).console = mockConsole;
 		Utils.initConsole();
 		expect(window.console).toBe(mockConsole);
-		(<any>window).console = origConsole;
+		(window as any).console = origConsole;
 	});
 
 	it('initConsole() with console undefined', () => {
 		const origConsole: Console = window.console;
-		(<any>window).console = null;
+		(window as any).console = null;
 		Utils.initConsole();
 		expect(window.console).not.toBeNull();
-		(<any>window).console = origConsole;
+		(window as any).console = origConsole;
 	});
 });

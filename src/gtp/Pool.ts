@@ -114,8 +114,8 @@ export default class Pool<T> {
 	 */
 	toString(): string {
 		return '[Pool: ' +
-				'borrowed=' + this.borrowedCount +
-				', size=' + this.length +
+				`borrowed=${this.borrowedCount}, ` +
+				`size=${this.length}` +
 				']';
 	}
 }

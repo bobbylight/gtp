@@ -178,10 +178,10 @@ export default class Delay {
 	}
 
 	toString() {
-		return '[Delay: _initial=' + this._initial +
-			', _remaining=' + this._remaining +
-			', _loop=' + this._loop +
-			', _callback=' + (this._callback != null) +
+		return `[Delay: _initial=${this._initial}, ` +
+			`_remaining=${this._remaining}, ` +
+			`_loop=${this._loop}, ` +
+			`_callback=${this._callback != null}` +
 			']';
 	}
 

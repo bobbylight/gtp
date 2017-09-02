@@ -1,3 +1,6 @@
+/**
+ * A tile set used in a <code>Tiled</code> map.
+ */
 export default class TiledTileset {
 
 	firstgid: number;

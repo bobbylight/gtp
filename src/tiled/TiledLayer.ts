@@ -1,6 +1,9 @@
 import TiledObject from './TiledObject';
 import TiledMap from './TiledMap';
 
+/**
+ * A layer in a <code>Tiled</code> map.
+ */
 export default class TiledLayer {
 
 	map: TiledMap;

@@ -1,3 +1,6 @@
+/**
+ * Represents a sound effect to play in a game.
+ */
 export default class Sound {
 
 	private _id: string;

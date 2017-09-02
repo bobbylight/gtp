@@ -1,5 +1,8 @@
 import Image from './Image';
 
+/**
+ * A collection of images contained in some sort of rectangular grid in a single image file.
+ */
 export default class SpriteSheet {
 
 	gtpImage: Image;
@@ -28,8 +31,8 @@ export default class SpriteSheet {
 		this.gtpImage = gtpImage;
 		this.cellW = cellW;
 		this.cellH = cellH;
-		this.spacingX = typeof spacing === 'undefined' ? 1 : spacing;
-		this.spacingY = typeof spacingY === 'undefined' ? this.spacingX : spacingY;
+		this.spacingX = spacing;
+		this.spacingY = spacingY;
 
 		this.rowCount = Math.floor(gtpImage.height / (cellH + this.spacingY));
 		if ((gtpImage.height - this.rowCount * (cellH + this.spacingY)) >= cellH) {

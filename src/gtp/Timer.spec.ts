@@ -12,12 +12,10 @@ describe('Timer', () => {
 
 		// Note we are assuming that console.log/error are called with 1 argument
 		// here...
-		spyOn(console, 'log')
-			.and.callFake((arg: any) => {
+		spyOn(console, 'log').and.callFake((arg: string) => {
 			debugContent += arg + '\n';
 		});
-		spyOn(console, 'error')
-			.and.callFake((arg: any) => {
+		spyOn(console, 'error').and.callFake((arg: string) => {
 			errorContent += arg + '\n';
 		});
 	});

@@ -4,6 +4,9 @@ import Image from '../gtp/Image';
 import Game from '../gtp/Game';
 import { Window } from '../gtp/GtpBase';
 
+/**
+ * A <code>Tiled</code> map.
+ */
 export default class TiledMap {
 
 	rowCount: number;
@@ -226,7 +229,7 @@ export default class TiledMap {
 
 		const tileset: TiledTileset = this._getImageForGid(value);
 		if (!tileset) {
-			console.log('null tileset for: ' + value + ' (layer ' + layer.name + ')');
+			console.log(`null tileset for: ${value} (layer ${layer.name})`);
 			return;
 		}
 
@@ -235,7 +238,7 @@ export default class TiledMap {
 			return;
 		}
 
-		const gameWindow: Window = <any>window;
+		const gameWindow: Window = window as any;
 		const game: Game = gameWindow.game;
 		const img: Image = game.assets.getTmxTilesetImage(tileset);
 
@@ -264,7 +267,7 @@ export default class TiledMap {
 		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
 		const tilesetCount: number = this.tilesets.length;
 		for (let i: number = 0; i < tilesetCount; i++) {
-			return this.tilesets[i].setScale(scale);
+			this.tilesets[i].setScale(scale);
 		}
 	}
 

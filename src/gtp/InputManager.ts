@@ -1,5 +1,13 @@
 import { Keys } from './Keys';
 
+/**
+ * Handles input for games.<p>
+ *
+ * For keyboards, allows polling of individual key presses, both with and
+ * without the keyboard repeat delay.<p>
+ *
+ * Touch and mouse input are currently not supported.
+ */
 export default class InputManager {
 
 	private keys: boolean[];
@@ -19,9 +27,9 @@ export default class InputManager {
 	 *        milliseconds.  A value of 0 means to take the operating system
 	 *        default.
 	 */
-	constructor(keyRefireMillis?: number) {
+	constructor(keyRefireMillis: number = 0) {
 		this.keys = [];
-		this._refireMillis = keyRefireMillis || 0;
+		this._refireMillis = keyRefireMillis;
 		this._repeatTimers = [];
 	}
 
@@ -135,7 +143,7 @@ export default class InputManager {
 				this._repeatTimers[key] = null;
 			}
 			else {
-				console.error('_keyUp: Timer does not exist for key: ' + key + '!');
+				console.error(`_keyUp: Timer does not exist for key: ${key}!`);
 			}
 		}
 		else {

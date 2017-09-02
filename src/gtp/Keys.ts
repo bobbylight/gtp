@@ -1,3 +1,6 @@
+/**
+ * An enumeration of keys, useful for input.
+ */
 export enum Keys {
 
 	KEY_ENTER = 13,

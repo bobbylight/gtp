@@ -1,5 +1,8 @@
 import State from './State';
 
+/**
+ * A transitional state that fades out of one state and fades in another.
+ */
 export default class FadeOutInState extends State {
 
 	private _leavingState: State;

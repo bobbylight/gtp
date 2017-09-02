@@ -62,7 +62,7 @@ export default class Game {
 		this._statusMessageColor = null;
 		this.showFps = false;
 		this.frames = 0;
-		this._fpsMsg = this._targetFps + ' fps';
+		this._fpsMsg = `${this._targetFps} fps`;
 		this._statusMessage = null;
 		this._statusMessageAlpha = 0;
 
@@ -144,7 +144,7 @@ export default class Game {
 			this.lastTime = now;
 		}
 		else if (now - this.lastTime >= 1000) {
-			this._fpsMsg = this.frames + ' fps';
+			this._fpsMsg = `${this.frames} fps`;
 			this.frames = 0;
 			this.lastTime = now;
 		}
@@ -212,7 +212,7 @@ export default class Game {
 	 * Starts the game loop.
 	 */
 	start() {
-		const callback: Function = Utils.hitch(this, this._tick);
+		const callback: Function = Utils.hitch(this, this._tick); // tslint:disable-line
 		this._gameTimer.start();
 		setInterval(callback, this._interval);
 	}
@@ -225,7 +225,7 @@ export default class Game {
 				this._statusMessageTime = time + 100;
 				this._statusMessageAlpha -= 0.1;
 				const alpha: number = Math.min(1, this._statusMessageAlpha);
-				this._statusMessageColor = 'rgba(' + this.statusMessageRGB + ',' + alpha + ')';
+				this._statusMessageColor = `rgba(${this.statusMessageRGB},${alpha})`;
 				if (this._statusMessageAlpha <= 0) {
 					this._statusMessage = null;
 				}

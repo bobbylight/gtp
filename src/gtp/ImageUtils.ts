@@ -29,7 +29,7 @@ export default class ImageUtils {
 			origCtx.drawImage(img, 0, 0);
 		}
 		else {
-			orig = <HTMLCanvasElement>img;
+			orig = img as HTMLCanvasElement;
 			origCtx = orig.getContext('2d')!;
 		}
 

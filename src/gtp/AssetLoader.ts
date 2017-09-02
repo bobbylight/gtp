@@ -9,6 +9,9 @@ import TiledTileset from '../tiled/TiledTileset';
 import TiledMap from '../tiled/TiledMap';
 import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
 
+/**
+ * Defines a type of resource we can load.
+ */
 interface ResourceType {
 	type: AssetType;
 }

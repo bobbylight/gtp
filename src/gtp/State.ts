@@ -29,10 +29,10 @@ export class State {
 			this.game = args;
 		}
 		else if (args) {
-			this.game = (<BaseStateArgs>args).game;
+			this.game = (args as BaseStateArgs).game;
 		}
 		else { // Default to global game object
-			const gameWindow: Window = <any>window;
+			const gameWindow: Window = window as any;
 			this.game = gameWindow.game;
 		}
 	}

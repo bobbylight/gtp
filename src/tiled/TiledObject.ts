@@ -2,6 +2,9 @@ import Game from '../gtp/Game';
 import Utils from '../gtp/Utils';
 import { Window } from '../gtp/GtpBase';
 
+/**
+ * An object in a <code>Tiled</code> map.
+ */
 export default class TiledObject {
 
 	gid: number;
@@ -17,7 +20,7 @@ export default class TiledObject {
 		this.gid = this.gid || -1;
 
 		// TODO: Remove
-		const gameWindow: Window = <any>window;
+		const gameWindow: Window = window as any;
 		const game: Game = gameWindow.game;
 		this.x *= game._scale;
 		this.y *= game._scale;

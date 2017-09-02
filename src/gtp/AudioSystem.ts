@@ -2,6 +2,9 @@ import Sound from './Sound';
 import { Window } from './GtpBase';
 import { SoundCompletedCallback } from './SoundCompletedCallback';
 
+/**
+ * Configuration for a playing sound.
+ */
 interface _PlayingSoundConfig {
 	audioSystem: AudioSystem;
 	id: number;
@@ -41,10 +44,10 @@ class PlayingSound {
 		this.source.loop = this._config.loop;
 		this.source.buffer = this._config.buffer;
 		if (this._config.connectTo instanceof AudioNode) {
-			this.source.connect(<AudioNode>this._config.connectTo);
+			this.source.connect(this._config.connectTo as AudioNode);
 		}
 		else {
-			let nodes: AudioNode[] = <AudioNode[]>this._config.connectTo;
+			const nodes: AudioNode[] = (this._config.connectTo as AudioNode[]);
 			nodes.forEach((node: AudioNode) => {
 				this.source.connect(node);
 			});
@@ -91,6 +94,9 @@ class PlayingSound {
 
 }
 
+/**
+ * A wrapper around web audio for games.
+ */
 export default class AudioSystem {
 
 	private _currentMusic: AudioBufferSourceNode | null;
@@ -169,7 +175,7 @@ export default class AudioSystem {
 	init() {
 
 		// Effectively cast to our window extension for static typing
-		const w: Window = <any>window;
+		const w: Window = window as any;
 
 		try {
 			w.AudioContext = w.AudioContext || w.webkitAudioContext;

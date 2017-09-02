@@ -1,5 +1,9 @@
 import ImageUtils from './ImageUtils';
 
+/**
+ * A wrapper around images.  Handles browser-specific quirks and other things a game shouldn't have
+ * to know about.
+ */
 export default class Image {
 
 	private _canvas: HTMLCanvasElement;

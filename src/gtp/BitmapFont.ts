@@ -2,6 +2,9 @@ import Image from './Image';
 import SpriteSheet from './SpriteSheet';
 import { Window } from './GtpBase';
 
+/**
+ * A font renderer that uses a bitmap for its glyphs.
+ */
 export default class BitmapFont extends SpriteSheet {
 
 	constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number) {
@@ -11,7 +14,7 @@ export default class BitmapFont extends SpriteSheet {
 	drawString(str: string, x: number, y: number) {
 
 		const glyphCount: number = this.size;
-		const gameWindow: Window = <any>window;
+		const gameWindow: Window = window as any;
 		const ctx: CanvasRenderingContext2D = gameWindow.game.canvas.getContext('2d')!;
 		const charWidth: number = this.cellW;
 

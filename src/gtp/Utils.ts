@@ -133,7 +133,7 @@ export default class Utils {
 		'use strict';
 		if (!window.console) {
 			const noOp: Function = () => {};
-			(<any>window).console = <any>{
+			(window as any).console = {
 				info: noOp,
 				log: noOp,
 				warn: noOp,

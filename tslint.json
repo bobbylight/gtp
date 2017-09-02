@@ -9,7 +9,7 @@
     "ban": false,
     //"class-name": true,
     //"comment-format": [ true, "check-space" ],
-    "completed-docs": [ true, "classes", "enums", "functions" ],
+    "completed-docs": [ true, "classes", "enums", "functions", "interfaces" ],
     "curly": true,
     "eofline": true,
     "forin": false,
@@ -23,7 +23,7 @@
     "max-file-line-count": [ true, 500 ],
     "max-line-length": [
       true,
-      140
+      130
     ],
     "member-access": [ true, "no-public" ],
 //    "member-ordering": [
@@ -31,8 +31,10 @@
 //      { "order": "fields-first" }
 //    ],
     "new-parens": true,
+    "no-angle-bracket-type-assertion": true,
     //"no-any": true,
     "no-arg": true,
+    "no-boolean-literal-compare": true,
     "no-consecutive-blank-lines": [ true, 1 ],
     "no-construct": true,
     "no-debugger": true,
@@ -55,12 +57,15 @@
     "no-switch-case-fall-through": false,
     "no-this-assignment": true,
     "no-trailing-whitespace": true,
+    "no-unbound-method": true,
+    //"no-unnecessary-type-assertion": true, // IntelliJ seems to red-squiggle these if we don't have them
     "no-unsafe-finally": true,
     "no-unused-expression": true,
-    //"no-unused-variable": [ true ],
+    "no-unused-variable": [ true ],
     "no-use-before-declare": true,
     "no-var-keyword": true,
     "no-var-requires": true,
+    "no-void-expression": true,
     "object-literal-sort-keys": false,
     "one-line": [
       true,
@@ -75,9 +80,10 @@
       "avoid-escape"
     ],
     "radix": true,
-    //"restrict-plus-operands": true,
+    "restrict-plus-operands": false,
     "semicolon": true,
     "space-within-parens": 0,
+    //"strict-type-predicates": true,
     "triple-equals": [
       true,
       "allow-null-check"
@@ -99,6 +105,7 @@
         "variable-declaration": "nospace"
       }
     ],
+    "use-default-type-parameter": true,
     "use-isnan": true,
     "variable-name": [
       true,

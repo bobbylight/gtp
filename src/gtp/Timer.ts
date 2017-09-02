@@ -8,6 +8,9 @@ interface TimeMap {
 	[key: string]: number;
 }
 
+/**
+ * Allows you to time actions and log their runtimes to the console.
+ */
 export default class Timer {
 
 	private _startTimes: TimeMap = {};
@@ -62,7 +65,7 @@ export default class Timer {
 	endAndLog(key: string) {
 		const time: number = this.end(key);
 		if (time > -1) {
-			console.log(this._prefix + ': ' + key + ': ' + time + ' ms');
+			console.log(`${this._prefix}: ${key}: ${time} ms`);
 		}
 	}
 

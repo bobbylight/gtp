@@ -1,4 +1,19 @@
-export default class Rectangle {
+/**
+ * Defines the shape of rectangular data, for compatibility with APIs that don't deal with <code>gtp</code>
+ * <code>Rectangle</code> instances.
+ */
+export interface RectangularData {
+	x: number;
+	y: number;
+	w: number;
+	h: number;
+}
+
+/**
+ * A class that represents rectangular data that also provides utility methods useful for games - intersection,
+ * etc.
+ */
+export default class Rectangle implements RectangularData {
 
 	x: number;
 	y: number;
@@ -19,9 +34,19 @@ export default class Rectangle {
 	}
 
 	/**
+	 * Returns whether a point is contained in this rectangle.
+	 * @param {number} x The x-coordinate of the point.
+	 * @param {number} y The y-coordinate of the point.
+	 * @returns {boolean} Whether the point is contained in this rectangle.
+	 */
+	contains(x: number, y: number): boolean {
+		return x >= this.x && x < this.x + this.w && y >= this.y && y < this.y + this.h;
+	}
+
+	/**
 	 * Returns whether one rectangle contains another.
 	 *
-	 * @param {number|Rectangle} x2 Either a second rectangle, or the
+	 * @param {number|RectangularData} x2 Either rectangular data, or the
 	 *        x-coordinate of the second rectangle.
 	 * @param {number} y2 The y-coordinate of the second rectangle, if
 	 *        specifying the dimensions as separate arguments.
@@ -31,10 +56,10 @@ export default class Rectangle {
 	 *        specifying the dimensions as separate arguments.
 	 * @return Whether this rectangle contains the specified rectangle.
 	 */
-	containsRect(x2: number|Rectangle, y2: number = 0, w2: number = 0, h2: number = 0) {
+	containsRect(x2: number | RectangularData, y2: number = 0, w2: number = 0, h2: number = 0): boolean {
 
-		if (x2 instanceof Rectangle) {
-			const r: Rectangle = <Rectangle>x2;
+		if (typeof x2 !== 'number') {
+			const r: RectangularData = x2 as RectangularData;
 			y2 = r.y;
 			w2 = r.w;
 			h2 = r.h;
@@ -54,7 +79,7 @@ export default class Rectangle {
 				return false;
 		}
 		w += x;
-		w2 += <number>x2;
+		w2 += x2 as number;
 		if (w2 <= x2) {
 				// X+W overflowed or W was zero, return false if...
 				// either original w or W was zero or
@@ -80,11 +105,11 @@ export default class Rectangle {
 	/**
 	 * Returns whether this rectangle intersects another.
 	 *
-	 * @param {Rectangle} rect2 Another rectangle to compare against.
-	 *        This should not be null.
+	 * @param {RectangularData} rect2 Another rectangular data to compare against.
+	 *        This should not be <code>null</code>.
 	 * @return {boolean} Whether the two rectangles intersect.
 	 */
-	intersects(rect2: Rectangle): boolean {
+	intersects(rect2: RectangularData): boolean {
 
 		let tw: number = this.w;
 		let th: number = this.h;
@@ -110,15 +135,32 @@ export default class Rectangle {
 
 	/**
 	 * Sets the bounds of this rectangle.
-	 * @param {number} x The new x-coordinate.
-	 * @param {number} y The new y-coordinate.
-	 * @param {number} w The new width.
-	 * @param {number} h The new height.
+	 * @param {number|RectangularData} x Either the new x-coordinate, or rectangular data.
+	 * @param {number} y The new y-coordinate, if the first argument is a number.  If the first argument is a number
+	 *        and this parameter is not specified, the current y value is preserved.
+	 * @param {number} w The new width, if the first argument is a number.  If the first argument is a number and
+	 *        this parameter is not specified, the current width value is preserved.
+	 * @param {number} h The new height, if the first argument is a number.  If the first argument is a number and
+	 *        this parameter is not specified, the current height value is preserved.
 	 */
-	set(x: number, y: number, w: number, h: number) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
+	set(x: number | RectangularData, y?: number, w?: number, h?: number) {
+		if (typeof x === 'number') {
+			this.x = x;
+			if (y != null) {
+				this.y = y;
+			}
+			if (w != null) {
+				this.w = w;
+			}
+			if (h != null) {
+				this.h = h;
+			}
+		}
+		else {
+			this.x = x.x;
+			this.y = x.y;
+			this.w = x.w;
+			this.h = x.h;
+		}
 	}
 }
