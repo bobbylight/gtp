@@ -260,7 +260,7 @@ export default class AudioSystem {
 	 * @param {boolean} loop Whether the music should loop.
 	 * @see stopMusic
 	 */
-	playMusic(id: string, loop: boolean = false) {
+	playMusic(id: string | null | undefined, loop: boolean = false) {
 
 		if (this.context) {
 
