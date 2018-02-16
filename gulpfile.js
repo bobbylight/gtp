@@ -87,7 +87,8 @@
     });
 
     gulp.task('default', function () {
-        runSequence('tslint', 'clean', 'compile', 'test', 'typedoc');
+        // typedoc temporarily disabled as 0.10.0 release throws an exception on this project when running
+        runSequence('tslint', 'clean', 'compile', 'test'/*, 'typedoc'*/);
     });
 
     gulp.task('upload-coverage-data', function () {
@@ -100,7 +101,7 @@
         // has a runSequence in it!  It will run the second task after the
         // first task in the "child" runSequence
         //runSequence('default', 'upload-coverage-data');
-        runSequence('tslint', 'clean', 'compile', 'test', 'typedoc', 'upload-coverage-data');
+        runSequence('tslint', 'clean', 'compile', 'test', /*'typedoc', */ 'upload-coverage-data');
     });
 
 })();
