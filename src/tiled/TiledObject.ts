@@ -7,12 +7,12 @@ import { Window } from '../gtp/GtpBase';
  */
 export default class TiledObject {
 
-	gid: number;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-	properties: { };
+	gid!: number;
+	x!: number;
+	y!: number;
+	width!: number;
+	height!: number;
+	properties: any;
 
 	constructor(data: any) {
 		Utils.mixin(data, this);

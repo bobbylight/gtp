@@ -29,7 +29,7 @@ import Utils from './gtp/Utils';
 import TiledLayer from './tiled/TiledLayer';
 import TiledMap from './tiled/TiledMap';
 import TiledObject from './tiled/TiledObject';
-import TiledTileset from './tiled/TiledTileset';
+import TiledTileset, { ImagePathModifier } from './tiled/TiledTileset';
 
 export {
 	AssetLoader,
@@ -58,6 +58,7 @@ export {
 	Timer,
 	Utils,
 
+	ImagePathModifier,
 	TiledLayer,
 	TiledMap,
 	TiledObject,

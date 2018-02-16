@@ -16,8 +16,8 @@ export default class TiledLayer {
 	type: string;
 	x: number;
 	y: number;
-	objects: TiledObject[];
-	objectsByName: { [name: string]: TiledObject };
+	objects?: TiledObject[];
+	objectsByName?: { [name: string]: TiledObject };
 
 	constructor(map: TiledMap, data: any) {
 		this.map = map;
@@ -75,7 +75,6 @@ export default class TiledLayer {
 	}
 
 	private _setObjects(objects: any) {
-		'use strict';
 		if (objects) {
 			this.objects = [];
 			this.objectsByName = {};

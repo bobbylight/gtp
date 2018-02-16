@@ -10,9 +10,9 @@ import { Keys } from './Keys';
  */
 export default class InputManager {
 
-	private keys: boolean[];
-	private _refireMillis: number;
-	private _repeatTimers: { [key: number/*Keys*/]: any };
+	private readonly keys: boolean[];
+	private readonly _refireMillis: number;
+	private readonly _repeatTimers: { [key: number/*Keys*/]: any };
 
 	/**
 	 * Handles input for games.<p>
@@ -22,8 +22,7 @@ export default class InputManager {
 	 *
 	 * Touch and mouse input are currently not supported.
 	 *
-	 * @constructor
-	 * @param {int} [keyRefireMillis=0] What the key refiring time should be, in
+	 * @param [keyRefireMillis=0] What the key refiring time should be, in
 	 *        milliseconds.  A value of 0 means to take the operating system
 	 *        default.
 	 */
@@ -36,7 +35,7 @@ export default class InputManager {
 	/**
 	 * Resets a specific key to its "not depressed" state.
 	 *
-	 * @param {int} key The key to reset.
+	 * @param key The key to reset.
 	 * @see clearKeyStates
 	 */
 	clearKeyState(key: Keys) {
@@ -58,10 +57,10 @@ export default class InputManager {
 
 	/**
 	 * Returns whether ctrl is pressed.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	ctrl(clear: boolean = false) {
 		return this.isKeyDown(Keys.KEY_CTRL, clear);
@@ -69,10 +68,10 @@ export default class InputManager {
 
 	/**
 	 * Returns whether down is pressed.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	down(clear: boolean = false) {
 		return this.isKeyDown(Keys.KEY_DOWN_ARROW, clear);
@@ -80,10 +79,10 @@ export default class InputManager {
 
 	/**
 	 * Returns whether enter is pressed.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	enter(clear: boolean = false) {
 		return this.isKeyDown(Keys.KEY_ENTER, clear);
@@ -100,11 +99,11 @@ export default class InputManager {
 
 	/**
 	 * Returns whether a specific key is pressed.
-	 * @param keyCode {Keys} A key code.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param keyCode A key code.
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	isKeyDown(keyCode: number, clear: boolean = false) {
 		const down: boolean = this.keys[keyCode];
@@ -116,6 +115,7 @@ export default class InputManager {
 
 	_keyDown(e: KeyboardEvent) {
 		const keyCode: number = e.keyCode;
+		// tslint:disable-next-line:no-magic-numbers
 		if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) { // An arrow key or space
 			e.preventDefault();
 		}
@@ -154,10 +154,10 @@ export default class InputManager {
 
 	/**
 	 * Returns whether left is pressed.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	left(clear: boolean = false) {
 		return this.isKeyDown(Keys.KEY_LEFT_ARROW, clear);
@@ -165,10 +165,10 @@ export default class InputManager {
 
 	/**
 	 * Returns whether right is pressed.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	right(clear: boolean = false) {
 		return this.isKeyDown(Keys.KEY_RIGHT_ARROW, clear);
@@ -176,10 +176,10 @@ export default class InputManager {
 
 	/**
 	 * Returns whether shift is pressed.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	shift(clear: boolean = false) {
 		return this.isKeyDown(Keys.KEY_SHIFT, clear);
@@ -187,10 +187,10 @@ export default class InputManager {
 
 	/**
 	 * Returns whether up is pressed.
-	 * @param clear {boolean} Whether the key's state should be reset to "not
+	 * @param clear Whether the key's state should be reset to "not
 	 *        pressed" when this method returns.  This is useful to effectively
 	 *        enable the keyboard's buffering.
-	 * @return {boolean} Whether the key was pressed.
+	 * @return Whether the key was pressed.
 	 */
 	up(clear: boolean = false) {
 		return this.isKeyDown(Keys.KEY_UP_ARROW, clear);

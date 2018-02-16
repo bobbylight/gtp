@@ -7,18 +7,18 @@
  */
 export default class Pool<T> {
 
-	private _pool: T[];
+	private readonly _pool: T[];
 	private _index: number;
-	private _growCount: number;
-	private _c: { new(): T };
+	private readonly _growCount: number;
+	private readonly _c: { new(): T };
 
 	/**
 	 * Creates an object pool.
-	 * @param {Function} ctorFunc The constructor function for <code>T</code>
+	 * @param ctorFunc The constructor function for <code>T</code>
 	 *        instances.
-	 * @param {number} initialSize The initial size of the pool; defaults to
+	 * @param initialSize The initial size of the pool; defaults to
 	 *        <code>20</code>.
-	 * @param {number} growCount The amount to grow this pool by if too many
+	 * @param growCount The amount to grow this pool by if too many
 	 *        objects are borrowed; defaults to <code>10</code>.
 	 */
 	constructor(ctorFunc: { new(): T }, initialSize: number = 20,
@@ -34,11 +34,11 @@ export default class Pool<T> {
 
 	/**
 	 * Gets an object from this pool.
-	 * @return {T} An object from this pool.
+	 * @return An object from this pool.
 	 * @see returnObj
 	 */
 	borrowObj(): T {
-		let obj: T = this._pool[this._index++];
+		const obj: T = this._pool[this._index++];
 		if (this._index >= this._pool.length) {
 			for (let i: number = 0; i < this._growCount; i++) {
 				this._pool.push(new this._c());
@@ -49,7 +49,7 @@ export default class Pool<T> {
 
 	/**
 	 * Returns the number of currently-borrowed objects.
-	 * @return {number} The number of currently-borrowed objects.
+	 * @return The number of currently-borrowed objects.
 	 */
 	get borrowedCount(): number {
 		return this._index;
@@ -68,8 +68,8 @@ export default class Pool<T> {
 
 	/**
 	 * Returns an object to this pool.
-	 * @param {T} obj The object to return.
-	 * @return {boolean} <code>true</code>, assuming the object was actually
+	 * @param obj The object to return.
+	 * @return <code>true</code>, assuming the object was actually
 	 *         from this pool, and not previously returned.	In other words,
 	 *         this method will only return <code>false</code> if you try to
 	 *         incorrectly return an object.
@@ -92,7 +92,7 @@ export default class Pool<T> {
 		}
 
 		// Swap it with the most-recently borrowed object and move our index back
-		let temp: T = this._pool[--this._index];
+		const temp: T = this._pool[--this._index];
 		this._pool[this._index] = this._pool[objIndex];
 		this._pool[objIndex] = temp;
 
@@ -102,7 +102,7 @@ export default class Pool<T> {
 	/**
 	 * Returns the total number of pooled objects, borrowed or otherwise.
 	 * Only really useful for debugging purposes.
-	 * @return {number} The total number of objects in this pool.
+	 * @return The total number of objects in this pool.
 	 */
 	get length(): number {
 		return this._pool.length;
@@ -110,7 +110,7 @@ export default class Pool<T> {
 
 	/**
 	 * Returns this object as a string.	Useful for debugging.
-	 * @return {string} A string representation of this pool.
+	 * @return A string representation of this pool.
 	 */
 	toString(): string {
 		return '[Pool: ' +

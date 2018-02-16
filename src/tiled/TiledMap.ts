@@ -1,4 +1,4 @@
-import TiledTileset from './TiledTileset';
+import TiledTileset, { ImagePathModifier } from './TiledTileset';
 import TiledLayer from './TiledLayer';
 import Image from '../gtp/Image';
 import Game from '../gtp/Game';
@@ -17,7 +17,6 @@ export default class TiledMap {
 	screenHeight: number;
 	screenRows: number;
 	screenCols: number;
-	imagePathModifier: Function;
 	layers: TiledLayer[];
 	layersByName: { [name: string]: TiledLayer };
 	objectGroups: TiledLayer[];
@@ -28,8 +27,6 @@ export default class TiledMap {
 
 	/**
 	 * A 2d game map, generated in Tiled.
-	 *
-	 * @constructor
 	 */
 	constructor(data: any, args: any) {
 
@@ -41,7 +38,7 @@ export default class TiledMap {
 		this.screenHeight = args.screenHeight;
 		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
 		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-		let imagePathModifier: Function = args ? args.imagePathModifier : null;
+		const imagePathModifier: ImagePathModifier = args ? args.imagePathModifier : null;
 
 		this.layers = [];
 		this.layersByName = {};
@@ -66,7 +63,7 @@ export default class TiledMap {
 	 * Adds a layer to this map.  This method is called internally by the library
 	 * and the programmer typically does not need to call it.
 	 *
-	 * @param {object} layerData The raw layer data.
+	 * @param layerData The raw layer data.
 	 * @method
 	 */
 	addLayer(layerData: any) {
@@ -137,7 +134,6 @@ export default class TiledMap {
 		// Paint until the end of the screen
 		let row: number = topLeftRow;
 		const layerCount: number = this.getLayerCount();
-		let tileCount: number = 0;
 		while (_y < screenHeight) {
 			for (let l: number = 0; l < layerCount; l++) {
 
@@ -156,7 +152,6 @@ export default class TiledMap {
 					while (_x < screenWidth) {
 						const value: number = layer.getData(row % rowCount, col % colCount);
 						this.drawTile(ctx, _x, _y, value, layer);
-						tileCount++;
 						_x += tileW;
 						col++;
 					}
@@ -173,16 +168,13 @@ export default class TiledMap {
 			_y += tileH;
 			row++;
 		}
-
-		//console.log('tileCount === ' + tileCount);
 	}
 
 	/**
 	 * Returns a layer by name.
 	 *
-	 * @param {string} name The name of the layer.
-	 * @return {TiledLayer} The layer, or null if there is no layer with
-	 *         that name.
+	 * @param name The name of the layer.
+	 * @return The layer, or null if there is no layer with that name.
 	 * @method
 	 */
 	getLayer(name: string): TiledLayer {
@@ -192,8 +184,8 @@ export default class TiledMap {
 	/**
 	 * Returns a layer by index.
 	 *
-	 * @param {int} index The index of the layer.
-	 * @return {TiledLayer} The layer, or null if there is no layer at
+	 * @param index The index of the layer.
+	 * @return The layer, or null if there is no layer at
 	 *         that index.
 	 * @method
 	 */
@@ -204,7 +196,7 @@ export default class TiledMap {
 	/**
 	 * Returns the number of layers in this map.
 	 *
-	 * @return {int} The number of layers in this map.
+	 * @return The number of layers in this map.
 	 */
 	getLayerCount(): number {
 		return this.layers.length;
@@ -274,7 +266,7 @@ export default class TiledMap {
 	/**
 	 * Returns the pixel width of this map.
 	 *
-	 * @return {int} The pixel width of this map.
+	 * @return The pixel width of this map.
 	 * @method
 	 */
 	getPixelWidth(): number {
@@ -284,7 +276,7 @@ export default class TiledMap {
 	/**
 	 * Returns the pixel height of this map.
 	 *
-	 * @return {int} The pixel height of this map.
+	 * @return The pixel height of this map.
 	 * @method
 	 */
 	getPixelHeight(): number {
@@ -293,8 +285,8 @@ export default class TiledMap {
 
 	/**
 	 * Removes a layer from this map.
-	 * @param {string} layerName The name of the layer to remove.
-	 * @return {boolean} Whether a layer by that name was found.
+	 * @param layerName The name of the layer to remove.
+	 * @return Whether a layer by that name was found.
 	 * @method
 	 */
 	removeLayer(layerName: string): boolean {

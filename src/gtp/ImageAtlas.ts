@@ -57,34 +57,35 @@ export interface ImageMap {
  */
 export default class ImageAtlas {
 
-	private _atlasInfo: any;
-	private _masterCanvas: HTMLCanvasElement;
+	private readonly atlasInfo: any;
+	private readonly masterCanvas: HTMLCanvasElement;
 
 	/**
 	 * Provides a means of parsing images out of an image atlas.
 	 *
-	 * @param {HTMLCanvasElement} canvas The canvas containing the image atlas's image.
-	 * @param {ImageAtlasInfo} atlasInfo Information on how to parse the individual images out
+	 * @param canvas The canvas containing the image atlas's image.
+	 * @param atlasInfo Information on how to parse the individual images out
 	 *        of the atlas.
 	 */
 	constructor(canvas: HTMLCanvasElement, atlasInfo: ImageAtlasInfo) {
-		this._atlasInfo = atlasInfo;
-		this._masterCanvas = canvas;
-		if (this._atlasInfo.firstPixelIsTranslucent) {
-			this._masterCanvas = ImageUtils.makeColorTranslucent(this._masterCanvas);
+		this.atlasInfo = atlasInfo;
+		this.masterCanvas = canvas;
+		if (this.atlasInfo.firstPixelIsTranslucent) {
+			this.masterCanvas = ImageUtils.makeColorTranslucent(this.masterCanvas);
 		}
 	}
 
 	/**
 	 * Parses all images out of the atlas.
 	 *
-	 * @returns {ImageMap} The parsed images.
+	 * @returns The parsed images.
 	 */
+	// tslint:disable:no-magic-numbers
 	parse(): ImageMap {
 
 		const images: ImageMap = {};
 
-		this._atlasInfo.images.forEach((imgInfo: ImageInfo) => {
+		this.atlasInfo.images.forEach((imgInfo: ImageInfo) => {
 
 			const id: string = imgInfo.id;
 			let x: number,
@@ -93,7 +94,7 @@ export default class ImageAtlas {
 				h: number;
 
 			if (imgInfo.dim) {
-				let dim: string[] = imgInfo.dim.split(/,\s*/);
+				const dim: string[] = imgInfo.dim.split(/,\s*/);
 				if (dim.length !== 4) {
 					throw new Error(`Invalid value for imgInfo ${id}'s dim: ${imgInfo.dim}`);
 				}
@@ -117,9 +118,10 @@ export default class ImageAtlas {
 				}
 			}
 
-			images[id] = new Image(this._masterCanvas, x, y, w, h);
+			images[id] = new Image(this.masterCanvas, x, y, w, h);
 		});
 
 		return images;
 	}
+	// tslint:enable:no-magic-numbers
 }

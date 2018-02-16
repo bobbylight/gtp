@@ -3,39 +3,39 @@
  */
 export default class Sound {
 
-	private _id: string;
-	private _buffer: any;
-	private _loopsByDefault: boolean;
-	private _loopStart: number;
+	private readonly id: string;
+	private readonly buffer: any;
+	private loopsByDefault: boolean;
+	private loopStart: number;
 
 	constructor(id: string, buffer: any, loopStart: number = 0) {
-		this._id = id;
-		this._buffer = buffer;
-		this._loopsByDefault = true;
-		this._loopStart = loopStart;
+		this.id = id;
+		this.buffer = buffer;
+		this.loopsByDefault = true;
+		this.loopStart = loopStart;
 	}
 
 	getBuffer(): any {
-		return this._buffer;
+		return this.buffer;
 	}
 
 	getId(): string {
-		return this._id;
+		return this.id;
 	}
 
 	getLoopsByDefaultIfMusic(): boolean {
-		return this._loopsByDefault;
+		return this.loopsByDefault;
 	}
 
 	setLoopsByDefaultIfMusic(loopsByDefault: boolean) {
-		this._loopsByDefault = loopsByDefault;
+		this.loopsByDefault = loopsByDefault;
 	}
 
 	getLoopStart(): number {
-		return this._loopStart;
+		return this.loopStart;
 	}
 
 	setLoopStart(loopStart: number) {
-		this._loopStart = loopStart;
+		this.loopStart = loopStart;
 	}
 }

@@ -1,5 +1,7 @@
 import ImageUtils from './ImageUtils';
 
+const MIN_CANVAS_DIMENSION: number = 256;
+
 /**
  * A wrapper around images.  Handles browser-specific quirks and other things a game shouldn't have
  * to know about.
@@ -9,18 +11,16 @@ export default class Image {
 	private _canvas: HTMLCanvasElement;
 	x: number;
 	y: number;
-	private _width: number;
-	private _height: number;
+	private readonly _width: number;
+	private readonly _height: number;
 
 	/**
 	 * A wrapper around images.  Handles browser-specific quirks and other things
 	 * a game shouldn't have to know about.
-	 *
-	 * @constructor
 	 */
 	constructor(canvas: HTMLCanvasElement, x?: number, y?: number, w?: number, h?: number) {
 		this._canvas = canvas;
-		if (x != null && y != null && w != null && h != null) {
+		if (x !== undefined && y !== undefined && w !== undefined && h !== undefined) {
 			this.x = x;
 			this.y = y;
 			this._width = w;
@@ -39,9 +39,9 @@ export default class Image {
 	 * and vice versa, unless all canvases are >= 256x256.
 	 */
 	_ensure256Square() {
-		if (this._canvas.width < 256 || this._canvas.height < 256) {
-			const w: number = Math.max(256, this._canvas.width);
-			const h: number = Math.max(256, this._canvas.height);
+		if (this._canvas.width < MIN_CANVAS_DIMENSION || this._canvas.height < MIN_CANVAS_DIMENSION) {
+			const w: number = Math.max(MIN_CANVAS_DIMENSION, this._canvas.width);
+			const h: number = Math.max(MIN_CANVAS_DIMENSION, this._canvas.height);
 			const canvas2: HTMLCanvasElement = ImageUtils.createCanvas(w, h);
 			const ctx2: CanvasRenderingContext2D = canvas2.getContext('2d')!;
 			ctx2.drawImage(this._canvas, 0, 0);
@@ -52,9 +52,9 @@ export default class Image {
 	/**
 	 * Draws this image.
 	 *
-	 * @param {CanvasRenderingContext2D} ctx A canvas' graphics context.
-	 * @param {int} x The x-coordinate at which to draw.
-	 * @param {int} y The y-coordinate at which to draw.
+	 * @param ctx A canvas' graphics context.
+	 * @param x The x-coordinate at which to draw.
+	 * @param y The y-coordinate at which to draw.
 	 */
 	draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
 		if (!ImageUtils.allowSubpixelImageRendering) {
@@ -68,12 +68,12 @@ export default class Image {
 	/**
 	 * Draws this image.
 	 *
-	 * @param {CanvasRenderingContext2D} ctx A canvas' graphics context.
-	 * @param {int} x The x-coordinate at which to draw.
-	 * @param {int} y The y-coordinate at which to draw.
-	 * @param {int} w The width to (possibly) stretch the image to when
+	 * @param ctx A canvas' graphics context.
+	 * @param x The x-coordinate at which to draw.
+	 * @param y The y-coordinate at which to draw.
+	 * @param w The width to (possibly) stretch the image to when
 	 *              drawing.
-	 * @param {int} h The height to (possibly) stretch the image to when
+	 * @param h The height to (possibly) stretch the image to when
 	 *              drawing.
 	 */
 	drawScaled(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
@@ -88,16 +88,16 @@ export default class Image {
 	/**
 	 * Draws this image.
 	 *
-	 * @param {CanvasRenderingContext2D} ctx A canvas' graphics context.
-	 * @param {int} srcX The x-coordinate at which to draw.
-	 * @param {int} srcY The y-coordinate at which to draw.
-	 * @param {int} srcW The width of the (possibly) sub-image to draw.
-	 * @param {int} srcH The height of the (possibly) sub-image to draw.
-	 * @param {int} destX The x-coordinate at which to draw.
-	 * @param {int} destY The y-coordinate at which to draw.
-	 * @param {int} destW The width to (possibly) stretch the image to when
+	 * @param ctx A canvas' graphics context.
+	 * @param srcX The x-coordinate at which to draw.
+	 * @param srcY The y-coordinate at which to draw.
+	 * @param srcW The width of the (possibly) sub-image to draw.
+	 * @param srcH The height of the (possibly) sub-image to draw.
+	 * @param destX The x-coordinate at which to draw.
+	 * @param destY The y-coordinate at which to draw.
+	 * @param destW The width to (possibly) stretch the image to when
 	 *              drawing.
-	 * @param {int} destH The height to (possibly) stretch the image to when
+	 * @param destH The height to (possibly) stretch the image to when
 	 *              drawing.
 	 */
 	drawScaled2(ctx: CanvasRenderingContext2D, srcX: number, srcY: number,
@@ -121,12 +121,11 @@ export default class Image {
 	 * Converts a color of a particular type to completely transparent in this
 	 * image.
 	 *
-	 * @param {int} x The x-coordinate of the pixel whose color to change.  0 will
+	 * @param x The x-coordinate of the pixel whose color to change.  0 will
 	 *        be used if this parameter is undefined.
-	 * @param {int} y The y-coordinate of the pixel whose color to change.  0 will
+	 * @param y The y-coordinate of the pixel whose color to change.  0 will
 	 *        be used if this parameter is undefined.
-	 * @return {Image} This image, which has been modified.
-	 * @method
+	 * @return This image, which has been modified.
 	 */
 	makeColorTranslucent(x: number = 0, y: number = 0) {
 		ImageUtils.makeColorTranslucent(this._canvas, x, y);

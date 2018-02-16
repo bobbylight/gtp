@@ -1,4 +1,11 @@
 /**
+ * A function that modifies a file path (for example, prepends a root directory to it).
+ */
+export interface ImagePathModifier {
+	(path: string): string;
+}
+
+/**
  * A tile set used in a <code>Tiled</code> map.
  */
 export default class TiledTileset {
@@ -14,7 +21,7 @@ export default class TiledTileset {
 	tileWidth: number;
 	tileHeight: number;
 
-	constructor(data: any, imagePathModifier?: Function) {
+	constructor(data: any, imagePathModifier?: ImagePathModifier) {
 		this.firstgid = data.firstgid;
 		this.image = data.image;
 		if (imagePathModifier) {

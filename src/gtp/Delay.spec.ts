@@ -1,5 +1,6 @@
 import { Delay } from '../index';
 
+// tslint:disable:no-magic-numbers
 describe('Delay', () => {
 
 	it('constructor happy path', () => {

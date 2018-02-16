@@ -8,8 +8,8 @@ export default class Point {
 
 	/**
 	 * Creates a <code>Point</code> instance.
-	 * @param {number} x The x-coordinate, or <code>0</code> if unspecified.
-	 * @param {number} y The y-coordinate, or <code>0</code> if unspecified.
+	 * @param x The x-coordinate, or <code>0</code> if unspecified.
+	 * @param y The y-coordinate, or <code>0</code> if unspecified.
 	 */
 	constructor(x: number = 0, y: number = 0) {
 		this.x = x;
@@ -18,11 +18,10 @@ export default class Point {
 
 	/**
 	 * Returns whether this point is equal to another one.
-	 * @param {Point} other The point to compare to, which may be
-	 *        <code>null</code>.
+	 * @param other The point to compare to, which may be <code>null</code>.
 	 * @return Whether the two points are equal.
 	 */
 	equals(other: Point | null): boolean {
-		return other != null && this.x === other.x && this.y === other.y;
+		return !!other && this.x === other.x && this.y === other.y;
 	}
 }

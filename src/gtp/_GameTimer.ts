@@ -3,26 +3,26 @@ import Utils from './Utils';
 /**
  * This class keeps track of game time.  That includes both total running
  * time, and "active time" (time not spent on paused screens, etc.).
- * @constructor
  */
 export class _GameTimer {
 
-	private _startShift: number;
+	private startShift: number;
 	private _paused: boolean;
-	private _pauseStart: number;
+	private pauseStart: number;
 	private _updating: boolean;
-	private _notUpdatingStart: number;
+	private notUpdatingStart: number;
 
 	constructor() {
 		this._paused = false;
-		this._pauseStart = 0;
+		this.pauseStart = 0;
 		this._updating = true;
-		this._notUpdatingStart = 0;
+		this.notUpdatingStart = 0;
+		this.startShift = 0;
 	}
 
 	/**
 	 * Returns whether this game is paused.
-	 * @return {boolean} Whether this game is paused.
+	 * @return Whether this game is paused.
 	 */
 	get paused(): boolean {
 		return this._paused;
@@ -34,24 +34,24 @@ export class _GameTimer {
 	 * game is not paused or in a "not updating" state (such as the main
 	 * frame not having focus).
 	 *
-	 * @return {number} The amount of time the game has been played, in
+	 * @return The amount of time the game has been played, in
 	 *         milliseconds.
 	 * @see resetPlayTime
 	 */
 	get playTime(): number {
-		if (this._pauseStart !== 0) {
-			return this._pauseStart - this._startShift;
+		if (this.pauseStart !== 0) {
+			return this.pauseStart - this.startShift;
 		}
-		else if (this._notUpdatingStart !== 0) {
-			return this._notUpdatingStart - this._startShift;
+		else if (this.notUpdatingStart !== 0) {
+			return this.notUpdatingStart - this.startShift;
 		}
-		return Utils.timestamp() - this._startShift;
+		return Utils.timestamp() - this.startShift;
 	}
 
 	/**
 	 * Returns whether this game is updating itself each frame.
 	 *
-	 * @return {boolean} Whether this game is updating itself.
+	 * @return Whether this game is updating itself.
 	 */
 	get updating(): boolean {
 		return this._updating;
@@ -66,7 +66,7 @@ export class _GameTimer {
 		if (this.paused || !this.updating) {
 			throw 'Cannot reset playtime millis when paused or not updating';
 		}
-		this._startShift = Utils.timestamp();
+		this.startShift = Utils.timestamp();
 	}
 
 	/**
@@ -83,12 +83,12 @@ export class _GameTimer {
 		if (this._paused !== paused) {
 			this._paused = paused;
 			if (paused) {
-				this._pauseStart = Utils.timestamp();
+				this.pauseStart = Utils.timestamp();
 			}
 			else {
-				const pauseTime: number = Utils.timestamp() - this._pauseStart;
-				this._startShift += pauseTime;
-				this._pauseStart = 0;
+				const pauseTime: number = Utils.timestamp() - this.pauseStart;
+				this.startShift += pauseTime;
+				this.pauseStart = 0;
 			}
 		}
 	}
@@ -101,19 +101,19 @@ export class _GameTimer {
 	 * This method can be used to temporarily "pause" a game when the game
 	 * window loses focus, for example.
 	 *
-	 * @param updating {boolean} Whether the game should be updating itself.
+	 * @param updating Whether the game should be updating itself.
 	 */
 	set updating(updating: boolean) {
 		if (this._updating !== updating) {
 			this._updating = updating;
 			if (!this.paused) { // "pause" state "encompasses" update state.
 				if (!this._updating) {
-					this._notUpdatingStart = Utils.timestamp();
+					this.notUpdatingStart = Utils.timestamp();
 				}
 				else {
-					const notUpdatingTime: number = Utils.timestamp() - this._notUpdatingStart;
-					this._startShift += notUpdatingTime;
-					this._notUpdatingStart = 0;
+					const notUpdatingTime: number = Utils.timestamp() - this.notUpdatingStart;
+					this.startShift += notUpdatingTime;
+					this.notUpdatingStart = 0;
 				}
 			}
 		}
@@ -123,7 +123,7 @@ export class _GameTimer {
 	 * Resets this timer.  This should be called when a new game is started.
 	 */
 	start() {
-		this._startShift = Utils.timestamp();
+		this.startShift = Utils.timestamp();
 	}
 
 }

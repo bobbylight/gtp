@@ -22,77 +22,94 @@ interface _PlayingSoundConfig {
 class PlayingSound {
 
 	id: number;
-	soundId: string;
-	source: AudioBufferSourceNode;
-	_config: _PlayingSoundConfig;
-	_startOffset: number;
-	_paused: boolean;
-	_start: number;
-	_playedTime: number;
+	soundId?: string;
+	source?: AudioBufferSourceNode;
+	private readonly config: _PlayingSoundConfig;
+	private startOffset: number;
+	private paused: boolean;
+	private _start: number;
+	private playedTime: number;
 
 	constructor(config: _PlayingSoundConfig) {
-		this._config = config;
-		this._paused = false;
+		this.config = config;
+		this.id = -1;
+		this.soundId = undefined;
+		this.source = undefined;
+		this.paused = false;
+		this.startOffset = -1;
+		this._start = -1;
+		this.playedTime = 0;
 	}
 
+	/**
+	 * We delay setting up the audio resources until the first time this sound is played as a
+	 * micro-optimization.
+	 */
 	private _initFromConfig() {
 
-		this.id = this._config.id;
-		this.soundId = this._config.soundId;
+		this.id = this.config.id;
+		this.soundId = this.config.soundId;
 
-		this.source = this._config.audioSystem.context.createBufferSource();
-		this.source.loop = this._config.loop;
-		this.source.buffer = this._config.buffer;
-		if (this._config.connectTo instanceof AudioNode) {
-			this.source.connect(this._config.connectTo as AudioNode);
+		this.source = this.config.audioSystem.context.createBufferSource();
+		this.source.loop = this.config.loop;
+		this.source.buffer = this.config.buffer;
+		if (this.config.connectTo instanceof AudioNode) {
+			this.source.connect(this.config.connectTo);
 		}
 		else {
-			const nodes: AudioNode[] = (this._config.connectTo as AudioNode[]);
+			const nodes: AudioNode[] = this.config.connectTo;
 			nodes.forEach((node: AudioNode) => {
-				this.source.connect(node);
+				this.source!.connect(node);
 			});
 		}
 
-		this._startOffset = this._config.startOffset || 0;
+		this.startOffset = this.config.startOffset || 0;
 
-		if (!this._config.loop) {
-			this.source.onended = this._config.onendedGenerator(this.id);
+		if (!this.config.loop) {
+			this.source.onended = this.config.onendedGenerator(this.id);
 		}
 	}
 
+	isPaused(): boolean {
+		return this.paused;
+	}
+
 	pause() {
-		if (!this._paused) {
-			this.source.stop();
-			this._playedTime += this.source.context.currentTime - this._start;
-			this._paused = true;
+		if (!this.paused) {
+			this.source!.stop();
+			this.playedTime += this.source!.context.currentTime - this._start;
+			this.paused = true;
 			this._start = 0;
 		}
 	}
 
 	resume() {
-		if (this._paused) {
-			this._paused = false;
-			let prevStartOffset: number = this._startOffset;
+		if (this.paused) {
+			this.paused = false;
+			const prevStartOffset: number = this.startOffset;
 			this._initFromConfig();
-			this._startOffset = prevStartOffset + this._playedTime;
-			this._startOffset = this._startOffset % this.source.buffer!.duration;
-			let curAudioTime: number = this.source.context.currentTime;
-			this.source.start(curAudioTime, this._startOffset);
+			this.startOffset = prevStartOffset + this.playedTime;
+			this.startOffset = this.startOffset % this.source!.buffer!.duration;
+			const curAudioTime: number = this.source!.context.currentTime;
+			this.source!.start(curAudioTime, this.startOffset);
 			this._start = curAudioTime;
-			this._playedTime = 0;
+			this.playedTime = 0;
 		}
 	}
 
 	start() {
-		this._paused = false;
+		this.paused = false;
 		this._initFromConfig();
-		let curAudioTime: number = this.source.context.currentTime;
-		this.source.start(curAudioTime, this._startOffset);
+		const curAudioTime: number = this.source!.context.currentTime;
+		this.source!.start(curAudioTime, this.startOffset);
 		this._start = curAudioTime;
-		this._playedTime = 0;
+		this.playedTime = 0;
 	}
 
 }
+
+const DEFAULT_MUSIC_FADE_SECONDS: number = 0.3;
+const MILLIS_PER_SECOND: number = 1000;
 
 /**
  * A wrapper around web audio for games.
@@ -100,17 +117,17 @@ class PlayingSound {
 export default class AudioSystem {
 
 	private _currentMusic: AudioBufferSourceNode | null;
-	private _sounds: { [id: string]: Sound };
+	private readonly _sounds: { [id: string]: Sound };
 	private _musicFade: number;
 	private _fadeMusic: boolean;
 	private _muted: boolean;
 	private _initialized: boolean;
 
-	context: AudioContext;
-	private _volumeFaderGain: GainNode;
-	private _musicFaderGain: GainNode;
-	private currentMusicId: string;
-	private _musicLoopStart: number;
+	context!: AudioContext;
+	private _volumeFaderGain!: GainNode;
+	private _musicFaderGain!: GainNode;
+	private currentMusicId!: string;
+	private _musicLoopStart!: number;
 
 	/**
 	 * A list of all sound effects currently being played.  If a sound effect
@@ -118,7 +135,7 @@ export default class AudioSystem {
 	 * list when it completes.  This data structure allows us to pause all sound
 	 * effects at the same time.
 	 */
-	private _playingSounds: PlayingSound[];
+	private readonly _playingSounds: PlayingSound[];
 
 	/**
 	 * Used to give all playing sound effects unique ids.
@@ -127,15 +144,14 @@ export default class AudioSystem {
 
 	/**
 	 * A wrapper around web audio for games.
-	 *
-	 * @constructor
 	 */
 	constructor() {
 		this._currentMusic = null;
 		this._sounds = {};
-		this._musicFade = 0.3; // seconds
+		this._musicFade = DEFAULT_MUSIC_FADE_SECONDS;
 		this._fadeMusic = true;
 		this._muted = false;
+		this._initialized = false;
 		this._playingSounds = [];
 		this._soundEffectIdGenerator = 0;
 	}
@@ -145,7 +161,7 @@ export default class AudioSystem {
 
 		const soundEffectId: number = this._createSoundEffectId();
 
-		const soundEffect: PlayingSound = new PlayingSound({
+		return new PlayingSound({
 			audioSystem: this,
 			buffer: this._sounds[id].getBuffer(),
 			connectTo: this._volumeFaderGain,
@@ -162,7 +178,6 @@ export default class AudioSystem {
 			soundId: id,
 			startOffset: startOffset,
 		});
-		return soundEffect;
 	}
 
 	private _createSoundEffectId(): number {
@@ -187,13 +202,12 @@ export default class AudioSystem {
 			this._initialized = true;
 		} catch (e) {
 			console.error('The Web Audio API is not supported in this browser.');
-			this._initialized = false;
 		}
 	}
 
 	/**
 	 * Registers a sound for later playback.
-	 * @param sound {Sound} The sound.
+	 * @param sound The sound.
 	 */
 	addSound(sound: Sound) {
 		if (this.context) {
@@ -212,7 +226,7 @@ export default class AudioSystem {
 				}
 				setTimeout(() => {
 					this.playMusic(newMusicId);
-				}, this._musicFade * 1000);
+				}, this._musicFade * MILLIS_PER_SECOND);
 			}
 			else {
 				this.playMusic(newMusicId);
@@ -223,7 +237,7 @@ export default class AudioSystem {
 	/**
 	 * Returns the ID of the current music being played.
 	 *
-	 * @return {string} The current music's ID.
+	 * @return The current music's ID.
 	 * @see playMusic
 	 * @see stopMusic
 	 */
@@ -234,7 +248,7 @@ export default class AudioSystem {
 	/**
 	 * Returns whether the audio system initialized properly.  This will return
 	 * false if the user's browser does not support the web audio API.
-	 * @return {boolean} Whether the sound system is initialized
+	 * @return Whether the sound system is initialized
 	 */
 	isInitialized(): boolean {
 		return this._initialized;
@@ -251,16 +265,15 @@ export default class AudioSystem {
 	}
 
 	/**
-	 * Plays a specific sound as background music.  Only one "music" can play
-	 * at a time, as opposed to "sounds," of which multiple can be playing at
-	 * one time.
-	 * @param {string} id The ID of the resource to play as music.  If this is
-	 *        <code>null</code>, the current music is stopped but no new music
-	 *        is started.
-	 * @param {boolean} loop Whether the music should loop.
+	 * Plays a specific sound as background music.  Only one "music" can play at a time,
+	 * as opposed to "sounds," of which multiple can be playing at one time.
+	 * @param id The ID of the resource to play as music.  If this is <code>null</code>,
+	 *        the current music is stopped but no new music is started.
+	 * @param [loop] Whether the music should loop.  If this is omitted, looping is determined
+	 *        by the sound's <code>getLoopsByDefaultIfMusic()</code> method.
 	 * @see stopMusic
 	 */
-	playMusic(id: string | null | undefined, loop: boolean = false) {
+	playMusic(id: string | null | undefined, loop?: boolean) {
 
 		if (this.context) {
 
@@ -300,21 +313,20 @@ export default class AudioSystem {
 
 	/**
 	 * Plays the sound with the given ID.
-	 * @param {string} id The ID of the resource to play.
-	 * @param {boolean} loop Whether the music should loop.  Defaults to
-	 *        <code>false</code>.
-	 * @param {Function} doneCallback An optional callback to call when the
+	 * @param id The ID of the resource to play.
+	 * @param loop Whether the music should loop.  Defaults to <code>false</code>.
+	 * @param doneCallback An optional callback to call when the
 	 *        sound completes. This callback will receive the returned numeric
 	 *        ID as a parameter.  This parameter is ignored if <code>loop</code>
 	 *        is <code>true</code>.
-	 * @return {number} An ID for the playing sound.  This can be used to
+	 * @return An ID for the playing sound.  This can be used to
 	 *         stop a looping sound via <code>stopSound(id)</code>.
 	 * @see stopSound
 	 */
 	playSound(id: string, loop: boolean = false, doneCallback?: SoundCompletedCallback): number {
 		if (this.context) {
 
-			let playingSound: PlayingSound = this._createPlayingSound(id, loop, 0, doneCallback);
+			const playingSound: PlayingSound = this._createPlayingSound(id, loop, 0, doneCallback);
 			this._playingSounds.push(playingSound);
 			playingSound.start();
 			return playingSound.id;
@@ -325,13 +337,13 @@ export default class AudioSystem {
 
 	/**
 	 * Removes a sound from our list of currently-being-played sound effects.
-	 * @param {number} id The sound effect to stop playing.
+	 * @param id The sound effect to stop playing.
 	 * @return The sound just removed, or <code>null</code> if there was no such sound.
 	 */
 	private _removePlayingSound(id: number): PlayingSound | null {
 		for (let i: number = 0; i < this._playingSounds.length; i++) {
 			if (this._playingSounds[i].id === id) {
-				let sound: PlayingSound = this._playingSounds[i];
+				const sound: PlayingSound = this._playingSounds[i];
 				this._playingSounds.splice(i, 1);
 				return sound;
 			}
@@ -346,8 +358,8 @@ export default class AudioSystem {
 	resumeAll() {
 
 		for (let i: number = 0; i < this._playingSounds.length; i++) {
-			let sound: PlayingSound = this._playingSounds[i];
-			if (sound._paused) {
+			const sound: PlayingSound = this._playingSounds[i];
+			if (sound.isPaused()) {
 				sound.resume();
 			}
 		}
@@ -355,9 +367,8 @@ export default class AudioSystem {
 
 	/**
 	 * Stops the currently playing music, if any.
-	 * @param {boolean} pause If <code>true</code>, the music is only paused;
-	 *        otherwise, native resources are freed and the music cannot be
-	 *        resumed.
+	 * @param pause If <code>true</code>, the music is only paused; otherwise,
+	 *        native resources are freed and the music cannot be resumed.
 	 * @see playMusic
 	 */
 	stopMusic(pause: boolean = false) {
@@ -374,15 +385,15 @@ export default class AudioSystem {
 
 	/**
 	 * Stops a playing sound, by ID.
-	 * @param {number} id The sound effect to stop.
-	 * @return {boolean} Whether the sound effect was stopped.  This will be
+	 * @param id The sound effect to stop.
+	 * @return Whether the sound effect was stopped.  This will be
 	 *         <code>false</code> if the sound effect specified is no longer
 	 *         playing.
 	 * @see playSound
 	 */
 	stopSound(id: number): boolean {
 		const sound: PlayingSound | null = this._removePlayingSound(id);
-		if (sound) {
+		if (sound && sound.source) {
 			sound.source.stop();
 			return true;
 		}
@@ -400,7 +411,6 @@ export default class AudioSystem {
 	}
 
 	get fadeMusic(): boolean {
-		'use strict';
 		return this._fadeMusic;
 	}
 

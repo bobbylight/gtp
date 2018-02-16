@@ -1,22 +1,22 @@
 import State from './State';
 
+const DEFAULT_HALF_TIME_MILLIS: number = 800;
+
 /**
  * A transitional state that fades out of one state and fades in another.
  */
 export default class FadeOutInState extends State {
 
-	private _leavingState: State;
-	private _enteringState: State;
-	private _transitionLogic: Function | undefined;
+	private readonly _leavingState: State;
+	private readonly _enteringState: State;
+	private readonly _transitionLogic: Function | undefined;
 	private _fadingOut: boolean;
 	private _alpha: number;
-	private _halfTime: number;
+	private readonly _halfTime: number;
 	private _curTime: number;
 
 	/**
 	 * Fades one state out and another state in.
-	 *
-	 * @constructor
 	 */
 	constructor(leavingState: State, enteringState: State,
 		transitionLogic?: Function, timeMillis?: number) {
@@ -26,7 +26,7 @@ export default class FadeOutInState extends State {
 		this._transitionLogic = transitionLogic;
 		this._fadingOut = true;
 		this._alpha = 1;
-		this._halfTime = timeMillis && timeMillis > 0 ? timeMillis / 2 : 800;
+		this._halfTime = timeMillis && timeMillis > 0 ? timeMillis / 2 : DEFAULT_HALF_TIME_MILLIS;
 		this._curTime = 0;
 	}
 
@@ -49,12 +49,7 @@ export default class FadeOutInState extends State {
 			}
 		}
 
-		if (this._fadingOut) {
-			this._alpha = 1 - (this._curTime / this._halfTime);
-		}
-		else {
-			this._alpha = (this._curTime / this._halfTime);
-		}
+		this._alpha = this._fadingOut ? 1 - (this._curTime / this._halfTime) : (this._curTime / this._halfTime);
 	}
 
 	render(ctx: CanvasRenderingContext2D) {

@@ -14,38 +14,37 @@ export interface DelayArgs {
  * A way to keep track of a delay.  Useful when you want some event to occur
  * every X milliseconds, for example.
  *
- * @param {object} args Arguments to this delay.
- * @param {number-or-array} args.millis The number of milliseconds between
+ * @param args Arguments to this delay.
+ * @param args.millis The number of milliseconds between
  *        events.  You can specify an array of numbers to have the even trigger
  *        at non-equal intervals.
- * @param {int} [args.minDelta] If specified, a minimum amount of variance for
+ * @param [args.minDelta] If specified, a minimum amount of variance for
  *        the event.  May be negative, but should be larger than the smallest
  *        value specified in millis.
- * @param {int} [args.maxDelta] If specified, a maximum amount of variance for
+ * @param [args.maxDelta] If specified, a maximum amount of variance for
  *        the event.
- * @param {int} [args.loop] If specified and <code>true</code>, this timer will
+ * @param [args.loop] If specified and <code>true</code>, this timer will
  *        automatically repeat and <code>isDone()</code> will never return
  *        <code>true</code>.
- * @param {int} [args.loopCount] This argument is only honored if
+ * @param [args.loopCount] This argument is only honored if
  *        <code>args.loop</code> is defined and <code>true</code>.  If true,
  *        this argument is the number of times to loop; if this argument is not
  *        specified, looping will occur indefinitely.
- * @param {function} [args.callback] If specified, a callback function that
+ * @param [args.callback] If specified, a callback function that
  *        will be called when this delay fires.
- * @constructor
  */
 export default class Delay {
 
-	_initial: number[];
-	_initialIndex: number;
-	_callback: Function | undefined;
-	_loop: boolean;
-	_loopCount: number;
-	_maxLoopCount: number;
-	_minDelta: number;
-	_maxDelta: number;
-	_remaining: number;
-	_curInitial: number;
+	private readonly _initial: number[];
+	private _initialIndex: number;
+	private readonly _callback: Function | undefined;
+	private readonly _loop: boolean;
+	private _loopCount: number;
+	private readonly _maxLoopCount: number;
+	private _minDelta?: number;
+	private _maxDelta?: number;
+	private _remaining: number;
+	private _curInitial: number;
 
 	constructor(args: DelayArgs) {
 		if (!args || !args.millis) {
@@ -60,6 +59,8 @@ export default class Delay {
 		this._loop = !!args.loop;
 		this._loopCount = 0;
 		this._maxLoopCount = this._loop ? (args.loopCount || -1) : -1;
+		this._remaining = 0;
+		this._curInitial = 0;
 		this.reset();
 	}
 
@@ -67,7 +68,7 @@ export default class Delay {
 	 * Should be called in the update() method of the current game state to
 	 * update this Delay.
 	 *
-	 * @param {int} delta The time that has elapsed since the last call to this
+	 * @param delta The time that has elapsed since the last call to this
 	 *        method.
 	 */
 	update(delta: number) {
@@ -98,7 +99,7 @@ export default class Delay {
 	/**
 	 * Returns the number of times this Delay has looped.
 	 *
-	 * @return {int} The number of times this Delay has looped.
+	 * @return The number of times this Delay has looped.
 	 */
 	getLoopCount(): number {
 		return this._loopCount;
@@ -107,7 +108,7 @@ export default class Delay {
 	/**
 	 * Returns the maximum delta value, or -1 if none was defined.
 	 *
-	 * @return {int} The maximum delta value.
+	 * @return The maximum delta value.
 	 * @see getMinDelta()
 	 */
 	getMaxDelta(): number {
@@ -117,7 +118,7 @@ export default class Delay {
 	/**
 	 * Returns the minimum delta value, or -1 if none was defined.
 	 *
-	 * @return {int} The minimum delta value.
+	 * @return The minimum delta value.
 	 * @see getMaxDelta()
 	 */
 	getMinDelta(): number {
@@ -127,7 +128,7 @@ export default class Delay {
 	/**
 	 * Returns the remaining time on this delay.
 	 *
-	 * @return {int} The remaining time on this delay.
+	 * @return The remaining time on this delay.
 	 */
 	getRemaining(): number {
 		return this._remaining;
@@ -137,7 +138,7 @@ export default class Delay {
 	 * Returns how far along we are in this delay, in the range
 	 * 0 - 1.
 	 *
-	 * @return {int} How far along we are in this delay.
+	 * @return How far along we are in this delay.
 	 */
 	getRemainingPercent(): number {
 		return this._remaining / this._curInitial;
@@ -146,7 +147,7 @@ export default class Delay {
 	/**
 	 * Returns whether this Delay has completed.
 	 *
-	 * @return {boolean} Whether this Delay has completed.
+	 * @return Whether this Delay has completed.
 	 */
 	isDone(): boolean {
 		return (!this._loop || this._loopCount === this._maxLoopCount) &&
@@ -156,8 +157,8 @@ export default class Delay {
 	/**
 	 * Causes this delay to trigger with a little random variance.
 	 *
-	 * @param {int} min The minimum possible variance, inclusive.
-	 * @param {int} max The maximum possible variance, exclusive.
+	 * @param min The minimum possible variance, inclusive.
+	 * @param max The maximum possible variance, exclusive.
 	 */
 	setRandomDelta(min: number, max: number) {
 		this._minDelta = min;
@@ -181,7 +182,7 @@ export default class Delay {
 		return `[Delay: _initial=${this._initial}, ` +
 			`_remaining=${this._remaining}, ` +
 			`_loop=${this._loop}, ` +
-			`_callback=${this._callback != null}` +
+			`_callback=${!!this._callback}` +
 			']';
 	}
 

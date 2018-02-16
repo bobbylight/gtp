@@ -2,6 +2,8 @@ import Image from './Image';
 import SpriteSheet from './SpriteSheet';
 import { Window } from './GtpBase';
 
+const FIRST_PRINTABLE_CODE_POINT: number = 0x20; // === ' '
+
 /**
  * A font renderer that uses a bitmap for its glyphs.
  */
@@ -19,7 +21,7 @@ export default class BitmapFont extends SpriteSheet {
 		const charWidth: number = this.cellW;
 
 		for (let i: number = 0; i < str.length; i++) {
-			let ch: number = str.charCodeAt(i) - 0x20;
+			let ch: number = str.charCodeAt(i) - FIRST_PRINTABLE_CODE_POINT;
 			if (ch < 0 || ch >= glyphCount) {
 				ch = 0;
 			}

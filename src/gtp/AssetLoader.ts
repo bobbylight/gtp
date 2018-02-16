@@ -34,23 +34,22 @@ interface ResourceType {
  */
 export default class AssetLoader {
 
-	private _scale: number;
-	private loadingAssetData: { [id: string]: ResourceType };
-	private responses: { [id: string]: any };
+	private readonly _scale: number;
+	private readonly loadingAssetData: { [id: string]: ResourceType };
+	private readonly responses: { [id: string]: any };
 	private callback: any;
 	audio: AudioSystem;
-	private _assetRoot: string | undefined;
-	private nextCallback: Function;
+	private readonly _assetRoot: string | undefined;
+	private nextCallback: Function | undefined;
 
 	/**
 	 * Provides methods to load images, sounds, and Tiled maps.
 	 *
-	 * @param {number} scale How much to scale image resources.
-	 * @param {AudioSystem} audio A web audio context.
-	 * @param {string} [assetRoot] If specified, this is the implicit root
+	 * @param scale How much to scale image resources.
+	 * @param audio A web audio context.
+	 * @param [assetRoot] If specified, this is the implicit root
 	 *        directory for all assets to load.  Use this if all assets are
 	 *        in a subfolder or different hierarchy than the project itself.
-	 * @constructor
 	 */
 	constructor(scale: number = 1, audio: AudioSystem, assetRoot?: string) {
 		this._scale = scale || 1;
@@ -63,8 +62,8 @@ export default class AssetLoader {
 
 	/**
 	 * Starts loading a JSON resource.
-	 * @param {string} id The ID to use when retrieving this resource.
-	 * @param {string} [url=id] The URL of the resource, defaulting to
+	 * @param id The ID to use when retrieving this resource.
+	 * @param [url=id] The URL of the resource, defaulting to
 	 *        {@code id} if not specified.
 	 */
 	addJson(id: string, url: string = id) {
@@ -83,7 +82,7 @@ export default class AssetLoader {
 
 		const xhr: XMLHttpRequest = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
-			if (xhr.readyState === 4) {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
 				const response: string = xhr.responseText;
 				this._completed(id, response);
 			}
@@ -96,8 +95,8 @@ export default class AssetLoader {
 
 	/**
 	 * Starts loading a canvas resource.
-	 * @param {string} id The ID to use when retrieving this resource.
-	 * @param {string} imageSrc The URL of the resource.
+	 * @param id The ID to use when retrieving this resource.
+	 * @param imageSrc The URL of the resource.
 	 */
 	addCanvas(id: string, imageSrc: string) {
 
@@ -124,9 +123,9 @@ export default class AssetLoader {
 
 	/**
 	 * Starts loading an image resource.
-	 * @param {string} id The ID to use when retrieving this resource.
-	 * @param {string} imageSrc The URL of the resource.
-	 * @param {boolean} firstPixelTranslucent If truthy, the pixel at (0, 0)
+	 * @param id The ID to use when retrieving this resource.
+	 * @param imageSrc The URL of the resource.
+	 * @param firstPixelTranslucent If truthy, the pixel at (0, 0)
 	 *        is made translucent, along with all other pixels of the same
 	 *        color.  The default value is <code>false</code>.
 	 */
@@ -160,9 +159,9 @@ export default class AssetLoader {
 
 	/**
 	 * Starts loading all images from an image atlas.
-	 * @param {string} id A unique identifier for this image atlas (probably not used after loading completes).
-	 * @param {string} imageSrc The URL of the resource.
-	 * @param {ImageAtlasInfo} atlasInfo Information about the images in the atlas to parse.
+	 * @param id A unique identifier for this image atlas (probably not used after loading completes).
+	 * @param imageSrc The URL of the resource.
+	 * @param atlasInfo Information about the images in the atlas to parse.
 	 */
 	addImageAtlasContents(id: string, imageSrc: string, atlasInfo: ImageAtlasInfo) {
 
@@ -182,16 +181,11 @@ export default class AssetLoader {
 			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
 			const atlas: ImageAtlas = new ImageAtlas(canvas, atlasInfo);
 
-			let prefix: string;
-			if (typeof atlasInfo.prefix === 'string') {
-				prefix = atlasInfo.prefix as string;
-			}
-			else {
-				prefix = atlasInfo.prefix ? `${id}.` : '';
-			}
+			const prefix: string = typeof atlasInfo.prefix === 'string' ? atlasInfo.prefix :
+				(atlasInfo.prefix ? `${id}.` : '');
 
 			const imageMap: ImageMap = atlas.parse();
-			for (let key in imageMap) {
+			for (const key in imageMap) {
 				if (imageMap.hasOwnProperty(key)) {
 					// Images in an atlas aren't tracked individually, but as the single atlas (see below)
 					this.responses[prefix + key] = imageMap[key];
@@ -207,11 +201,11 @@ export default class AssetLoader {
 
 	/**
 	 * Starts loading a sound resource.
-	 * @param {string} id The ID to use when retrieving this resource.
-	 * @param {string} soundSrc The URL of the resource.
-	 * @param {number} [loopStart=0] Where to start, in seconds, if/when this
+	 * @param id The ID to use when retrieving this resource.
+	 * @param soundSrc The URL of the resource.
+	 * @param [loopStart=0] Where to start, in seconds, if/when this
 	 *        sound loops (which is typical when using a sound as music).
-	 * @param {boolean} [loopByDefaultIfMusic=true] Whether this sound should
+	 * @param [loopByDefaultIfMusic=true] Whether this sound should
 	 *        loop by default when it is played as music.
 	 */
 	addSound(id: string, soundSrc: string, loopStart: number = 0,
@@ -233,9 +227,7 @@ export default class AssetLoader {
 				// TODO: Clean up this API
 				this.audio.context.decodeAudioData(xhr.response, (buffer: AudioBuffer) => {
 					const sound: Sound = new Sound(id, buffer, loopStart || 0);
-					if (typeof loopByDefaultIfMusic !== 'undefined') {
-						sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
-					}
+					sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
 					this.audio.addSound(sound);
 					this._completed(id, buffer);
 				});
@@ -251,15 +243,15 @@ export default class AssetLoader {
 
 	/**
 	 * Starts loading a sprite sheet resource.
-	 * @param {string} id The ID to use when retrieving this resource.
-	 * @param {string} imageSrc The URL of the resource.
-	 * @param {int} cellW The width of a cell.
-	 * @param {int} cellH The height of a cell.
-	 * @param {int} spacingX The horizontal spacing between cells.  Assumed to
+	 * @param id The ID to use when retrieving this resource.
+	 * @param imageSrc The URL of the resource.
+	 * @param cellW The width of a cell.
+	 * @param cellH The height of a cell.
+	 * @param spacingX The horizontal spacing between cells.  Assumed to
 	 *        be 0 if not defined.
-	 * @param {int} spacingY The vertical spacing between cells.  Assumed to
+	 * @param spacingY The vertical spacing between cells.  Assumed to
 	 *        be 0 if not defined.
-	 * @param {boolean} firstPixelTranslucent If truthy, the pixel at (0, 0)
+	 * @param firstPixelTranslucent If truthy, the pixel at (0, 0)
 	 *        is made translucent, along with all other pixels of the same color.
 	 */
 	addSpriteSheet(id: string, imageSrc: string, cellW: number, cellH: number,
@@ -303,7 +295,7 @@ export default class AssetLoader {
 	 * Registers all images needed by the TMX map's tilesets to this asset
 	 * loader.
 	 *
-	 * @param {TiledMap} map The Tiled map.
+	 * @param map The Tiled map.
 	 */
 	addTmxMap(map: TiledMap) {
 		if (map.tilesets && map.tilesets.length) {
@@ -320,8 +312,8 @@ export default class AssetLoader {
 	 * called by the library and is typically not called directly by the
 	 * application.
 	 *
-	 * @param {TiledTileset} tileset The tile set.
-	 * @return {Image} The tileset image.
+	 * @param tileset The tile set.
+	 * @return The tileset image.
 	 */
 	getTmxTilesetImage(tileset: TiledTileset): Image {
 		return this.responses['_tilesetImage_' + tileset.name];
@@ -329,10 +321,10 @@ export default class AssetLoader {
 
 	/**
 	 * Retrieves a resource by ID.
-	 * @param {string} res The ID of the resource.
-	 * @return The resource, or null if not found.
+	 * @param res The ID of the resource.
+	 * @return The resource, or <code>undefined</code> if not found.
 	 */
-	get(res: string): any {
+	get<T>(res: string): T {
 		return this.responses[res];
 	}
 
@@ -350,8 +342,8 @@ export default class AssetLoader {
 
 	/**
 	 * Adds a resource.
-	 * @param {string} res The ID for the resource.
-	 * @param {any} value The resource value.
+	 * @param res The ID for the resource.
+	 * @param value The resource value.
 	 */
 	set(res: string, value: any) {
 		this.responses[res] = value;
@@ -387,7 +379,7 @@ export default class AssetLoader {
 	/**
 	 * Returns whether all assets in this loader have successfully loaded.
 	 *
-	 * @return {boolean} Whether all assets have loaded.
+	 * @return Whether all assets have loaded.
 	 */
 	isDoneLoading(): boolean {
 		return Utils.getObjectSize(this.loadingAssetData) === 0;

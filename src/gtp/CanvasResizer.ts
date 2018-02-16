@@ -20,15 +20,15 @@ import { StretchMode } from './StretchMode';
  * }
  * </pre>
  */
-export default class CanvasResizer {
+export default {
 
 	/**
 	 * Resizes a canvas to use the specified stretch mode.
 	 *
-	 * @param {HTMLCanvasElement} canvas The canvas to resize.
-	 * @param {StretchMode} stretchMode The stretch mode to apply.
+	 * @param canvas The canvas to resize.
+	 * @param stretchMode The stretch mode to apply.
 	 */
-	static resize(canvas: HTMLCanvasElement, stretchMode: StretchMode) {
+	resize(canvas: HTMLCanvasElement, stretchMode: StretchMode) {
 
 		switch (stretchMode) {
 
@@ -54,4 +54,4 @@ export default class CanvasResizer {
 
 		}
 	}
-}
+};

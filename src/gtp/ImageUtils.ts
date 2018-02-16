@@ -1,20 +1,18 @@
 /**
  * General-purpose utilities for manipulating images in canvases.
- * @constructor
  */
-export default class ImageUtils {
+const ImageUtils: any = { // tslint:disable-line
 
 	/**
 	 * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and
 	 * y-coordinates are rounded to the nearest integer when rendering images.
 	 */
-	static allowSubpixelImageRendering: boolean = false;
+	allowSubpixelImageRendering: false,
 
 	/**
 	 * Takes an img/canvas and a scaling factor and returns the scaled image.
-	 * @method
 	 */
-	static resize(img: HTMLImageElement|HTMLCanvasElement, scale: number = 1): HTMLCanvasElement {
+	resize(img: HTMLImageElement|HTMLCanvasElement, scale: number = 1): HTMLCanvasElement {
 
 		// The original image is drawn into an offscreen canvas of the same size
 		// and copied, pixel by pixel into another offscreen canvas with the
@@ -29,7 +27,7 @@ export default class ImageUtils {
 			origCtx.drawImage(img, 0, 0);
 		}
 		else {
-			orig = img as HTMLCanvasElement;
+			orig = img;
 			origCtx = orig.getContext('2d')!;
 		}
 
@@ -45,6 +43,7 @@ export default class ImageUtils {
 		const scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d')!;
 		const scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
 
+		// tslint:disable:no-magic-numbers
 		for (let y: number = 0; y < heightScaled; y++) {
 			for (let x: number = 0; x < widthScaled; x++) {
 				const index: number = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
@@ -55,12 +54,13 @@ export default class ImageUtils {
 				scaledPixels.data[indexScaled + 3] = origPixels.data[index + 3];
 			}
 		}
+		// tslint:enable:no-magic-numbers
 
 		scaledCtx.putImageData(scaledPixels, 0, 0);
 		return scaled;
-	}
+	},
 
-	static createCanvas(width: number, height: number, parentDiv?: HTMLElement|string) {
+	createCanvas(width: number, height: number, parentDiv?: HTMLElement|string) {
 
 		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = width;
@@ -69,22 +69,18 @@ export default class ImageUtils {
 
 		if (parentDiv) {
 
-			let actualParent: HTMLElement;
-			if (typeof parentDiv === 'string') {
-				actualParent = document.getElementById(parentDiv)!;
-			}
-			else {
-				actualParent = parentDiv;
-			}
+			const actualParent: HTMLElement = typeof parentDiv === 'string' ?
+				document.getElementById(parentDiv)! : parentDiv;
+
 			// Clear previous contents in place there was a placeholder image
 			actualParent.innerHTML = '';
 			actualParent.appendChild(canvas);
 		}
 
 		return canvas;
-	}
+	},
 
-	static prepCanvas(canvas: HTMLCanvasElement) {
+	prepCanvas(canvas: HTMLCanvasElement) {
 		// Use "any" instead of "CanvasRenderingContext2D" since  the TypeScript definition
 		// files don't like the experimental *imageSmoothingEnabled properties
 		const ctx: any = canvas.getContext('2d');
@@ -95,26 +91,26 @@ export default class ImageUtils {
 		ctx.msImageSmoothingEnabled = false;
 
 		/* TODO: set imageRendering CSS properties based on some Game config property */
-	}
+	},
 
 	/**
 	 * Converts a color of a particular type to completely transparent in a canvas.
 	 *
-	 * @param {Canvas} canvas The canvas to operate on.
-	 * @param {int} x The x-coordinate of the pixel whose color to change.  0 will
+	 * @param canvas The canvas to operate on.
+	 * @param x The x-coordinate of the pixel whose color to change.  0 will
 	 *        be used if this parameter is undefined.
-	 * @param {int} y The y-coordinate of the pixel whose color to change.  0 will
+	 * @param y The y-coordinate of the pixel whose color to change.  0 will
 	 *        be used if this parameter is undefined.
-	 * @return {Canvas} The original canvas, which has been modified.
-	 * @method
+	 * @return The original canvas, which has been modified.
 	 */
-	static makeColorTranslucent(canvas: HTMLCanvasElement, x: number = 0, y: number = 0) {
+	makeColorTranslucent(canvas: HTMLCanvasElement, x: number = 0, y: number = 0) {
 
 		const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
 		const w: number = canvas.width;
 		const h: number = canvas.height;
 		const pixels: ImageData = ctx.getImageData(0, 0, w, h);
 
+		// tslint:disable:no-magic-numbers
 		const color: number[] = [];
 		const offs: number = (y * w + x) * 4;
 		for (let i: number = 0; i < 4; i++) {
@@ -133,8 +129,11 @@ export default class ImageUtils {
 				}
 			}
 		}
+		// tslint:enable:no-magic-numbers
 
 		ctx.putImageData(pixels, 0, 0);
 		return canvas;
 	}
-}
+};
+
+export default ImageUtils;

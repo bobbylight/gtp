@@ -1,11 +1,11 @@
 import { Utils, BrowserUtil } from '../index';
 
+// tslint:disable:no-magic-numbers
 describe('Utils', () => {
 	'use strict';
 
 	it('constructor happy path, even though not used', () => {
-		const utils: Utils = new Utils();
-		expect(utils).not.toBeNull();
+		expect(Utils).not.toBeNull();
 	});
 
 	it('getObjectSize() happy path', () => {

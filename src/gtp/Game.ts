@@ -8,10 +8,13 @@ import Utils from './Utils';
 import AudioSystem from './AudioSystem';
 import AssetLoader from './AssetLoader';
 
+const STATUS_MESSAGE_TIME_INC: number = 100;
+const STATUS_MESSAGE_ALPHA_DEC: number = 0.1;
+const MILLIS_PER_SECOND: number = 1000;
+const DEFAULT_TARGET_FPS: number = 30;
+
 /**
  * A base class for a game.
- *
- * @constructor
  */
 export default class Game {
 
@@ -33,8 +36,8 @@ export default class Game {
 	private _statusMessage: string | null;
 	private _statusMessageAlpha: number;
 	private _statusMessageTime: number;
-	state: State;
-	private _gameTimer: _GameTimer;
+	state!: State;
+	private readonly _gameTimer: _GameTimer;
 	timer: Timer;
 
 	constructor(args: any = {}) {
@@ -46,8 +49,8 @@ export default class Game {
 
 		this.inputManager = new InputManager(args.keyRefreshMillis || 0);
 		this.inputManager.install();
-		this._targetFps = args.targetFps || 30;
-		this._interval = 1000 / this._targetFps;
+		this._targetFps = args.targetFps || DEFAULT_TARGET_FPS;
+		this._interval = MILLIS_PER_SECOND / this._targetFps;
 		this.lastTime = 0;
 
 		this.audio = new AudioSystem();
@@ -65,6 +68,7 @@ export default class Game {
 		this._fpsMsg = `${this._targetFps} fps`;
 		this._statusMessage = null;
 		this._statusMessageAlpha = 0;
+		this._statusMessageTime = 0;
 
 		this._gameTimer = new _GameTimer();
 		this.timer = new Timer();
@@ -72,7 +76,7 @@ export default class Game {
 
 	/**
 	 * Clears the screen.
-	 * @param {string} clearScreenColor The color to clear the screen with.
+	 * @param clearScreenColor The color to clear the screen with.
 	 *        If unspecified, <code>this.clearScreenColor</code> is used.
 	 */
 	clearScreen(clearScreenColor: string = this.clearScreenColor) {
@@ -91,7 +95,7 @@ export default class Game {
 
 	/**
 	 * Returns whether this game is paused.
-	 * @return {boolean} Whether this game is paused.
+	 * @return Whether this game is paused.
 	 */
 	get paused(): boolean {
 		return this._gameTimer.paused;
@@ -114,8 +118,8 @@ export default class Game {
 	 * Returns a random number between <code>0</code> and
 	 * <code>number</code>, exclusive.
 	 *
-	 * @param max {number} The upper bound, exclusive.
-	 * @return {number} The random number.
+	 * @param max The upper bound, exclusive.
+	 * @return The random number.
 	 */
 	randomInt(max: number): number {
 		const min: number = 0;
@@ -140,10 +144,7 @@ export default class Game {
 
 		this.frames++;
 		const now: number = Utils.timestamp();
-		if (this.lastTime === null) {
-			this.lastTime = now;
-		}
-		else if (now - this.lastTime >= 1000) {
+		if (now - this.lastTime >= MILLIS_PER_SECOND) {
 			this._fpsMsg = `${this.frames} fps`;
 			this.frames = 0;
 			this.lastTime = now;
@@ -160,7 +161,7 @@ export default class Game {
 	private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
 		if (this._statusMessage) {
 			const x: number = 10;
-			const y: number = this.canvas.height - 6;
+			const y: number = this.canvas.height - 6; // tslint:disable-line
 			ctx.font = '10pt Arial';
 			ctx.fillStyle = this._statusMessageColor || '#fff';
 			ctx.fillText(this._statusMessage, x, y);
@@ -205,7 +206,7 @@ export default class Game {
 	setStatusMessage(message: string) {
 		this._statusMessage = message;
 		this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
-		this._statusMessageTime = Utils.timestamp() + 100;
+		this._statusMessageTime = Utils.timestamp() + STATUS_MESSAGE_TIME_INC;
 	}
 
 	/**
@@ -222,8 +223,8 @@ export default class Game {
 		if (this._statusMessage) {
 			const time: number = Utils.timestamp();
 			if (time > this._statusMessageTime) {
-				this._statusMessageTime = time + 100;
-				this._statusMessageAlpha -= 0.1;
+				this._statusMessageTime = time + STATUS_MESSAGE_TIME_INC;
+				this._statusMessageAlpha -= STATUS_MESSAGE_ALPHA_DEC;
 				const alpha: number = Math.min(1, this._statusMessageAlpha);
 				this._statusMessageColor = `rgba(${this.statusMessageRGB},${alpha})`;
 				if (this._statusMessageAlpha <= 0) {
@@ -237,7 +238,7 @@ export default class Game {
 	}
 
 	toggleMuted(): boolean {
-		let muted: boolean = this.audio.toggleMuted();
+		const muted: boolean = this.audio.toggleMuted();
 		this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
 		return muted;
 	}

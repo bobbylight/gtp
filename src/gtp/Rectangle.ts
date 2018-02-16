@@ -15,19 +15,18 @@ export interface RectangularData {
  */
 export default class Rectangle implements RectangularData {
 
-	x: number;
-	y: number;
-	w: number;
-	h: number;
+	x!: number;
+	y!: number;
+	w!: number;
+	h!: number;
 
 	/**
 	 * A simple rectangle class, containing some useful utility methods.
 	 *
-	 * @constructor
-	 * @param {int} x The x-coordinate, defaulting to <code>0</code>.
-	 * @param {int} y The y-coordinate, defaulting to <code>0</code>.
-	 * @param {int} w The width of the rectangle, defaulting to <code>0</code>.
-	 * @param {int} h The height of the rectangle, defaulting to <code>0</code>.
+	 * @param x The x-coordinate, defaulting to <code>0</code>.
+	 * @param y The y-coordinate, defaulting to <code>0</code>.
+	 * @param w The width of the rectangle, defaulting to <code>0</code>.
+	 * @param h The height of the rectangle, defaulting to <code>0</code>.
 	 */
 	constructor(x: number = 0, y: number = 0, w: number = 0, h: number = 0) {
 		this.set(x, y, w, h);
@@ -35,9 +34,9 @@ export default class Rectangle implements RectangularData {
 
 	/**
 	 * Returns whether a point is contained in this rectangle.
-	 * @param {number} x The x-coordinate of the point.
-	 * @param {number} y The y-coordinate of the point.
-	 * @returns {boolean} Whether the point is contained in this rectangle.
+	 * @param x The x-coordinate of the point.
+	 * @param y The y-coordinate of the point.
+	 * @returns Whether the point is contained in this rectangle.
 	 */
 	contains(x: number, y: number): boolean {
 		return x >= this.x && x < this.x + this.w && y >= this.y && y < this.y + this.h;
@@ -46,20 +45,20 @@ export default class Rectangle implements RectangularData {
 	/**
 	 * Returns whether one rectangle contains another.
 	 *
-	 * @param {number|RectangularData} x2 Either rectangular data, or the
+	 * @param x2 Either rectangular data, or the
 	 *        x-coordinate of the second rectangle.
-	 * @param {number} y2 The y-coordinate of the second rectangle, if
+	 * @param y2 The y-coordinate of the second rectangle, if
 	 *        specifying the dimensions as separate arguments.
-	 * @param {number} w2 The width of the second rectangle, if
+	 * @param w2 The width of the second rectangle, if
 	 *        specifying the dimensions as separate arguments.
-	 * @param {number} h2 The height of the second rectangle, if
+	 * @param h2 The height of the second rectangle, if
 	 *        specifying the dimensions as separate arguments.
 	 * @return Whether this rectangle contains the specified rectangle.
 	 */
 	containsRect(x2: number | RectangularData, y2: number = 0, w2: number = 0, h2: number = 0): boolean {
 
 		if (typeof x2 !== 'number') {
-			const r: RectangularData = x2 as RectangularData;
+			const r: RectangularData = x2;
 			y2 = r.y;
 			w2 = r.w;
 			h2 = r.h;
@@ -68,18 +67,18 @@ export default class Rectangle implements RectangularData {
 
 		let w: number = this.w;
 		let h: number = this.h;
-		if ((w | h | w2 | h2) < 0) {
+		if ((w | h | w2 | h2) < 0) { // tslint:disable-line
 				// At least one of the dimensions is negative...
 				return false;
 		}
 		// Note: if any dimension is zero, tests below must return false...
-		let x: number = this.x;
-		let y: number = this.y;
+		const x: number = this.x;
+		const y: number = this.y;
 		if (x2 < x || y2 < y) {
 				return false;
 		}
 		w += x;
-		w2 += x2 as number;
+		w2 += x2;
 		if (w2 <= x2) {
 				// X+W overflowed or W was zero, return false if...
 				// either original w or W was zero or
@@ -105,9 +104,9 @@ export default class Rectangle implements RectangularData {
 	/**
 	 * Returns whether this rectangle intersects another.
 	 *
-	 * @param {RectangularData} rect2 Another rectangular data to compare against.
+	 * @param rect2 Another rectangular data to compare against.
 	 *        This should not be <code>null</code>.
-	 * @return {boolean} Whether the two rectangles intersect.
+	 * @return Whether the two rectangles intersect.
 	 */
 	intersects(rect2: RectangularData): boolean {
 
@@ -118,10 +117,10 @@ export default class Rectangle implements RectangularData {
 		if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
 			return false;
 		}
-		let tx: number = this.x;
-		let ty: number = this.y;
-		let rx: number = rect2.x;
-		let ry: number = rect2.y;
+		const tx: number = this.x;
+		const ty: number = this.y;
+		const rx: number = rect2.x;
+		const ry: number = rect2.y;
 		rw += rx;
 		rh += ry;
 		tw += tx;
@@ -135,24 +134,24 @@ export default class Rectangle implements RectangularData {
 
 	/**
 	 * Sets the bounds of this rectangle.
-	 * @param {number|RectangularData} x Either the new x-coordinate, or rectangular data.
-	 * @param {number} y The new y-coordinate, if the first argument is a number.  If the first argument is a number
+	 * @param x Either the new x-coordinate, or rectangular data.
+	 * @param y The new y-coordinate, if the first argument is a number.  If the first argument is a number
 	 *        and this parameter is not specified, the current y value is preserved.
-	 * @param {number} w The new width, if the first argument is a number.  If the first argument is a number and
+	 * @param w The new width, if the first argument is a number.  If the first argument is a number and
 	 *        this parameter is not specified, the current width value is preserved.
-	 * @param {number} h The new height, if the first argument is a number.  If the first argument is a number and
+	 * @param h The new height, if the first argument is a number.  If the first argument is a number and
 	 *        this parameter is not specified, the current height value is preserved.
 	 */
 	set(x: number | RectangularData, y?: number, w?: number, h?: number) {
 		if (typeof x === 'number') {
 			this.x = x;
-			if (y != null) {
+			if (typeof y !== 'undefined') {
 				this.y = y;
 			}
-			if (w != null) {
+			if (typeof w !== 'undefined') {
 				this.w = w;
 			}
-			if (h != null) {
+			if (typeof h !== 'undefined') {
 				this.h = h;
 			}
 		}
