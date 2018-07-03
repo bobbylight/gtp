@@ -29,10 +29,13 @@ cd gtp
 npm install
 ```
 
-The TypeScript code lives in `src/`, and is transpiled into `lib/` by running gulp:
+The TypeScript code lives in `src/`, and is transpiled into `lib/` by running gulp.  Useful commands:
 
 ```bash
-gulp
+gulp         # build
+gulp watch   # builds and watches for changes
+gulp test    # runs unit tests
+gulp typedoc # generates documentation
 ```
 
 Gulp tasks are also provided for individually running unit tests, linting, etc.

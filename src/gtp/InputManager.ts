@@ -114,6 +114,7 @@ export default class InputManager {
 	}
 
 	_keyDown(e: KeyboardEvent) {
+		// tslint:disable-next-line:deprecation
 		const keyCode: number = e.keyCode;
 		// tslint:disable-next-line:no-magic-numbers
 		if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) { // An arrow key or space
@@ -135,6 +136,7 @@ export default class InputManager {
 	}
 
 	_keyUp(e: KeyboardEvent) {
+		// tslint:disable-next-line:deprecation
 		const key: number = e.keyCode;
 		if (this._refireMillis) {
 			if (this._repeatTimers[key]) { // Should always be true
