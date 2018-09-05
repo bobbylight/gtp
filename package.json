@@ -24,8 +24,8 @@
     "gulp-typedoc": "2.2.0",
     "gulp-typescript": "4.0.1",
     "jasmine-ajax": "3.4.0",
-    "jasmine-core": "3.1.0",
-    "karma": "2.0.4",
+    "jasmine-core": "3.2.1",
+    "karma": "3.0.0",
     "karma-chrome-launcher": "2.2.0",
     "karma-commonjs": "1.0.0",
     "karma-coverage": "1.1.2",
@@ -37,11 +37,11 @@
     "karma-spec-reporter": "0.0.32",
     "merge2": "1.2.2",
     "phantomjs-prebuilt": "2.1.16",
-    "requirejs": "2.3.5",
+    "requirejs": "2.3.6",
     "rimraf": "2.6.2",
     "run-sequence": "2.2.1",
-    "tslint": "5.10.0",
-    "typedoc": "0.11.1",
-    "typescript": "2.9.2"
+    "tslint": "5.11.0",
+    "typedoc": "0.12.0",
+    "typescript": "3.0.3"
   }
 }

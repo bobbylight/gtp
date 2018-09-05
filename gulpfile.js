@@ -93,9 +93,8 @@ gulp.task('upload-coverage-data', () => {
 });
 
 gulp.task('ci-build', () => {
-    // runSequence does not appear to work when calling another task that
-    // has a runSequence in it!  It will run the second task after the
-    // first task in the "child" runSequence
+    // runSequence does not appear to work when calling another task that has a runSequence in it!  It will run
+    // the second task after the first task in the "child" runSequence
     //runSequence('default', 'upload-coverage-data');
     runSequence('tslint', 'clean', 'compile', 'test', /*'typedoc', */ 'upload-coverage-data');
 });
