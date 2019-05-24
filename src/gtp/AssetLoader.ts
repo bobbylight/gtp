@@ -330,11 +330,11 @@ export default class AssetLoader {
 
 	_isAlreadyTracked(id: string): boolean {
 		if (this.loadingAssetData[id]) {
-			console.log('A resource with id ' + id + ' is already loading.  Assuming they are the same');
+			console.log(`A resource with id ${id} is already loading.  Assuming they are the same`);
 			return true;
 		}
-		else if (this.responses[id]) {
-			console.log('A resource with id ' + id + ' has already been loaded.');
+		if (this.responses[id]) {
+			console.log(`A resource with id ${id} has already been loaded.`);
 			return true;
 		}
 		return false;

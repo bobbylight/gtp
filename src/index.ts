@@ -12,7 +12,7 @@ import FadeOutInState from './gtp/FadeOutInState';
 import Game from './gtp/Game';
 //import { GtpBase } from './gtp/GtpBase';
 import Image from './gtp/Image';
-import ImageAtlas from './gtp/ImageAtlas';
+import ImageAtlas, { ImageAtlasInfo, ImageInfo, ImageMap } from './gtp/ImageAtlas';
 import ImageUtils from './gtp/ImageUtils';
 import InputManager from './gtp/InputManager';
 import { Keys } from './gtp/Keys';
@@ -45,6 +45,9 @@ export {
 	//GtpBase,
 	Image,
 	ImageAtlas,
+	ImageAtlasInfo,
+	ImageInfo,
+	ImageMap,
 	ImageUtils,
 	InputManager,
 	Keys,

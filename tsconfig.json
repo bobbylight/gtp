@@ -13,6 +13,7 @@
     "noUnusedLocals": true,
     //"noUnusedParameters": true,
     "preserveConstEnums": true,
+    "removeComments": false,
     "strict": true,
     "strictNullChecks": true,
     //"moduleResolution": "node",

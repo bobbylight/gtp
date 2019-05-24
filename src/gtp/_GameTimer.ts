@@ -42,7 +42,7 @@ export class _GameTimer {
 		if (this.pauseStart !== 0) {
 			return this.pauseStart - this.startShift;
 		}
-		else if (this.notUpdatingStart !== 0) {
+		if (this.notUpdatingStart !== 0) {
 			return this.notUpdatingStart - this.startShift;
 		}
 		return Utils.timestamp() - this.startShift;

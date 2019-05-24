@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const del = require('del');
-const runSequence = require('run-sequence');
 const typedoc = require('gulp-typedoc');
 const tsc = require('gulp-typescript');
 const tsProject = tsc.createProject('tsconfig.json');
@@ -52,11 +51,11 @@ gulp.task('typedoc', () => {
 });
 
 // Lints and builds the library source when changes occur.
-gulp.task('watch', [ 'tslint', 'compile' ], () => {
+gulp.task('watch', gulp.series([ 'tslint', 'compile' ], () => {
     // NOTE: typedoc does not seem to work in a watch - only runs the first
     // time; subsequent times it fails to generate sub-pages.
-    gulp.watch('src/**/*.ts', [ 'tslint', 'compile' ]);
-});
+    gulp.watch('src/**/*.ts', gulp.series([ 'tslint', 'compile' ]));
+}));
 
 gulp.task('test', (done) => {
     new KarmaServer({
@@ -82,19 +81,14 @@ gulp.task('watch-test', (done) => {
     }, done).start();
 });
 
-gulp.task('default', () => {
+gulp.task('default', gulp.series(
     // typedoc temporarily disabled as 0.10.0 release throws an exception on this project when running
-    runSequence('tslint', 'clean', 'compile', 'test'/*, 'typedoc'*/);
-});
+    [ 'tslint', 'clean', 'compile', 'test'/*, 'typedoc'*/ ]
+));
 
 gulp.task('upload-coverage-data', () => {
     gulp.src('coverage/**/lcov.info')
         .pipe(coveralls());
 });
 
-gulp.task('ci-build', () => {
-    // runSequence does not appear to work when calling another task that has a runSequence in it!  It will run
-    // the second task after the first task in the "child" runSequence
-    //runSequence('default', 'upload-coverage-data');
-    runSequence('tslint', 'clean', 'compile', 'test', /*'typedoc', */ 'upload-coverage-data');
-});
+gulp.task('ci-build', gulp.series([ 'tslint', 'clean', 'compile', 'test', /*'typedoc', */ 'upload-coverage-data' ]));

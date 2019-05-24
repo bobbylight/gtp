@@ -45,10 +45,10 @@ export default {
 				}
 				return params.substring(start, end);
 			}
-			else if (params.charAt(start) === '&') {
+			if (params.charAt(start) === '&') {
 				return ''; // &foo&bar
 			}
-			else if (start === params.length) {
+			if (start === params.length) {
 				return ''; // &foo
 			}
 		}

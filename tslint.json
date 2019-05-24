@@ -16,6 +16,7 @@
     "deprecation": true,
     "encoding": true,
     "eofline": true,
+    //"file-name-casing": [ true, "kebab-case" ],
     "forin": false,
     "indent": [
       true,
@@ -45,6 +46,7 @@
     "no-consecutive-blank-lines": [ true, 1 ],
     "no-console": false,
     "no-construct": true,
+    //"no-constructor-vars": false,
     "no-debugger": true,
     "no-duplicate-imports": true,
     "no-duplicate-super": true,
@@ -86,7 +88,6 @@
     "no-unsafe-any": false, // TODO: Fix me up
     "no-unsafe-finally": true,
     "no-unused-expression": true,
-    "no-unused-variable": [ true ],
     "no-use-before-declare": true,
     "no-var-keyword": true,
     "no-var-requires": true,
@@ -111,7 +112,7 @@
       "avoid-escape"
     ],
     "radix": true,
-    "restrict-plus-operands": false,
+    "restrict-plus-operands": false, // Allow concatenating strings with numbers
     "semicolon": true,
     "space-within-parens": 0,
     "strict-boolean-expressions": false,
@@ -142,6 +143,7 @@
       }
     ],
     "unified-signatures": true,
+    "unnecessary-else": true,
     "use-default-type-parameter": true,
     "use-isnan": true,
     "variable-name": [
