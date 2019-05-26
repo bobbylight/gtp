@@ -1,5 +1,4 @@
 import Game from '../gtp/Game';
-import Utils from '../gtp/Utils';
 import { Window } from '../gtp/GtpBase';
 
 /**
@@ -8,16 +7,26 @@ import { Window } from '../gtp/GtpBase';
 export default class TiledObject {
 
 	gid!: number;
+	name!: string;
 	x!: number;
 	y!: number;
 	width!: number;
 	height!: number;
+	type!: string;
+	visible!: boolean;
 	properties: any;
 
 	constructor(data: any) {
-		Utils.mixin(data, this);
-		this.properties = this.properties || {};
-		this.gid = this.gid || -1;
+
+		this.gid = data.gid || -1;
+		this.name = data.name;
+		this.x = data.x || 0;
+		this.y = data.y || 0;
+		this.width = data.width || 0;
+		this.height = data.height || 0;
+		this.type = data.type;
+		this.visible = typeof data.visible === 'undefined' ? true : data.visible;
+		this.properties = data.properties || {};
 
 		// TODO: Remove
 		const gameWindow: Window = window as any;
