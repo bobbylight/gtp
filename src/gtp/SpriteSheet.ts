@@ -23,9 +23,12 @@ export default class SpriteSheet {
 	 * @param [spacing=1] Optional empty space between cells.
 	 * @param [spacingY=spacing] Optional vertical empty space between cells.
 	 *        Specify only if different than the horizontal spacing.
+	 * @param [scale=1] If gtpImage was scaled up, this is the scale factor.
+	 *        The cell width, height, and spacing values will be multiplied
+	 *        by this value.
 	 */
 	constructor(gtpImage: Image, cellW: number, cellH: number,
-		spacing: number = 1, spacingY: number = spacing) {
+		spacing: number = 1, spacingY: number = spacing, scale: number = 1) {
 
 		this.gtpImage = gtpImage;
 		this.cellW = cellW;
@@ -33,12 +36,19 @@ export default class SpriteSheet {
 		this.spacingX = spacing;
 		this.spacingY = spacingY;
 
-		this.rowCount = Math.floor(gtpImage.height / (cellH + this.spacingY));
-		if ((gtpImage.height - this.rowCount * (cellH + this.spacingY)) >= cellH) {
+		if (scale !== 1) {
+			this.cellW *= scale;
+			this.cellH *= scale;
+			this.spacingX *= scale;
+			this.spacingY *= scale;
+		}
+
+		this.rowCount = Math.floor(gtpImage.height / (this.cellH + this.spacingY));
+		if ((gtpImage.height - this.rowCount * (this.cellH + this.spacingY)) >= this.cellH) {
 			this.rowCount++;
 		}
-		this.colCount = Math.floor(gtpImage.width / (cellW + this.spacingX));
-		if ((gtpImage.width - this.colCount * (cellW + this.spacingX)) >= cellW) {
+		this.colCount = Math.floor(gtpImage.width / (this.cellW + this.spacingX));
+		if ((gtpImage.width - this.colCount * (this.cellW + this.spacingX)) >= this.cellW) {
 			this.colCount++;
 		}
 

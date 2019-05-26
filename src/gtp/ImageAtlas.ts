@@ -78,10 +78,13 @@ export default class ImageAtlas {
 	/**
 	 * Parses all images out of the atlas.
 	 *
+	 * @param [scale=1] If gtpImage was scaled up, this is the scale factor.
+	 *        The cell width, height, and spacing values will be multiplied
+	 *        by this value.
 	 * @returns The parsed images.
 	 */
 	// tslint:disable:no-magic-numbers
-	parse(): ImageMap {
+	parse(scale: number = 1): ImageMap {
 
 		const images: ImageMap = {};
 
@@ -116,6 +119,13 @@ export default class ImageAtlas {
 				if (x < 0 || y < 0 || w < 0 || h < 0) {
 					throw new Error(`x, y, w, h (or s) not specified for imgInfo: ${JSON.stringify(imgInfo)}`);
 				}
+			}
+
+			if (scale !== 1) {
+				x *= scale;
+				y *= scale;
+				w *= scale;
+				h *= scale;
 			}
 
 			images[id] = new Image(this.masterCanvas, x, y, w, h);

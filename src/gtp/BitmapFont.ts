@@ -9,8 +9,8 @@ const FIRST_PRINTABLE_CODE_POINT: number = 0x20; // === ' '
  */
 export default class BitmapFont extends SpriteSheet {
 
-	constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number) {
-		super(gtpImage, cellW, cellH, spacing, spacingY);
+	constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number, scale: number = 1) {
+		super(gtpImage, cellW, cellH, spacing, spacingY, scale);
 	}
 
 	drawString(str: string, x: number, y: number) {
