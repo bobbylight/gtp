@@ -11,8 +11,8 @@ import { Keys } from './Keys';
 export default class InputManager {
 
 	private readonly keys: boolean[];
-	private readonly _refireMillis: number;
-	private readonly _repeatTimers: { [key: number/*Keys*/]: any };
+	private readonly refireMillis: number;
+	private readonly repeatTimers: { [key: number/*Keys*/]: any };
 
 	/**
 	 * Handles input for games.<p>
@@ -28,8 +28,8 @@ export default class InputManager {
 	 */
 	constructor(keyRefireMillis: number = 0) {
 		this.keys = [];
-		this._refireMillis = keyRefireMillis;
-		this._repeatTimers = [];
+		this.refireMillis = keyRefireMillis;
+		this.repeatTimers = [];
 	}
 
 	/**
@@ -40,9 +40,9 @@ export default class InputManager {
 	 */
 	clearKeyState(key: Keys) {
 		this.keys[key] = false;
-		if (this._repeatTimers[key]) {
-			clearInterval(this._repeatTimers[key]);
-			this._repeatTimers[key] = null;
+		if (this.repeatTimers[key]) {
+			clearInterval(this.repeatTimers[key]);
+			this.repeatTimers[key] = null;
 		}
 	}
 
@@ -120,13 +120,13 @@ export default class InputManager {
 		if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) { // An arrow key or space
 			e.preventDefault();
 		}
-		if (this._refireMillis) {
-			if (!this._repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
+		if (this.refireMillis) {
+			if (!this.repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
 				this.keys[keyCode] = true;
-				this._repeatTimers[keyCode] = setInterval(() => {
+				this.repeatTimers[keyCode] = setInterval(() => {
 					//console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
 					this.keys[keyCode] = true;
-				}, this._refireMillis);
+				}, this.refireMillis);
 			}
 		}
 		else {
@@ -138,11 +138,11 @@ export default class InputManager {
 	_keyUp(e: KeyboardEvent) {
 		// tslint:disable-next-line:deprecation
 		const key: number = e.keyCode;
-		if (this._refireMillis) {
-			if (this._repeatTimers[key]) { // Should always be true
+		if (this.refireMillis) {
+			if (this.repeatTimers[key]) { // Should always be true
 				this.keys[key] = false;
-				clearInterval(this._repeatTimers[key]);
-				this._repeatTimers[key] = null;
+				clearInterval(this.repeatTimers[key]);
+				this.repeatTimers[key] = null;
 			}
 			else {
 				console.error(`_keyUp: Timer does not exist for key: ${key}!`);

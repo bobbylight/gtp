@@ -57,7 +57,7 @@ export interface ImageMap {
  */
 export default class ImageAtlas {
 
-	private readonly atlasInfo: any;
+	private readonly atlasInfo: ImageAtlasInfo;
 	private readonly masterCanvas: HTMLCanvasElement;
 
 	/**

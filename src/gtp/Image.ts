@@ -1,52 +1,35 @@
 import ImageUtils from './ImageUtils';
 
-const MIN_CANVAS_DIMENSION: number = 256;
-
 /**
  * A wrapper around images.  Handles browser-specific quirks and other things a game shouldn't have
  * to know about.
  */
 export default class Image {
 
-	private _canvas: HTMLCanvasElement;
+	private readonly canvas: HTMLCanvasElement;
 	x: number;
 	y: number;
-	private readonly _width: number;
-	private readonly _height: number;
+	private readonly w: number;
+	private readonly h: number;
 
 	/**
 	 * A wrapper around images.  Handles browser-specific quirks and other things
 	 * a game shouldn't have to know about.
 	 */
 	constructor(canvas: HTMLCanvasElement, x?: number, y?: number, w?: number, h?: number) {
-		this._canvas = canvas;
 		if (x !== undefined && y !== undefined && w !== undefined && h !== undefined) {
 			this.x = x;
 			this.y = y;
-			this._width = w;
-			this._height = h;
+			this.w = w;
+			this.h = h;
 		}
 		else {
 			this.x = this.y = 0;
-			this._width = this._canvas.width;
-			this._height = this._canvas.height;
+			// Set these with regard to original canvas, not (possibly) resized one
+			this.w = canvas.width;
+			this.h = canvas.height;
 		}
-		this._ensure256Square();
-	}
-
-	/**
-	 * Chrome has trouble copying from a canvas in RAM to a canvas in GPU memory
-	 * and vice versa, unless all canvases are >= 256x256.
-	 */
-	_ensure256Square() {
-		if (this._canvas.width < MIN_CANVAS_DIMENSION || this._canvas.height < MIN_CANVAS_DIMENSION) {
-			const w: number = Math.max(MIN_CANVAS_DIMENSION, this._canvas.width);
-			const h: number = Math.max(MIN_CANVAS_DIMENSION, this._canvas.height);
-			const canvas2: HTMLCanvasElement = ImageUtils.createCanvas(w, h);
-			const ctx2: CanvasRenderingContext2D = canvas2.getContext('2d')!;
-			ctx2.drawImage(this._canvas, 0, 0);
-			this._canvas = canvas2;
-		}
+		this.canvas = ImageUtils.ensure256Square(canvas);
 	}
 
 	/**
@@ -61,8 +44,8 @@ export default class Image {
 			x = Math.round(x);
 			y = Math.round(y);
 		}
-		ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height,
-			x, y, this._width, this._height);
+		ctx.drawImage(this.canvas, this.x, this.y, this.w, this.h,
+			x, y, this.w, this.h);
 	}
 
 	/**
@@ -81,7 +64,7 @@ export default class Image {
 			x = Math.round(x);
 			y = Math.round(y);
 		}
-		ctx.drawImage(this._canvas, this.x, this.y, this._width, this._height,
+		ctx.drawImage(this.canvas, this.x, this.y, this.w, this.h,
 			x, y, w, h);
 	}
 
@@ -113,7 +96,7 @@ export default class Image {
 		srcX = this.x + srcX;
 		srcY = this.y + srcY;
 
-		ctx.drawImage(this._canvas, srcX, srcY, srcW, srcH,
+		ctx.drawImage(this.canvas, srcX, srcY, srcW, srcH,
 			destX, destY, destW, destH);
 	}
 
@@ -128,15 +111,15 @@ export default class Image {
 	 * @return This image, which has been modified.
 	 */
 	makeColorTranslucent(x: number = 0, y: number = 0) {
-		ImageUtils.makeColorTranslucent(this._canvas, x, y);
+		ImageUtils.makeColorTranslucent(this.canvas, x, y);
 	}
 
 	get width(): number {
-		return this._width;
+		return this.w;
 	}
 
 	get height(): number {
-		return this._height;
+		return this.h;
 	}
 
 }

@@ -8,7 +8,7 @@ describe('TiledObject', () => {
 	beforeEach(() => {
 
 		(window as any).game = {
-			_scale: 1
+			scale: 1
 		};
 
 		object = new TiledObject({

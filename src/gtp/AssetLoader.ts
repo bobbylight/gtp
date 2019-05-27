@@ -34,12 +34,12 @@ interface ResourceType {
  */
 export default class AssetLoader {
 
-	private readonly _scale: number;
+	private readonly scale: number;
 	private readonly loadingAssetData: { [id: string]: ResourceType };
 	private readonly responses: { [id: string]: any };
 	private callback: any;
 	audio: AudioSystem;
-	private readonly _assetRoot: string | undefined;
+	private readonly assetRoot: string | undefined;
 	private nextCallback: Function | undefined;
 
 	/**
@@ -52,12 +52,12 @@ export default class AssetLoader {
 	 *        in a subfolder or different hierarchy than the project itself.
 	 */
 	constructor(scale: number = 1, audio: AudioSystem, assetRoot?: string) {
-		this._scale = scale || 1;
+		this.scale = scale || 1;
 		this.loadingAssetData = {};
 		this.responses = {};
 		this.callback = null;
 		this.audio = audio;
-		this._assetRoot = assetRoot;
+		this.assetRoot = assetRoot;
 	}
 
 	/**
@@ -68,8 +68,8 @@ export default class AssetLoader {
 	 */
 	addJson(id: string, url: string = id) {
 
-		if (this._assetRoot) {
-			url = this._assetRoot + url;
+		if (this.assetRoot) {
+			url = this.assetRoot + url;
 		}
 
 		if (this._isAlreadyTracked(id)) {
@@ -100,8 +100,8 @@ export default class AssetLoader {
 	 */
 	addCanvas(id: string, imageSrc: string) {
 
-		if (this._assetRoot) {
-			imageSrc = this._assetRoot + imageSrc;
+		if (this.assetRoot) {
+			imageSrc = this.assetRoot + imageSrc;
 		}
 
 		const  image: HTMLImageElement = document.createElement('img'); //new Image();
@@ -113,7 +113,7 @@ export default class AssetLoader {
 			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
 			', callback == ' + (this.callback !== null));
 		image.addEventListener('load', () => {
-			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
 			this._completed(id, canvas);
 		});
 
@@ -132,8 +132,8 @@ export default class AssetLoader {
 	addImage(id: string, imageSrc: string,
 			firstPixelTranslucent: boolean = false) {
 
-		if (this._assetRoot) {
-			imageSrc = this._assetRoot + imageSrc;
+		if (this.assetRoot) {
+			imageSrc = this.assetRoot + imageSrc;
 		}
 
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
@@ -145,7 +145,7 @@ export default class AssetLoader {
 			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
 			', callback == ' + (this.callback !== null));
 		image.addEventListener('load', () => {
-			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
 			const gtpImage: Image = new Image(canvas);
 			if (firstPixelTranslucent) {
 				gtpImage.makeColorTranslucent(0, 0);
@@ -165,8 +165,8 @@ export default class AssetLoader {
 	 */
 	addImageAtlasContents(id: string, imageSrc: string, atlasInfo: ImageAtlasInfo) {
 
-		if (this._assetRoot) {
-			imageSrc = this._assetRoot + imageSrc;
+		if (this.assetRoot) {
+			imageSrc = this.assetRoot + imageSrc;
 		}
 
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
@@ -178,7 +178,7 @@ export default class AssetLoader {
 			`callback == ${this.callback !== null}`);
 		image.addEventListener('load', () => {
 
-			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
 			const atlas: ImageAtlas = new ImageAtlas(canvas, atlasInfo);
 
 			const prefix: string = typeof atlasInfo.prefix === 'string' ? atlasInfo.prefix :
@@ -218,8 +218,8 @@ export default class AssetLoader {
 			}
 			this.loadingAssetData[id] = { type: AssetType.AUDIO };
 
-			if (this._assetRoot) {
-				soundSrc = this._assetRoot + soundSrc;
+			if (this.assetRoot) {
+				soundSrc = this.assetRoot + soundSrc;
 			}
 
 			const xhr: XMLHttpRequest = new XMLHttpRequest();
@@ -260,13 +260,13 @@ export default class AssetLoader {
 
 		spacingX = spacingX || 0;
 		spacingY = spacingY || 0;
-		cellW *= this._scale;
-		cellH *= this._scale;
-		spacingX *= this._scale;
-		spacingY *= this._scale;
+		cellW *= this.scale;
+		cellH *= this.scale;
+		spacingX *= this.scale;
+		spacingY *= this.scale;
 
-		if (this._assetRoot) {
-			imageSrc = this._assetRoot + imageSrc;
+		if (this.assetRoot) {
+			imageSrc = this.assetRoot + imageSrc;
 		}
 
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
@@ -278,7 +278,7 @@ export default class AssetLoader {
 			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
 			', callback == ' + (this.callback !== null));
 		image.addEventListener('load', () => {
-			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this._scale);
+			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
 			const gtpImage: Image = new Image(canvas);
 			if (firstPixelTranslucent) {
 				gtpImage.makeColorTranslucent(0, 0);

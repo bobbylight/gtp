@@ -18,59 +18,59 @@ const DEFAULT_TARGET_FPS: number = 30;
  */
 export default class Game {
 
-	/*private */_scale: number;
-	canvas: HTMLCanvasElement;
-	inputManager: InputManager;
-	_targetFps: number;
-	_interval: number;
+	readonly scale: number;
+	readonly canvas: HTMLCanvasElement;
+	readonly inputManager: InputManager;
+	targetFps: number;
+	interval: number;
 	lastTime: number;
 	audio: AudioSystem;
 	assets: AssetLoader;
 	clearScreenColor: string;
 	fpsColor: string;
 	statusMessageRGB: string;
-	private _statusMessageColor: string | null;
+	private statusMessageColor: string | null;
 	showFps: boolean;
 	frames: number;
-	private _fpsMsg: string;
-	private _statusMessage: string | null;
-	private _statusMessageAlpha: number;
-	private _statusMessageTime: number;
-	state!: State;
-	private readonly _gameTimer: _GameTimer;
+	private fpsMsg: string;
+	private statusMessage: string | null;
+	private statusMessageAlpha: number;
+	private statusMessageTime: number;
+	state!: State<Game>;
+	private readonly gameTimer: _GameTimer;
 	timer: Timer;
 
 	constructor(args: any = {}) {
 
 		Utils.initConsole();
 
-		this._scale = args.scale || 1;
+		this.scale = args.scale || 1;
 		this.canvas = ImageUtils.createCanvas(args.width, args.height, args.parent);
 
 		this.inputManager = new InputManager(args.keyRefreshMillis || 0);
 		this.inputManager.install();
-		this._targetFps = args.targetFps || DEFAULT_TARGET_FPS;
-		this._interval = MILLIS_PER_SECOND / this._targetFps;
+		this.targetFps = args.targetFps || DEFAULT_TARGET_FPS;
+		this.interval = MILLIS_PER_SECOND / this.targetFps;
 		this.lastTime = 0;
 
 		this.audio = new AudioSystem();
 		this.audio.init();
 		const assetPrefix: string = args.assetRoot || null;
-		this.assets = new AssetLoader(this._scale, this.audio, assetPrefix);
+		this.assets = new AssetLoader(this.scale, this.audio, assetPrefix);
 
 		this.clearScreenColor = 'rgb(0,0,0)';
 
 		this.fpsColor = 'rgb(255,255,255)';
 		this.statusMessageRGB = '255,255,255';
-		this._statusMessageColor = null;
+		this.statusMessageColor = null;
 		this.showFps = false;
 		this.frames = 0;
-		this._fpsMsg = `${this._targetFps} fps`;
-		this._statusMessage = null;
-		this._statusMessageAlpha = 0;
-		this._statusMessageTime = 0;
+		this.fpsMsg = `${this.targetFps} fps`;
+		this.statusMessage = null;
+		this.statusMessageAlpha = 0;
+		this.statusMessageTime = 0;
 
-		this._gameTimer = new _GameTimer();
+		this.gameTimer = new _GameTimer();
 		this.timer = new Timer();
 	}
 
@@ -98,7 +98,7 @@ export default class Game {
 	 * @return Whether this game is paused.
 	 */
 	get paused(): boolean {
-		return this._gameTimer.paused;
+		return this.gameTimer.paused;
 	}
 
 	/**
@@ -111,7 +111,7 @@ export default class Game {
 	 * @see resetPlayTime
 	 */
 	get playTime(): number {
-		return this._gameTimer.playTime;
+		return this.gameTimer.playTime;
 	}
 
 	/**
@@ -135,7 +135,7 @@ export default class Game {
 		if (this.showFps) {
 			this._renderFps(ctx);
 		}
-		if (this._statusMessage && this._statusMessageAlpha > 0) {
+		if (this.statusMessage && this.statusMessageAlpha > 0) {
 			this._renderStatusMessage(ctx);
 		}
 	}
@@ -145,7 +145,7 @@ export default class Game {
 		this.frames++;
 		const now: number = Utils.timestamp();
 		if (now - this.lastTime >= MILLIS_PER_SECOND) {
-			this._fpsMsg = `${this.frames} fps`;
+			this.fpsMsg = `${this.frames} fps`;
 			this.frames = 0;
 			this.lastTime = now;
 		}
@@ -154,17 +154,17 @@ export default class Game {
 		const y: number = 15;
 		ctx.font = '10pt Arial';
 		ctx.fillStyle = this.fpsColor;
-		ctx.fillText(this._fpsMsg, x, y);
+		ctx.fillText(this.fpsMsg, x, y);
 
 	}
 
 	private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
-		if (this._statusMessage) {
+		if (this.statusMessage) {
 			const x: number = 10;
 			const y: number = this.canvas.height - 6; // tslint:disable-line
 			ctx.font = '10pt Arial';
-			ctx.fillStyle = this._statusMessageColor || '#fff';
-			ctx.fillText(this._statusMessage, x, y);
+			ctx.fillStyle = this.statusMessageColor || '#fff';
+			ctx.fillText(this.statusMessage, x, y);
 		}
 	}
 
@@ -174,7 +174,7 @@ export default class Game {
 	 * @see playTimeMillis
 	 */
 	resetPlayTime() {
-		this._gameTimer.resetPlayTime();
+		this.gameTimer.resetPlayTime();
 	}
 
 	/**
@@ -192,10 +192,10 @@ export default class Game {
 		else {
 			this.audio.resumeAll();
 		}
-		this._gameTimer.paused = paused;
+		this.gameTimer.paused = paused;
 	}
 
-	setState(state: State) {
+	setState(state: State<Game>) {
 		if (this.state) {
 			this.state.leaving(this);
 		}
@@ -204,31 +204,31 @@ export default class Game {
 	}
 
 	setStatusMessage(message: string) {
-		this._statusMessage = message;
-		this._statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
-		this._statusMessageTime = Utils.timestamp() + STATUS_MESSAGE_TIME_INC;
+		this.statusMessage = message;
+		this.statusMessageAlpha = 2.0; // 1.0 of message, 1.0 of fading out
+		this.statusMessageTime = Utils.timestamp() + STATUS_MESSAGE_TIME_INC;
 	}
 
 	/**
 	 * Starts the game loop.
 	 */
 	start() {
-		const callback: Function = Utils.hitch(this, this._tick); // tslint:disable-line
-		this._gameTimer.start();
-		setInterval(callback, this._interval);
+		const callback: Function = this._tick.bind(this);
+		this.gameTimer.start();
+		setInterval(callback, this.interval);
 	}
 
 	private _tick() {
 
-		if (this._statusMessage) {
+		if (this.statusMessage) {
 			const time: number = Utils.timestamp();
-			if (time > this._statusMessageTime) {
-				this._statusMessageTime = time + STATUS_MESSAGE_TIME_INC;
-				this._statusMessageAlpha -= STATUS_MESSAGE_ALPHA_DEC;
-				const alpha: number = Math.min(1, this._statusMessageAlpha);
-				this._statusMessageColor = `rgba(${this.statusMessageRGB},${alpha})`;
-				if (this._statusMessageAlpha <= 0) {
-					this._statusMessage = null;
+			if (time > this.statusMessageTime) {
+				this.statusMessageTime = time + STATUS_MESSAGE_TIME_INC;
+				this.statusMessageAlpha -= STATUS_MESSAGE_ALPHA_DEC;
+				const alpha: number = Math.min(1, this.statusMessageAlpha);
+				this.statusMessageColor = `rgba(${this.statusMessageRGB},${alpha})`;
+				if (this.statusMessageAlpha <= 0) {
+					this.statusMessage = null;
 				}
 			}
 		}
@@ -264,7 +264,7 @@ export default class Game {
 			}
 
 		}
-		this.state.update(this._interval);
+		this.state.update(this.interval);
 
 	}
 

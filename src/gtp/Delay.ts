@@ -2,7 +2,7 @@
  * Arguments to the Delay constructor.
  */
 export interface DelayArgs {
-	millis: any;
+	millis: number | number[];
 	minDelta?: number;
 	maxDelta?: number;
 	callback?: Function;
@@ -35,32 +35,32 @@ export interface DelayArgs {
  */
 export default class Delay {
 
-	private readonly _initial: number[];
-	private _initialIndex: number;
-	private readonly _callback: Function | undefined;
-	private readonly _loop: boolean;
-	private _loopCount: number;
-	private readonly _maxLoopCount: number;
-	private _minDelta?: number;
-	private _maxDelta?: number;
-	private _remaining: number;
-	private _curInitial: number;
+	private readonly initial: number[];
+	private initialIndex: number;
+	private readonly callback: Function | undefined;
+	private readonly loop: boolean;
+	private loopCount: number;
+	private readonly maxLoopCount: number;
+	private minDelta?: number;
+	private maxDelta?: number;
+	private remaining: number;
+	private curInitial: number;
 
 	constructor(args: DelayArgs) {
 		if (!args || !args.millis) {
 			throw 'Missing required "millis" argument to Delay';
 		}
-		this._initial = args.millis.length ? args.millis : [args.millis];
-		this._initialIndex = 0;
+		this.initial = Array.isArray(args.millis) ? args.millis : [ args.millis ];
+		this.initialIndex = 0;
 		if (args.minDelta && args.maxDelta) {
 			this.setRandomDelta(args.minDelta, args.maxDelta);
 		}
-		this._callback = args.callback;
-		this._loop = !!args.loop;
-		this._loopCount = 0;
-		this._maxLoopCount = this._loop ? (args.loopCount || -1) : -1;
-		this._remaining = 0;
-		this._curInitial = 0;
+		this.callback = args.callback;
+		this.loop = !!args.loop;
+		this.loopCount = 0;
+		this.maxLoopCount = this.loop ? (args.loopCount || -1) : -1;
+		this.remaining = 0;
+		this.curInitial = 0;
 		this.reset();
 	}
 
@@ -72,25 +72,25 @@ export default class Delay {
 	 *        method.
 	 */
 	update(delta: number) {
-		if (this._remaining > 0) {
-			this._remaining -= delta;
-			if (this._remaining <= 0 && this._callback) {
-				this._callback(this);
+		if (this.remaining > 0) {
+			this.remaining -= delta;
+			if (this.remaining <= 0 && this.callback) {
+				this.callback(this);
 			}
 		}
-		if (this._remaining <= 0) {
-			if (this._loop) {
-				if (this._maxLoopCount === -1 || this._loopCount < this._maxLoopCount - 1) {
-					this._loopCount++;
+		if (this.remaining <= 0) {
+			if (this.loop) {
+				if (this.maxLoopCount === -1 || this.loopCount < this.maxLoopCount - 1) {
+					this.loopCount++;
 					this.reset(true);
 				}
 				else {
-					this._loopCount = this._maxLoopCount;
-					this._remaining = -1;
+					this.loopCount = this.maxLoopCount;
+					this.remaining = -1;
 				}
 			}
 			else {
-				this._remaining = Math.max(0, this._remaining);
+				this.remaining = Math.max(0, this.remaining);
 			}
 		}
 		return this.isDone();
@@ -102,7 +102,7 @@ export default class Delay {
 	 * @return The number of times this Delay has looped.
 	 */
 	getLoopCount(): number {
-		return this._loopCount;
+		return this.loopCount;
 	}
 
 	/**
@@ -112,7 +112,7 @@ export default class Delay {
 	 * @see getMinDelta()
 	 */
 	getMaxDelta(): number {
-		return typeof this._maxDelta !== 'undefined' ? this._maxDelta : -1;
+		return typeof this.maxDelta !== 'undefined' ? this.maxDelta : -1;
 	}
 
 	/**
@@ -122,7 +122,7 @@ export default class Delay {
 	 * @see getMaxDelta()
 	 */
 	getMinDelta(): number {
-		return typeof this._minDelta !== 'undefined' ? this._minDelta : -1;
+		return typeof this.minDelta !== 'undefined' ? this.minDelta : -1;
 	}
 
 	/**
@@ -131,7 +131,7 @@ export default class Delay {
 	 * @return The remaining time on this delay.
 	 */
 	getRemaining(): number {
-		return this._remaining;
+		return this.remaining;
 	}
 
 	/**
@@ -141,7 +141,7 @@ export default class Delay {
 	 * @return How far along we are in this delay.
 	 */
 	getRemainingPercent(): number {
-		return this._remaining / this._curInitial;
+		return this.remaining / this.curInitial;
 	}
 
 	/**
@@ -150,8 +150,8 @@ export default class Delay {
 	 * @return Whether this Delay has completed.
 	 */
 	isDone(): boolean {
-		return (!this._loop || this._loopCount === this._maxLoopCount) &&
-			this._remaining <= 0;
+		return (!this.loop || this.loopCount === this.maxLoopCount) &&
+			this.remaining <= 0;
 	}
 
 	/**
@@ -161,28 +161,28 @@ export default class Delay {
 	 * @param max The maximum possible variance, exclusive.
 	 */
 	setRandomDelta(min: number, max: number) {
-		this._minDelta = min;
-		this._maxDelta = max;
+		this.minDelta = min;
+		this.maxDelta = max;
 	}
 
 	reset(smooth?: boolean) {
 		smooth = !!smooth;
-		const prevRemaining: number = this._remaining;
-		this._curInitial = this._remaining = this._initial[this._initialIndex];
+		const prevRemaining: number = this.remaining;
+		this.curInitial = this.remaining = this.initial[this.initialIndex];
 		if (smooth && prevRemaining < 0) {
-			this._remaining += prevRemaining; // Subtract how much we went over
+			this.remaining += prevRemaining; // Subtract how much we went over
 		}
-		this._initialIndex = (this._initialIndex + 1) % this._initial.length;
-		if (this._minDelta || this._maxDelta) {
+		this.initialIndex = (this.initialIndex + 1) % this.initial.length;
+		if (this.minDelta || this.maxDelta) {
 			//				this._remaining += Utils.randomInt(this._minDelta, this._maxDelta);
 		}
 	}
 
 	toString() {
-		return `[Delay: _initial=${this._initial}, ` +
-			`_remaining=${this._remaining}, ` +
-			`_loop=${this._loop}, ` +
-			`_callback=${!!this._callback}` +
+		return `[Delay: _initial=${this.initial}, ` +
+			`_remaining=${this.remaining}, ` +
+			`_loop=${this.loop}, ` +
+			`_callback=${!!this.callback}` +
 			']';
 	}
 

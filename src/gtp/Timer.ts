@@ -13,8 +13,8 @@ interface TimeMap {
  */
 export default class Timer {
 
-	private readonly _startTimes: TimeMap = {};
-	private _prefix: string = 'DEBUG';
+	private readonly startTimes: TimeMap = {};
+	private prefix: string = 'DEBUG';
 
 	/**
 	 * Allows you to time actions and log their runtimes to the console.
@@ -28,7 +28,7 @@ export default class Timer {
 	 * @param prefix The new prefix.  'DEBUG' is used if not defined.
 	 */
 	setLogPrefix(prefix: string = 'DEBUG') {
-		this._prefix = prefix;
+		this.prefix = prefix;
 	}
 
 	/**
@@ -37,7 +37,7 @@ export default class Timer {
 	 * @param key A unique key for the thing being timed.
 	 */
 	start(key: string) {
-		this._startTimes[key] = Utils.timestamp();
+		this.startTimes[key] = Utils.timestamp();
 	}
 
 	/**
@@ -46,13 +46,13 @@ export default class Timer {
 	 * @param key The key of the thing being timed.
 	 */
 	end(key: string) {
-		const start: number = this._startTimes[key];
+		const start: number = this.startTimes[key];
 		if (!start) {
 			console.error('Cannot end timer for "' + key + '" as it was never started');
 			return -1;
 		}
 		const time: number = Utils.timestamp() - start;
-		delete this._startTimes[key];
+		delete this.startTimes[key];
 		return time;
 	}
 
@@ -64,7 +64,7 @@ export default class Timer {
 	endAndLog(key: string) {
 		const time: number = this.end(key);
 		if (time > -1) {
-			console.log(`${this._prefix}: ${key}: ${time} ms`);
+			console.log(`${this.prefix}: ${key}: ${time} ms`);
 		}
 	}
 

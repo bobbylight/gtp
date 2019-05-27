@@ -4,24 +4,24 @@ import { Window } from './GtpBase';
 /**
  * Arguments to pass to a state's constructor.
  */
-export interface BaseStateArgs {
-	game: Game;
+export interface BaseStateArgs<T extends Game> {
+	game: T;
 }
 
 /**
  * A base class for game states.  Basically just an interface with callbacks
  * for updating and rendering, along with other lifecycle-ish methods.
  */
-export class State {
+export class State<T extends Game> {
 
-	game: Game;
+	game: T;
 
 	/**
 	 * A base class for game states.  Basically just an interface with callbacks
 	 * for updating and rendering, along with other lifecycle-ish methods.
 	 * @param args Arguments to the game state.
 	 */
-	constructor(args?: Game|BaseStateArgs) {
+	constructor(args?: T | BaseStateArgs<T>) {
 		if (args && args instanceof Game) {
 			this.game = args;
 		}
@@ -30,7 +30,7 @@ export class State {
 		}
 		else { // Default to global game object
 			const gameWindow: Window = window as any;
-			this.game = gameWindow.game;
+			this.game = gameWindow.game as T;
 		}
 	}
 
@@ -40,7 +40,7 @@ export class State {
 	 * @param game The game being played.
 	 * @see leaving
 	 */
-	enter(game: Game) {
+	enter(game: T) {
 		// Subclasses can override
 	}
 
@@ -49,7 +49,7 @@ export class State {
 	 * @param game The game being played.
 	 * @see enter
 	 */
-	leaving(game: Game) {
+	leaving(game: T) {
 	}
 
 	/**

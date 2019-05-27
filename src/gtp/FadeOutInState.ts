@@ -1,55 +1,56 @@
 import State from './State';
+import Game from './Game';
 
 const DEFAULT_HALF_TIME_MILLIS: number = 800;
 
 /**
  * A transitional state that fades out of one state and fades in another.
  */
-export default class FadeOutInState extends State {
+export default class FadeOutInState<T extends Game> extends State<T> {
 
-	private readonly _leavingState: State;
-	private readonly _enteringState: State;
-	private readonly _transitionLogic: Function | undefined;
-	private _fadingOut: boolean;
-	private _alpha: number;
-	private readonly _halfTime: number;
-	private _curTime: number;
+	private readonly leavingState: State<T>;
+	private readonly enteringState: State<T>;
+	private readonly transitionLogic: Function | undefined;
+	private fadingOut: boolean;
+	private alpha: number;
+	private readonly halfTime: number;
+	private curTime: number;
 
 	/**
 	 * Fades one state out and another state in.
 	 */
-	constructor(leavingState: State, enteringState: State,
+	constructor(leavingState: State<T>, enteringState: State<T>,
 		transitionLogic?: Function, timeMillis?: number) {
 		super();
-		this._leavingState = leavingState;
-		this._enteringState = enteringState;
-		this._transitionLogic = transitionLogic;
-		this._fadingOut = true;
-		this._alpha = 1;
-		this._halfTime = timeMillis && timeMillis > 0 ? timeMillis / 2 : DEFAULT_HALF_TIME_MILLIS;
-		this._curTime = 0;
+		this.leavingState = leavingState;
+		this.enteringState = enteringState;
+		this.transitionLogic = transitionLogic;
+		this.fadingOut = true;
+		this.alpha = 1;
+		this.halfTime = timeMillis && timeMillis > 0 ? timeMillis / 2 : DEFAULT_HALF_TIME_MILLIS;
+		this.curTime = 0;
 	}
 
 	update(delta: number) {
 
 		super.update(delta);
 		//         console.log('delta === ' + delta);
-		this._curTime += delta;
-		if (this._curTime >= this._halfTime) {
-			this._curTime -= this._halfTime;
-			if (this._fadingOut) {
-				this._fadingOut = false;
-				if (this._transitionLogic) {
-					this._transitionLogic();
+		this.curTime += delta;
+		if (this.curTime >= this.halfTime) {
+			this.curTime -= this.halfTime;
+			if (this.fadingOut) {
+				this.fadingOut = false;
+				if (this.transitionLogic) {
+					this.transitionLogic();
 				}
 			}
 			else {
-				this._setState(this._enteringState);
+				this._setState(this.enteringState);
 				return;
 			}
 		}
 
-		this._alpha = this._fadingOut ? 1 - (this._curTime / this._halfTime) : (this._curTime / this._halfTime);
+		this.alpha = this.fadingOut ? 1 - (this.curTime / this.halfTime) : (this.curTime / this.halfTime);
 	}
 
 	render(ctx: CanvasRenderingContext2D) {
@@ -58,12 +59,12 @@ export default class FadeOutInState extends State {
 		this.game.clearScreen();
 
 		const previousAlpha: number = ctx.globalAlpha;
-		ctx.globalAlpha = this._alpha;
-		if (this._fadingOut) {
-			this._leavingState.render(ctx);
+		ctx.globalAlpha = this.alpha;
+		if (this.fadingOut) {
+			this.leavingState.render(ctx);
 		}
 		else {
-			this._enteringState.render(ctx);
+			this.enteringState.render(ctx);
 		}
 		ctx.globalAlpha = previousAlpha;
 	}
@@ -74,7 +75,7 @@ export default class FadeOutInState extends State {
 	 *
 	 * @param state The new state.
 	 */
-	private _setState(state: State) {
-		this.game.setState(this._enteringState);
+	private _setState(state: State<T>) {
+		this.game.setState(this.enteringState);
 	}
 }

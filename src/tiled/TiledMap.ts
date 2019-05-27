@@ -3,6 +3,8 @@ import TiledLayer from './TiledLayer';
 import Image from '../gtp/Image';
 import Game from '../gtp/Game';
 import { Window } from '../gtp/GtpBase';
+import TiledProperty, { TiledPropertyType } from './TiledProperty';
+import { TypedMap } from '../gtp/TypedMap';
 
 /**
  * A <code>Tiled</code> map.
@@ -18,10 +20,11 @@ export default class TiledMap {
 	screenRows: number;
 	screenCols: number;
 	layers: TiledLayer[];
-	layersByName: { [name: string]: TiledLayer };
+	layersByName: TypedMap<TiledLayer>;
 	objectGroups: TiledLayer[];
 	tilesets: TiledTileset[];
-	properties: any;
+	readonly properties: TiledProperty[];
+	readonly propertiesByName: TypedMap<TiledProperty>;
 	version: number;
 	orientation: string;
 
@@ -54,9 +57,14 @@ export default class TiledMap {
 			}
 		}
 
-		this.properties = data.properties;
+		this.properties = data.properties || [];
 		this.version = data.version;
 		this.orientation = data.orientation;
+
+		this.propertiesByName = {};
+		this.properties.forEach((property: TiledProperty) => {
+			this.propertiesByName[property.name] = property;
+		});
 	}
 
 	/**
@@ -120,9 +128,9 @@ export default class TiledMap {
 
 		// The view coordinates at which to start painting.
 		const startX: number = tileEdgeX - x0;
-		let _x: number = startX;
+		let x: number = startX;
 		const startY: number = tileEdgeY - y0;
-		let _y: number = startY;
+		let y: number = startY;
 
 		if (topLeftCol < 0) {
 			topLeftCol += colCount;
@@ -134,11 +142,11 @@ export default class TiledMap {
 		// Paint until the end of the screen
 		let row: number = topLeftRow;
 		const layerCount: number = this.getLayerCount();
-		while (_y < screenHeight) {
+		while (y < screenHeight) {
 			for (let l: number = 0; l < layerCount; l++) {
 
 				let col: number = topLeftCol;
-				_x = startX;
+				x = startX;
 
 				const layer: TiledLayer = this.getLayerByIndex(l);
 				if (layer.visible) {
@@ -149,10 +157,10 @@ export default class TiledMap {
 						ctx.globalAlpha = prevOpacity * layer.opacity;
 					}
 
-					while (_x < screenWidth) {
+					while (x < screenWidth) {
 						const value: number = layer.getData(row % rowCount, col % colCount);
-						this.drawTile(ctx, _x, _y, value, layer);
-						_x += tileW;
+						this.drawTile(ctx, x, y, value, layer);
+						x += tileW;
 						col++;
 					}
 
@@ -165,7 +173,7 @@ export default class TiledMap {
 				// Here we could render sprites in-between layers
 			}
 
-			_y += tileH;
+			y += tileH;
 			row++;
 		}
 	}
@@ -210,6 +218,10 @@ export default class TiledMap {
 			}
 		}
 		return this.tilesets[tilesetCount - 1];
+	}
+
+	getProperty<T extends TiledPropertyType>(name: string): T | null {
+		return this.propertiesByName[name] ? this.propertiesByName[name].value : null;
 	}
 
 	drawTile(ctx: CanvasRenderingContext2D, x: number, y: number,

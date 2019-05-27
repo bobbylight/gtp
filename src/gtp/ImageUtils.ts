@@ -1,3 +1,5 @@
+const MIN_CANVAS_DIMENSION: number = 256;
+
 /**
  * General-purpose utilities for manipulating images in canvases.
  */
@@ -75,6 +77,24 @@ const ImageUtils: any = { // tslint:disable-line
 			// Clear previous contents in place there was a placeholder image
 			actualParent.innerHTML = '';
 			actualParent.appendChild(canvas);
+		}
+
+		return canvas;
+	},
+
+	/**
+	 * Chrome has trouble copying from a canvas in RAM to a canvas in GPU memory
+	 * and vice versa, unless all canvases are >= 256x256.
+	 */
+	ensure256Square(canvas: HTMLCanvasElement): HTMLCanvasElement {
+
+		if (canvas.width < MIN_CANVAS_DIMENSION || canvas.height < MIN_CANVAS_DIMENSION) {
+			const w: number = Math.max(MIN_CANVAS_DIMENSION, canvas.width);
+			const h: number = Math.max(MIN_CANVAS_DIMENSION, canvas.height);
+			const canvas2: HTMLCanvasElement = ImageUtils.createCanvas(w, h);
+			const ctx2: CanvasRenderingContext2D = canvas2.getContext('2d')!;
+			ctx2.drawImage(canvas, 0, 0);
+			canvas = canvas2;
 		}
 
 		return canvas;

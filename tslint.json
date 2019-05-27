@@ -82,6 +82,7 @@
     "no-this-assignment": true,
     "no-trailing-whitespace": true,
     "no-unbound-method": true,
+    "no-unnecessary-callback-wrapper": true,
     "no-unnecessary-class": true,
     "no-unnecessary-qualifier": true,
     "no-unnecessary-type-assertion": true,
@@ -149,7 +150,6 @@
     "variable-name": [
       true,
       "check-format",
-      "allow-leading-underscore", // TODO: Remove this
       "ban-keywords"
     ],
     "whitespace": [

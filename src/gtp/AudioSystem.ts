@@ -5,7 +5,7 @@ import { SoundCompletedCallback } from './SoundCompletedCallback';
 /**
  * Configuration for a playing sound.
  */
-interface _PlayingSoundConfig {
+interface PlayingSoundConfig {
 	audioSystem: AudioSystem;
 	id: number;
 	soundId: string;
@@ -24,20 +24,20 @@ class PlayingSound {
 	id: number;
 	soundId?: string;
 	source?: AudioBufferSourceNode;
-	private readonly config: _PlayingSoundConfig;
+	private readonly config: PlayingSoundConfig;
 	private startOffset: number;
 	private paused: boolean;
-	private _start: number;
+	private startTime: number;
 	private playedTime: number;
 
-	constructor(config: _PlayingSoundConfig) {
+	constructor(config: PlayingSoundConfig) {
 		this.config = config;
 		this.id = -1;
 		this.soundId = undefined;
 		this.source = undefined;
 		this.paused = false;
 		this.startOffset = -1;
-		this._start = -1;
+		this.startTime = -1;
 		this.playedTime = 0;
 	}
 
@@ -45,7 +45,7 @@ class PlayingSound {
 	 * We delay setting up the audio resources until the first time this sound is played as a
 	 * micro-optimization.
 	 */
-	private _initFromConfig() {
+	private initFromConfig() {
 
 		this.id = this.config.id;
 		this.soundId = this.config.soundId;
@@ -77,9 +77,9 @@ class PlayingSound {
 	pause() {
 		if (!this.paused) {
 			this.source!.stop();
-			this.playedTime += this.source!.context.currentTime - this._start;
+			this.playedTime += this.source!.context.currentTime - this.startTime;
 			this.paused = true;
-			this._start = 0;
+			this.startTime = 0;
 		}
 	}
 
@@ -87,22 +87,22 @@ class PlayingSound {
 		if (this.paused) {
 			this.paused = false;
 			const prevStartOffset: number = this.startOffset;
-			this._initFromConfig();
+			this.initFromConfig();
 			this.startOffset = prevStartOffset + this.playedTime;
 			this.startOffset = this.startOffset % this.source!.buffer!.duration;
 			const curAudioTime: number = this.source!.context.currentTime;
 			this.source!.start(curAudioTime, this.startOffset);
-			this._start = curAudioTime;
+			this.startTime = curAudioTime;
 			this.playedTime = 0;
 		}
 	}
 
 	start() {
 		this.paused = false;
-		this._initFromConfig();
+		this.initFromConfig();
 		const curAudioTime: number = this.source!.context.currentTime;
 		this.source!.start(curAudioTime, this.startOffset);
-		this._start = curAudioTime;
+		this.startTime = curAudioTime;
 		this.playedTime = 0;
 	}
 
@@ -116,18 +116,18 @@ const MILLIS_PER_SECOND: number = 1000;
  */
 export default class AudioSystem {
 
-	private _currentMusic: AudioBufferSourceNode | null;
-	private readonly _sounds: { [id: string]: Sound };
-	private _musicFade: number;
-	private _fadeMusic: boolean;
-	private _muted: boolean;
-	private _initialized: boolean;
+	private currentMusic: AudioBufferSourceNode | null;
+	private readonly sounds: { [id: string]: Sound };
+	private musicFade: number;
+	private doFadeMusic: boolean;
+	private muted: boolean;
+	private initialized: boolean;
 
 	context!: AudioContext;
-	private _volumeFaderGain!: GainNode;
-	private _musicFaderGain!: GainNode;
+	private volumeFaderGain!: GainNode;
+	private musicFaderGain!: GainNode;
 	private currentMusicId!: string;
-	private _musicLoopStart!: number;
+	private musicLoopStart!: number;
 
 	/**
 	 * A list of all sound effects currently being played.  If a sound effect
@@ -135,41 +135,41 @@ export default class AudioSystem {
 	 * list when it completes.  This data structure allows us to pause all sound
 	 * effects at the same time.
 	 */
-	private readonly _playingSounds: PlayingSound[];
+	private readonly playingSounds: PlayingSound[];
 
 	/**
 	 * Used to give all playing sound effects unique ids.
 	 */
-	private _soundEffectIdGenerator: number;
+	private soundEffectIdGenerator: number;
 
 	/**
 	 * A wrapper around web audio for games.
 	 */
 	constructor() {
-		this._currentMusic = null;
-		this._sounds = {};
-		this._musicFade = DEFAULT_MUSIC_FADE_SECONDS;
-		this._fadeMusic = true;
-		this._muted = false;
-		this._initialized = false;
-		this._playingSounds = [];
-		this._soundEffectIdGenerator = 0;
+		this.currentMusic = null;
+		this.sounds = {};
+		this.musicFade = DEFAULT_MUSIC_FADE_SECONDS;
+		this.doFadeMusic = true;
+		this.muted = false;
+		this.initialized = false;
+		this.playingSounds = [];
+		this.soundEffectIdGenerator = 0;
 	}
 
-	private _createPlayingSound(id: string, loop: boolean = false,
+	private createPlayingSound(id: string, loop: boolean = false,
 			startOffset: number = 0, doneCallback?: SoundCompletedCallback): PlayingSound {
 
-		const soundEffectId: number = this._createSoundEffectId();
+		const soundEffectId: number = this.createSoundEffectId();
 
 		return new PlayingSound({
 			audioSystem: this,
-			buffer: this._sounds[id].getBuffer(),
-			connectTo: this._volumeFaderGain,
+			buffer: this.sounds[id].getBuffer(),
+			connectTo: this.volumeFaderGain,
 			id: soundEffectId,
 			loop: loop,
 			onendedGenerator: (playingSoundId: number) => {
 				return () => {
-					this._removePlayingSound(playingSoundId);
+					this.removePlayingSound(playingSoundId);
 					if (doneCallback) {
 						doneCallback(soundEffectId, id);
 					}
@@ -180,8 +180,8 @@ export default class AudioSystem {
 		});
 	}
 
-	private _createSoundEffectId(): number {
-		return this._soundEffectIdGenerator++;
+	private createSoundEffectId(): number {
+		return this.soundEffectIdGenerator++;
 	}
 
 	/**
@@ -195,11 +195,11 @@ export default class AudioSystem {
 		try {
 			w.AudioContext = w.AudioContext || w.webkitAudioContext;
 			this.context = new w.AudioContext();
-			this._volumeFaderGain = this.context.createGain();
-			this._volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
-			this._volumeFaderGain.gain.value = 1;
-			this._volumeFaderGain.connect(this.context.destination);
-			this._initialized = true;
+			this.volumeFaderGain = this.context.createGain();
+			this.volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
+			this.volumeFaderGain.gain.value = 1;
+			this.volumeFaderGain.connect(this.context.destination);
+			this.initialized = true;
 		} catch (e) {
 			console.error('The Web Audio API is not supported in this browser.');
 		}
@@ -211,22 +211,22 @@ export default class AudioSystem {
 	 */
 	addSound(sound: Sound) {
 		if (this.context) {
-			this._sounds[sound.getId()] = sound;
+			this.sounds[sound.getId()] = sound;
 		}
 	}
 
 	fadeOutMusic(newMusicId: string) {
 
 		if (this.context) {
-			if (this._currentMusic) {
-				if (!this._muted) {
+			if (this.currentMusic) {
+				if (!this.muted) {
 					// We must "anchor" via setValueAtTime() before calling a *rampToValue() method (???)
-					this._musicFaderGain.gain.setValueAtTime(this._musicFaderGain.gain.value, this.context.currentTime);
-					this._musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this._musicFade);
+					this.musicFaderGain.gain.setValueAtTime(this.musicFaderGain.gain.value, this.context.currentTime);
+					this.musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this.musicFade);
 				}
 				setTimeout(() => {
 					this.playMusic(newMusicId);
-				}, this._musicFade * MILLIS_PER_SECOND);
+				}, this.musicFade * MILLIS_PER_SECOND);
 			}
 			else {
 				this.playMusic(newMusicId);
@@ -251,7 +251,7 @@ export default class AudioSystem {
 	 * @return Whether the sound system is initialized
 	 */
 	isInitialized(): boolean {
-		return this._initialized;
+		return this.initialized;
 	}
 
 	/**
@@ -259,7 +259,7 @@ export default class AudioSystem {
 	 * @see resumeAll
 	 */
 	pauseAll() {
-		this._playingSounds.forEach((sound: PlayingSound) => {
+		this.playingSounds.forEach((sound: PlayingSound) => {
 			sound.pause();
 		});
 	}
@@ -277,33 +277,33 @@ export default class AudioSystem {
 
 		if (this.context) {
 
-			// Note: We destroy and recreate _musicFaderGain each time, because
+			// Note: We destroy and recreate musicFaderGain each time, because
 			// it appears to occasionally start playing muted if we do not do
 			// so, even when gain.value===1, on Chrome 38.
-			if (this._currentMusic) {
+			if (this.currentMusic) {
 				this.stopMusic(false);
 			}
 
 			if (!id) {
 				return; // null id => don't play any music
 			}
-			const sound: Sound = this._sounds[id];
+			const sound: Sound = this.sounds[id];
 			if (typeof loop === 'undefined') {
 				loop = sound.getLoopsByDefaultIfMusic();
 			}
 
-			this._musicFaderGain = this.context.createGain();
-			this._musicFaderGain.gain.setValueAtTime(1, this.context.currentTime);
-			this._musicFaderGain.gain.value = 1;
-			this._currentMusic = this.context.createBufferSource();
-			this._currentMusic.loop = loop;
-			this._musicLoopStart = sound.getLoopStart() || 0;
-			this._currentMusic.loopStart = this._musicLoopStart;
-			this._currentMusic.buffer = sound.getBuffer();
-			this._currentMusic.loopEnd = this._currentMusic.buffer!.duration;
-			this._currentMusic.connect(this._musicFaderGain);
-			this._musicFaderGain.connect(this._volumeFaderGain);
-			this._currentMusic.start(0);
+			this.musicFaderGain = this.context.createGain();
+			this.musicFaderGain.gain.setValueAtTime(1, this.context.currentTime);
+			this.musicFaderGain.gain.value = 1;
+			this.currentMusic = this.context.createBufferSource();
+			this.currentMusic.loop = loop;
+			this.musicLoopStart = sound.getLoopStart() || 0;
+			this.currentMusic.loopStart = this.musicLoopStart;
+			this.currentMusic.buffer = sound.getBuffer();
+			this.currentMusic.loopEnd = this.currentMusic.buffer!.duration;
+			this.currentMusic.connect(this.musicFaderGain);
+			this.musicFaderGain.connect(this.volumeFaderGain);
+			this.currentMusic.start(0);
 			this.currentMusicId = id;
 			console.log(`Just started new music with id: ${id}, loop: ${loop}`);
 
@@ -326,8 +326,8 @@ export default class AudioSystem {
 	playSound(id: string, loop: boolean = false, doneCallback?: SoundCompletedCallback): number {
 		if (this.context) {
 
-			const playingSound: PlayingSound = this._createPlayingSound(id, loop, 0, doneCallback);
-			this._playingSounds.push(playingSound);
+			const playingSound: PlayingSound = this.createPlayingSound(id, loop, 0, doneCallback);
+			this.playingSounds.push(playingSound);
 			playingSound.start();
 			return playingSound.id;
 		}
@@ -340,11 +340,11 @@ export default class AudioSystem {
 	 * @param id The sound effect to stop playing.
 	 * @return The sound just removed, or <code>null</code> if there was no such sound.
 	 */
-	private _removePlayingSound(id: number): PlayingSound | null {
-		for (let i: number = 0; i < this._playingSounds.length; i++) {
-			if (this._playingSounds[i].id === id) {
-				const sound: PlayingSound = this._playingSounds[i];
-				this._playingSounds.splice(i, 1);
+	private removePlayingSound(id: number): PlayingSound | null {
+		for (let i: number = 0; i < this.playingSounds.length; i++) {
+			if (this.playingSounds[i].id === id) {
+				const sound: PlayingSound = this.playingSounds[i];
+				this.playingSounds.splice(i, 1);
 				return sound;
 			}
 		}
@@ -357,8 +357,8 @@ export default class AudioSystem {
 	 */
 	resumeAll() {
 
-		for (let i: number = 0; i < this._playingSounds.length; i++) {
-			const sound: PlayingSound = this._playingSounds[i];
+		for (let i: number = 0; i < this.playingSounds.length; i++) {
+			const sound: PlayingSound = this.playingSounds[i];
 			if (sound.isPaused()) {
 				sound.resume();
 			}
@@ -372,13 +372,13 @@ export default class AudioSystem {
 	 * @see playMusic
 	 */
 	stopMusic(pause: boolean = false) {
-		if (this._currentMusic) {
-			this._currentMusic.stop();
+		if (this.currentMusic) {
+			this.currentMusic.stop();
 			if (!pause) {
-				this._currentMusic.disconnect();
-				this._musicFaderGain.disconnect();
-				delete this._currentMusic;
-				delete this._musicFaderGain;
+				this.currentMusic.disconnect();
+				this.musicFaderGain.disconnect();
+				delete this.currentMusic;
+				delete this.musicFaderGain;
 			}
 		}
 	}
@@ -392,7 +392,7 @@ export default class AudioSystem {
 	 * @see playSound
 	 */
 	stopSound(id: number): boolean {
-		const sound: PlayingSound | null = this._removePlayingSound(id);
+		const sound: PlayingSound | null = this.removePlayingSound(id);
 		if (sound && sound.source) {
 			sound.source.stop();
 			return true;
@@ -401,28 +401,28 @@ export default class AudioSystem {
 	}
 
 	toggleMuted(): boolean {
-		this._muted = !this._muted;
+		this.muted = !this.muted;
 		if (this.context) {
-			const initialValue: number = this._muted ? 0 : 1;
-			this._volumeFaderGain.gain.setValueAtTime(initialValue, this.context.currentTime);
-			this._volumeFaderGain.gain.value = initialValue;
+			const initialValue: number = this.muted ? 0 : 1;
+			this.volumeFaderGain.gain.setValueAtTime(initialValue, this.context.currentTime);
+			this.volumeFaderGain.gain.value = initialValue;
 		}
-		return this._muted;
+		return this.muted;
 	}
 
 	get fadeMusic(): boolean {
-		return this._fadeMusic;
+		return this.doFadeMusic;
 	}
 
 	set fadeMusic(fade: boolean) {
-		this._fadeMusic = fade;
+		this.doFadeMusic = fade;
 	}
 
 	get musicFadeSeconds(): number {
-		return this._musicFade;
+		return this.musicFade;
 	}
 
 	set musicFadeSeconds(seconds: number) {
-		this._musicFade = seconds;
+		this.musicFade = seconds;
 	}
 }

@@ -1,5 +1,6 @@
 import TiledObject from './TiledObject';
 import TiledMap from './TiledMap';
+import { TypedMap } from '../gtp/TypedMap';
 
 /**
  * A layer in a <code>Tiled</code> map.
@@ -17,7 +18,7 @@ export default class TiledLayer {
 	x: number;
 	y: number;
 	objects?: TiledObject[];
-	objectsByName?: { [name: string]: TiledObject };
+	objectsByName?: TypedMap<TiledObject>;
 
 	constructor(map: TiledMap, data: any) {
 		this.map = map;
@@ -30,7 +31,7 @@ export default class TiledLayer {
 		this.type = data.type;
 		this.x = data.x;
 		this.y = data.y;
-		this._setObjects(data.objects);
+		this.setObjects(data.objects);
 	}
 
 	getData(row: number, col: number): number {
@@ -74,7 +75,7 @@ export default class TiledLayer {
 		return this.type === 'objectgroup';
 	}
 
-	private _setObjects(objects: any) {
+	private setObjects(objects: any[]) {
 		if (objects) {
 			this.objects = [];
 			this.objectsByName = {};

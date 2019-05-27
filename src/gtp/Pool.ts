@@ -7,10 +7,10 @@
  */
 export default class Pool<T> {
 
-	private readonly _pool: T[];
-	private _index: number;
-	private readonly _growCount: number;
-	private readonly _c: { new(): T };
+	private readonly pool: T[];
+	private index: number;
+	private readonly growCount: number;
+	private readonly c: { new(): T };
 
 	/**
 	 * Creates an object pool.
@@ -23,13 +23,13 @@ export default class Pool<T> {
 	 */
 	constructor(ctorFunc: { new(): T }, initialSize: number = 20,
 				growCount: number = 10) {
-		this._c = ctorFunc;
-		this._pool = [];
+		this.c = ctorFunc;
+		this.pool = [];
 		for (let i: number = 0; i < initialSize; i++) {
-			this._pool.push(new this._c());
+			this.pool.push(new this.c());
 		}
-		this._index = 0;
-		this._growCount = growCount;
+		this.index = 0;
+		this.growCount = growCount;
 	}
 
 	/**
@@ -38,10 +38,10 @@ export default class Pool<T> {
 	 * @see returnObj
 	 */
 	borrowObj(): T {
-		const obj: T = this._pool[this._index++];
-		if (this._index >= this._pool.length) {
-			for (let i: number = 0; i < this._growCount; i++) {
-				this._pool.push(new this._c());
+		const obj: T = this.pool[this.index++];
+		if (this.index >= this.pool.length) {
+			for (let i: number = 0; i < this.growCount; i++) {
+				this.pool.push(new this.c());
 			}
 		}
 		return obj;
@@ -52,7 +52,7 @@ export default class Pool<T> {
 	 * @return The number of currently-borrowed objects.
 	 */
 	get borrowedCount(): number {
-		return this._index;
+		return this.index;
 	}
 
 	/**
@@ -63,7 +63,7 @@ export default class Pool<T> {
 	 * @see returnObj
 	 */
 	reset() {
-		this._index = 0;
+		this.index = 0;
 	}
 
 	/**
@@ -80,8 +80,8 @@ export default class Pool<T> {
 
 		// Get the index of the object being returned.
 		let objIndex: number = -1;
-		for (let i: number = 0; i < this._index; i++) {
-			if (obj === this._pool[i]) {
+		for (let i: number = 0; i < this.index; i++) {
+			if (obj === this.pool[i]) {
 				objIndex = i;
 				break;
 			}
@@ -92,9 +92,9 @@ export default class Pool<T> {
 		}
 
 		// Swap it with the most-recently borrowed object and move our index back
-		const temp: T = this._pool[--this._index];
-		this._pool[this._index] = this._pool[objIndex];
-		this._pool[objIndex] = temp;
+		const temp: T = this.pool[--this.index];
+		this.pool[this.index] = this.pool[objIndex];
+		this.pool[objIndex] = temp;
 
 		return true;
 	}
@@ -105,7 +105,7 @@ export default class Pool<T> {
 	 * @return The total number of objects in this pool.
 	 */
 	get length(): number {
-		return this._pool.length;
+		return this.pool.length;
 	}
 
 	/**

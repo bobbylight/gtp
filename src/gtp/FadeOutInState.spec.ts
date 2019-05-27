@@ -1,12 +1,13 @@
 import { State, FadeOutInState } from '../index';
+import Game from './Game';
 
 describe('FadeOutInState', () => {
 	'use strict';
 
 	it('constructor happy path', () => {
 
-		const leavingState: State = new State();
-		const enteringState: State = new State();
+		const leavingState: State<Game> = new State<Game>();
+		const enteringState: State<Game> = new State<Game>();
 		const temp: any = {
 			transitionLogic: () => {
 			}
@@ -15,7 +16,7 @@ describe('FadeOutInState', () => {
 
 		spyOn(temp, 'transitionLogic');
 
-		const state: FadeOutInState = new FadeOutInState(leavingState, enteringState,
+		const state: FadeOutInState<Game> = new FadeOutInState<Game>(leavingState, enteringState,
 			temp.transitionLogic, timeMillis);
 		expect(state).toBeDefined();
 		expect(temp.transitionLogic).not.toHaveBeenCalled();
@@ -23,8 +24,8 @@ describe('FadeOutInState', () => {
 
 	it('transitionLogic is called at halfway point', () => {
 
-		const leavingState: State = new State();
-		const enteringState: State = new State();
+		const leavingState: State<Game> = new State<Game>();
+		const enteringState: State<Game> = new State<Game>();
 		const temp: any = {
 			transitionLogic: () => {
 			}
@@ -33,7 +34,7 @@ describe('FadeOutInState', () => {
 
 		spyOn(temp, 'transitionLogic');
 
-		const state: FadeOutInState = new FadeOutInState(leavingState, enteringState,
+		const state: FadeOutInState<Game> = new FadeOutInState<Game>(leavingState, enteringState,
 			temp.transitionLogic, timeMillis);
 		expect(temp.transitionLogic).not.toHaveBeenCalled();
 

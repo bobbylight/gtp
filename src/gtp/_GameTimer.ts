@@ -7,15 +7,15 @@ import Utils from './Utils';
 export class _GameTimer {
 
 	private startShift: number;
-	private _paused: boolean;
+	private isPaused: boolean;
 	private pauseStart: number;
-	private _updating: boolean;
+	private isUpdating: boolean;
 	private notUpdatingStart: number;
 
 	constructor() {
-		this._paused = false;
+		this.isPaused = false;
 		this.pauseStart = 0;
-		this._updating = true;
+		this.isUpdating = true;
 		this.notUpdatingStart = 0;
 		this.startShift = 0;
 	}
@@ -25,7 +25,7 @@ export class _GameTimer {
 	 * @return Whether this game is paused.
 	 */
 	get paused(): boolean {
-		return this._paused;
+		return this.isPaused;
 	}
 
 	/**
@@ -54,7 +54,7 @@ export class _GameTimer {
 	 * @return Whether this game is updating itself.
 	 */
 	get updating(): boolean {
-		return this._updating;
+		return this.isUpdating;
 	}
 
 	/**
@@ -80,8 +80,8 @@ export class _GameTimer {
 	 */
 	set paused(paused: boolean) {
 		// Cannot pause while !updating, so this is okay
-		if (this._paused !== paused) {
-			this._paused = paused;
+		if (this.isPaused !== paused) {
+			this.isPaused = paused;
 			if (paused) {
 				this.pauseStart = Utils.timestamp();
 			}
@@ -104,10 +104,10 @@ export class _GameTimer {
 	 * @param updating Whether the game should be updating itself.
 	 */
 	set updating(updating: boolean) {
-		if (this._updating !== updating) {
-			this._updating = updating;
+		if (this.isUpdating !== updating) {
+			this.isUpdating = updating;
 			if (!this.paused) { // "pause" state "encompasses" update state.
-				if (!this._updating) {
+				if (!this.isUpdating) {
 					this.notUpdatingStart = Utils.timestamp();
 				}
 				else {
