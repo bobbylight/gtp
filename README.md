@@ -15,13 +15,7 @@ Features include:
 * [Tiled](http://www.mapeditor.org/) map support
 
 ## Hacking
-First, install `gulp` using `npm` if you do not already have it:
-
-```bash
-npm install -g gulp
-```
-
-Next, check out the project and install all dependencies:
+First, check out the project and install all dependencies:
 
 ```bash
 git clone https://github.com/bobbylight/gtp.git
@@ -29,13 +23,14 @@ cd gtp
 npm install
 ```
 
-The TypeScript code lives in `src/`, and is transpiled into `lib/` by running gulp.  Useful commands:
+The TypeScript code lives in `src/`, and is transpiled into `lib/` by running `npm`.  Useful commands:
 
 ```bash
-gulp         # build
-gulp watch   # builds and watches for changes
-gulp test    # runs unit tests
-gulp typedoc # generates documentation
+npm run clean   # deletes the build, doc, and coverage directories
+npm run build   # build
+npm run watch   # builds and watches for changes
+npm run test    # runs unit tests and generates coverage report
+npm run doc     # generates documentation
 ```
 
-Gulp tasks are also provided for individually running unit tests, linting, etc.
+See `package.json` for all available commands.

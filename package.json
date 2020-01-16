@@ -9,20 +9,22 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib coverage doc"
+    "clean": "rimraf lib coverage doc",
+    "lint": "tslint --project .",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "karma start karma.conf.js --single-run",
+    "test:all-browsers": "karma start karma.conf.js --single-run --browsers Chrome,Firefox,PhantomJS",
+    "test:watch": "karma start karma.conf.js",
+    "doc": "typedoc --target ES5 --includeDeclarations --excludeExternals --mode modules --module commonjs --out doc/ --name gtp --exclude **/*.spec.ts src/",
+    "upload-coverage": "cat coverage/P*/lcov.info | coveralls"
   },
   "files": [
     "lib/"
   ],
   "devDependencies": {
     "@types/jasmine": "3.3.12",
-    "del": "4.1.1",
-    "gulp": "4.0.2",
-    "gulp-coveralls": "0.1.4",
-    "gulp-sourcemaps": "2.6.5",
-    "gulp-tslint": "8.1.4",
-    "gulp-typedoc": "2.2.2",
-    "gulp-typescript": "5.0.1",
+    "coveralls": "3.0.9",
     "jasmine-ajax": "4.0.0",
     "jasmine-core": "3.4.0",
     "karma": "4.1.0",
@@ -35,13 +37,10 @@
     "karma-jasmine-ajax": "0.1.13",
     "karma-phantomjs-launcher": "1.0.4",
     "karma-spec-reporter": "0.0.32",
-    "merge2": "1.2.3",
     "phantomjs-prebuilt": "2.1.16",
-    "requirejs": "2.3.6",
-    "rimraf": "2.6.3",
-    "run-sequence": "2.2.1",
+    "rimraf": "3.0.0",
     "tslint": "5.16.0",
-    "typedoc": "0.14.2",
-    "typescript": "3.4.5"
+    "typedoc": "0.16.4",
+    "typescript": "3.7.4"
   }
 }
