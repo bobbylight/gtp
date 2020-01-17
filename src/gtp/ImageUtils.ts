@@ -3,18 +3,18 @@ const MIN_CANVAS_DIMENSION: number = 256;
 /**
  * General-purpose utilities for manipulating images in canvases.
  */
-const ImageUtils: any = { // tslint:disable-line
+export default class ImageUtils {
 
 	/**
 	 * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and
 	 * y-coordinates are rounded to the nearest integer when rendering images.
 	 */
-	allowSubpixelImageRendering: false,
+	static allowSubpixelImageRendering: boolean = false;
 
 	/**
 	 * Takes an img/canvas and a scaling factor and returns the scaled image.
 	 */
-	resize(img: HTMLImageElement|HTMLCanvasElement, scale: number = 1): HTMLCanvasElement {
+	static resize(img: HTMLImageElement|HTMLCanvasElement, scale: number = 1): HTMLCanvasElement {
 
 		// The original image is drawn into an offscreen canvas of the same size
 		// and copied, pixel by pixel into another offscreen canvas with the
@@ -60,9 +60,9 @@ const ImageUtils: any = { // tslint:disable-line
 
 		scaledCtx.putImageData(scaledPixels, 0, 0);
 		return scaled;
-	},
+	}
 
-	createCanvas(width: number, height: number, parentDiv?: HTMLElement|string) {
+	static createCanvas(width: number, height: number, parentDiv?: HTMLElement|string) {
 
 		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = width;
@@ -80,13 +80,13 @@ const ImageUtils: any = { // tslint:disable-line
 		}
 
 		return canvas;
-	},
+	}
 
 	/**
 	 * Chrome has trouble copying from a canvas in RAM to a canvas in GPU memory
 	 * and vice versa, unless all canvases are >= 256x256.
 	 */
-	ensure256Square(canvas: HTMLCanvasElement): HTMLCanvasElement {
+	static ensure256Square(canvas: HTMLCanvasElement): HTMLCanvasElement {
 
 		if (canvas.width < MIN_CANVAS_DIMENSION || canvas.height < MIN_CANVAS_DIMENSION) {
 			const w: number = Math.max(MIN_CANVAS_DIMENSION, canvas.width);
@@ -98,20 +98,20 @@ const ImageUtils: any = { // tslint:disable-line
 		}
 
 		return canvas;
-	},
+	}
 
-	prepCanvas(canvas: HTMLCanvasElement) {
+	static prepCanvas(canvas: HTMLCanvasElement) {
 		// Use "any" instead of "CanvasRenderingContext2D" since  the TypeScript definition
 		// files don't like the experimental *imageSmoothingEnabled properties
-		const ctx: any = canvas.getContext('2d');
+		const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
 		ctx.imageSmoothingEnabled = false;
-		ctx.mozImageSmoothingEnabled = false;
-		ctx.oImageSmoothingEnabled = false;
-		ctx.webkitImageSmoothingEnabled = false;
-		ctx.msImageSmoothingEnabled = false;
+		(ctx as any).mozImageSmoothingEnabled = false;
+		(ctx as any).oImageSmoothingEnabled = false;
+		(ctx as any).webkitImageSmoothingEnabled = false;
+		(ctx as any).msImageSmoothingEnabled = false;
 
 		/* TODO: set imageRendering CSS properties based on some Game config property */
-	},
+	}
 
 	/**
 	 * Converts a color of a particular type to completely transparent in a canvas.
@@ -123,7 +123,7 @@ const ImageUtils: any = { // tslint:disable-line
 	 *        be used if this parameter is undefined.
 	 * @return The original canvas, which has been modified.
 	 */
-	makeColorTranslucent(canvas: HTMLCanvasElement, x: number = 0, y: number = 0) {
+	static makeColorTranslucent(canvas: HTMLCanvasElement, x: number = 0, y: number = 0) {
 
 		const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
 		const w: number = canvas.width;
@@ -154,6 +154,4 @@ const ImageUtils: any = { // tslint:disable-line
 		ctx.putImageData(pixels, 0, 0);
 		return canvas;
 	}
-};
-
-export default ImageUtils;
+}

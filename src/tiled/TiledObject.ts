@@ -21,6 +21,7 @@ export default class TiledObject {
 
 	constructor(data: any) {
 
+		// tslint:disable
 		this.gid = data.gid || -1;
 		this.name = data.name;
 		this.x = data.x || 0;
@@ -30,6 +31,7 @@ export default class TiledObject {
 		this.type = data.type;
 		this.visible = typeof data.visible === 'undefined' ? true : data.visible;
 		this.properties = data.properties || [];
+		// tslint:enable
 
 		// TODO: Remove
 		const gameWindow: Window = window as any;
@@ -46,7 +48,7 @@ export default class TiledObject {
 	}
 
 	getProperty<T extends TiledPropertyType>(name: string): T | null {
-		return this.propertiesByName[name] ? this.propertiesByName[name].value : null;
+		return this.propertiesByName[name] ? this.propertiesByName[name].value as T : null;
 	}
 
 	intersects(ox: number, oy: number, ow: number, oh: number) {

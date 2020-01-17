@@ -4,18 +4,18 @@
 export default class Sound {
 
 	private readonly id: string;
-	private readonly buffer: any;
+	private readonly buffer: AudioBuffer;
 	private loopsByDefault: boolean;
 	private loopStart: number;
 
-	constructor(id: string, buffer: any, loopStart: number = 0) {
+	constructor(id: string, buffer: AudioBuffer, loopStart: number = 0) {
 		this.id = id;
 		this.buffer = buffer;
 		this.loopsByDefault = true;
 		this.loopStart = loopStart;
 	}
 
-	getBuffer(): any {
+	getBuffer(): AudioBuffer {
 		return this.buffer;
 	}
 

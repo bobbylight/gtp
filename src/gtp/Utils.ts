@@ -120,7 +120,7 @@ export default {
 		if (window.performance && window.performance.now) {
 			return window.performance.now();
 		}
-		return Date.now(); // IE < 10, PhantomJS 1.x, which is used by unit tests
+		return Date.now(); // IE < 10
 	},
 
 	/**

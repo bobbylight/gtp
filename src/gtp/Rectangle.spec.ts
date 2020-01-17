@@ -1,4 +1,5 @@
 import { Rectangle } from '../index';
+import { RectangularData } from './Rectangle';
 
 // tslint:disable:no-magic-numbers
 describe('Rectangle', () => {
@@ -102,7 +103,7 @@ describe('Rectangle', () => {
 
 	it('intersects happy path - true, object literal', () => {
 		const r1: Rectangle = new Rectangle(0, 0, 20, 20);
-		const r2: any = { x: 10, y: 10, w: 20, h: 20 };
+		const r2: RectangularData = { x: 10, y: 10, w: 20, h: 20 };
 		expect(r1.intersects(r2)).toEqual(true);
 	});
 

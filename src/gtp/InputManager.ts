@@ -12,7 +12,7 @@ export default class InputManager {
 
 	private readonly keys: boolean[];
 	private readonly refireMillis: number;
-	private readonly repeatTimers: { [key: number/*Keys*/]: any };
+	private readonly repeatTimers: { [key: number/*Keys*/]: number };
 
 	/**
 	 * Handles input for games.<p>
@@ -42,7 +42,7 @@ export default class InputManager {
 		this.keys[key] = false;
 		if (this.repeatTimers[key]) {
 			clearInterval(this.repeatTimers[key]);
-			this.repeatTimers[key] = null;
+			delete this.repeatTimers[key];
 		}
 	}
 
@@ -124,7 +124,7 @@ export default class InputManager {
 			if (!this.repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
 				this.keys[keyCode] = true;
 				this.repeatTimers[keyCode] = setInterval(() => {
-					//console.log('--- ' + new Date() + ': Setting keydown to true for: ' + keyCode + ', previous === ' + self.keys[keyCode]);
+					//console.log(`--- ${new Date()}: Setting keydown to true for: ${keyCode}, previous === ${self.keys[keyCode]}`);
 					this.keys[keyCode] = true;
 				}, this.refireMillis);
 			}
@@ -142,7 +142,7 @@ export default class InputManager {
 			if (this.repeatTimers[key]) { // Should always be true
 				this.keys[key] = false;
 				clearInterval(this.repeatTimers[key]);
-				this.repeatTimers[key] = null;
+				delete this.repeatTimers[key];
 			}
 			else {
 				console.error(`_keyUp: Timer does not exist for key: ${key}!`);

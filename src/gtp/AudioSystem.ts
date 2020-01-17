@@ -66,7 +66,8 @@ class PlayingSound {
 		this.startOffset = this.config.startOffset || 0;
 
 		if (!this.config.loop) {
-			this.source.onended = this.config.onendedGenerator(this.id);
+			this.source.onended = this.config.onendedGenerator(this.id) as
+				(this: AudioScheduledSourceNode, ev: Event) => any;
 		}
 	}
 
@@ -193,13 +194,20 @@ export default class AudioSystem {
 		const w: Window = window as any;
 
 		try {
+
 			w.AudioContext = w.AudioContext || w.webkitAudioContext;
-			this.context = new w.AudioContext();
-			this.volumeFaderGain = this.context.createGain();
-			this.volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
-			this.volumeFaderGain.gain.value = 1;
-			this.volumeFaderGain.connect(this.context.destination);
-			this.initialized = true;
+
+			if (w.AudioContext) {
+				this.context = new w.AudioContext();
+				this.volumeFaderGain = this.context.createGain();
+				this.volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
+				this.volumeFaderGain.gain.value = 1;
+				this.volumeFaderGain.connect(this.context.destination);
+				this.initialized = true;
+			}
+			else {
+				console.log('The Web Audio API is not supported in this browser.');
+			}
 		} catch (e) {
 			console.error('The Web Audio API is not supported in this browser.');
 		}
@@ -300,7 +308,7 @@ export default class AudioSystem {
 			this.musicLoopStart = sound.getLoopStart() || 0;
 			this.currentMusic.loopStart = this.musicLoopStart;
 			this.currentMusic.buffer = sound.getBuffer();
-			this.currentMusic.loopEnd = this.currentMusic.buffer!.duration;
+			this.currentMusic.loopEnd = this.currentMusic.buffer.duration;
 			this.currentMusic.connect(this.musicFaderGain);
 			this.musicFaderGain.connect(this.volumeFaderGain);
 			this.currentMusic.start(0);

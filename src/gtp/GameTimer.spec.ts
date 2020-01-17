@@ -1,10 +1,10 @@
-import { _GameTimer } from './_GameTimer';
+import { GameTimer } from './GameTimer';
 
 describe('_GameTimer', () => {
 
 	it('get/set paused should work', () => {
 
-		const timer: _GameTimer = new _GameTimer();
+		const timer: GameTimer = new GameTimer();
 		expect(timer.paused).toBeFalsy();
 		timer.paused = true;
 		expect(timer.paused).toBeTruthy();
@@ -12,7 +12,7 @@ describe('_GameTimer', () => {
 
 	it('get/set updating should work', () => {
 
-		const timer: _GameTimer = new _GameTimer();
+		const timer: GameTimer = new GameTimer();
 		expect(timer.updating).toBeTruthy();
 		timer.updating = false;
 		expect(timer.updating).toBeFalsy();

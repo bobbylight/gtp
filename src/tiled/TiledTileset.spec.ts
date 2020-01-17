@@ -23,6 +23,7 @@ describe('TiledTileset', () => {
 		};
 		const tileset: TiledTileset = new TiledTileset(data, imageModifier);
 
+		// tslint:disable
 		expect(tileset.firstgid).toBe(data.firstgid);
 		expect(tileset.image).toBe(imageModifier(data.image));
 		expect(tileset.imageWidth).toBe(data.imagewidth);
@@ -33,6 +34,7 @@ describe('TiledTileset', () => {
 		expect(tileset.spacing).toBe(data.spacing);
 		expect(tileset.tileWidth).toBe(data.tilewidth);
 		expect(tileset.tileHeight).toBe(data.tileheight);
+		// tslint:enable
 	});
 
 	it('setScale() happy path', () => {
@@ -49,11 +51,13 @@ describe('TiledTileset', () => {
 
 		const SCALE: number = 4;
 		tileset.setScale(SCALE);
+		// tslint:disable
 		expect(tileset.imageWidth).toBe(data.imagewidth * SCALE);
 		expect(tileset.imageHeight).toBe(data.imageheight * SCALE);
 		expect(tileset.margin).toBe(data.margin * SCALE);
 		expect(tileset.spacing).toBe(data.spacing * SCALE);
 		expect(tileset.tileWidth).toBe(data.tilewidth * SCALE);
 		expect(tileset.tileHeight).toBe(data.tileheight * SCALE);
+		// tslint:enable
 	});
 });

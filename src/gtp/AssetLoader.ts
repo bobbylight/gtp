@@ -37,7 +37,7 @@ export default class AssetLoader {
 	private readonly scale: number;
 	private readonly loadingAssetData: { [id: string]: ResourceType };
 	private readonly responses: { [id: string]: any };
-	private callback: any;
+	private callback: Function | null;
 	audio: AudioSystem;
 	private readonly assetRoot: string | undefined;
 	private nextCallback: Function | undefined;
@@ -225,7 +225,7 @@ export default class AssetLoader {
 			const xhr: XMLHttpRequest = new XMLHttpRequest();
 			xhr.onload = () => {
 				// TODO: Clean up this API
-				this.audio.context.decodeAudioData(xhr.response, (buffer: AudioBuffer) => {
+				this.audio.context.decodeAudioData(xhr.response as ArrayBuffer, (buffer: AudioBuffer) => {
 					const sound: Sound = new Sound(id, buffer, loopStart || 0);
 					sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
 					this.audio.addSound(sound);
@@ -316,7 +316,7 @@ export default class AssetLoader {
 	 * @return The tileset image.
 	 */
 	getTmxTilesetImage(tileset: TiledTileset): Image {
-		return this.responses['_tilesetImage_' + tileset.name];
+		return this.responses['_tilesetImage_' + tileset.name] as Image;
 	}
 
 	/**
@@ -325,7 +325,7 @@ export default class AssetLoader {
 	 * @return The resource, or <code>undefined</code> if not found.
 	 */
 	get<T>(res: string): T {
-		return this.responses[res];
+		return this.responses[res] as T;
 	}
 
 	_isAlreadyTracked(id: string): boolean {
@@ -355,7 +355,7 @@ export default class AssetLoader {
 			return;
 		}
 		if (this.loadingAssetData[res].type === AssetType.JSON) {
-			response = JSON.parse(response);
+			response = JSON.parse(response as string);
 		}
 		this.responses[res] = response;
 		delete this.loadingAssetData[res];
@@ -363,7 +363,7 @@ export default class AssetLoader {
 				Utils.getObjectSize(this.loadingAssetData) +
 				', callback == ' + (this.callback !== null));
 		if (this.isDoneLoading() && this.callback) {
-			this.callback.call();
+			this.callback.call(this);
 			delete this.callback;
 			console.log('... Callback called and deleted (callback == ' + (this.callback !== null) + ')');
 			if (this.nextCallback) {

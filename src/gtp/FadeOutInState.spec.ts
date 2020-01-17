@@ -1,6 +1,13 @@
 import { State, FadeOutInState } from '../index';
 import Game from './Game';
 
+/**
+ * A typed wrapper class to keep tslint happy in this unit test class.
+ */
+interface FunctionWrapperForTesting {
+	transitionLogic: () => string;
+}
+
 describe('FadeOutInState', () => {
 	'use strict';
 
@@ -8,8 +15,9 @@ describe('FadeOutInState', () => {
 
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
-		const temp: any = {
+		const temp: FunctionWrapperForTesting = {
 			transitionLogic: () => {
+				return 'foo';
 			}
 		};
 		const timeMillis: number = 500;
@@ -26,8 +34,9 @@ describe('FadeOutInState', () => {
 
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
-		const temp: any = {
+		const temp: FunctionWrapperForTesting = {
 			transitionLogic: () => {
+				return 'foo';
 			}
 		};
 		const timeMillis: number = 500;

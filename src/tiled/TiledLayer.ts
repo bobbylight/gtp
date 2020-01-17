@@ -20,6 +20,7 @@ export default class TiledLayer {
 	objects?: TiledObject[];
 	objectsByName?: TypedMap<TiledObject>;
 
+	// tslint:disable
 	constructor(map: TiledMap, data: any) {
 		this.map = map;
 		this.name = data.name;
@@ -33,6 +34,7 @@ export default class TiledLayer {
 		this.y = data.y;
 		this.setObjects(data.objects);
 	}
+	// tslint:enable
 
 	getData(row: number, col: number): number {
 		if (!this.data) { // An object layer
@@ -82,7 +84,7 @@ export default class TiledLayer {
 			for (let i: number = 0; i < objects.length; i++) {
 				const obj: TiledObject = new TiledObject(objects[i]);
 				this.objects.push(obj);
-				this.objectsByName[objects[i].name] = obj;
+				this.objectsByName[objects[i].name] = obj; // tslint:disable-line
 			}
 		}
 	}

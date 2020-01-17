@@ -1,7 +1,7 @@
 import { Keys } from './Keys';
 import InputManager from './InputManager';
 import State from './State';
-import { _GameTimer } from './_GameTimer';
+import { GameTimer } from './GameTimer';
 import Timer from './Timer';
 import ImageUtils from './ImageUtils';
 import Utils from './Utils';
@@ -12,6 +12,19 @@ const STATUS_MESSAGE_TIME_INC: number = 100;
 const STATUS_MESSAGE_ALPHA_DEC: number = 0.1;
 const MILLIS_PER_SECOND: number = 1000;
 const DEFAULT_TARGET_FPS: number = 30;
+
+/**
+ * Optional arguments that can be passed to the <code>Game</code> constructor.
+ */
+export interface GameArgs {
+	scale?: number;
+	width: number;
+	height: number;
+	parent?: HTMLElement | string;
+	keyRefreshMillis?: number;
+	targetFps?: number;
+	assetRoot?: string;
+}
 
 /**
  * A base class for a game.
@@ -37,10 +50,10 @@ export default class Game {
 	private statusMessageAlpha: number;
 	private statusMessageTime: number;
 	state!: State<Game>;
-	private readonly gameTimer: _GameTimer;
+	private readonly gameTimer: GameTimer;
 	timer: Timer;
 
-	constructor(args: any = {}) {
+	constructor(args: GameArgs = { width: 640, height: 480 }) {
 
 		Utils.initConsole();
 
@@ -55,7 +68,7 @@ export default class Game {
 
 		this.audio = new AudioSystem();
 		this.audio.init();
-		const assetPrefix: string = args.assetRoot || null;
+		const assetPrefix: string | undefined = args.assetRoot;
 		this.assets = new AssetLoader(this.scale, this.audio, assetPrefix);
 
 		this.clearScreenColor = 'rgb(0,0,0)';
@@ -70,7 +83,7 @@ export default class Game {
 		this.statusMessageAlpha = 0;
 		this.statusMessageTime = 0;
 
-		this.gameTimer = new _GameTimer();
+		this.gameTimer = new GameTimer();
 		this.timer = new Timer();
 	}
 

@@ -8,7 +8,7 @@
     "arrow-parens": true,
     "ban": false,
     "ban-comma-operator": true,
-    "class-name": false,
+    "class-name": true,
     "comment-format": false, //[ true, "check-space" ],
     "completed-docs": [ true, "classes", "enums", "functions", "interfaces" ],
     "curly": true,
@@ -16,7 +16,7 @@
     "deprecation": true,
     "encoding": true,
     "eofline": true,
-    //"file-name-casing": [ true, "kebab-case" ],
+    //"file-name-casing": [ true, "pascal-case" ],
     "forin": false,
     "indent": [
       true,
@@ -24,12 +24,12 @@
     ],
     "jsdoc-format": [ true, "check-multiline-start" ],
     "label-position": true,
-    //"linebreak-style": [ true, "CRLF" ],
+    "linebreak-style": [ true, "LF" ],
     "match-default-export-name": true,
-    "max-file-line-count": [ true, 500 ],
+    "max-file-line-count": [ true, 450 ],
     "max-line-length": [
       true,
-      130
+      120
     ],
     "member-access": [ true, "no-public" ],
 //    "member-ordering": [
@@ -83,10 +83,10 @@
     "no-trailing-whitespace": true,
     "no-unbound-method": true,
     "no-unnecessary-callback-wrapper": true,
-    "no-unnecessary-class": true,
+    "no-unnecessary-class": false, // classes with static members results in better typing
     "no-unnecessary-qualifier": true,
     "no-unnecessary-type-assertion": true,
-    "no-unsafe-any": false, // TODO: Fix me up
+    "no-unsafe-any": true,
     "no-unsafe-finally": true,
     "no-unused-expression": true,
     "no-use-before-declare": true,

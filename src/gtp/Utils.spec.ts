@@ -10,10 +10,10 @@ describe('Utils', () => {
 
 	it('getObjectSize() happy path', () => {
 
-		let obj: any = {};
+		let obj: Object = {};
 		expect(Utils.getObjectSize(obj)).toBe(0);
 
-		obj = {one: 1, two: 2};
+		obj = { one: 1, two: 2 };
 		expect(Utils.getObjectSize(obj)).toBe(2);
 	});
 
@@ -98,7 +98,7 @@ describe('Utils', () => {
 		const origConsole: Console = window.console;
 		(window as any).console = mockConsole;
 		Utils.initConsole();
-		expect(window.console).toBe(mockConsole);
+		expect((window as any).console).toBe(mockConsole);
 		(window as any).console = origConsole;
 	});
 
