@@ -85,7 +85,7 @@ describe('Utils', () => {
 		const waitUntil: number = Date.now() + DELAY + 1; // Wait > 300 milliseconds
 		while (Date.now() < waitUntil) {}
 		const end: number = Utils.timestamp();
-		expect(end).toBeGreaterThan(start + DELAY);
+		expect(end).toBeGreaterThan(start + 1);
 	});
 
 	it('initConsole() with console defined', () => {
