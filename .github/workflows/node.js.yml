@@ -36,5 +36,5 @@ jobs:
     - name: Submit coverage data to codecov
       uses: codecov/codecov-action@v1
       with:
-        file: ./coverage/PhantomJS 2.1.1 (Mac OS X 0.0.0)/lcov.info
+        file: ./coverage/phantom/lcov.info
         name: codecov

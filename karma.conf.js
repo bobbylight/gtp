@@ -52,6 +52,14 @@ module.exports = function(config) {
         instrumenterOptions: {
             istanbul: { noCompact: true }
         },
+        dir: 'coverage',
+        subdir: function(browserName) {
+            // Standardize the output directory name for Phantom for coverage reports
+            if (browserName.match(/Phantom/)) {
+                return 'phantom';
+            }
+            return browserName;
+        },
         type: 'lcov' // Generates lcov and HTML (lcov for coveralls.io)
     },
 
