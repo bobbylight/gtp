@@ -123,7 +123,7 @@ export default class InputManager {
 		if (this.refireMillis) {
 			if (!this.repeatTimers[keyCode]) { // Only do on actual keydown, not key repeat
 				this.keys[keyCode] = true;
-				this.repeatTimers[keyCode] = setInterval(() => {
+				this.repeatTimers[keyCode] = +setInterval(() => {
 					//console.log(`--- ${new Date()}: Setting keydown to true for: ${keyCode}, previous === ${self.keys[keyCode]}`);
 					this.keys[keyCode] = true;
 				}, this.refireMillis);
