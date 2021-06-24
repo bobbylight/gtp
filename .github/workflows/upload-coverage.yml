@@ -1,7 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Build
+name: Upload Coverage
 
 on:
   push:
@@ -16,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -31,5 +28,8 @@ jobs:
       run: npm run build
     - name: Run tests
       run: npm test
-    - name: Generate documentation
-      run: npm run doc
+    - name: Submit coverage data to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage/phantom/lcov.info
+        name: codecov
