@@ -31,7 +31,7 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 		this.curTime = 0;
 	}
 
-	update(delta: number) {
+	override update(delta: number) {
 
 		super.update(delta);
 		//         console.log('delta === ' + delta);
@@ -53,7 +53,7 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 		this.alpha = this.fadingOut ? 1 - (this.curTime / this.halfTime) : (this.curTime / this.halfTime);
 	}
 
-	render(ctx: CanvasRenderingContext2D) {
+	override render(ctx: CanvasRenderingContext2D) {
 
 		super.render(ctx);
 		this.game.clearScreen();

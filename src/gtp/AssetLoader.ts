@@ -37,7 +37,7 @@ export default class AssetLoader {
 	private readonly scale: number;
 	private readonly loadingAssetData: { [id: string]: ResourceType };
 	private readonly responses: { [id: string]: any };
-	private callback: Function | null;
+	private callback: Function | undefined;
 	audio: AudioSystem;
 	private readonly assetRoot: string | undefined;
 	private nextCallback: Function | undefined;
@@ -55,7 +55,7 @@ export default class AssetLoader {
 		this.scale = scale || 1;
 		this.loadingAssetData = {};
 		this.responses = {};
-		this.callback = null;
+		this.callback = undefined;
 		this.audio = audio;
 		this.assetRoot = assetRoot;
 	}

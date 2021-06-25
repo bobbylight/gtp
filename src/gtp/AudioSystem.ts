@@ -117,7 +117,7 @@ const MILLIS_PER_SECOND: number = 1000;
  */
 export default class AudioSystem {
 
-	private currentMusic: AudioBufferSourceNode | null;
+	private currentMusic?: AudioBufferSourceNode;
 	private readonly sounds: { [id: string]: Sound };
 	private musicFade: number;
 	private doFadeMusic: boolean;
@@ -126,7 +126,7 @@ export default class AudioSystem {
 
 	context!: AudioContext;
 	private volumeFaderGain!: GainNode;
-	private musicFaderGain!: GainNode;
+	private musicFaderGain?: GainNode;
 	private currentMusicId!: string;
 	private musicLoopStart!: number;
 
@@ -147,7 +147,7 @@ export default class AudioSystem {
 	 * A wrapper around web audio for games.
 	 */
 	constructor() {
-		this.currentMusic = null;
+		this.currentMusic = undefined;
 		this.sounds = {};
 		this.musicFade = DEFAULT_MUSIC_FADE_SECONDS;
 		this.doFadeMusic = true;
@@ -229,8 +229,8 @@ export default class AudioSystem {
 			if (this.currentMusic) {
 				if (!this.muted) {
 					// We must "anchor" via setValueAtTime() before calling a *rampToValue() method (???)
-					this.musicFaderGain.gain.setValueAtTime(this.musicFaderGain.gain.value, this.context.currentTime);
-					this.musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this.musicFade);
+					this.musicFaderGain!.gain.setValueAtTime(this.musicFaderGain!.gain.value, this.context.currentTime);
+					this.musicFaderGain!.gain.linearRampToValueAtTime(0, this.context.currentTime + this.musicFade);
 				}
 				setTimeout(() => {
 					this.playMusic(newMusicId);
@@ -384,7 +384,7 @@ export default class AudioSystem {
 			this.currentMusic.stop();
 			if (!pause) {
 				this.currentMusic.disconnect();
-				this.musicFaderGain.disconnect();
+				this.musicFaderGain!.disconnect();
 				delete this.currentMusic;
 				delete this.musicFaderGain;
 			}
