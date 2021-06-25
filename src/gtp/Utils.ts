@@ -11,7 +11,7 @@ export default {
 	 * @param obj The object.
 	 * @return The number of elements in the object.
 	 */
-	getObjectSize(obj: Object): number {
+	getObjectSize(obj: any): number {
 		let size: number = 0;
 		for (const key in obj) {
 			if (obj.hasOwnProperty(key)) {
@@ -64,9 +64,11 @@ export default {
 	 * @return A function that does the same thing as 'func', but in the
 	 *         specified scope.
 	 */
+	// eslint-disable-next-line
 	hitch(scope: any, func: Function): Function {
 		// "arguments" cannot be referenced in arrow functions
-		return function() { // tslint:disable-line:only-arrow-functions
+		return function() {
+			// eslint-disable-next-line
 			func.apply(scope, arguments);
 		};
 	},
@@ -129,7 +131,7 @@ export default {
 	initConsole() {
 		'use strict';
 		if (!window.console) {
-			const noOp: Function = () => {};
+			const noOp = () => {};
 			(window as any).console = {
 				info: noOp,
 				log: noOp,

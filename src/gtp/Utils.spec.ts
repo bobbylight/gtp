@@ -1,6 +1,5 @@
 import { Utils, BrowserUtil } from '../index';
 
-// tslint:disable:no-magic-numbers
 describe('Utils', () => {
 	'use strict';
 
@@ -10,7 +9,7 @@ describe('Utils', () => {
 
 	it('getObjectSize() happy path', () => {
 
-		let obj: Object = {};
+		let obj: unknown = {};
 		expect(Utils.getObjectSize(obj)).toBe(0);
 
 		obj = { one: 1, two: 2 };

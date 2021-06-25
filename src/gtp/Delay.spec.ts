@@ -1,6 +1,5 @@
 import { Delay } from '../index';
 
-// tslint:disable:no-magic-numbers
 describe('Delay', () => {
 
 	it('constructor happy path', () => {
@@ -18,10 +17,10 @@ describe('Delay', () => {
 
 	// it('constructor with required arguments not specified', () => {
 	// 	expect(() => {
-	// 		new Delay(); // tslint:disable-line
+	// 		new Delay();
 	// 	}).toThrow();
 	// 	expect(() => {
-	// 		new Delay({}); // tslint:disable-line
+	// 		new Delay({});
 	// 	}).toThrow();
 	// });
 

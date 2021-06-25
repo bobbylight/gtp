@@ -1,6 +1,5 @@
 import { Point } from '../index';
 
-// tslint:disable:no-magic-numbers
 describe('Point', () => {
 	'use strict';
 

@@ -30,6 +30,7 @@ The TypeScript code lives in `src/`, and is transpiled into `lib/` by running `n
 npm run clean   # deletes the build, doc, and coverage directories
 npm run build   # build
 npm run watch   # builds and watches for changes
+npm run lint    # Lints the source code
 npm run test    # runs unit tests and generates coverage report
 npm run doc     # generates documentation
 ```

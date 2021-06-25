@@ -174,7 +174,7 @@ export default class Game {
 	private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
 		if (this.statusMessage) {
 			const x: number = 10;
-			const y: number = this.canvas.height - 6; // tslint:disable-line
+			const y: number = this.canvas.height - 6;
 			ctx.font = '10pt Arial';
 			ctx.fillStyle = this.statusMessageColor || '#fff';
 			ctx.fillText(this.statusMessage, x, y);

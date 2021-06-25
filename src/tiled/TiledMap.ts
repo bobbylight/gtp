@@ -33,7 +33,6 @@ export default class TiledMap {
 	 */
 	constructor(data: any, args: any) {
 
-		// tslint:disable
 		this.rowCount = data.height;
 		this.colCount = data.width;
 		this.tileWidth = args.tileWidth;
@@ -61,7 +60,6 @@ export default class TiledMap {
 		this.properties = data.properties || [];
 		this.version = data.version;
 		this.orientation = data.orientation;
-		// tslint:enable
 
 		this.propertiesByName = {};
 		this.properties.forEach((property: TiledProperty) => {

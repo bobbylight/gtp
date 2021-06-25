@@ -1,6 +1,5 @@
 import { Image } from '../index';
 
-// tslint:disable:no-magic-numbers
 describe('Image', () => {
 	'use strict';
 

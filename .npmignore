@@ -4,6 +4,7 @@ doc/
 src/
 typings/
 .editorconfig
+.eslintrc.js
 .gitattributes
 .npmignore
 .travis.yml
@@ -14,5 +15,4 @@ npm-debug.log
 test-main.js
 Thumbs.db
 tsconfig.json
-tslint.json
 typings.json

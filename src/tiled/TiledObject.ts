@@ -21,7 +21,6 @@ export default class TiledObject {
 
 	constructor(data: any) {
 
-		// tslint:disable
 		this.gid = data.gid || -1;
 		this.name = data.name;
 		this.x = data.x || 0;
@@ -31,7 +30,6 @@ export default class TiledObject {
 		this.type = data.type;
 		this.visible = typeof data.visible === 'undefined' ? true : data.visible;
 		this.properties = data.properties || [];
-		// tslint:enable
 
 		// TODO: Remove
 		const gameWindow: Window = window as any;

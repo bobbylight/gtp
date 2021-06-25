@@ -1,7 +1,6 @@
 import { Rectangle } from '../index';
 import { RectangularData } from './Rectangle';
 
-// tslint:disable:no-magic-numbers
 describe('Rectangle', () => {
 	'use strict';
 

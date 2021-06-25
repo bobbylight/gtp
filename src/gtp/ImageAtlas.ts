@@ -83,7 +83,6 @@ export default class ImageAtlas {
 	 *        by this value.
 	 * @returns The parsed images.
 	 */
-	// tslint:disable:no-magic-numbers
 	parse(scale: number = 1): ImageMap {
 
 		const images: ImageMap = {};
@@ -133,5 +132,4 @@ export default class ImageAtlas {
 
 		return images;
 	}
-	// tslint:enable:no-magic-numbers
 }

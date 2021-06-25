@@ -1,6 +1,5 @@
 import { Sound } from '../index';
 
-// tslint:disable:no-magic-numbers
 describe('Sound', () => {
 
 	it('constructor happy path, no loop start', () => {

@@ -22,7 +22,6 @@ export default class TiledTileset {
 	tileHeight: number;
 
 	constructor(data: any, imagePathModifier?: ImagePathModifier) {
-		// tslint:disable
 		this.firstgid = data.firstgid;
 		this.image = data.image;
 		if (imagePathModifier) {
@@ -36,7 +35,6 @@ export default class TiledTileset {
 		this.spacing = data.spacing;
 		this.tileWidth = data.tilewidth;
 		this.tileHeight = data.tileheight;
-		// tslint:enable
 	}
 
 	setScale(scale: number) {

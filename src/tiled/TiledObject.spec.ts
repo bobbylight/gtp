@@ -1,6 +1,5 @@
 import { TiledObject } from '../index';
 
-// tslint:disable:no-magic-numbers
 describe('TiledObject', () => {
 
 	let object: TiledObject;

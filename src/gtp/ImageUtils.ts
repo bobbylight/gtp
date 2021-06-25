@@ -45,7 +45,6 @@ export default class ImageUtils {
 		const scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d')!;
 		const scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
 
-		// tslint:disable:no-magic-numbers
 		for (let y: number = 0; y < heightScaled; y++) {
 			for (let x: number = 0; x < widthScaled; x++) {
 				const index: number = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
@@ -56,7 +55,6 @@ export default class ImageUtils {
 				scaledPixels.data[indexScaled + 3] = origPixels.data[index + 3];
 			}
 		}
-		// tslint:enable:no-magic-numbers
 
 		scaledCtx.putImageData(scaledPixels, 0, 0);
 		return scaled;
@@ -130,7 +128,6 @@ export default class ImageUtils {
 		const h: number = canvas.height;
 		const pixels: ImageData = ctx.getImageData(0, 0, w, h);
 
-		// tslint:disable:no-magic-numbers
 		const color: number[] = [];
 		const offs: number = (y * w + x) * 4;
 		for (let i: number = 0; i < 4; i++) {
@@ -149,7 +146,6 @@ export default class ImageUtils {
 				}
 			}
 		}
-		// tslint:enable:no-magic-numbers
 
 		ctx.putImageData(pixels, 0, 0);
 		return canvas;

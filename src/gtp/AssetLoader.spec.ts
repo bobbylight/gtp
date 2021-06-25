@@ -12,7 +12,7 @@ describe('AssetLoader', () => {
 	// });
 	//
 	// it('constructor, happy path', () => {
-	// 	new AssetLoader(1, new AudioSystem()); // tslint:disable-line
+	// 	new AssetLoader(1, new AudioSystem());
 	// });
 	//
 	// it('isDoneLoading() works', () => {

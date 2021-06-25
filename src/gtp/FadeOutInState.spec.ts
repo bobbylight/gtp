@@ -1,9 +1,6 @@
 import { State, FadeOutInState } from '../index';
 import Game from './Game';
 
-/**
- * A typed wrapper class to keep tslint happy in this unit test class.
- */
 interface FunctionWrapperForTesting {
 	transitionLogic: () => string;
 }

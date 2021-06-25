@@ -67,7 +67,7 @@ export default class Rectangle implements RectangularData {
 
 		let w: number = this.w;
 		let h: number = this.h;
-		if ((w | h | w2 | h2) < 0) { // tslint:disable-line
+		if ((w | h | w2 | h2) < 0) {
 				// At least one of the dimensions is negative...
 				return false;
 		}

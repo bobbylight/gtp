@@ -60,7 +60,7 @@ module.exports = function(config) {
             }
             return browserName;
         },
-        type: 'lcov' // Generates lcov and HTML (lcov for coveralls.io)
+        type: 'lcov' // Generates lcov and HTML
     },
 
     // web server port

@@ -1,6 +1,5 @@
 import { Pool } from '../index';
 
-// tslint:disable:no-magic-numbers
 describe('Pool', () => {
 	'use strict';
 

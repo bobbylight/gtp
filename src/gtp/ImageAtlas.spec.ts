@@ -1,6 +1,5 @@
 import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
 
-// tslint:disable:no-magic-numbers
 describe('ImageAtlas', () => {
 
 	it('parse() works for valid image, x, y, w, h', () => {
