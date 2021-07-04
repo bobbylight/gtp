@@ -129,8 +129,7 @@ export default {
 	 * Defines console functions for IE9 and other braindead browsers.
 	 */
 	initConsole() {
-		'use strict';
-		if (!window.console) {
+			if (!window.console) {
 			const noOp = () => {};
 			(window as any).console = {
 				info: noOp,

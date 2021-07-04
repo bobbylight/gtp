@@ -1,7 +1,6 @@
 import { Pool } from '../index';
 
 describe('Pool', () => {
-	'use strict';
 
 	/**
 	 * A simple dummy class used in these tests.

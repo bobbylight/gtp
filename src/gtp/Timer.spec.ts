@@ -1,7 +1,6 @@
 import { Timer } from '../index';
 
 describe('Timer', () => {
-	'use strict';
 
 	let debugContent: string,
 		errorContent: string;
@@ -12,12 +11,16 @@ describe('Timer', () => {
 
 		// Note we are assuming that console.log/error are called with 1 argument
 		// here...
-		spyOn(console, 'log').and.callFake((arg: string) => {
+		jest.spyOn(console, 'log').mockImplementation((arg: string) => {
 			debugContent += arg + '\n';
 		});
-		spyOn(console, 'error').and.callFake((arg: string) => {
+		jest.spyOn(console, 'error').mockImplementation((arg: string) => {
 			errorContent += arg + '\n';
 		});
+	});
+
+	afterEach(() => {
+		jest.resetAllMocks();
 	});
 
 	it('logging, happy path, single event', () => {

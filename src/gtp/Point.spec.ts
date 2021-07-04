@@ -1,7 +1,6 @@
 import { Point } from '../index';
 
 describe('Point', () => {
-	'use strict';
 
 	it('constructor 0-arg', () => {
 		const point: Point = new Point();

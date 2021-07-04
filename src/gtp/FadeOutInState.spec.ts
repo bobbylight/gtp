@@ -6,20 +6,19 @@ interface FunctionWrapperForTesting {
 }
 
 describe('FadeOutInState', () => {
-	'use strict';
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
 
 	it('constructor happy path', () => {
 
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
 		const temp: FunctionWrapperForTesting = {
-			transitionLogic: () => {
-				return 'foo';
-			}
+			transitionLogic: jest.fn()
 		};
 		const timeMillis: number = 500;
-
-		spyOn(temp, 'transitionLogic');
 
 		const state: FadeOutInState<Game> = new FadeOutInState<Game>(leavingState, enteringState,
 			temp.transitionLogic, timeMillis);
@@ -32,13 +31,9 @@ describe('FadeOutInState', () => {
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
 		const temp: FunctionWrapperForTesting = {
-			transitionLogic: () => {
-				return 'foo';
-			}
+			transitionLogic: jest.fn()
 		};
 		const timeMillis: number = 500;
-
-		spyOn(temp, 'transitionLogic');
 
 		const state: FadeOutInState<Game> = new FadeOutInState<Game>(leavingState, enteringState,
 			temp.transitionLogic, timeMillis);

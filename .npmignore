@@ -10,7 +10,7 @@ typings/
 .travis.yml
 gtp.iml
 gulpfile.js
-karma.conf.js
+jest.conf.js
 npm-debug.log
 test-main.js
 Thumbs.db

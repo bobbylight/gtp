@@ -2,7 +2,6 @@ import { Rectangle } from '../index';
 import { RectangularData } from './Rectangle';
 
 describe('Rectangle', () => {
-	'use strict';
 
 	it('0-arg constructor happy path', () => {
 		const rect: Rectangle = new Rectangle();

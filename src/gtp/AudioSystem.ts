@@ -188,7 +188,7 @@ export default class AudioSystem {
 	/**
 	 * Initializes the audio system.
 	 */
-	init() {
+	init(): boolean {
 
 		// Effectively cast to our window extension for static typing
 		const w: Window = window as any;
@@ -199,6 +199,7 @@ export default class AudioSystem {
 
 			if (w.AudioContext) {
 				this.context = new w.AudioContext();
+				console.log('--- ' + this.context);
 				this.volumeFaderGain = this.context.createGain();
 				this.volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
 				this.volumeFaderGain.gain.value = 1;
@@ -210,7 +211,10 @@ export default class AudioSystem {
 			}
 		} catch (e) {
 			console.error('The Web Audio API is not supported in this browser.');
+			console.error(e);
 		}
+
+		return this.initialized;
 	}
 
 	/**

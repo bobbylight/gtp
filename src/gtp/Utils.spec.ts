@@ -1,7 +1,6 @@
 import { Utils, BrowserUtil } from '../index';
 
 describe('Utils', () => {
-	'use strict';
 
 	it('constructor happy path, even though not used', () => {
 		expect(Utils).not.toBeNull();
@@ -18,8 +17,8 @@ describe('Utils', () => {
 
 	it('getRequestParam() param found, no values, multiple params', () => {
 
-		spyOn(BrowserUtil, 'getWindowLocationSearch')
-			.and.returnValue('?foo&bar&bas');
+		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+			.mockReturnValue('?foo&bar&bas');
 
 		expect(Utils.getRequestParam('foo')).toBe('');
 		expect(Utils.getRequestParam('bar')).toBe('');
@@ -28,8 +27,8 @@ describe('Utils', () => {
 
 	it('getRequestParam() param found, values, multiple params', () => {
 
-		spyOn(BrowserUtil, 'getWindowLocationSearch')
-			.and.returnValue('?foo=fooValue&bar=barValue&bas=basValue');
+		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+			.mockReturnValue('?foo=fooValue&bar=barValue&bas=basValue');
 
 		expect(Utils.getRequestParam('foo')).toBe('fooValue');
 		expect(Utils.getRequestParam('bar')).toBe('barValue');
@@ -38,16 +37,16 @@ describe('Utils', () => {
 
 	it('getRequestParam() param not found', () => {
 
-		spyOn(BrowserUtil, 'getWindowLocationSearch')
-			.and.returnValue('?foo=fooValue&bar=barValue&bas=basValue');
+		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+			.mockReturnValue('?foo=fooValue&bar=barValue&bas=basValue');
 
 		expect(Utils.getRequestParam('notFound')).toBeNull();
 	});
 
 	it('getRequestParam() param not found, substring of param', () => {
 
-		spyOn(BrowserUtil, 'getWindowLocationSearch')
-			.and.returnValue('?debugMode=true');
+		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+			.mockReturnValue('?debugMode=true');
 
 		expect(Utils.getRequestParam('debug')).toBeNull();
 	});

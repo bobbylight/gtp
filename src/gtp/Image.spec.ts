@@ -1,7 +1,6 @@
 import { Image } from '../index';
 
 describe('Image', () => {
-	'use strict';
 
 	it('constructor happy path - 1 arg', () => {
 
