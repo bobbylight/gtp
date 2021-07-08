@@ -104,7 +104,7 @@ export default class AssetLoader {
 			imageSrc = this.assetRoot + imageSrc;
 		}
 
-		const  image: HTMLImageElement = document.createElement('img'); //new Image();
+		const image: HTMLImageElement = document.createElement('img'); //new Image();
 		if (this._isAlreadyTracked(id)) {
 			return;
 		}

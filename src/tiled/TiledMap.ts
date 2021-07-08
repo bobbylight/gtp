@@ -1,10 +1,12 @@
-import TiledTileset, { ImagePathModifier } from './TiledTileset';
+import TiledTileset, {ImagePathModifier} from './TiledTileset';
 import TiledLayer from './TiledLayer';
 import Image from '../gtp/Image';
 import Game from '../gtp/Game';
-import { Window } from '../gtp/GtpBase';
-import TiledProperty, { TiledPropertyType } from './TiledProperty';
-import { TypedMap } from '../gtp/TypedMap';
+import {Window} from '../gtp/GtpBase';
+import TiledProperty, {TiledPropertyType} from './TiledProperty';
+import {TypedMap} from '../gtp/TypedMap';
+import {TiledMapData} from "./TiledMapData";
+import {TiledMapArgs} from "./TiledMapArgs";
 
 /**
  * A <code>Tiled</code> map.
@@ -31,7 +33,7 @@ export default class TiledMap {
 	/**
 	 * A 2d game map, generated in Tiled.
 	 */
-	constructor(data: any, args: any) {
+	constructor(data: TiledMapData, args: TiledMapArgs) {
 
 		this.rowCount = data.height;
 		this.colCount = data.width;
@@ -41,7 +43,7 @@ export default class TiledMap {
 		this.screenHeight = args.screenHeight;
 		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
 		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-		const imagePathModifier: ImagePathModifier = args ? args.imagePathModifier : null;
+		const imagePathModifier: ImagePathModifier | undefined = args.imagePathModifier;
 
 		this.layers = [];
 		this.layersByName = {};
