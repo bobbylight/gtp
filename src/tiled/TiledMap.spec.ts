@@ -204,4 +204,22 @@ describe('TiledMap', () => {
 		expect(tiledMap.removeLayer('layer-1')).toBeFalsy();
 		expect(tiledMap.removeLayer('unknown')).toBeFalsy();
 	});
+
+	it('setScale() works properly', () => {
+
+		const args: any = {
+			tileWidth: 16,
+			tileHeight: 16,
+			screenWidth: 2,
+			screenHeight: 2,
+		};
+
+		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
+		const origTileWidth: number = tiledMap.tileWidth;
+		const origTileHeight: number = tiledMap.tileHeight;
+
+		tiledMap.setScale(3);
+		expect(tiledMap.tileWidth).toEqual(origTileWidth * 3);
+		expect(tiledMap.tileHeight).toEqual(origTileHeight * 3);
+	});
 });

@@ -180,60 +180,14 @@ export default class TiledMap {
 		}
 	}
 
-	/**
-	 * Returns a layer by name.
-	 *
-	 * @param name The name of the layer.
-	 * @return The layer, or null if there is no layer with that name.
-	 * @method
-	 */
-	getLayer(name: string): TiledLayer {
-		return this.layersByName[name];
-	}
-
-	/**
-	 * Returns a layer by index.
-	 *
-	 * @param index The index of the layer.
-	 * @return The layer, or null if there is no layer at
-	 *         that index.
-	 * @method
-	 */
-	getLayerByIndex(index: number): TiledLayer {
-		return this.layers[index];
-	}
-
-	/**
-	 * Returns the number of layers in this map.
-	 *
-	 * @return The number of layers in this map.
-	 */
-	getLayerCount(): number {
-		return this.layers.length;
-	}
-
-	private _getImageForGid(gid: number): TiledTileset {
-		const tilesetCount: number = this.tilesets.length;
-		for (let i: number = 0; i < tilesetCount; i++) {
-			if (this.tilesets[i].firstgid > gid) {
-				return this.tilesets[i - 1];
-			}
-		}
-		return this.tilesets[tilesetCount - 1];
-	}
-
-	getProperty<T extends TiledPropertyType>(name: string): T | null {
-		return this.propertiesByName[name] ? this.propertiesByName[name].value as T : null;
-	}
-
 	drawTile(ctx: CanvasRenderingContext2D, x: number, y: number,
-			value: number, layer: TiledLayer) {
+			 value: number, layer: TiledLayer) {
 
 		if (value <= 0) { // 0 => no tile to draw
 			return;
 		}
 
-		const tileset: TiledTileset = this._getImageForGid(value);
+		const tileset: TiledTileset = this.getImageForGid(value);
 		if (!tileset) {
 			console.log(`null tileset for: ${value} (layer ${layer.name})`);
 			return;
@@ -266,15 +220,50 @@ export default class TiledMap {
 
 	}
 
-	setScale(scale: number) {
-		this.tileWidth *= scale;
-		this.tileHeight *= scale;
-		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
-		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
+	/**
+	 * Returns a layer by name.
+	 *
+	 * @param name The name of the layer.
+	 * @return The layer, or null if there is no layer with that name.
+	 * @method
+	 */
+	getLayer(name: string): TiledLayer {
+		return this.layersByName[name];
+	}
+
+	/**
+	 * Returns a layer by index.
+	 *
+	 * @param index The index of the layer.
+	 * @return The layer, or null if there is no layer at
+	 *         that index.
+	 * @method
+	 */
+	getLayerByIndex(index: number): TiledLayer {
+		return this.layers[index];
+	}
+
+	/**
+	 * Returns the number of layers in this map.
+	 *
+	 * @return The number of layers in this map.
+	 */
+	getLayerCount(): number {
+		return this.layers.length;
+	}
+
+	private getImageForGid(gid: number): TiledTileset {
 		const tilesetCount: number = this.tilesets.length;
 		for (let i: number = 0; i < tilesetCount; i++) {
-			this.tilesets[i].setScale(scale);
+			if (this.tilesets[i].firstgid > gid) {
+				return this.tilesets[i - 1];
+			}
 		}
+		return this.tilesets[tilesetCount - 1];
+	}
+
+	getProperty<T extends TiledPropertyType>(name: string): T | null {
+		return this.propertiesByName[name] ? this.propertiesByName[name].value as T : null;
 	}
 
 	/**
@@ -317,5 +306,16 @@ export default class TiledMap {
 			}
 		}
 		return false;
+	}
+
+	setScale(scale: number) {
+		this.tileWidth *= scale;
+		this.tileHeight *= scale;
+		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
+		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
+		const tilesetCount: number = this.tilesets.length;
+		for (let i: number = 0; i < tilesetCount; i++) {
+			this.tilesets[i].setScale(scale);
+		}
 	}
 }
