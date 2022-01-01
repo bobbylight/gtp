@@ -47,7 +47,7 @@ describe('ImageUtils', () => {
 
 		const sizes: number[] = [ 1, 64, 255 ];
 
-		for (let size of sizes) {
+		for (const size of sizes) {
 
 			const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
 			canvas.width = size;
@@ -85,7 +85,7 @@ describe('ImageUtils', () => {
 
 		const sizes: number[] = [ 256, 257, 512 ];
 
-		for (let size of sizes) {
+		for (const size of sizes) {
 
 			const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
 			canvas.width = size;

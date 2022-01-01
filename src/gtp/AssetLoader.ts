@@ -351,7 +351,7 @@ export default class AssetLoader {
 
 	_completed(res: string, response: any) {
 		if (!this.loadingAssetData[res]) {
-			console.error('Resource not found! - ' + res);
+			console.error(`Resource not found! - ${res}`);
 			return;
 		}
 		if (this.loadingAssetData[res].type === AssetType.JSON) {

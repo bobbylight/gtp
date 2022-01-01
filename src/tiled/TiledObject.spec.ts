@@ -30,7 +30,7 @@ describe('TiledObject', () => {
 		expect(object.intersects(1, 1, 1, 1)).toBeTruthy();
 	});
 
-	it('intersects() returns success when top-leftcorner contained', () => {
+	it('intersects() returns success when top-left corner contained', () => {
 		expect(object.intersects(3, 3, 5, 5)).toBeTruthy();
 	});
 

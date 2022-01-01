@@ -28,6 +28,7 @@ import Utils from './gtp/Utils';
 
 import TiledLayer from './tiled/TiledLayer';
 import TiledMap from './tiled/TiledMap';
+import { TiledMapData } from './tiled/TiledMapData';
 import TiledObject from './tiled/TiledObject';
 import TiledTileset, { ImagePathModifier } from './tiled/TiledTileset';
 
@@ -64,6 +65,7 @@ export {
 	ImagePathModifier,
 	TiledLayer,
 	TiledMap,
+	TiledMapData,
 	TiledObject,
 	TiledTileset
 };

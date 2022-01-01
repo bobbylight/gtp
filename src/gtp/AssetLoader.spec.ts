@@ -66,6 +66,10 @@ describe('AssetLoader', () => {
 		expect(assetLoader.get('testJson')).toEqual({ test: 'json' });
 	});
 
+	it('addCanvas() loads the data', () => {
+		// TODO: Implement me
+	});
+
 	it('addSound() loads sound data if audio is enabled in this browser', () => {
 
 		window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;

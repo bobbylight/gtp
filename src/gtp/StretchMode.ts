@@ -24,7 +24,7 @@
  *       parent document, while maintaining its original aspect ratio.
  * </ul>
  */
-export enum StretchMode {
+export const enum StretchMode {
 
 	/**
 	 * No stretching is done.  If the area to paint in is smaller than

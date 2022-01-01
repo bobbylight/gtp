@@ -313,8 +313,8 @@ export default class TiledMap {
 						delete this.objectGroups[j];
 					}
 				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}

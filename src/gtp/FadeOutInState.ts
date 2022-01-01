@@ -34,7 +34,6 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 	override update(delta: number) {
 
 		super.update(delta);
-		//         console.log('delta === ' + delta);
 		this.curTime += delta;
 		if (this.curTime >= this.halfTime) {
 			this.curTime -= this.halfTime;
