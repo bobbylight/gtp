@@ -12,13 +12,7 @@ export default {
 	 * @return The number of elements in the object.
 	 */
 	getObjectSize(obj: any): number {
-		let size: number = 0;
-		for (const key in obj) {
-			if (obj.hasOwnProperty(key)) {
-				size++;
-			}
-		}
-		return size;
+		return Object.keys(obj).length;
 	},
 
 	/**
@@ -81,7 +75,7 @@ export default {
 	 */
 	mixin(source: any, target: any) {
 		for (const prop in source) {
-			if (source.hasOwnProperty(prop)) {
+			if (Object.prototype.hasOwnProperty.call(source, prop)) {
 				//if (!target[prop]) {
 				target[prop] = source[prop];
 				//}

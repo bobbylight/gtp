@@ -81,7 +81,9 @@ describe('Utils', () => {
 
 		const start: number = Utils.timestamp();
 		const waitUntil: number = Date.now() + DELAY + 1; // Wait > 300 milliseconds
-		while (Date.now() < waitUntil) {}
+		while (Date.now() < waitUntil) {
+			// empty - comment for eslint
+		}
 		const end: number = Utils.timestamp();
 		expect(end).toBeGreaterThan(start + 1);
 	});

@@ -1,6 +1,6 @@
 import TiledObject from './TiledObject';
 import TiledMap from './TiledMap';
-import { TypedMap } from '../gtp/TypedMap';
+import TypedMap from '../gtp/TypedMap';
 
 /**
  * A layer in a <code>Tiled</code> map.

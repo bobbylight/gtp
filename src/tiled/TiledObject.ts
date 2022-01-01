@@ -1,7 +1,7 @@
 import Game from '../gtp/Game';
 import { Window } from '../gtp/GtpBase';
 import TiledProperty, { TiledPropertyType } from './TiledProperty';
-import { TypedMap } from '../gtp/TypedMap';
+import TypedMap from '../gtp/TypedMap';
 
 /**
  * An object in a <code>Tiled</code> map.

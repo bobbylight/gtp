@@ -1,7 +1,7 @@
 import { Keys } from './Keys';
 import InputManager from './InputManager';
 import State from './State';
-import { GameTimer } from './GameTimer';
+import GameTimer from './GameTimer';
 import Timer from './Timer';
 import ImageUtils from './ImageUtils';
 import Utils from './Utils';

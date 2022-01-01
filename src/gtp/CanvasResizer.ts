@@ -30,6 +30,7 @@ export default {
 	 */
 	resize(canvas: HTMLCanvasElement, stretchMode: StretchMode) {
 
+		/* eslint-disable no-case-declarations */
 		switch (stretchMode) {
 
 			default:
@@ -44,8 +45,8 @@ export default {
 				break;
 
 			case StretchMode.STRETCH_PROPORTIONAL:
-				const xFactor: number = document.body.clientWidth / (canvas.width * 1.0);
-				const yFactor: number = document.body.clientHeight / (canvas.height * 1.0);
+				const xFactor: number = document.body.clientWidth / canvas.width;
+				const yFactor: number = document.body.clientHeight / canvas.height;
 				const factor: number = Math.min(xFactor, yFactor);
 				canvas.style.width = Math.floor(canvas.width * factor) + 'px';
 				canvas.style.height = Math.floor(canvas.height * factor) + 'px';
@@ -53,5 +54,6 @@ export default {
 				break;
 
 		}
+		/* eslint-enable no-case-declarations */
 	}
 };

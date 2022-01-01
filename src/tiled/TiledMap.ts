@@ -4,9 +4,9 @@ import Image from '../gtp/Image';
 import Game from '../gtp/Game';
 import {Window} from '../gtp/GtpBase';
 import TiledProperty, {TiledPropertyType} from './TiledProperty';
-import {TypedMap} from '../gtp/TypedMap';
-import {TiledMapData} from "./TiledMapData";
-import {TiledMapArgs} from "./TiledMapArgs";
+import TypedMap from '../gtp/TypedMap';
+import { TiledMapData } from './TiledMapData';
+import { TiledMapArgs } from './TiledMapArgs';
 
 /**
  * A <code>Tiled</code> map.
@@ -181,7 +181,7 @@ export default class TiledMap {
 	}
 
 	drawTile(ctx: CanvasRenderingContext2D, x: number, y: number,
-			 value: number, layer: TiledLayer) {
+			value: number, layer: TiledLayer) {
 
 		if (value <= 0) { // 0 => no tile to draw
 			return;

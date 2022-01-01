@@ -18,7 +18,7 @@ import InputManager from './gtp/InputManager';
 import { Keys } from './gtp/Keys';
 import Point from './gtp/Point';
 import Pool from './gtp/Pool';
-import Rectangle from './gtp/Rectangle';
+import Rectangle, { RectangularData } from './gtp/Rectangle';
 import Sound from './gtp/Sound';
 import SpriteSheet from './gtp/SpriteSheet';
 import { State, BaseStateArgs } from './gtp/State';
@@ -55,6 +55,7 @@ export {
 	Point,
 	Pool,
 	Rectangle,
+	RectangularData,
 	Sound,
 	SpriteSheet,
 	State,

@@ -4,7 +4,7 @@ import Utils from './Utils';
  * This class keeps track of game time.  That includes both total running
  * time, and "active time" (time not spent on paused screens, etc.).
  */
-export class GameTimer {
+export default class GameTimer {
 
 	private startShift: number;
 	private isPaused: boolean;

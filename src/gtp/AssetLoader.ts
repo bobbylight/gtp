@@ -186,7 +186,7 @@ export default class AssetLoader {
 
 			const imageMap: ImageMap = atlas.parse();
 			for (const key in imageMap) {
-				if (imageMap.hasOwnProperty(key)) {
+				if (Object.prototype.hasOwnProperty.call(imageMap, key)) {
 					// Images in an atlas aren't tracked individually, but as the single atlas (see below)
 					this.responses[prefix + key] = imageMap[key];
 				}
