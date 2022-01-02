@@ -136,8 +136,9 @@ export default class Game {
 	 */
 	randomInt(max: number): number {
 		const min: number = 0;
+		max = Math.floor(max);
 		// Using Math.round() would give a non-uniform distribution!
-		return Math.floor(Math.random() * (max - min + 1) + min);
+		return Math.floor(Math.random() * (max - min) + min);
 	}
 
 	render() {
@@ -146,14 +147,14 @@ export default class Game {
 		this.state.render(ctx);
 
 		if (this.showFps) {
-			this._renderFps(ctx);
+			this.renderFps(ctx);
 		}
 		if (this.statusMessage && this.statusMessageAlpha > 0) {
-			this._renderStatusMessage(ctx);
+			this.renderStatusMessage(ctx);
 		}
 	}
 
-	private _renderFps(ctx: CanvasRenderingContext2D) {
+	private renderFps(ctx: CanvasRenderingContext2D) {
 
 		this.frames++;
 		const now: number = Utils.timestamp();
@@ -171,7 +172,7 @@ export default class Game {
 
 	}
 
-	private _renderStatusMessage(ctx: CanvasRenderingContext2D) {
+	private renderStatusMessage(ctx: CanvasRenderingContext2D) {
 		if (this.statusMessage) {
 			const x: number = 10;
 			const y: number = this.canvas.height - 6;
@@ -226,12 +227,12 @@ export default class Game {
 	 * Starts the game loop.
 	 */
 	start() {
-		const callback: Function = this._tick.bind(this);
+		const callback: Function = this.tick.bind(this);
 		this.gameTimer.start();
 		setInterval(callback, this.interval);
 	}
 
-	private _tick() {
+	private tick() {
 
 		if (this.statusMessage) {
 			const time: number = Utils.timestamp();
