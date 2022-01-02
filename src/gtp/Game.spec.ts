@@ -6,6 +6,12 @@ class DummyState extends State<Game> {
 
 describe('Game', () => {
 
+	afterEach(() => {
+		jest.clearAllMocks();
+		jest.resetAllMocks();
+		jest.restoreAllMocks();
+	});
+
 	it('constructor happy path', () => {
 		new Game();
 	});
@@ -75,10 +81,8 @@ describe('Game', () => {
 		expect(game.playTime).toBeLessThan(firstPlayTime);
 	});
 
-	it('randomInt() works', async () => {
-
+	it('randomInt() works', () => {
 		const game: Game = new Game();
-
 		expect(game.randomInt(10)).toBeLessThan(10);
 	});
 
@@ -94,6 +98,22 @@ describe('Game', () => {
 
 		game.render();
 	});
+
+	it('start() starts an event loop', async () => {
+
+		const game: Game = new Game();
+		game.setState(new DummyState());
+		game.start();
+		game.toggleShowFps();
+
+		const updateSpy: jest.SpyInstance = jest.spyOn(game, 'update');
+		const renderSpy: jest.SpyInstance = jest.spyOn(game, 'render');
+
+		await new Promise(r => setTimeout(r, 50));
+		expect(updateSpy).toHaveBeenCalled();
+		expect(renderSpy).toHaveBeenCalled();
+	});
+
 
 	it('toggleMuted() toggles mute state', () => {
 		const game: Game = new Game();
