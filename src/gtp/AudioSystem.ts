@@ -199,7 +199,6 @@ export default class AudioSystem {
 
 			if (w.AudioContext) {
 				this.context = new w.AudioContext();
-				console.log('--- ' + this.context);
 				this.volumeFaderGain = this.context.createGain();
 				this.volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
 				this.volumeFaderGain.gain.value = 1;

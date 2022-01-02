@@ -24,8 +24,8 @@ describe('AssetLoader', () => {
 		}
 	}));
 
-	let origXmlHttpRequest: any | undefined = undefined;
-	let origAudioContext: any | undefined = undefined;
+	let origXmlHttpRequest: any = undefined;
+	let origAudioContext: any = undefined;
 
 	beforeAll(() => {
 		origXmlHttpRequest = window.XMLHttpRequest;
