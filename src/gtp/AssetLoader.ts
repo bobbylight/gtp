@@ -72,7 +72,7 @@ export default class AssetLoader {
 			url = this.assetRoot + url;
 		}
 
-		if (this._isAlreadyTracked(id)) {
+		if (this.isAlreadyTracked(id)) {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.JSON };
@@ -84,7 +84,7 @@ export default class AssetLoader {
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState === XMLHttpRequest.DONE) {
 				const response: string = xhr.responseText;
-				this._completed(id, response);
+				this.completed(id, response);
 			}
 		};
 
@@ -105,7 +105,7 @@ export default class AssetLoader {
 		}
 
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
-		if (this._isAlreadyTracked(id)) {
+		if (this.isAlreadyTracked(id)) {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.IMAGE };
@@ -114,7 +114,7 @@ export default class AssetLoader {
 			', callback == ' + (this.callback !== null));
 		image.addEventListener('load', () => {
 			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
-			this._completed(id, canvas);
+			this.completed(id, canvas);
 		});
 
 		image.src = imageSrc;
@@ -137,7 +137,7 @@ export default class AssetLoader {
 		}
 
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
-		if (this._isAlreadyTracked(id)) {
+		if (this.isAlreadyTracked(id)) {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.IMAGE };
@@ -150,7 +150,7 @@ export default class AssetLoader {
 			if (firstPixelTranslucent) {
 				gtpImage.makeColorTranslucent(0, 0);
 			}
-			this._completed(id, gtpImage);
+			this.completed(id, gtpImage);
 		});
 
 		image.src = imageSrc;
@@ -170,7 +170,7 @@ export default class AssetLoader {
 		}
 
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
-		if (this._isAlreadyTracked(id)) {
+		if (this.isAlreadyTracked(id)) {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.IMAGE };
@@ -192,7 +192,7 @@ export default class AssetLoader {
 				}
 			}
 
-			this._completed(id, atlas);
+			this.completed(id, atlas);
 		});
 
 		image.src = imageSrc;
@@ -213,7 +213,7 @@ export default class AssetLoader {
 
 		if (this.audio.isInitialized()) {
 
-			if (this._isAlreadyTracked(id)) {
+			if (this.isAlreadyTracked(id)) {
 				return;
 			}
 			this.loadingAssetData[id] = { type: AssetType.AUDIO };
@@ -229,7 +229,7 @@ export default class AssetLoader {
 					const sound: Sound = new Sound(id, buffer, loopStart || 0);
 					sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
 					this.audio.addSound(sound);
-					this._completed(id, buffer);
+					this.completed(id, buffer);
 				});
 			};
 
@@ -270,7 +270,7 @@ export default class AssetLoader {
 		}
 
 		const image: HTMLImageElement = document.createElement('img'); //new Image();
-		if (this._isAlreadyTracked(id)) {
+		if (this.isAlreadyTracked(id)) {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.IMAGE };
@@ -284,7 +284,7 @@ export default class AssetLoader {
 				gtpImage.makeColorTranslucent(0, 0);
 			}
 			const ss: SpriteSheet = new SpriteSheet(gtpImage, cellW, cellH, spacingX, spacingY);
-			this._completed(id, ss);
+			this.completed(id, ss);
 		});
 
 		image.src = imageSrc;
@@ -328,7 +328,7 @@ export default class AssetLoader {
 		return this.responses[res] as T;
 	}
 
-	_isAlreadyTracked(id: string): boolean {
+	private isAlreadyTracked(id: string): boolean {
 		if (this.loadingAssetData[id]) {
 			console.log(`A resource with id ${id} is already loading.  Assuming they are the same`);
 			return true;
@@ -349,7 +349,7 @@ export default class AssetLoader {
 		this.responses[res] = value;
 	}
 
-	_completed(res: string, response: any) {
+	private completed(res: string, response: any) {
 		if (!this.loadingAssetData[res]) {
 			console.error(`Resource not found! - ${res}`);
 			return;
