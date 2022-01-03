@@ -153,14 +153,19 @@ describe('AudioSystem', () => {
 		// Simulate no web audio support
 		(window as any).AudioContext = undefined;
 
-		const audio: AudioSystem = new AudioSystem();
-		expect(audio.init()).toBeFalsy(); // Notified of no support
+		try {
 
-		// But can still call the sound API - no need for wrapping in if-blocks
-		const buffer: AudioBuffer = {} as unknown as AudioBuffer;
-		const mockSound: Sound = new Sound('musicId', buffer);
-		audio.addSound(mockSound);
-		expect(audio.playSound('musicId')).toEqual(-1);
+			const audio: AudioSystem = new AudioSystem();
+			expect(audio.init()).toBeFalsy(); // Notified of no support
+
+			// But can still call the sound API - no need for wrapping in if-blocks
+			const buffer: AudioBuffer = {} as unknown as AudioBuffer;
+			const mockSound: Sound = new Sound('musicId', buffer);
+			audio.addSound(mockSound);
+			expect(audio.playSound('musicId')).toEqual(-1);
+		} finally {
+			window.AudioContext = mockAudioContext;
+		}
 	});
 
 	it('playSound() starts a sound effect', () => {
