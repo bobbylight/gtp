@@ -123,6 +123,20 @@ describe('AudioSystem', () => {
 		expect(audio.getCurrentMusic()).toEqual('musicId');
 	});
 
+	it('pauseAll() and resumeAll() toggle all sound effects', () => {
+
+		const buffer: AudioBuffer = {} as unknown as AudioBuffer;
+		const mockSound: Sound = new Sound('soundId', buffer);
+
+		const audio: AudioSystem = new AudioSystem();
+		audio.init();
+		audio.addSound(mockSound);
+		expect(audio.playSound('soundId')).toBeGreaterThan(-1);
+
+		audio.pauseAll();
+		audio.resumeAll();
+	});
+
 	it('playMusic() starts a track', () => {
 
 		const buffer: AudioBuffer = {} as unknown as AudioBuffer;
@@ -132,6 +146,21 @@ describe('AudioSystem', () => {
 		audio.init();
 		audio.addSound(mockSound);
 		audio.playMusic('musicId', true);
+	});
+
+	it('playSound() returns -1 if audio is not available in this browser', () => {
+
+		// Simulate no web audio support
+		(window as any).AudioContext = undefined;
+
+		const audio: AudioSystem = new AudioSystem();
+		expect(audio.init()).toBeFalsy(); // Notified of no support
+
+		// But can still call the sound API - no need for wrapping in if-blocks
+		const buffer: AudioBuffer = {} as unknown as AudioBuffer;
+		const mockSound: Sound = new Sound('musicId', buffer);
+		audio.addSound(mockSound);
+		expect(audio.playSound('musicId')).toEqual(-1);
 	});
 
 	it('playSound() starts a sound effect', () => {
