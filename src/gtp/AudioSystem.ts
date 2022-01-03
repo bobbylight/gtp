@@ -53,14 +53,13 @@ class PlayingSound {
 		this.source = this.config.audioSystem.context.createBufferSource();
 		this.source.loop = this.config.loop;
 		this.source.buffer = this.config.buffer;
-		if (this.config.connectTo instanceof AudioNode) {
-			this.source.connect(this.config.connectTo);
-		}
-		else {
-			const nodes: AudioNode[] = this.config.connectTo;
-			nodes.forEach((node: AudioNode) => {
+		if (this.config.connectTo instanceof Array) {
+			this.config.connectTo.forEach((node: AudioNode) => {
 				this.source!.connect(node);
 			});
+		}
+		else {
+			this.source.connect(this.config.connectTo);
 		}
 
 		this.startOffset = this.config.startOffset || 0;
@@ -127,7 +126,7 @@ export default class AudioSystem {
 	context!: AudioContext;
 	private volumeFaderGain!: GainNode;
 	private musicFaderGain?: GainNode;
-	private currentMusicId!: string;
+	private currentMusicId: string | undefined;
 	private musicLoopStart!: number;
 
 	/**
@@ -226,7 +225,7 @@ export default class AudioSystem {
 		}
 	}
 
-	fadeOutMusic(newMusicId: string) {
+	fadeOutMusic(newMusicId?: string) {
 
 		if (this.context) {
 			if (this.currentMusic) {
@@ -252,7 +251,7 @@ export default class AudioSystem {
 	 * @see playMusic
 	 * @see stopMusic
 	 */
-	getCurrentMusic(): string {
+	getCurrentMusic(): string | undefined {
 		return this.currentMusicId;
 	}
 
@@ -335,8 +334,8 @@ export default class AudioSystem {
 	 * @see stopSound
 	 */
 	playSound(id: string, loop: boolean = false, doneCallback?: SoundCompletedCallback): number {
-		if (this.context) {
 
+		if (this.context) {
 			const playingSound: PlayingSound = this.createPlayingSound(id, loop, 0, doneCallback);
 			this.playingSounds.push(playingSound);
 			playingSound.start();
@@ -389,6 +388,7 @@ export default class AudioSystem {
 				this.currentMusic.disconnect();
 				this.musicFaderGain!.disconnect();
 				delete this.currentMusic;
+				delete this.currentMusicId;
 				delete this.musicFaderGain;
 			}
 		}
