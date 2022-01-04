@@ -57,7 +57,7 @@ describe('AssetLoader', () => {
 	describe.each`
 		assetRoot
 		${undefined}
-		${''} // Just need a defined value to hit the code path but keep inline images working
+		${'data:'} // Kind of hacky, but use the start of our inline GIF image URL
 	`('when assetRoot is $assetRoot', ({ assetRoot }) => {
 
 		it('constructor, happy path', () => {
@@ -181,8 +181,11 @@ describe('AssetLoader', () => {
 			expect(assetLoader.get('testImage')).toBeUndefined();
 
 			// Add something to load, now we're waiting
-			assetLoader.addImage('testImage',
-				'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+			let imageSrc: string = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+			if (assetRoot) {
+				imageSrc = imageSrc.substring(assetRoot.length);
+			}
+			assetLoader.addImage('testImage', imageSrc);
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
 			await new Promise(r => setTimeout(r, 50));
@@ -216,9 +219,11 @@ describe('AssetLoader', () => {
 			};
 
 			// Add something to load, now we're waiting
-			assetLoader.addImageAtlasContents('unused',
-				'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
-				atlasInfo);
+			let imageSrc: string = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+			if (assetRoot) {
+				imageSrc = imageSrc.substring(assetRoot.length);
+			}
+			assetLoader.addImageAtlasContents('unused', imageSrc, atlasInfo);
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
 			await new Promise(r => setTimeout(r, 50));
