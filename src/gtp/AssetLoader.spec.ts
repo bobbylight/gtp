@@ -57,10 +57,11 @@ describe('AssetLoader', () => {
 	describe.each`
 		assetRoot
 		${undefined}
-		${'foo'}
+		${''} // Just need a defined value to hit the code path but keep inline images working
 	`('when assetRoot is $assetRoot', ({ assetRoot }) => {
+
 		it('constructor, happy path', () => {
-			new AssetLoader(1, new AudioSystem());
+			new AssetLoader(1, new AudioSystem(), assetRoot);
 		});
 
 		it('addJson() loads the data', () => {
@@ -152,7 +153,7 @@ describe('AssetLoader', () => {
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 
 			// Initially nothing queued up, so we're "done loading"
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem());
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			expect(assetLoader.get('testCanvas')).toBeUndefined();
@@ -174,7 +175,7 @@ describe('AssetLoader', () => {
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 
 			// Initially nothing queued up, so we're "done loading"
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem());
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			expect(assetLoader.get('testImage')).toBeUndefined();
@@ -196,7 +197,7 @@ describe('AssetLoader', () => {
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 
 			// Initially nothing queued up, so we're "done loading"
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem());
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			expect(assetLoader.get('testImage')).toBeUndefined();
@@ -234,7 +235,7 @@ describe('AssetLoader', () => {
 			// Initially nothing queued up, so we're "done loading"
 			const audioSystem: AudioSystem = new AudioSystem();
 			expect(audioSystem.init()).toBeTruthy();
-			const assetLoader: AssetLoader = new AssetLoader(1, audioSystem);
+			const assetLoader: AssetLoader = new AssetLoader(1, audioSystem, assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			expect(assetLoader.get('testSound')).toBeUndefined();
@@ -258,7 +259,7 @@ describe('AssetLoader', () => {
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 
 			// Initially nothing queued up, so we're "done loading"
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem());
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			expect(assetLoader.get('testImage')).toBeUndefined();
@@ -295,7 +296,7 @@ describe('AssetLoader', () => {
 
 			const map: TiledMap = new TiledMap(data, args);
 
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem());
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 
 			assetLoader.addTmxMap(map); // No errors
 		});
@@ -320,14 +321,14 @@ describe('AssetLoader', () => {
 
 			const map: TiledMap = new TiledMap(data, args);
 
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem());
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 
 			assetLoader.addTmxMap(map); // No errors
 		});
 
 		it('set() works to manually add a resource', () => {
 
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem());
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.get('foo')).toBeUndefined();
 
 			assetLoader.set('foo', 14);
