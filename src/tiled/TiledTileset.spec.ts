@@ -1,58 +1,28 @@
-import { TiledTileset, ImagePathModifier } from '../index';
+import TiledTileset, { scaleTileset } from './TiledTileset';
 
 describe('TiledTileset', () => {
 
-	const imageModifier: ImagePathModifier = (path: string): string => {
-		return `/prepended${path}`;
-	};
+	describe('scaleTileset', () => {
 
-	it('constructor happy path', () => {
+		it('scales a tileset as expected', () => {
 
-		const data: any = {
-			firstgid: 4,
-			image: '/path/to/image.png',
-			imagewidth: 22,
-			imageheight: 33,
-			margin: 44,
-			name: 'foo',
-			properties: {},
-			spacing: 55,
-			tilewidth: 66,
-			tileheight: 77
-		};
-		const tileset: TiledTileset = new TiledTileset(data, imageModifier);
+			const tileset = {
+				imagewidth: 2,
+				imageheight: 3,
+				tilewidth: 4,
+				tileheight: 5,
+				margin: 6,
+				spacing: 7,
+			} as TiledTileset;
 
-		expect(tileset.firstgid).toBe(data.firstgid);
-		expect(tileset.image).toBe(imageModifier(data.image));
-		expect(tileset.imageWidth).toBe(data.imagewidth);
-		expect(tileset.imageHeight).toBe(data.imageheight);
-		expect(tileset.margin).toBe(data.margin);
-		expect(tileset.name).toBe(data.name);
-		expect(tileset.properties).toBeDefined();
-		expect(tileset.spacing).toBe(data.spacing);
-		expect(tileset.tileWidth).toBe(data.tilewidth);
-		expect(tileset.tileHeight).toBe(data.tileheight);
-	});
+			scaleTileset(tileset, 2);
 
-	it('setScale() happy path', () => {
-
-		const data: any = {
-			imagewidth: 22,
-			imageheight: 33,
-			margin: 44,
-			spacing: 55,
-			tilewidth: 66,
-			tileheight: 77
-		};
-		const tileset: TiledTileset = new TiledTileset(data, imageModifier);
-
-		const SCALE: number = 4;
-		tileset.setScale(SCALE);
-		expect(tileset.imageWidth).toBe(data.imagewidth * SCALE);
-		expect(tileset.imageHeight).toBe(data.imageheight * SCALE);
-		expect(tileset.margin).toBe(data.margin * SCALE);
-		expect(tileset.spacing).toBe(data.spacing * SCALE);
-		expect(tileset.tileWidth).toBe(data.tilewidth * SCALE);
-		expect(tileset.tileHeight).toBe(data.tileheight * SCALE);
-	});
+			expect(tileset.imagewidth).toBe(4);
+			expect(tileset.imageheight).toBe(6);
+			expect(tileset.tilewidth).toBe(8);
+			expect(tileset.tileheight).toBe(10);
+			expect(tileset.margin).toBe(12);
+			expect(tileset.spacing).toBe(14);
+		});
+	})
 });

@@ -2,46 +2,56 @@ import TiledMap from './TiledMap';
 import TiledLayer from './TiledLayer';
 import { TiledMapData } from './TiledMapData';
 import Image from '../gtp/Image';
+import TiledTileset from './TiledTileset';
+import { TiledMapArgs } from './TiledMapArgs';
+import AssetLoader from '../gtp/AssetLoader';
+import AudioSystem from '../gtp/AudioSystem';
 
 const simpleMapData: TiledMapData = {
-	width: 2,
+	compressionlevel: -1,
 	height: 3,
+	infinite: false,
 	layers: [
 		{
+			data: [ 1, 1, 1, 1 ],
+			id: 1,
+			height: 2,
 			name: 'layer-1',
-			width: 2,
-			height: 2,
 			opacity: 1,
+			type: 'tilelayer',
 			visible: true,
+			width: 2,
 			x: 0,
 			y: 0,
-			data: [ 1, 1, 1, 1 ]
 		},
 		{
+			data: [ 2, 2, 2, 2 ],
+			id: 2,
+			height: 2,
 			name: 'layer-2',
-			width: 2,
-			height: 2,
 			opacity: 1,
+			type: 'tilelayer',
 			visible: true,
+			width: 2,
 			x: 0,
 			y: 0,
-			data: [ 2, 2, 2, 2 ]
 		},
 		{
-			name: 'layer-3',
-			width: 2,
-			height: 2,
-			opacity: 1,
-			visible: true,
-			x: 0,
-			y: 0,
 			data: [ 3, 3, 3, 3 ],
+			id: 3,
+			height: 2,
+			name: 'layer-3',
+			opacity: 1,
+			type: 'tilelayer',
+			visible: true,
+			width: 2,
+			x: 0,
+			y: 0,
 		},
 	],
-	tilesets: [
-		{
-		},
-	],
+	nextlayerid: 4,
+	nextobjectid: 1,
+	orientation: 'orthogonal',
 	properties: [
 		{
 			name: 'property-1',
@@ -49,19 +59,31 @@ const simpleMapData: TiledMapData = {
 			value: 5,
 		},
 	],
-	version: 1,
-	orientation: 'not-sure',
+	renderorder: 'right-down',
+	tiledversion: '1.8.3',
+	tileheight: 16,
+	tilewidth: 16,
+	tilesets: [
+		{
+			firstgid: 1,
+			source: 'test-tiles.json',
+		} as TiledTileset,
+	],
+	type: 'map',
+	version: '1.8',
+	width: 2,
 };
 
 describe('TiledMap', () => {
 
 	it('constructor adds the proper number of layers, tilesets and properties', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
 			screenWidth: 2,
 			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -76,17 +98,18 @@ describe('TiledMap', () => {
 		expect(tiledMap.tilesets.length).toEqual(1);
 
 		// Validate properties
-		expect(tiledMap.properties.length).toEqual(1);
-		expect(tiledMap.propertiesByName['property-1'].value).toEqual(5);
+		expect(tiledMap.properties?.length).toEqual(1);
+		expect(tiledMap.propertiesByName?.get('property-1')?.value).toEqual(5);
 	});
 
 	it('draw() renders the map', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
-			screenWidth: 1,
-			screenHeight: 1,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
+			screenWidth: 2,
+			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -111,11 +134,12 @@ describe('TiledMap', () => {
 
 	it('getLayer() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
-			screenWidth: 1,
-			screenHeight: 1,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
+			screenWidth: 2,
+			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -125,11 +149,12 @@ describe('TiledMap', () => {
 
 	it('getLayerByIndex() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
-			screenWidth: 1,
-			screenHeight: 1,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
+			screenWidth: 2,
+			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -139,11 +164,12 @@ describe('TiledMap', () => {
 
 	it('getLayerCount() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
-			screenWidth: 1,
-			screenHeight: 1,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
+			screenWidth: 2,
+			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -152,25 +178,27 @@ describe('TiledMap', () => {
 
 	it('getProperty() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
-			screenWidth: 1,
-			screenHeight: 1,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
+			screenWidth: 2,
+			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 		expect(tiledMap.getProperty('property-1')).toEqual(5);
-		expect(tiledMap.getProperty('unknown')).toBeNull();
+		expect(tiledMap.getProperty('unknown')).toBeUndefined();
 	});
 
 	it('getPixelHeight() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
 			screenWidth: 2,
-			screenHeight: 3,
+			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -179,11 +207,12 @@ describe('TiledMap', () => {
 
 	it('getPixelWidth() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
 			screenWidth: 2,
-			screenHeight: 3,
+			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -192,11 +221,12 @@ describe('TiledMap', () => {
 
 	it('removeLayer() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
 			screenWidth: 2,
 			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
@@ -207,19 +237,20 @@ describe('TiledMap', () => {
 
 	it('setScale() works properly', () => {
 
-		const args: any = {
-			tileWidth: 16,
-			tileHeight: 16,
+		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+		assets.set('test-tiles.json', {});
+		const args: TiledMapArgs = {
 			screenWidth: 2,
 			screenHeight: 2,
+			assets,
 		};
 
 		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
-		const origTileWidth: number = tiledMap.tileWidth;
-		const origTileHeight: number = tiledMap.tileHeight;
+		const origTileWidth: number = tiledMap.tilewidth;
+		const origTileHeight: number = tiledMap.tileheight;
 
 		tiledMap.setScale(3);
-		expect(tiledMap.tileWidth).toEqual(origTileWidth * 3);
-		expect(tiledMap.tileHeight).toEqual(origTileHeight * 3);
+		expect(tiledMap.tilewidth).toEqual(origTileWidth * 3);
+		expect(tiledMap.tileheight).toEqual(origTileHeight * 3);
 	});
 });

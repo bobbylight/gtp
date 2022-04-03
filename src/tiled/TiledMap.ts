@@ -1,100 +1,125 @@
-import TiledTileset, {ImagePathModifier} from './TiledTileset';
-import TiledLayer from './TiledLayer';
+import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTileset';
 import Image from '../gtp/Image';
 import Game from '../gtp/Game';
 import {Window} from '../gtp/GtpBase';
 import TiledProperty, {TiledPropertyType} from './TiledProperty';
-import TypedMap from '../gtp/TypedMap';
 import { TiledMapData } from './TiledMapData';
 import { TiledMapArgs } from './TiledMapArgs';
+import { TiledLayerData } from './TiledLayerData';
+import TiledLayer from './TiledLayer';
+import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer';
 
 /**
  * A <code>Tiled</code> map.
  */
-export default class TiledMap {
+export default class TiledMap implements TiledMapData, TiledPropertiesContainer {
 
-	rowCount: number;
-	colCount: number;
-	tileWidth: number;
-	tileHeight: number;
+	backgroundcolor?: string;
+	compressionlevel: number;
+	height: number;
+	hexsidelength?: number;
+	infinite: boolean;
+	layers: TiledLayer[];
+	nextlayerid: number;
+	nextobjectid: number;
+	orientation: 'orthogonal' | 'isometric' | 'staggered' | 'hexagonal';
+	parallaxoriginx?: number;
+	parallaxoriginy?: number;
+	properties?: TiledProperty[];
+	renderorder: 'right-down' | 'right-up' | 'left-down' | 'left-up';
+	staggeraxis?: 'x' | 'y';
+	staggerindex?: 'odd' | 'even';
+	tiledversion: string;
+	tileheight: number;
+	tilesets: TiledTileset[];
+	tilewidth: number;
+	type: 'map';
+	version: string;
+	width: number;
+
 	screenWidth: number;
 	screenHeight: number;
 	screenRows: number;
 	screenCols: number;
-	layers: TiledLayer[];
-	layersByName: TypedMap<TiledLayer>;
+	layersByName: Map<String, TiledLayer>;
 	objectGroups: TiledLayer[];
-	tilesets: TiledTileset[];
-	readonly properties: TiledProperty[];
-	readonly propertiesByName: TypedMap<TiledProperty>;
-	version: number;
-	orientation: string;
+	propertiesByName!: Map<String, TiledProperty>;
 
 	/**
 	 * A 2d game map, generated in Tiled.
 	 */
 	constructor(data: TiledMapData, args: TiledMapArgs) {
 
-		this.rowCount = data.height;
-		this.colCount = data.width;
-		this.tileWidth = args.tileWidth;
-		this.tileHeight = args.tileHeight;
+		// Standard Tiled map properties
+		this.backgroundcolor = data.backgroundcolor;
+		this.compressionlevel = data.compressionlevel;
+		this.height = data.height;
+		this.hexsidelength = data.hexsidelength;
+		this.infinite = data.infinite;
+		this.layers = data.layers.map(layer => new TiledLayer(this, layer));
+		this.nextlayerid = data.nextlayerid;
+		this.nextobjectid = data.nextobjectid;
+		this.orientation = data.orientation;
+		this.parallaxoriginx = data.parallaxoriginx;
+		this.parallaxoriginy = data.parallaxoriginy;
+		this.properties = data.properties;
+		this.renderorder = data.renderorder;
+		this.staggeraxis = data.staggeraxis;
+		this.staggerindex = data.staggerindex;
+		this.tiledversion = data.tiledversion;
+		this.tileheight = data.tileheight;
+		this.tilesets = data.tilesets;
+		this.tilewidth = data.tilewidth;
+		this.type = data.type;
+		this.version = data.version;
+		this.width = data.width;
+
+		// Properties we've added for convenience
 		this.screenWidth = args.screenWidth;
 		this.screenHeight = args.screenHeight;
-		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
-		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-		const imagePathModifier: ImagePathModifier | undefined = args.imagePathModifier;
+		this.screenRows = Math.ceil(this.screenHeight / this.tileheight);
+		this.screenCols = Math.ceil(this.screenWidth / this.tilewidth);
+		const imagePathModifier: TiledImagePathModifier | undefined = args.imagePathModifier;
 
-		this.layers = [];
-		this.layersByName = {};
-		this.objectGroups = [];
-		for (let i: number = 0; i < data.layers.length; i++) {
-			this.addLayer(data.layers[i]);
-		}
-
-		this.tilesets = [];
-		if (data.tilesets && data.tilesets.length) {
-			for (let i: number = 0; i < data.tilesets.length; i++) {
-				this.tilesets.push(new TiledTileset(data.tilesets[i], imagePathModifier));
+		this.tilesets = data.tilesets.map(tileset => {
+			// Newer Tiled versions reference most tileset data in external JSON
+			// files via a "source" property. Sniff that out and inline all tileset
+			// data into the map for simplicity.
+			if (tileset.source) {
+				tileset = args.assets.get(tileset.source);
 			}
-		}
-
-		this.properties = data.properties || [];
-		this.version = data.version;
-		this.orientation = data.orientation;
-
-		this.propertiesByName = {};
-		this.properties.forEach((property: TiledProperty) => {
-			this.propertiesByName[property.name] = property;
+			return tileset;
 		});
-	}
+		this.tilesets = [];
+		data.tilesets.forEach(tileset => {
+			if (imagePathModifier) {
+				tileset.image = imagePathModifier(tileset.image);
+			}
+			this.tilesets.push(tileset);
+		});
 
-	/**
-	 * Adds a layer to this map.  This method is called internally by the library
-	 * and the programmer typically does not need to call it.
-	 *
-	 * @param layerData The raw layer data.
-	 * @method
-	 */
-	addLayer(layerData: any) {
-		const layer: TiledLayer = new TiledLayer(this, layerData);
-		this.layers.push(layer);
-		this.layersByName[layer.name] = layer;
-		if (layer.isObjectGroup()) {
-			this.objectGroups.push(layer);
-		}
+		this.layersByName = new Map<String, TiledLayer>();
+		this.objectGroups = [];
+		this.layers.forEach(layer => {
+			this.layersByName.set(layer.name, layer);
+			if (layer.isObjectGroup()) {
+				this.objectGroups.push(layer);
+			}
+		});
+
+		initPropertiesByName(this);
 	}
 
 	draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number,
 			dx: number = 0, dy: number = 0) {
 
-		const colCount: number = this.colCount;
-		const rowCount: number = this.rowCount;
+		const colCount: number = this.width;
+		const rowCount: number = this.height;
 
 		const screenCols: number = this.screenRows;
 		const screenRows: number = this.screenCols;
-		const tileW: number = this.tileWidth;
-		const tileH: number = this.tileHeight;
+		const tileW: number = this.tilewidth;
+		const tileH: number = this.tileheight;
 		const tileSize: number = tileW; // Assumes square tiles (!).  Fix me one day
 		const screenWidth: number = this.screenWidth;
 		const screenHeight: number = this.screenHeight;
@@ -143,14 +168,12 @@ export default class TiledMap {
 
 		// Paint until the end of the screen
 		let row: number = topLeftRow;
-		const layerCount: number = this.getLayerCount();
 		while (y < screenHeight) {
-			for (let l: number = 0; l < layerCount; l++) {
+			this.layers.forEach(layer => {
 
 				let col: number = topLeftCol;
 				x = startX;
 
-				const layer: TiledLayer = this.getLayerByIndex(l);
 				if (layer.visible) {
 
 					let prevOpacity: number = 1; // Default value needed for strict null checks
@@ -173,7 +196,7 @@ export default class TiledMap {
 				}
 
 				// Here we could render sprites in-between layers
-			}
+			});
 
 			y += tileH;
 			row++;
@@ -181,13 +204,13 @@ export default class TiledMap {
 	}
 
 	drawTile(ctx: CanvasRenderingContext2D, x: number, y: number,
-			value: number, layer: TiledLayer) {
+			value: number, layer: TiledLayerData) {
 
 		if (value <= 0) { // 0 => no tile to draw
 			return;
 		}
 
-		const tileset: TiledTileset = this.getImageForGid(value);
+		const tileset: TiledTileset = this.getTilesetForGid(value);
 		if (!tileset) {
 			console.log(`null tileset for: ${value} (layer ${layer.name})`);
 			return;
@@ -202,9 +225,9 @@ export default class TiledMap {
 		const game: Game = gameWindow.game;
 		const img: Image = game.assets.getTmxTilesetImage(tileset);
 
-		const tileW: number = this.tileWidth;
+		const tileW: number = this.tilewidth;
 		const sw: number = tileW + tileset.spacing;
-		const tileH: number = this.tileHeight;
+		const tileH: number = this.tileheight;
 		const sh: number = tileH + tileset.spacing;
 
 		// TODO: "+ 1" is based on extra space at end of image.  Should be configured/calculated
@@ -221,21 +244,36 @@ export default class TiledMap {
 	}
 
 	/**
-	 * Returns a layer by name.
+	 * Returns a layer by name. Throws an error if the layer does not exist.
 	 *
 	 * @param name The name of the layer.
-	 * @return The layer, or null if there is no layer with that name.
+	 * @return The layer.
 	 * @method
 	 */
 	getLayer(name: string): TiledLayer {
-		return this.layersByName[name];
+		const layer = this.layersByName.get(name);
+		if (!layer) {
+			throw new Error(`No such layer: ${name}`);
+		}
+		return layer;
+	}
+
+	/**
+	 * Returns a layer by name.
+	 *
+	 * @param name The layer to return.
+	 * @return The layer, or <code>undefined</code> if it does not exist.
+	 * @method
+	 */
+	getLayerIfExists(name: string): TiledLayer | undefined {
+		return this.layersByName.get(name);
 	}
 
 	/**
 	 * Returns a layer by index.
 	 *
 	 * @param index The index of the layer.
-	 * @return The layer, or null if there is no layer at
+	 * @return The layer, or undefined if there is no layer at
 	 *         that index.
 	 * @method
 	 */
@@ -252,18 +290,17 @@ export default class TiledMap {
 		return this.layers.length;
 	}
 
-	private getImageForGid(gid: number): TiledTileset {
-		const tilesetCount: number = this.tilesets.length;
-		for (let i: number = 0; i < tilesetCount; i++) {
-			if (this.tilesets[i].firstgid > gid) {
-				return this.tilesets[i - 1];
-			}
-		}
-		return this.tilesets[tilesetCount - 1];
-	}
-
-	getProperty<T extends TiledPropertyType>(name: string): T | null {
-		return this.propertiesByName[name] ? this.propertiesByName[name].value as T : null;
+	/**
+	 * A utility method to fetch a property from this map.
+	 * This is a convenience method for <code>map.propertiesByName.get(name)!</code>.
+	 * An error is thrown if the property does not exist.
+	 *
+	 * @param name The name of the property to retrieve.
+	 * @return The property's value.
+	 * @method
+	 */
+	getProperty<T extends TiledPropertyType>(name: string): T {
+		return getProperty(this, name);
 	}
 
 	/**
@@ -273,7 +310,7 @@ export default class TiledMap {
 	 * @method
 	 */
 	getPixelWidth(): number {
-		return this.colCount * this.tileWidth;
+		return this.width * this.tilewidth;
 	}
 
 	/**
@@ -283,11 +320,25 @@ export default class TiledMap {
 	 * @method
 	 */
 	getPixelHeight(): number {
-		return this.rowCount * this.tileHeight;
+		return this.height * this.tileheight;
+	}
+
+	private getTilesetForGid(gid: number): TiledTileset {
+		const tilesetCount: number = this.tilesets.length;
+		for (let i: number = 0; i < tilesetCount; i++) {
+			if (this.tilesets[i].firstgid > gid) {
+				return this.tilesets[i - 1];
+			}
+		}
+		return this.tilesets[tilesetCount - 1];
 	}
 
 	/**
-	 * Removes a layer from this map.
+	 * Removes a layer from this map. This should be called instead of
+	 * manually manipulating the <code>layers</code> property directly
+	 * to ensure <code>layersByName</code> and <objectGroups</code>
+	 * stay in sync.
+	 *
 	 * @param layerName The name of the layer to remove.
 	 * @return Whether a layer by that name was found.
 	 * @method
@@ -296,7 +347,7 @@ export default class TiledMap {
 		for (let i: number = 0; i < this.layers.length; i++) {
 			if (this.layers[i].name === layerName) {
 				this.layers.splice(i, 1);
-				delete this.layersByName[layerName];
+				this.layersByName.delete(layerName);
 				for (let j: number = 0; j < this.objectGroups.length; j++) {
 					if (this.objectGroups[j].name === layerName) {
 						delete this.objectGroups[j];
@@ -309,13 +360,10 @@ export default class TiledMap {
 	}
 
 	setScale(scale: number) {
-		this.tileWidth *= scale;
-		this.tileHeight *= scale;
-		this.screenRows = Math.ceil(this.screenHeight / this.tileHeight);
-		this.screenCols = Math.ceil(this.screenWidth / this.tileWidth);
-		const tilesetCount: number = this.tilesets.length;
-		for (let i: number = 0; i < tilesetCount; i++) {
-			this.tilesets[i].setScale(scale);
-		}
+		this.tilewidth *= scale;
+		this.tileheight *= scale;
+		this.screenRows = Math.ceil(this.screenHeight / this.tileheight);
+		this.screenCols = Math.ceil(this.screenWidth / this.tilewidth);
+		this.tilesets.forEach(tileset => scaleTileset(tileset, scale));
 	}
 }

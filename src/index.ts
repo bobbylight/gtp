@@ -30,7 +30,7 @@ import TiledLayer from './tiled/TiledLayer';
 import TiledMap from './tiled/TiledMap';
 import { TiledMapData } from './tiled/TiledMapData';
 import TiledObject from './tiled/TiledObject';
-import TiledTileset, { ImagePathModifier } from './tiled/TiledTileset';
+import TiledTileset, { TiledImagePathModifier } from './tiled/TiledTileset';
 
 export {
 	AssetLoader,
@@ -63,7 +63,7 @@ export {
 	Timer,
 	Utils,
 
-	ImagePathModifier,
+	TiledImagePathModifier,
 	TiledLayer,
 	TiledMap,
 	TiledMapData,
