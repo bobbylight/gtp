@@ -298,13 +298,10 @@ export default class AssetLoader {
 	 * @param map The Tiled map.
 	 */
 	addTmxMap(map: TiledMap) {
-		if (map.tilesets && map.tilesets.length) {
-			for (let i: number = 0; i < map.tilesets.length; i++) {
-				const tileset: TiledTileset = map.tilesets[i];
-				const id: string = '_tilesetImage_' + tileset.name;
-				this.addImage(id, tileset.image);
-			}
-		}
+		map.tilesets.forEach(tileset => {
+			const id: string = '_tilesetImage_' + tileset.name;
+			this.addImage(id, tileset.image);
+		});
 	}
 
 	/**
@@ -322,10 +319,14 @@ export default class AssetLoader {
 	/**
 	 * Retrieves a resource by ID.
 	 * @param res The ID of the resource.
-	 * @return The resource, or <code>undefined</code> if not found.
+	 * @return The resource. An error is thrown if the resource isn't found.
 	 */
 	get<T>(res: string): T {
-		return this.responses[res] as T;
+		const resource: T | undefined = this.responses[res];
+		if (!resource) {
+			throw new Error(`Resource is not loaded: ${res}`);
+		}
+		return resource;
 	}
 
 	private isAlreadyTracked(id: string): boolean {

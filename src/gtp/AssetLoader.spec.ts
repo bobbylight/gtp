@@ -72,8 +72,6 @@ describe('AssetLoader', () => {
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
-			expect(assetLoader.get('testJson')).toBeUndefined();
-
 			// Add something to load, now we're waiting
 			assetLoader.addJson('testJson', '/fake/url.json');
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
@@ -97,8 +95,6 @@ describe('AssetLoader', () => {
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
-
-			expect(assetLoader.get('testJson')).toBeUndefined();
 
 			// Add something to load, now we're waiting
 			assetLoader.addJson('testJson', '/fake/url.json');
@@ -128,8 +124,6 @@ describe('AssetLoader', () => {
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
-			expect(assetLoader.get('testJson')).toBeUndefined();
-
 			// Add something to load, now we're waiting
 			assetLoader.addJson('testJson', '/fake/url.json');
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
@@ -156,8 +150,6 @@ describe('AssetLoader', () => {
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
-			expect(assetLoader.get('testCanvas')).toBeUndefined();
-
 			// Add something to load, now we're waiting
 			assetLoader.addCanvas('testCanvas',
 				'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
@@ -177,8 +169,6 @@ describe('AssetLoader', () => {
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
-
-			expect(assetLoader.get('testImage')).toBeUndefined();
 
 			// Add something to load, now we're waiting
 			let imageSrc: string = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
@@ -202,8 +192,6 @@ describe('AssetLoader', () => {
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
-
-			expect(assetLoader.get('testImage')).toBeUndefined();
 
 			const atlasInfo: ImageAtlasInfo = {
 				prefix: 'testAtlasImages',
@@ -243,8 +231,6 @@ describe('AssetLoader', () => {
 			const assetLoader: AssetLoader = new AssetLoader(1, audioSystem, assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
-			expect(assetLoader.get('testSound')).toBeUndefined();
-
 			// Add something to load, now we're waiting
 			assetLoader.addSound('testSound', '/fake/sound.ogg');
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
@@ -267,8 +253,6 @@ describe('AssetLoader', () => {
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
-			expect(assetLoader.get('testImage')).toBeUndefined();
-
 			// Add something to load, now we're waiting
 			assetLoader.addSpriteSheet('testSheet',
 				'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
@@ -285,23 +269,31 @@ describe('AssetLoader', () => {
 		it('addTmxMap() works with undefined tilesets', () => {
 
 			const data: TiledMapData = {
-				width: 1,
+				compressionlevel: -1,
 				height: 1,
-				version: 1,
+				infinite: false,
 				layers: [],
+				nextlayerid: 4,
+				nextobjectid: 4,
+				orientation: 'orthogonal',
 				properties: [],
-				orientation: 'not-sure',
+				renderorder: 'right-down',
+				tileheight: 16,
+				tiledversion: '1.8.3',
+				tilewidth: 16,
+				tilesets: [],
+				type: 'map',
+				version: '1.8',
+				width: 1,
 			};
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			const args: TiledMapArgs = {
-				tileWidth: 16,
-				tileHeight: 16,
 				screenWidth: 1,
 				screenHeight: 1,
+				assets: assetLoader,
 			};
 
 			const map: TiledMap = new TiledMap(data, args);
-
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 
 			assetLoader.addTmxMap(map); // No errors
 		});
@@ -309,24 +301,31 @@ describe('AssetLoader', () => {
 		it('addTmxMap() works with empty tilesets', () => {
 
 			const data: TiledMapData = {
-				width: 1,
+				compressionlevel: -1,
 				height: 1,
-				version: 1,
+				infinite: false,
 				layers: [],
+				nextlayerid: 4,
+				nextobjectid: 4,
+				orientation: 'orthogonal',
 				properties: [],
-				orientation: 'not-sure',
+				renderorder: 'right-down',
+				tileheight: 16,
+				tiledversion: '1.8.3',
+				tilewidth: 16,
 				tilesets: [],
+				type: 'map',
+				version: '1.8',
+				width: 1,
 			};
+			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			const args: TiledMapArgs = {
-				tileWidth: 16,
-				tileHeight: 16,
 				screenWidth: 1,
 				screenHeight: 1,
+				assets: assetLoader,
 			};
 
 			const map: TiledMap = new TiledMap(data, args);
-
-			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 
 			assetLoader.addTmxMap(map); // No errors
 		});
@@ -334,7 +333,6 @@ describe('AssetLoader', () => {
 		it('set() works to manually add a resource', () => {
 
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.get('foo')).toBeUndefined();
 
 			assetLoader.set('foo', 14);
 			expect(assetLoader.get('foo')).toEqual(14);
