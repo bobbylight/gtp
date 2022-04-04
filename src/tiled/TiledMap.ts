@@ -2,7 +2,7 @@ import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTiles
 import Image from '../gtp/Image';
 import Game from '../gtp/Game';
 import {Window} from '../gtp/GtpBase';
-import TiledProperty, {TiledPropertyType} from './TiledProperty';
+import TiledProperty from './TiledProperty';
 import { TiledMapData } from './TiledMapData';
 import { TiledMapArgs } from './TiledMapArgs';
 import { TiledLayerData } from './TiledLayerData';
@@ -312,15 +312,17 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 
 	/**
 	 * A utility method to fetch a property from this map.
-	 * This is a convenience method for <code>map.propertiesByName.get(name)!</code>.
-	 * An error is thrown if the property does not exist.
+	 * This is a convenience method for <code>layer.propertiesByName.get(name)!</code>.
+	 * An error is thrown if the property does not exist and no default is specified.
 	 *
 	 * @param name The name of the property to retrieve.
+	 * @param defaultValue The default value to return if the property does not exist,
+	 *        or omitted or <code>undefined</code>.
 	 * @return The property's value.
 	 * @method
 	 */
-	getProperty<T extends TiledPropertyType>(name: string): T {
-		return getProperty(this, name);
+	getProperty<T>(name: string, defaultValue?: T): T {
+		return getProperty(this, name, defaultValue);
 	}
 
 	private getTilesetForGid(gid: number): TiledTileset {

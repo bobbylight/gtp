@@ -1,8 +1,11 @@
-import TiledProperty, { TiledPropertyType } from './TiledProperty';
+import TiledProperty from './TiledProperty';
 
-export function getProperty<T extends TiledPropertyType>(container: TiledPropertiesContainer, name: string): T {
+export function getProperty<T>(container: TiledPropertiesContainer, name: string, defaultValue?: T): T {
 	const result: TiledProperty | undefined = container.propertiesByName.get(name);
 	if (!result) {
+		if (typeof defaultValue !== 'undefined') {
+			return defaultValue;
+		}
 		throw new Error(`No such property on object, or named properties not initialized: ${name}`);
 	}
 	return result.value;

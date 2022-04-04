@@ -1,7 +1,7 @@
 import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer';
 import TiledProperty from './TiledProperty';
 
-describe('TiledPropertiesContaainer', () => {
+describe('TiledPropertiesContainer', () => {
 
 	let object: TiledPropertiesContainer;
 
@@ -32,7 +32,12 @@ describe('TiledPropertiesContaainer', () => {
 			expect(getProperty(object, 'foo')).toBe(object.properties![0].value);
 		});
 
-		it('throws ab error if the property is not defined', () => {
+		it('returns the default value if one is specified and the property is not defined', () => {
+			initPropertiesByName(object);
+			expect(getProperty(object, 'unknown', false)).toBe(false);
+		});
+
+		it('throws an error if the property is not defined and there is no default', () => {
 			expect(() => getProperty(object, 'unknown')).toThrowError();
 		});
 	});
