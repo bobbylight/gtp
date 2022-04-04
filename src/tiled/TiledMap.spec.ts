@@ -165,7 +165,11 @@ describe('TiledMap', () => {
 			expect(tiledMap.getProperty('property-1')).toBeDefined();
 		});
 
-		it('throws an error if the property requested is not defined', () => {
+		it('returns the default value if one is specified and the property is not defined', () => {
+			expect(tiledMap.getProperty('unknown', false)).toBe(false);
+		});
+
+		it('throws an error if the property requested is not defined and there is no default', () => {
 			expect(() => tiledMap.getProperty('unknown')).toThrowError();
 		});
 	});

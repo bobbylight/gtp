@@ -1,7 +1,7 @@
 import TiledObject, { intersects } from './TiledObject';
 import TiledMap from './TiledMap';
 import { TiledLayerData } from './TiledLayerData';
-import TiledProperty, { TiledPropertyType } from './TiledProperty';
+import TiledProperty from './TiledProperty';
 import { TiledChunk } from './TiledChunk';
 import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer';
 
@@ -115,14 +115,16 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 	/**
 	 * A utility method to fetch a property from this map.
 	 * This is a convenience method for <code>layer.propertiesByName.get(name)!</code>.
-	 * An error is thrown if the property does not exist.
+	 * An error is thrown if the property does not exist and no default is specified.
 	 *
 	 * @param name The name of the property to retrieve.
+	 * @param defaultValue The default value to return if the property does not exist,
+	 *        or omitted or <code>undefined</code>.
 	 * @return The property's value.
 	 * @method
 	 */
-	getProperty<T extends TiledPropertyType>(name: string): T {
-		return getProperty(this, name);
+	getProperty<T>(name: string, defaultValue?: T): T {
+		return getProperty(this, name, defaultValue);
 	}
 
 	isObjectGroup(): boolean {
