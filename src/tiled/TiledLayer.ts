@@ -1,4 +1,4 @@
-import TiledObject, { intersects, populatePropertiesByName } from './TiledObject';
+import TiledObject, { intersects } from './TiledObject';
 import TiledMap from './TiledMap';
 import { TiledLayerData } from './TiledLayerData';
 import TiledProperty, { TiledPropertyType } from './TiledProperty';
@@ -13,7 +13,7 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 
 	chunks?: TiledChunk[];
 	compression?: 'zlib' | 'gzip' | 'zstd';
-	data: number[] | string;
+	data?: number[] | string;
 	draworder?: 'topdown' | 'index';
 	encoding?: 'csv' | 'base64';
 	height: number;
@@ -101,7 +101,7 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 	}
 
 	private _getIndex(row: number, col: number): number {
-		return row * this.map.width + col;
+		return row * this.width + col;
 	}
 
 	getObjectByName(name: string): TiledObject | undefined {
@@ -135,7 +135,7 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 			this.objectsByName = new Map<String, TiledObject>();
 
 			objects.forEach(object => {
-				populatePropertiesByName(object);
+				initPropertiesByName(object);
 				this.objects!.push(object);
 				this.objectsByName!.set(object.name, object);
 			});
