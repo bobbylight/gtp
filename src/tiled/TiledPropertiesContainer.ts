@@ -3,7 +3,7 @@ import TiledProperty, { TiledPropertyType } from './TiledProperty';
 export function getProperty<T extends TiledPropertyType>(container: TiledPropertiesContainer, name: string): T {
 	const result: TiledProperty | undefined = container.propertiesByName.get(name);
 	if (!result) {
-		throw new Error(`No such property on object: ${name}`);
+		throw new Error(`No such property on object, or named properties not initialized: ${name}`);
 	}
 	return result.value;
 }

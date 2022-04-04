@@ -19,8 +19,9 @@ export interface TiledLayerData {
 
 	/**
 	 * An array of unsigned ints (GID) or base64-encoded data.
+	 * Only on <code>tilelayer</code>s.
 	 */
-	data: number[] | string;
+	data?: number[] | string;
 
 	/**
 	 * <code>topdown</code> is the default.  Only used in

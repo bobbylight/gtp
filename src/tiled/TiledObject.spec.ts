@@ -1,4 +1,4 @@
-import TiledObject, { intersects, populatePropertiesByName, scaleObject } from './TiledObject';
+import TiledObject, { intersects, scaleObject } from './TiledObject';
 
 describe('TiledObject', () => {
 
@@ -23,24 +23,6 @@ describe('TiledObject', () => {
 			expect(object.width).toBe(15);
 			expect(object.height).toBe(15);
 		});
-	});
-
-	describe('populatePropertiesByName()', () => {
-
-		it('works in the happy path', () => {
-
-			object.properties = [
-				{
-					name: 'foo',
-					value: 3,
-					type: 'int'
-				},
-			];
-
-			populatePropertiesByName(object);
-
-			expect(object.propertiesByName.get('foo')).toBe(object.properties[0]);
-		})
 	});
 
 	describe('intersects()', () => {

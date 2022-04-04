@@ -76,22 +76,28 @@ const simpleMapData: TiledMapData = {
 
 describe('TiledMap', () => {
 
-	it('constructor adds the proper number of layers, tilesets and properties', () => {
+	let assets: AssetLoader;
+	let tiledMap: TiledMap;
 
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
+	beforeEach(() => {
+
+		assets = new AssetLoader(1, new AudioSystem(), '');
 		assets.set('test-tiles.json', {});
+
 		const args: TiledMapArgs = {
 			screenWidth: 2,
 			screenHeight: 2,
 			assets,
 		};
+		tiledMap = new TiledMap(simpleMapData, args);
+	});
 
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
+	it('constructor adds the proper number of layers, tilesets and properties', () => {
 
 		// Validate layers
 		expect(tiledMap.layers.length).toEqual(3);
 		tiledMap.layers.forEach((layer: TiledLayer, index: number) => {
-			expect(layer.data[0]).toEqual(index + 1);
+			expect(layer.data![0]).toEqual(index + 1);
 		});
 
 		// Validate tilesets
@@ -103,16 +109,6 @@ describe('TiledMap', () => {
 	});
 
 	it('draw() renders the map', () => {
-
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
-
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 
 		const mockImage: Image = {
 			drawScaled2: jest.fn(),
@@ -132,104 +128,57 @@ describe('TiledMap', () => {
 		expect(mockImage.drawScaled2).toHaveBeenCalled();
 	});
 
-	it('getLayer() works properly', () => {
+	describe('getLayer()', () => {
 
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
+		it('returns a value in the happy path', () => {
+			expect(tiledMap.getLayer('layer-1')).toBeDefined();
+		});
 
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
-		expect(tiledMap.getLayer('layer-1')).toBeDefined();
-		expect(tiledMap.getLayer('unknown')).not.toBeDefined();
+		it('throws an error if the layer requested is not defined', () => {
+			expect(() => tiledMap.getLayer('unknown')).toThrowError();
+		});
+	});
+
+	describe('getLayerIfExists()', () => {
+
+		it('returns a value in the happy path', () => {
+			expect(tiledMap.getLayerIfExists('layer-1')).toBeDefined();
+		});
+
+		it('returns undefined if the layer does not exist', () => {
+			expect(tiledMap.getLayerIfExists('unknown')).toBeUndefined();
+		});
 	});
 
 	it('getLayerByIndex() works properly', () => {
-
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
-
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 		expect(tiledMap.getLayerByIndex(0)).toBeDefined();
 		expect(tiledMap.getLayerByIndex(999)).not.toBeDefined();
 	});
 
 	it('getLayerCount() works properly', () => {
-
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
-
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 		expect(tiledMap.getLayerCount()).toEqual(3);
 	});
 
-	it('getProperty() works properly', () => {
+	describe('getProperty()', () => {
 
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
+		it('returns a value in the happy path', () => {
+			expect(tiledMap.getProperty('property-1')).toBeDefined();
+		});
 
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
-		expect(tiledMap.getProperty('property-1')).toEqual(5);
-		expect(tiledMap.getProperty('unknown')).toBeUndefined();
+		it('throws an error if the property requested is not defined', () => {
+			expect(() => tiledMap.getProperty('unknown')).toThrowError();
+		});
 	});
 
 	it('getPixelHeight() works properly', () => {
-
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
-
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 		expect(tiledMap.getPixelHeight()).toEqual(48);
 	});
 
 	it('getPixelWidth() works properly', () => {
-
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
-
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 		expect(tiledMap.getPixelWidth()).toEqual(32);
 	});
 
 	it('removeLayer() works properly', () => {
-
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
-
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 		expect(tiledMap.removeLayer('layer-1')).toBeTruthy();
 		expect(tiledMap.removeLayer('layer-1')).toBeFalsy();
 		expect(tiledMap.removeLayer('unknown')).toBeFalsy();
@@ -237,15 +186,6 @@ describe('TiledMap', () => {
 
 	it('setScale() works properly', () => {
 
-		const assets: AssetLoader = new AssetLoader(1, new AudioSystem(), '');
-		assets.set('test-tiles.json', {});
-		const args: TiledMapArgs = {
-			screenWidth: 2,
-			screenHeight: 2,
-			assets,
-		};
-
-		const tiledMap: TiledMap = new TiledMap(simpleMapData, args);
 		const origTileWidth: number = tiledMap.tilewidth;
 		const origTileHeight: number = tiledMap.tileheight;
 

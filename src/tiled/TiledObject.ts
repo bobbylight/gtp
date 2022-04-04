@@ -1,17 +1,11 @@
 import TiledProperty from './TiledProperty';
+import TiledPropertiesContainer from './TiledPropertiesContainer';
 
 export function scaleObject(object: TiledObject, scale: number) {
 	object.x *= scale;
 	object.y *= scale;
 	object.width *= scale;
 	object.height *= scale;
-}
-
-export function populatePropertiesByName(object: TiledObject) {
-	object.propertiesByName = new Map<String, TiledProperty>();
-	object.properties?.forEach((prop: TiledProperty) => {
-		object.propertiesByName.set(prop.name, prop);
-	});
 }
 
 export function intersects(object: TiledObject, ox: number, oy: number, ow: number, oh: number) {
@@ -42,7 +36,7 @@ export function intersects(object: TiledObject, ox: number, oy: number, ow: numb
 /**
  * An object in a <code>Tiled</code> map.
  */
-export default interface TiledObject {
+export default interface TiledObject extends TiledPropertiesContainer {
 
 	readonly ellipse: boolean;
 	readonly gid: number;
@@ -52,7 +46,7 @@ export default interface TiledObject {
 	point: boolean;
 	polygon?: TiledPoint[];
 	polyline?: TiledPoint[];
-	properties: TiledProperty[];
+	properties?: TiledProperty[];
 	propertiesByName: Map<String, TiledProperty>;
 	rotation: number;
 	template: string;

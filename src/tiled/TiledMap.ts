@@ -291,16 +291,13 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	}
 
 	/**
-	 * A utility method to fetch a property from this map.
-	 * This is a convenience method for <code>map.propertiesByName.get(name)!</code>.
-	 * An error is thrown if the property does not exist.
+	 * Returns the pixel height of this map.
 	 *
-	 * @param name The name of the property to retrieve.
-	 * @return The property's value.
+	 * @return The pixel height of this map.
 	 * @method
 	 */
-	getProperty<T extends TiledPropertyType>(name: string): T {
-		return getProperty(this, name);
+	getPixelHeight(): number {
+		return this.height * this.tileheight;
 	}
 
 	/**
@@ -314,13 +311,16 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	}
 
 	/**
-	 * Returns the pixel height of this map.
+	 * A utility method to fetch a property from this map.
+	 * This is a convenience method for <code>map.propertiesByName.get(name)!</code>.
+	 * An error is thrown if the property does not exist.
 	 *
-	 * @return The pixel height of this map.
+	 * @param name The name of the property to retrieve.
+	 * @return The property's value.
 	 * @method
 	 */
-	getPixelHeight(): number {
-		return this.height * this.tileheight;
+	getProperty<T extends TiledPropertyType>(name: string): T {
+		return getProperty(this, name);
 	}
 
 	private getTilesetForGid(gid: number): TiledTileset {
