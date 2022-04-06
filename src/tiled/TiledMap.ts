@@ -8,6 +8,7 @@ import { TiledMapArgs } from './TiledMapArgs';
 import { TiledLayerData } from './TiledLayerData';
 import TiledLayer from './TiledLayer';
 import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer';
+import { scaleObject } from './TiledObject';
 
 /**
  * A <code>Tiled</code> map.
@@ -86,16 +87,13 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 			// files via a "source" property. Sniff that out and inline all tileset
 			// data into the map for simplicity.
 			if (tileset.source) {
-				tileset = args.assets.get(tileset.source);
+				// Preserve "firstgid", and any other properties that might be in original
+				Object.assign(tileset, args.assets.get(tileset.source));
 			}
-			return tileset;
-		});
-		this.tilesets = [];
-		data.tilesets.forEach(tileset => {
 			if (imagePathModifier) {
 				tileset.image = imagePathModifier(tileset.image);
 			}
-			this.tilesets.push(tileset);
+			return tileset;
 		});
 
 		this.layersByName = new Map<String, TiledLayer>();
@@ -366,6 +364,9 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 		this.tileheight *= scale;
 		this.screenRows = Math.ceil(this.screenHeight / this.tileheight);
 		this.screenCols = Math.ceil(this.screenWidth / this.tilewidth);
+		this.layers.forEach(layer => {
+			layer.objects?.forEach(object => scaleObject(object, scale));
+		});
 		this.tilesets.forEach(tileset => scaleTileset(tileset, scale));
 	}
 }
