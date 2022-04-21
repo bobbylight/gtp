@@ -82,7 +82,7 @@ export default class Delay {
 			if (this.loop) {
 				if (this.maxLoopCount === -1 || this.loopCount < this.maxLoopCount - 1) {
 					this.loopCount++;
-					this.reset(true);
+					this.nextInitial(true);
 				}
 				else {
 					this.loopCount = this.maxLoopCount;
@@ -155,6 +155,24 @@ export default class Delay {
 	}
 
 	/**
+	 * Advances this Delay so its next delay amount. Effectively does nothing
+	 * in the common case where there's only one such delay amount.
+	 *
+	 * @param smooth Whether to do so smoothly.
+	 */
+	private nextInitial(smooth: boolean = false) {
+		const prevRemaining: number = this.remaining;
+		this.initialIndex = (this.initialIndex + 1) % this.initial.length;
+		this.curInitial = this.remaining = this.initial[this.initialIndex];
+		if (smooth && prevRemaining < 0) {
+			this.remaining += prevRemaining; // Subtract how much we went over
+		}
+		if (this.minDelta || this.maxDelta) {
+			//this.remaining += Utils.randomInt(this._minDelta, this._maxDelta);
+		}
+	}
+
+	/**
 	 * Causes this delay to trigger with a little random variance.
 	 *
 	 * @param min The minimum possible variance, inclusive.
@@ -165,17 +183,14 @@ export default class Delay {
 		this.maxDelta = max;
 	}
 
-	reset(smooth?: boolean) {
-		smooth = !!smooth;
-		const prevRemaining: number = this.remaining;
+	/**
+	 * Resets this delay to its beginning. This essentially resets the amount
+	 * of time it's been running to <code>0</code>.
+	 */
+	reset() {
+		this.initialIndex = 0;
 		this.curInitial = this.remaining = this.initial[this.initialIndex];
-		if (smooth && prevRemaining < 0) {
-			this.remaining += prevRemaining; // Subtract how much we went over
-		}
-		this.initialIndex = (this.initialIndex + 1) % this.initial.length;
-		if (this.minDelta || this.maxDelta) {
-			//				this._remaining += Utils.randomInt(this._minDelta, this._maxDelta);
-		}
+		this.loopCount = 0;
 	}
 
 	toString() {

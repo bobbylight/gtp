@@ -3,26 +3,9 @@ import { Delay } from '../index';
 describe('Delay', () => {
 
 	it('constructor happy path', () => {
-
 		const delay: Delay = new Delay({millis: 100});
 		expect(delay.isDone()).toEqual(false);
-		delay.update(50);
-		expect(delay.isDone()).toEqual(false);
-		delay.update(49);
-		expect(delay.isDone()).toEqual(false);
-		delay.update(1);
-		expect(delay.isDone()).toEqual(true);
-
 	});
-
-	// it('constructor with required arguments not specified', () => {
-	// 	expect(() => {
-	// 		new Delay();
-	// 	}).toThrow();
-	// 	expect(() => {
-	// 		new Delay({});
-	// 	}).toThrow();
-	// });
 
 	it('constructor with delta specified', () => {
 
@@ -216,12 +199,28 @@ describe('Delay', () => {
 
 	});
 
-	it('reset(smooth=true)', () => {
+	it('update() with a delta smaller than the delay and looping enabled', () => {
 
 		const delay: Delay = new Delay({millis: 100, loop: true});
 		expect(delay.getRemaining()).toEqual(100);
-		delay.update(105); // Calls reset(true)
+		delay.update(30);
+		expect(delay.getRemaining()).toEqual(70);
+	});
+
+	it('update() with a delta larger than the delay and looping enabled', () => {
+
+		const delay: Delay = new Delay({millis: 100, loop: true});
+		expect(delay.getRemaining()).toEqual(100);
+		delay.update(105); // Calls nextInitial(true)
 		expect(delay.getRemaining()).toEqual(95);
+	});
+
+	it('update() with a delta larger than the delay and looping disabled', () => {
+
+		const delay: Delay = new Delay({millis: 100});
+		expect(delay.getRemaining()).toEqual(100);
+		delay.update(105); // Calls nextInitial(true)
+		expect(delay.getRemaining()).toEqual(0);
 	});
 
 	it('toString()', () => {
