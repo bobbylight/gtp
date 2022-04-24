@@ -7,7 +7,7 @@ describe('AssetLoader', () => {
 	const xhrMock: any = {
 		open: jest.fn(),
 		send: jest.fn(),
-		onerror: jest.fn()
+		onerror: jest.fn(),
 	};
 
 	const mockAudioContext: any/*AudioContext*/ = jest.fn(() => ({
@@ -34,7 +34,7 @@ describe('AssetLoader', () => {
 				connect: () => {},
 				disconnect: () => {},
 			};
-		}
+		},
 	}));
 
 	let origXmlHttpRequest: any = undefined;

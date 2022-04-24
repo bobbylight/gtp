@@ -50,7 +50,7 @@ class PlayingSound {
 		this.id = this.config.id;
 		this.soundId = this.config.soundId;
 
-		this.source = this.config.audioSystem.context.createBufferSource();
+		this.source = this.config.audioSystem.context!.createBufferSource();
 		this.source.loop = this.config.loop;
 		this.source.buffer = this.config.buffer;
 		if (this.config.connectTo instanceof Array) {
@@ -62,7 +62,7 @@ class PlayingSound {
 			this.source.connect(this.config.connectTo);
 		}
 
-		this.startOffset = this.config.startOffset || 0;
+		this.startOffset = this.config.startOffset ?? 0;
 
 		if (!this.config.loop) {
 			this.source.onended = this.config.onendedGenerator(this.id) as
@@ -123,7 +123,7 @@ export default class AudioSystem {
 	private muted: boolean;
 	private initialized: boolean;
 
-	context!: AudioContext;
+	context?: AudioContext;
 	private volumeFaderGain!: GainNode;
 	private musicFaderGain?: GainNode;
 	private currentMusicId: string | undefined;
@@ -194,7 +194,7 @@ export default class AudioSystem {
 
 		try {
 
-			w.AudioContext = w.AudioContext || w.webkitAudioContext;
+			w.AudioContext = w.AudioContext ?? w.webkitAudioContext;
 
 			if (w.AudioContext) {
 				this.context = new w.AudioContext();
@@ -404,7 +404,7 @@ export default class AudioSystem {
 	 */
 	stopSound(id: number): boolean {
 		const sound: PlayingSound | null = this.removePlayingSound(id);
-		if (sound && sound.source) {
+		if (sound?.source) {
 			sound.source.stop();
 			return true;
 		}

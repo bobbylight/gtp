@@ -10,5 +10,5 @@ export default {
 	 */
 	getWindowLocationSearch(): string {
 		return window.location.search;
-	}
+	},
 };

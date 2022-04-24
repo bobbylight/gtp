@@ -10,7 +10,7 @@ describe('TiledObject', () => {
 			x: 0,
 			y: 0,
 			width: 5,
-			height: 5
+			height: 5,
 		} as TiledObject;
 	});
 

@@ -48,6 +48,6 @@ export enum Keys {
 	KEY_W = 87,
 	KEY_X = 88,
 	KEY_Y = 89,
-	KEY_Z = 90
+	KEY_Z = 90,
 
 }

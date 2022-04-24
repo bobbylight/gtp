@@ -43,7 +43,7 @@ export default interface TiledTileset {
 	tiledversion?: string;
 	tileheight: number;
 	tileoffset?: TiledTileOffset;
-	tiles?: TiledTilesetTile[]
+	tiles?: TiledTilesetTile[];
 	tilewidth: number;
 	transforms?: TiledTilesetTransformations;
 	transparentcolor?: string;

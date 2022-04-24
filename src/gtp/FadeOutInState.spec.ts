@@ -16,7 +16,7 @@ describe('FadeOutInState', () => {
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
 		const temp: FunctionWrapperForTesting = {
-			transitionLogic: jest.fn()
+			transitionLogic: jest.fn(),
 		};
 		const timeMillis: number = 500;
 
@@ -31,7 +31,7 @@ describe('FadeOutInState', () => {
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
 		const temp: FunctionWrapperForTesting = {
-			transitionLogic: jest.fn()
+			transitionLogic: jest.fn(),
 		};
 		const timeMillis: number = 500;
 

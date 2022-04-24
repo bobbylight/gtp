@@ -45,5 +45,5 @@ export const enum StretchMode {
 	 * of the window in which they're being displayed, while maintaining their
 	 * proper aspect ratio.
 	 */
-	STRETCH_PROPORTIONAL
+	STRETCH_PROPORTIONAL,
 }

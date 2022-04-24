@@ -68,5 +68,5 @@ export {
 	TiledMap,
 	TiledMapData,
 	TiledObject,
-	TiledTileset
+	TiledTileset,
 };

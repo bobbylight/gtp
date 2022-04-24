@@ -93,7 +93,7 @@ describe('Utils', () => {
 			info: 1,
 			log: 2,
 			warn: 3,
-			'error': 4
+			'error': 4,
 		};
 		const origConsole: Console = window.console;
 		(window as any).console = mockConsole;

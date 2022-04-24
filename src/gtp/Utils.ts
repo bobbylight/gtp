@@ -113,7 +113,7 @@ export default {
 	 * @return A time, in milliseconds.
 	 */
 	timestamp(): number {
-		if (window.performance && window.performance.now) {
+		if (window.performance?.now) {
 			return window.performance.now();
 		}
 		return Date.now(); // IE < 10
@@ -129,8 +129,8 @@ export default {
 				info: noOp,
 				log: noOp,
 				warn: noOp,
-				'error': noOp
+				'error': noOp,
 			};
 		}
-	}
+	},
 };

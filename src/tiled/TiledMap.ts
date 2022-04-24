@@ -364,9 +364,10 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 		this.tileheight *= scale;
 		this.screenRows = Math.ceil(this.screenHeight / this.tileheight);
 		this.screenCols = Math.ceil(this.screenWidth / this.tilewidth);
+		// Unnecessary curly braces in fat arrow functions required by eslint
 		this.layers.forEach(layer => {
-			layer.objects?.forEach(object => scaleObject(object, scale));
+			layer.objects?.forEach(object => { scaleObject(object, scale) });
 		});
-		this.tilesets.forEach(tileset => scaleTileset(tileset, scale));
+		this.tilesets.forEach(tileset => { scaleTileset(tileset, scale) });
 	}
 }

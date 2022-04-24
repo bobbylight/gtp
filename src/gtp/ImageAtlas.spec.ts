@@ -16,9 +16,9 @@ describe('ImageAtlas', () => {
 					x: 0,
 					y: 0,
 					w: 16,
-					h: 16
-				}
-			]
+					h: 16,
+				},
+			],
 		};
 
 		const imageInfos: ImageMap = new ImageAtlas(canvas, atlasInfo).parse();
@@ -38,9 +38,9 @@ describe('ImageAtlas', () => {
 					id: 'img1',
 					y: 0,
 					w: 16,
-					h: 16
-				}
-			]
+					h: 16,
+				},
+			],
 		};
 
 		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
@@ -59,9 +59,9 @@ describe('ImageAtlas', () => {
 					id: 'img1',
 					x: 0,
 					w: 16,
-					h: 16
-				}
-			]
+					h: 16,
+				},
+			],
 		};
 
 		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
@@ -80,9 +80,9 @@ describe('ImageAtlas', () => {
 					id: 'img1',
 					x: 0,
 					y: 0,
-					h: 16
-				}
-			]
+					h: 16,
+				},
+			],
 		};
 
 		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
@@ -101,9 +101,9 @@ describe('ImageAtlas', () => {
 					id: 'img1',
 					x: 0,
 					y: 0,
-					w: 16
-				}
-			]
+					w: 16,
+				},
+			],
 		};
 
 		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
@@ -120,9 +120,9 @@ describe('ImageAtlas', () => {
 			images: [
 				{
 					id: 'img1',
-					dim: '0, 0, 16, 16'
-				}
-			]
+					dim: '0, 0, 16, 16',
+				},
+			],
 		};
 
 		const imageInfos: ImageMap = new ImageAtlas(canvas, atlasInfo).parse();
@@ -140,9 +140,9 @@ describe('ImageAtlas', () => {
 			images: [
 				{
 					id: 'img1',
-					dim: '0,0,16,16'
-				}
-			]
+					dim: '0,0,16,16',
+				},
+			],
 		};
 
 		const imageInfos: ImageMap = new ImageAtlas(canvas, atlasInfo).parse();
@@ -160,9 +160,9 @@ describe('ImageAtlas', () => {
 			images: [
 				{
 					id: 'img1',
-					dim: '0,0,16'
-				}
-			]
+					dim: '0,0,16',
+				},
+			],
 		};
 
 		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
@@ -179,9 +179,9 @@ describe('ImageAtlas', () => {
 			images: [
 				{
 					id: 'img1',
-					dim: '0,0,16,16,16'
-				}
-			]
+					dim: '0,0,16,16,16',
+				},
+			],
 		};
 
 		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();

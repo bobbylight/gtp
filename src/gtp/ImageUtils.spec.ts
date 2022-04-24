@@ -23,7 +23,7 @@ describe('ImageUtils', () => {
 
 	it('resizing an HTMLCanvasElement works', () => {
 
-		const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = 10;
 		canvas.height = 10;
 
@@ -34,7 +34,7 @@ describe('ImageUtils', () => {
 
 	it('resizing but param set to 1x works', () => {
 
-		const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = 10;
 		canvas.height = 10;
 
@@ -49,7 +49,7 @@ describe('ImageUtils', () => {
 
 		for (const size of sizes) {
 
-			const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+			const canvas: HTMLCanvasElement = document.createElement('canvas');
 			canvas.width = size;
 			canvas.height = size;
 
@@ -61,7 +61,7 @@ describe('ImageUtils', () => {
 
 	it('ensuring a canvas with width < 256 can get resized to 256', () => {
 
-		const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = 128;
 		canvas.height = 256;
 
@@ -72,7 +72,7 @@ describe('ImageUtils', () => {
 
 	it('ensuring a canvas with height < 256 can get resized to 256', () => {
 
-		const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = 256;
 		canvas.height = 128;
 
@@ -87,7 +87,7 @@ describe('ImageUtils', () => {
 
 		for (const size of sizes) {
 
-			const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+			const canvas: HTMLCanvasElement = document.createElement('canvas');
 			canvas.width = size;
 			canvas.height = size;
 
@@ -99,7 +99,7 @@ describe('ImageUtils', () => {
 
 	it('makeColorTranslucent() should work', () => {
 
-		const canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = 256;
 		canvas.height = 128;
 

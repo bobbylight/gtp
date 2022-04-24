@@ -27,7 +27,7 @@ describe('AudioSystem', () => {
 				connect: () => {},
 				disconnect: () => {},
 			};
-		}
+		},
 	}));
 
 	let origAudioContext: any = undefined;

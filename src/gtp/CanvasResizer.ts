@@ -55,5 +55,5 @@ export default {
 
 		}
 		/* eslint-enable no-case-declarations */
-	}
+	},
 };

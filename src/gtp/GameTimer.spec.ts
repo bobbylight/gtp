@@ -36,14 +36,14 @@ describe('_GameTimer', () => {
 		expect(timer.playTime).toBeLessThan(origPlayTime);
 	});
 
-	it('resetPlayTime should throw an error if called when paused', async () => {
+	it('resetPlayTime should throw an error if called when paused', () => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		timer.paused = true;
 		expect(() => { timer.resetPlayTime(); }).toThrow();
 	});
 
-	it('resetPlayTime should throw an error if called when not updating', async () => {
+	it('resetPlayTime should throw an error if called when not updating', () => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		timer.updating = false;

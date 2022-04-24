@@ -58,7 +58,7 @@ export default class Delay {
 		this.callback = args.callback;
 		this.loop = !!args.loop;
 		this.loopCount = 0;
-		this.maxLoopCount = this.loop ? (args.loopCount || -1) : -1;
+		this.maxLoopCount = this.loop ? (args.loopCount || -1) : -1; // eslint-disable-line
 		this.remaining = 0;
 		this.curInitial = 0;
 		this.reset();

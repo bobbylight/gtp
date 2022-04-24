@@ -57,12 +57,12 @@ export default class Game {
 
 		Utils.initConsole();
 
-		this.scale = args.scale || 1;
+		this.scale = args.scale ?? 1;
 		this.canvas = ImageUtils.createCanvas(args.width, args.height, args.parent);
 
-		this.inputManager = new InputManager(args.keyRefreshMillis || 0);
+		this.inputManager = new InputManager(args.keyRefreshMillis ?? 0);
 		this.inputManager.install();
-		this.targetFps = args.targetFps || DEFAULT_TARGET_FPS;
+		this.targetFps = args.targetFps ?? DEFAULT_TARGET_FPS;
 		this.interval = MILLIS_PER_SECOND / this.targetFps;
 		this.lastTime = 0;
 
@@ -177,7 +177,7 @@ export default class Game {
 			const x: number = 10;
 			const y: number = this.canvas.height - 6;
 			ctx.font = '10pt Arial';
-			ctx.fillStyle = this.statusMessageColor || '#fff';
+			ctx.fillStyle = this.statusMessageColor ?? '#fff';
 			ctx.fillText(this.statusMessage, x, y);
 		}
 	}
