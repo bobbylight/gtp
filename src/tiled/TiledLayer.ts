@@ -42,8 +42,8 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 	y: number;
 
 	map: TiledMap;
-	propertiesByName!: Map<String, TiledProperty>;
-	objectsByName?: Map<String, TiledObject>;
+	propertiesByName!: Map<string, TiledProperty>;
+	objectsByName?: Map<string, TiledObject>;
 
 	constructor(map: TiledMap, data: TiledLayerData) {
 
@@ -134,7 +134,7 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 	private setObjects(objects?: TiledObject[]) {
 		if (objects) {
 			this.objects = [];
-			this.objectsByName = new Map<String, TiledObject>();
+			this.objectsByName = new Map<string, TiledObject>();
 
 			objects.forEach(object => {
 				initPropertiesByName(object);

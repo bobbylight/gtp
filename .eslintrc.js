@@ -14,29 +14,25 @@ module.exports = {
     },
     plugins: [
         '@typescript-eslint',
+        '@stylistic',
     ],
     rules: {
+        'no-duplicate-imports': 1,
         quotes: 'off', // Replaced by TypeScript-equivalent rule
         '@typescript-eslint/adjacent-overload-signatures': 0,
         '@typescript-eslint/array-type': [ 'error', { default: 'array' } ],
         '@typescript-eslint/ban-types': 0, // We use 'Function'
         //'@typescript-eslint/brace-style': [ 'error', 'stroustrup' ],
         '@typescript-eslint/class-literal-property-style': 1,
-        '@typescript-eslint/comma-dangle': [ 'error', 'always-multiline' ],
-        '@typescript-eslint/comma-spacing': 1,
         '@typescript-eslint/consistent-type-definitions': [ 'error', 'interface' ],
         '@typescript-eslint/explicit-module-boundary-types': 0,
         //'@typescript-eslint/indent': [ 'error', 'tab' ], // Broken rule - see doc
-        '@typescript-eslint/keyword-spacing': 1,
         '@typescript-eslint/lines-between-class-members': 0, // fields are OK
-        '@typescript-eslint/member-delimiter-style': [ 'error' ],
         '@typescript-eslint/no-confusing-non-null-assertion': 1,
         '@typescript-eslint/no-confusing-void-expression': 1,
-        '@typescript-eslint/no-duplicate-imports': 1,
         '@typescript-eslint/no-dynamic-delete': 0, // TODO: enable
         '@typescript-eslint/no-empty-function': 0,
         '@typescript-eslint/no-explicit-any': 0,
-        '@typescript-eslint/no-extra-semi': 1,
         '@typescript-eslint/no-extraneous-class': 0, // TODO
         '@typescript-eslint/no-inferrable-types': 0,
         '@typescript-eslint/no-invalid-void-type': 1,
@@ -62,10 +58,15 @@ module.exports = {
         '@typescript-eslint/prefer-regexp-exec': 1,
         '@typescript-eslint/prefer-return-this-type': 1,
         '@typescript-eslint/prefer-string-starts-ends-with': 1,
-        '@typescript-eslint/quotes': [ 'error', 'single' ],
         '@typescript-eslint/require-await': 1,
         '@typescript-eslint/restrict-plus-operands': 0, // TODO: Implement
-        '@typescript-eslint/type-annotation-spacing': 1,
         '@typescript-eslint/typedef': 1,
+        '@stylistic/comma-dangle': [ 'error', 'always-multiline' ],
+        '@stylistic/comma-spacing': 1,
+        '@stylistic/keyword-spacing': 1,
+        '@stylistic/member-delimiter-style': [ 'error' ],
+        '@stylistic/no-extra-semi': 1,
+        '@stylistic/quotes': [ 'error', 'single' ],
+        '@stylistic/type-annotation-spacing': 1,
     },
 };

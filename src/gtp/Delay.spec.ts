@@ -1,4 +1,5 @@
 import { Delay } from '../index';
+import { DelayCallback } from './Delay';
 
 describe('Delay', () => {
 
@@ -38,7 +39,7 @@ describe('Delay', () => {
 	it('update() calls callback when not looping', () => {
 
 		let callbackCalled: boolean = false;
-		const cb: Function = () => {
+		const cb: DelayCallback = () => {
 			callbackCalled = true;
 		};
 
@@ -57,7 +58,7 @@ describe('Delay', () => {
 	it('update() calls callback when looping', () => {
 
 		let callbackCalled: boolean = false;
-		const cb: Function = () => {
+		const cb: DelayCallback = () => {
 			callbackCalled = true;
 		};
 
@@ -226,10 +227,10 @@ describe('Delay', () => {
 	it('toString()', () => {
 
 		const delay: Delay = new Delay({millis: 100});
-		expect(delay.toString()).toEqual('[Delay: _initial=100' +
-			', _remaining=100' +
-			', _loop=false' +
-			', _callback=false' +
+		expect(delay.toString()).toEqual('[Delay: initial=100' +
+			', remaining=100' +
+			', loop=false' +
+			', callback=false' +
 			']');
 
 	});

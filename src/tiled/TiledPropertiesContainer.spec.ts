@@ -20,7 +20,7 @@ describe('TiledPropertiesContainer', () => {
 					value: 42,
 				},
 			],
-			propertiesByName: new Map<String, TiledProperty>(),
+			propertiesByName: new Map<string, TiledProperty>(),
 		};
 
 	});

@@ -1,3 +1,7 @@
+export interface DelayCallback {
+	(delay: Delay): void;
+}
+
 /**
  * Arguments to the Delay constructor.
  */
@@ -5,7 +9,7 @@ export interface DelayArgs {
 	millis: number | number[];
 	minDelta?: number;
 	maxDelta?: number;
-	callback?: Function;
+	callback?: DelayCallback;
 	loop?: boolean;
 	loopCount?: number;
 }
@@ -37,7 +41,7 @@ export default class Delay {
 
 	private readonly initial: number[];
 	private initialIndex: number;
-	private readonly callback: Function | undefined;
+	private readonly callback: DelayCallback | undefined;
 	private readonly loop: boolean;
 	private loopCount: number;
 	private readonly maxLoopCount: number;
@@ -47,7 +51,7 @@ export default class Delay {
 	private curInitial: number;
 
 	constructor(args: DelayArgs) {
-		if (!args || !args.millis) {
+		if (!args?.millis) {
 			throw 'Missing required "millis" argument to Delay';
 		}
 		this.initial = Array.isArray(args.millis) ? args.millis : [ args.millis ];
@@ -112,7 +116,7 @@ export default class Delay {
 	 * @see getMinDelta()
 	 */
 	getMaxDelta(): number {
-		return typeof this.maxDelta !== 'undefined' ? this.maxDelta : -1;
+		return this.maxDelta ?? -1;
 	}
 
 	/**
@@ -122,7 +126,7 @@ export default class Delay {
 	 * @see getMaxDelta()
 	 */
 	getMinDelta(): number {
-		return typeof this.minDelta !== 'undefined' ? this.minDelta : -1;
+		return this.minDelta ?? -1;
 	}
 
 	/**
@@ -194,10 +198,10 @@ export default class Delay {
 	}
 
 	toString() {
-		return `[Delay: _initial=${this.initial}, ` +
-			`_remaining=${this.remaining}, ` +
-			`_loop=${this.loop}, ` +
-			`_callback=${!!this.callback}` +
+		return `[Delay: initial=${this.initial}, ` +
+			`remaining=${this.remaining}, ` +
+			`loop=${this.loop}, ` +
+			`callback=${!!this.callback}` +
 			']';
 	}
 

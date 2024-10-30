@@ -12,7 +12,7 @@ export function getProperty<T>(container: TiledPropertiesContainer, name: string
 }
 
 export function initPropertiesByName(container: TiledPropertiesContainer) {
-	container.propertiesByName = new Map<String, TiledProperty>();
+	container.propertiesByName = new Map<string, TiledProperty>();
 	container.properties?.forEach((property: TiledProperty) => {
 		container.propertiesByName.set(property.name, property);
 	});
@@ -23,5 +23,5 @@ export function initPropertiesByName(container: TiledPropertiesContainer) {
  */
 export default interface TiledPropertiesContainer {
 	properties?: TiledProperty[];
-	propertiesByName: Map<String, TiledProperty>;
+	propertiesByName: Map<string, TiledProperty>;
 }

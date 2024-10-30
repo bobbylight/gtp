@@ -42,9 +42,9 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	screenHeight: number;
 	screenRows: number;
 	screenCols: number;
-	layersByName: Map<String, TiledLayer>;
+	layersByName: Map<string, TiledLayer>;
 	objectGroups: TiledLayer[];
-	propertiesByName!: Map<String, TiledProperty>;
+	propertiesByName!: Map<string, TiledProperty>;
 
 	/**
 	 * A 2d game map, generated in Tiled.
@@ -96,7 +96,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 			return tileset;
 		});
 
-		this.layersByName = new Map<String, TiledLayer>();
+		this.layersByName = new Map<string, TiledLayer>();
 		this.objectGroups = [];
 		this.layers.forEach(layer => {
 			this.layersByName.set(layer.name, layer);

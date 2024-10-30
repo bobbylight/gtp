@@ -227,7 +227,7 @@ export default class Game {
 	 * Starts the game loop.
 	 */
 	start() {
-		const callback: Function = this.tick.bind(this);
+		const callback: () => void = this.tick.bind(this);
 		this.gameTimer.start();
 		setInterval(callback, this.interval);
 	}

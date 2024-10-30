@@ -2,6 +2,10 @@ import Sound from './Sound';
 import { Window } from './GtpBase';
 import { SoundCompletedCallback } from './SoundCompletedCallback';
 
+export interface OnEndedGenerator {
+	(playingSoundId: number): ((this: AudioScheduledSourceNode, ev: Event) => any) | null;
+}
+
 /**
  * Configuration for a playing sound.
  */
@@ -12,7 +16,7 @@ interface PlayingSoundConfig {
 	loop: boolean;
 	buffer: AudioBuffer;
 	connectTo: AudioNode|AudioNode[];
-	onendedGenerator: Function;
+	onendedGenerator: OnEndedGenerator;
 	startOffset?: number;
 }
 
@@ -170,9 +174,7 @@ export default class AudioSystem {
 			onendedGenerator: (playingSoundId: number) => {
 				return () => {
 					this.removePlayingSound(playingSoundId);
-					if (doneCallback) {
-						doneCallback(soundEffectId, id);
-					}
+					doneCallback?.(soundEffectId, id);
 				};
 			},
 			soundId: id,

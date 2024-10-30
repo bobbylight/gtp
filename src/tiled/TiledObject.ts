@@ -47,7 +47,7 @@ export default interface TiledObject extends TiledPropertiesContainer {
 	polygon?: TiledPoint[];
 	polyline?: TiledPoint[];
 	properties?: TiledProperty[];
-	propertiesByName: Map<String, TiledProperty>;
+	propertiesByName: Map<string, TiledProperty>;
 	rotation: number;
 	template: string;
 	text?: TiledText;

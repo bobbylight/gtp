@@ -10,6 +10,14 @@ import TiledMap from '../tiled/TiledMap';
 import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
 
 /**
+ * Callback for when the asset loader completes loading everything requested.
+ */
+export interface AssetLoaderCallback {
+	(): void;
+}
+
+
+/**
  * Defines a type of resource we can load.
  */
 interface ResourceType {
@@ -37,10 +45,10 @@ export default class AssetLoader {
 	private readonly scale: number;
 	private readonly loadingAssetData: { [id: string]: ResourceType };
 	private readonly responses: { [id: string]: any };
-	private callback: Function | undefined;
+	private callback: AssetLoaderCallback | undefined;
 	audio: AudioSystem;
 	private readonly assetRoot: string | undefined;
-	private nextCallback: Function | undefined;
+	private nextCallback: AssetLoaderCallback | undefined;
 
 	/**
 	 * Provides methods to load images, sounds, and Tiled maps.
@@ -387,7 +395,7 @@ export default class AssetLoader {
 		return Utils.getObjectSize(this.loadingAssetData) === 0;
 	}
 
-	onLoad(callback: Function) {
+	onLoad(callback: AssetLoaderCallback) {
 
 		if (this.isDoneLoading()) {
 			callback();
