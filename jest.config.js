@@ -3,15 +3,15 @@ module.exports = {
     testEnvironmentOptions: {
         // Force image to load when appropriate:
         // https://github.com/jsdom/jsdom/issues/1816
-        resources: 'usable'
+        resources: 'usable',
     },
     roots: [
-        '<rootDir>/src'
+        '<rootDir>/src',
     ],
     testMatch: [
-        '**/*.spec.ts'
+        '**/*.spec.ts',
     ],
     transform: {
-        '^.+\\.ts$': 'ts-jest'
-    }
+        '^.+\\.ts$': 'ts-jest',
+    },
 };

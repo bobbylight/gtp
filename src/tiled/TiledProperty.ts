@@ -6,5 +6,6 @@ export type TiledPropertyType = 'string' | 'float' | 'int' | 'bool' | 'file' | '
 export default interface TiledProperty {
 	name: string;
 	type: TiledPropertyType;
+	propertytype?: string;
 	value: any;
 }
