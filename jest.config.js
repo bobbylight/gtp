@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
     testEnvironment: 'jsdom',
     testEnvironmentOptions: {
         // Force image to load when appropriate:
@@ -15,3 +15,4 @@ module.exports = {
         '^.+\\.ts$': 'ts-jest',
     },
 };
+module.exports = config;
