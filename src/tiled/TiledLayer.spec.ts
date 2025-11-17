@@ -151,7 +151,7 @@ describe('TiledLayer', () => {
 		});
 
 		it('throws an error if the property requested is not defined and there is no default', () => {
-			expect(() => tileLayer.getProperty('unknown')).toThrowError();
+			expect(() => tileLayer.getProperty('unknown')).toThrow();
 		});
 	});
 
