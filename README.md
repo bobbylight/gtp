@@ -19,6 +19,7 @@ First, check out the project and install all dependencies:
 ```bash
 git clone https://github.com/bobbylight/gtp.git
 cd gtp
+nvm use
 npm install
 ```
 
