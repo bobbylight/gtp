@@ -1,5 +1,5 @@
 # GTP - A very basic 2D HTML5 game library
-![Build](https://github.com/bobbylight/gtp/actions/workflows/node.js.yml/badge.svg)
+![Build](https://github.com/bobbylight/gtp/actions/workflows/build.js.yml/badge.svg)
 ![CodeQL](https://github.com/bobbylight/gtp/actions/workflows/codeql-analysis.yml/badge.svg)
 [![codecov](https://codecov.io/gh/bobbylight/gtp/branch/master/graph/badge.svg?token=)](https://codecov.io/gh/bobbylight/gtp)
 
