@@ -40,7 +40,7 @@ export default class Timer {
 	end(key: string) {
 		const start: number = this.startTimes[key];
 		if (!start) {
-			console.error('Cannot end timer for "' + key + '" as it was never started');
+			console.error(`Cannot end timer for "${key}" as it was never started`);
 			return -1;
 		}
 		const time: number = Utils.timestamp() - start;

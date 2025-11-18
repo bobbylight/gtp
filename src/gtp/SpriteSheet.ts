@@ -1,4 +1,4 @@
-import Image from './Image';
+import Image, { ColorChange } from './Image';
 
 /**
  * A collection of images contained in some sort of rectangular grid in a single image file.
@@ -56,6 +56,17 @@ export default class SpriteSheet {
 	}
 
 	/**
+	 * Creates a copy of this sprite sheet with one or more colors changed.
+	 *
+	 * @param colorChanges The colors to change.
+	 * @returns A new sprite sheet with the specified colors changed.
+	 */
+	createRecoloredCopy(...colorChanges: ColorChange[]): SpriteSheet {
+		const newImage = this.gtpImage.createRecoloredCopy(...colorChanges);
+		return new SpriteSheet(newImage, this.cellW, this.cellH, this.spacingX, this.spacingY);
+	}
+
+	/**
 	 * Draws a sprite in this sprite sheet by row and column.
 	 * @param ctx The canvas' context.
 	 * @param x The x-coordinate at which to draw.
@@ -68,7 +79,6 @@ export default class SpriteSheet {
 		const cellH: number = this.cellH;
 		const srcX: number = (cellW + this.spacingX) * col; //(col-1);
 		const srcY: number = (cellH + this.spacingY) * row; //(row-1);
-		//ctx.drawImage(this.gtpImage.canvas, srcX,srcY,cellW,cellH, x,y,cellW,cellH);
 		this.gtpImage.drawScaled2(ctx, srcX, srcY, cellW, cellH, x, y, cellW, cellH);
 	}
 

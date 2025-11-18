@@ -1,32 +1,6 @@
-import { Image } from '../index';
+import { SpriteSheet, Image } from '../index';
 
-describe('Image', () => {
-
-	it('constructor happy path - 1 arg', () => {
-
-		const canvas: HTMLCanvasElement = document.createElement('canvas');
-		canvas.width = 40;
-		canvas.height = 50;
-
-		const image: Image = new Image(canvas);
-		expect(image.width).toBe(canvas.width);
-		expect(image.height).toBe(canvas.height);
-		expect(image.x).toBe(0);
-		expect(image.y).toBe(0);
-	});
-
-	it('constructor happy path - 5 args', () => {
-
-		const canvas: HTMLCanvasElement = document.createElement('canvas');
-		canvas.width = 40;
-		canvas.height = 50;
-
-		const image: Image = new Image(canvas, 2, 2, 20, 20);
-		expect(image.width).toBe(20);
-		expect(image.height).toBe(20);
-		expect(image.x).toBe(2);
-		expect(image.y).toBe(2);
-	});
+describe('Spritesheet', () => {
 
 	describe('createRecoloredCopy', () => {
 		it('works', () => {
@@ -49,27 +23,28 @@ describe('Image', () => {
 			origPixelData.data[7] = 0xff;
 			origCtx.putImageData(origPixelData, 0, 0);
 
-			// Create an image from that canvas
+			// Create a sprite sheet from that canvas
 			const origImage = new Image(origCanvas);
+			const origSpritesheet = new SpriteSheet(origImage, 1, 1);
 
-			// Create a new image from the original with inverted colors.
+			// Create a new sprite sheet from the original with inverted colors.
 			// Render it to a new canvas
-			const newImage = origImage.createRecoloredCopy({
+			const newSpritesheet = origSpritesheet.createRecoloredCopy({
 				fromR: 0xff, fromG: 0xff, fromB: 0xff, toR: 0x00, toG: 0x00, toB: 0x00,
 			}, {
 				fromR: 0x00, fromG: 0x00, fromB: 0x00, toR: 0xff, toG: 0xff, toB: 0xff,
 			});
-			const newImageCanvas = document.createElement('canvas');
-			newImageCanvas.width = 2;
-			newImageCanvas.height = 1;
-			const newImageCtx = newImageCanvas.getContext('2d');
-			if (!newImageCtx) {
+			const newCanvas = document.createElement('canvas');
+			newCanvas.width = 2;
+			newCanvas.height = 1;
+			const newCtx = newCanvas.getContext('2d');
+			if (!newCtx) {
 				throw new Error('Could not get context');
 			}
-			newImage.draw(newImageCtx, 0, 0);
+			newSpritesheet.gtpImage.draw(newCtx, 0, 0);
 
 			// Verify the colors are inverted
-			const newPixelData = newImageCtx.getImageData(0, 0, 2, 1);
+			const newPixelData = newCtx.getImageData(0, 0, 2, 1);
 			expect(newPixelData.data[0]).toEqual(0x00);
 			expect(newPixelData.data[1]).toEqual(0x00);
 			expect(newPixelData.data[2]).toEqual(0x00);
