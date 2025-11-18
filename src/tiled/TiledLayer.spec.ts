@@ -1,9 +1,9 @@
+import AssetLoader from '../gtp/AssetLoader';
+import AudioSystem from '../gtp/AudioSystem';
 import TiledLayer from './TiledLayer';
 import { TiledMapData } from './TiledMapData';
 import TiledMap from './TiledMap';
 import { TiledMapArgs } from './TiledMapArgs';
-import AssetLoader from '../gtp/AssetLoader';
-import AudioSystem from '../gtp/AudioSystem';
 import { TiledLayerData } from './TiledLayerData';
 import TiledTileset from './TiledTileset';
 import TiledObject from './TiledObject';

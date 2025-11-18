@@ -62,7 +62,7 @@ describe('Game', () => {
 		expect(game.paused).toBeFalsy();
 	});
 
-	it('getting playTime works', async () => {
+	it('getting playTime works', async() => {
 
 		const game: Game = new Game();
 
@@ -71,7 +71,7 @@ describe('Game', () => {
 		expect(game.playTime).toBeGreaterThan(firstPlayTime);
 	});
 
-	it('resetting playTime works', async () => {
+	it('resetting playTime works', async() => {
 
 		const game: Game = new Game();
 
@@ -99,7 +99,7 @@ describe('Game', () => {
 		game.render();
 	});
 
-	it('start() starts an event loop', async () => {
+	it('start() starts an event loop', async() => {
 
 		const game: Game = new Game();
 		game.setState(new DummyState());

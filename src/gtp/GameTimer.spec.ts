@@ -18,7 +18,7 @@ describe('_GameTimer', () => {
 		expect(timer.updating).toBeFalsy();
 	});
 
-	it('playTime increases as time goes on', async () => {
+	it('playTime increases as time goes on', async() => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		const origPlayTime: number = timer.playTime; // This may be > 0 already
@@ -26,7 +26,7 @@ describe('_GameTimer', () => {
 		expect(timer.playTime).toBeGreaterThan(origPlayTime);
 	});
 
-	it('resetPlayTime should set play time back to 0', async () => {
+	it('resetPlayTime should set play time back to 0', async() => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		await new Promise(r => setTimeout(r, 50));

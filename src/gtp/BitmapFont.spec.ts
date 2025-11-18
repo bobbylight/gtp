@@ -44,7 +44,7 @@ describe('BitmapFont', () => {
 			expect(font.drawByIndex).toHaveBeenCalledTimes(3);
 			for (let i = 0; i < 3; i++) {
 				expect(font.drawByIndex).toHaveBeenNthCalledWith(i + 1,
-					expect.anything(), expect.anything(), expect.anything(), 0
+					expect.anything(), expect.anything(), expect.anything(), 0,
 				);
 			}
 		});
@@ -59,7 +59,7 @@ describe('BitmapFont', () => {
 			expect(font.drawByIndex).toHaveBeenCalledTimes(3);
 			for (let i = 0; i < 3; i++) {
 				expect(font.drawByIndex).toHaveBeenNthCalledWith(i + 1,
-					expect.anything(), expect.anything(), expect.anything(), 0
+					expect.anything(), expect.anything(), expect.anything(), 0,
 				);
 			}
 		});

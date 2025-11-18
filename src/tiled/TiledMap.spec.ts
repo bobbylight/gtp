@@ -1,11 +1,10 @@
+import AssetLoader from '../gtp/AssetLoader';
+import AudioSystem from '../gtp/AudioSystem';
 import TiledMap from './TiledMap';
 import TiledLayer from './TiledLayer';
 import { TiledMapData } from './TiledMapData';
-import Image from '../gtp/Image';
 import TiledTileset from './TiledTileset';
 import { TiledMapArgs } from './TiledMapArgs';
-import AssetLoader from '../gtp/AssetLoader';
-import AudioSystem from '../gtp/AudioSystem';
 
 const simpleMapData: TiledMapData = {
 	compressionlevel: -1,
@@ -110,9 +109,9 @@ describe('TiledMap', () => {
 
 	it('draw() renders the map', () => {
 
-		const mockImage: Image = {
+		const mockImage = {
 			drawScaled2: jest.fn(),
-		} as unknown as Image;
+		};
 
 		(window as any).game = {
 			assets: {

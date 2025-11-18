@@ -1,5 +1,5 @@
-import { TiledImagePathModifier } from './TiledTileset';
 import AssetLoader from '../gtp/AssetLoader';
+import { TiledImagePathModifier } from './TiledTileset';
 
 /**
  * Extra arguments to a <code>TiledMap</code>.
