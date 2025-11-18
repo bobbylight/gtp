@@ -142,7 +142,7 @@ describe('AssetLoader', () => {
 			expect(assetLoader.isDoneLoading()).toBeTruthy(); // Already loaded 'testJson'
 		});
 
-		it('addCanvas() loads the data', async () => {
+		it('addCanvas() loads the data', async() => {
 
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 
@@ -162,7 +162,7 @@ describe('AssetLoader', () => {
 			expect(assetLoader.get('testCanvas')).toBeDefined();
 		});
 
-		it('addImage() loads the data', async () => {
+		it('addImage() loads the data', async() => {
 
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 
@@ -185,7 +185,7 @@ describe('AssetLoader', () => {
 			expect(assetLoader.get('testImage')).toBeDefined();
 		});
 
-		it('addImageAtlasContents() loads the data', async () => {
+		it('addImageAtlasContents() loads the data', async() => {
 
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 
@@ -245,7 +245,7 @@ describe('AssetLoader', () => {
 			expect(assetLoader.get('testSound')).toBeDefined();
 		});
 
-		it('addSpriteSheet() loads the data', async () => {
+		it('addSpriteSheet() loads the data', async() => {
 
 			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
 

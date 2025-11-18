@@ -1,7 +1,7 @@
-import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTileset';
 import Image from '../gtp/Image';
 import Game from '../gtp/Game';
 import {Window} from '../gtp/GtpBase';
+import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTileset';
 import TiledProperty from './TiledProperty';
 import { TiledMapData } from './TiledMapData';
 import { TiledMapArgs } from './TiledMapArgs';

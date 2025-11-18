@@ -1,3 +1,5 @@
+import TiledTileset from '../tiled/TiledTileset';
+import TiledMap from '../tiled/TiledMap';
 import SpriteSheet from './SpriteSheet';
 import { AssetType } from './AssetType';
 import AudioSystem from './AudioSystem';
@@ -5,8 +7,6 @@ import Utils from './Utils';
 import ImageUtils from './ImageUtils';
 import Image from './Image';
 import Sound from './Sound';
-import TiledTileset from '../tiled/TiledTileset';
-import TiledMap from '../tiled/TiledMap';
 import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
 
 /**
