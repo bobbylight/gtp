@@ -4,9 +4,7 @@
 import TiledProperty from './TiledProperty';
 import TiledLayer from './TiledLayer';
 
-export interface TiledImagePathModifier {
-	(path: string): string;
-}
+export type TiledImagePathModifier = (path: string) => string;
 
 export function scaleTileset(tileset: TiledTileset, scale: number) {
 	tileset.imagewidth *= scale;

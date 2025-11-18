@@ -8,7 +8,7 @@ export default class Sound {
 	private loopsByDefault: boolean;
 	private loopStart: number;
 
-	constructor(id: string, buffer: AudioBuffer, loopStart: number = 0) {
+	constructor(id: string, buffer: AudioBuffer, loopStart= 0) {
 		this.id = id;
 		this.buffer = buffer;
 		this.loopsByDefault = true;

@@ -12,10 +12,7 @@ import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
 /**
  * Callback for when the asset loader completes loading everything requested.
  */
-export interface AssetLoaderCallback {
-	(): void;
-}
-
+export type AssetLoaderCallback = () => void;
 
 /**
  * Defines a type of resource we can load.
@@ -43,8 +40,8 @@ interface ResourceType {
 export default class AssetLoader {
 
 	private readonly scale: number;
-	private readonly loadingAssetData: { [id: string]: ResourceType };
-	private readonly responses: { [id: string]: any };
+	private readonly loadingAssetData: Record<string, ResourceType>;
+	private readonly responses: Record<string, any>;
 	private callback: AssetLoaderCallback | undefined;
 	audio: AudioSystem;
 	private readonly assetRoot: string | undefined;
@@ -59,7 +56,7 @@ export default class AssetLoader {
 	 *        directory for all assets to load.  Use this if all assets are
 	 *        in a subfolder or different hierarchy than the project itself.
 	 */
-	constructor(scale: number = 1, audio: AudioSystem, assetRoot?: string) {
+	constructor(scale= 1, audio: AudioSystem, assetRoot?: string) {
 		this.scale = scale || 1;
 		this.loadingAssetData = {};
 		this.responses = {};
@@ -84,9 +81,9 @@ export default class AssetLoader {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.JSON };
-		console.log('Adding: ' + id + ' => ' + url +
-			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
-			', callback == ' + (this.callback !== null));
+		console.log(`Adding: ${id} => ${url}, ` +
+			`remaining == ${Utils.getObjectSize(this.loadingAssetData)}, ` +
+			`callback == ${this.callback !== null}`);
 
 		const xhr: XMLHttpRequest = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
@@ -117,9 +114,9 @@ export default class AssetLoader {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.IMAGE };
-		console.log('Adding: ' + id + ' => ' + imageSrc +
-			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
-			', callback == ' + (this.callback !== null));
+		console.log(`Adding: ${id} => ${imageSrc}, ` +
+			`remaining == ${Utils.getObjectSize(this.loadingAssetData)}, ` +
+			`callback == ${this.callback !== null}`);
 		image.addEventListener('load', () => {
 			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
 			this.completed(id, canvas);
@@ -137,8 +134,7 @@ export default class AssetLoader {
 	 *        is made translucent, along with all other pixels of the same
 	 *        color.  The default value is <code>false</code>.
 	 */
-	addImage(id: string, imageSrc: string,
-			firstPixelTranslucent: boolean = false) {
+	addImage(id: string, imageSrc: string, firstPixelTranslucent= false) {
 
 		if (this.assetRoot) {
 			imageSrc = this.assetRoot + imageSrc;
@@ -149,9 +145,9 @@ export default class AssetLoader {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.IMAGE };
-		console.log('Adding: ' + id + ' => ' + imageSrc +
-			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
-			', callback == ' + (this.callback !== null));
+		console.log(`Adding: ${id} => ${imageSrc}, ` +
+			`remaining == ${Utils.getObjectSize(this.loadingAssetData)}, ` +
+			`callback == ${this.callback !== null}`);
 		image.addEventListener('load', () => {
 			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
 			const gtpImage: Image = new Image(canvas);
@@ -216,8 +212,8 @@ export default class AssetLoader {
 	 * @param [loopByDefaultIfMusic=true] Whether this sound should
 	 *        loop by default when it is played as music.
 	 */
-	addSound(id: string, soundSrc: string, loopStart: number = 0,
-			loopByDefaultIfMusic: boolean = true) {
+	addSound(id: string, soundSrc: string, loopStart= 0,
+		loopByDefaultIfMusic= true) {
 
 		if (this.audio.isInitialized()) {
 
@@ -234,7 +230,7 @@ export default class AssetLoader {
 			xhr.onload = () => {
 				// this.autio.context is definitely defined since audio initialized
 				// TODO: Clean up this API
-				this.audio.context!.decodeAudioData(xhr.response as ArrayBuffer, (buffer: AudioBuffer) => {
+				void this.audio.context!.decodeAudioData(xhr.response as ArrayBuffer, (buffer: AudioBuffer) => {
 					const sound: Sound = new Sound(id, buffer, loopStart || 0);
 					sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
 					this.audio.addSound(sound);
@@ -264,8 +260,8 @@ export default class AssetLoader {
 	 *        is made translucent, along with all other pixels of the same color.
 	 */
 	addSpriteSheet(id: string, imageSrc: string, cellW: number, cellH: number,
-			spacingX: number = 0, spacingY: number = 0,
-			firstPixelTranslucent: boolean = false) {
+		spacingX= 0, spacingY= 0,
+		firstPixelTranslucent= false) {
 
 		spacingX = spacingX || 0;
 		spacingY = spacingY || 0;
@@ -283,9 +279,9 @@ export default class AssetLoader {
 			return;
 		}
 		this.loadingAssetData[id] = { type: AssetType.IMAGE };
-		console.log('Adding: ' + id + ' => ' + imageSrc +
-			', remaining == ' + Utils.getObjectSize(this.loadingAssetData) +
-			', callback == ' + (this.callback !== null));
+		console.log(`Adding: ${id} => ${imageSrc}, ` +
+			`remaining == ${Utils.getObjectSize(this.loadingAssetData)}, ` +
+			`callback == ${this.callback !== null}`);
 		image.addEventListener('load', () => {
 			const canvas: HTMLCanvasElement = ImageUtils.resize(image, this.scale);
 			const gtpImage: Image = new Image(canvas);
@@ -308,7 +304,7 @@ export default class AssetLoader {
 	 */
 	addTmxMap(map: TiledMap) {
 		map.tilesets.forEach(tileset => {
-			const id: string = '_tilesetImage_' + tileset.name;
+			const id= `_tilesetImage_${tileset.name}`;
 			this.addImage(id, tileset.image);
 		});
 	}
@@ -322,7 +318,7 @@ export default class AssetLoader {
 	 * @return The tileset image.
 	 */
 	getTmxTilesetImage(tileset: TiledTileset): Image {
-		return this.responses['_tilesetImage_' + tileset.name] as Image;
+		return this.responses[`_tilesetImage_${tileset.name}`] as Image;
 	}
 
 	/**
@@ -330,8 +326,8 @@ export default class AssetLoader {
 	 * @param res The ID of the resource.
 	 * @return The resource. An error is thrown if the resource isn't found.
 	 */
-	get<T>(res: string): T {
-		const resource: T | undefined = this.responses[res];
+	get(res: string): unknown {
+		const resource: unknown = this.responses[res];
 		if (!resource) {
 			throw new Error(`Resource is not loaded: ${res}`);
 		}
@@ -369,20 +365,18 @@ export default class AssetLoader {
 		}
 		this.responses[res] = response;
 		delete this.loadingAssetData[res];
-		console.log('Completed: ' + res + ', remaining == ' +
-				Utils.getObjectSize(this.loadingAssetData) +
-				', callback == ' + (this.callback !== null));
+		console.log(`Completed: ${res}, remaining == ${Utils.getObjectSize(this.loadingAssetData)}, ` +
+			`callback == ${this.callback !== null}`);
 		if (this.isDoneLoading() && this.callback) {
 			this.callback.call(this);
 			delete this.callback;
-			console.log('... Callback called and deleted (callback == ' + (this.callback !== null) + ')');
+			console.log(`... Callback called and deleted (callback == ${this.callback !== null})`);
 			if (this.nextCallback) {
 				this.callback = this.nextCallback;
 				delete this.nextCallback;
 			}
-		}
-		else {
-			console.log('... Not running callback - ' + this.isDoneLoading() + ', ' + (this.callback !== null));
+		} else {
+			console.log(`... Not running callback - ${this.isDoneLoading()}, ${this.callback !== null}`);
 		}
 	}
 
@@ -399,11 +393,9 @@ export default class AssetLoader {
 
 		if (this.isDoneLoading()) {
 			callback();
-		}
-		else if (this.callback) { // A new callback added from another callback
+		} else if (this.callback) { // A new callback added from another callback
 			this.nextCallback = callback;
-		}
-		else {
+		} else {
 			this.callback = callback;
 		}
 	}

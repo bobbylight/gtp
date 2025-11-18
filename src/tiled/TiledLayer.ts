@@ -87,7 +87,7 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 		if (!this.data) { // An object layer
 			return -1;
 		}
-		const index: number = this._getIndex(row, col);
+		const index: number = this.getIndex(row, col);
 		return this.data[index] as number; // We currently only support numeric data
 	}
 
@@ -95,12 +95,12 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 		if (!this.data) { // An object layer
 			return false;
 		}
-		const index: number = this._getIndex(row, col);
+		const index: number = this.getIndex(row, col);
 		(this.data as number[])[index] = value; // We currently only support numeric data
 		return true;
 	}
 
-	private _getIndex(row: number, col: number): number {
+	private getIndex(row: number, col: number): number {
 		return row * this.width + col;
 	}
 

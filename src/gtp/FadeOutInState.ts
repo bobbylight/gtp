@@ -1,15 +1,13 @@
 import State from './State';
 import Game from './Game';
 
-const DEFAULT_HALF_TIME_MILLIS: number = 800;
+const DEFAULT_HALF_TIME_MILLIS= 800;
 
 /**
  * An optional callback called when this transition hits its halfway point (completely faded out,
  * not yet started to fade back in).
  */
-export interface TransitionLogicCallback {
-	(): void;
-}
+export type TransitionLogicCallback = () => void;
 
 /**
  * A transitional state that fades out of one state and fades in another.
@@ -48,9 +46,8 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 			if (this.fadingOut) {
 				this.fadingOut = false;
 				this.transitionLogic?.();
-			}
-			else {
-				this._setState(this.enteringState);
+			} else {
+				this.setState(this.enteringState);
 				return;
 			}
 		}
@@ -67,8 +64,7 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 		ctx.globalAlpha = this.alpha;
 		if (this.fadingOut) {
 			this.leavingState.render(ctx);
-		}
-		else {
+		} else {
 			this.enteringState.render(ctx);
 		}
 		ctx.globalAlpha = previousAlpha;
@@ -80,7 +76,7 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 	 *
 	 * @param state The new state.
 	 */
-	private _setState(state: State<T>) {
+	private setState(state: State<T>) {
 		this.game.setState(this.enteringState);
 	}
 }

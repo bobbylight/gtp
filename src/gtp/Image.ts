@@ -22,8 +22,7 @@ export default class Image {
 			this.y = y;
 			this.w = w;
 			this.h = h;
-		}
-		else {
+		} else {
 			this.x = this.y = 0;
 			// Set these with regard to original canvas, not (possibly) resized one
 			this.w = canvas.width;
@@ -84,8 +83,8 @@ export default class Image {
 	 *              drawing.
 	 */
 	drawScaled2(ctx: CanvasRenderingContext2D, srcX: number, srcY: number,
-			srcW: number, srcH: number,
-			destX: number, destY: number, destW: number, destH: number) {
+		srcW: number, srcH: number,
+		destX: number, destY: number, destW: number, destH: number) {
 
 		if (!ImageUtils.allowSubpixelImageRendering) {
 			srcX = Math.round(srcX);
@@ -110,7 +109,7 @@ export default class Image {
 	 *        be used if this parameter is undefined.
 	 * @return This image, which has been modified.
 	 */
-	makeColorTranslucent(x: number = 0, y: number = 0) {
+	makeColorTranslucent(x= 0, y= 0) {
 		ImageUtils.makeColorTranslucent(this.canvas, x, y);
 	}
 

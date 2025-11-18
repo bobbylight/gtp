@@ -109,7 +109,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	}
 
 	draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number,
-			dx: number = 0, dy: number = 0) {
+		dx= 0, dy= 0) {
 
 		const colCount: number = this.width;
 		const rowCount: number = this.height;
@@ -174,7 +174,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 
 				if (layer.visible) {
 
-					let prevOpacity: number = 1; // Default value needed for strict null checks
+					let prevOpacity= 1; // Default value needed for strict null checks
 					if (layer.opacity < 1) {
 						prevOpacity = ctx.globalAlpha;
 						ctx.globalAlpha = prevOpacity * layer.opacity;
@@ -202,7 +202,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	}
 
 	drawTile(ctx: CanvasRenderingContext2D, x: number, y: number,
-			value: number, layer: TiledLayerData) {
+		value: number, layer: TiledLayerData) {
 
 		if (value <= 0) { // 0 => no tile to draw
 			return;
@@ -325,7 +325,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 
 	private getTilesetForGid(gid: number): TiledTileset {
 		const tilesetCount: number = this.tilesets.length;
-		for (let i: number = 0; i < tilesetCount; i++) {
+		for (let i= 0; i < tilesetCount; i++) {
 			if (this.tilesets[i].firstgid > gid) {
 				return this.tilesets[i - 1];
 			}
@@ -344,13 +344,13 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 * @method
 	 */
 	removeLayer(layerName: string): boolean {
-		for (let i: number = 0; i < this.layers.length; i++) {
+		for (let i= 0; i < this.layers.length; i++) {
 			if (this.layers[i].name === layerName) {
 				this.layers.splice(i, 1);
 				this.layersByName.delete(layerName);
-				for (let j: number = 0; j < this.objectGroups.length; j++) {
+				for (let j = 0; j < this.objectGroups.length; j++) {
 					if (this.objectGroups[j].name === layerName) {
-						delete this.objectGroups[j];
+						this.objectGroups.splice(j, 1);
 					}
 				}
 				return true;
@@ -366,8 +366,12 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 		this.screenCols = Math.ceil(this.screenWidth / this.tilewidth);
 		// Unnecessary curly braces in fat arrow functions required by eslint
 		this.layers.forEach(layer => {
-			layer.objects?.forEach(object => { scaleObject(object, scale) });
+			layer.objects?.forEach(object => {
+				scaleObject(object, scale)
+			});
 		});
-		this.tilesets.forEach(tileset => { scaleTileset(tileset, scale) });
+		this.tilesets.forEach(tileset => {
+			scaleTileset(tileset, scale)
+		});
 	}
 }
