@@ -36,21 +36,21 @@ export default {
 
 			default:
 			case StretchMode.STRETCH_NONE:
-				canvas.style.width = canvas.width + 'px';
-				canvas.style.height = canvas.height + 'px';
+				canvas.style.width = `${canvas.width}px`;
+				canvas.style.height = `${canvas.height}px`;
 				break;
 
 			case StretchMode.STRETCH_FILL:
-				canvas.style.width = document.body.clientWidth + 'px';
-				canvas.style.height = document.body.clientHeight + 'px';
+				canvas.style.width = `${document.body.clientWidth}px`;
+				canvas.style.height = `${document.body.clientHeight}px`;
 				break;
 
 			case StretchMode.STRETCH_PROPORTIONAL:
 				const xFactor: number = document.body.clientWidth / canvas.width;
 				const yFactor: number = document.body.clientHeight / canvas.height;
 				const factor: number = Math.min(xFactor, yFactor);
-				canvas.style.width = Math.floor(canvas.width * factor) + 'px';
-				canvas.style.height = Math.floor(canvas.height * factor) + 'px';
+				canvas.style.width = `${Math.floor(canvas.width * factor)}px`;
+				canvas.style.height = `${Math.floor(canvas.height * factor)}px`;
 				// Centering should be handled via CSS
 				break;
 

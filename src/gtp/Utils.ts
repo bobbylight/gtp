@@ -11,7 +11,7 @@ export default {
 	 * @param obj The object.
 	 * @return The number of elements in the object.
 	 */
-	getObjectSize(obj: any): number {
+	getObjectSize(obj: object): number {
 		return Object.keys(obj).length;
 	},
 
@@ -25,9 +25,9 @@ export default {
 	getRequestParam(param: string): string | null {
 
 		// Replace leading '?' with '&'
-		const params: string = '&' + BrowserUtil.getWindowLocationSearch().substring(1);
+		const params= '&' + BrowserUtil.getWindowLocationSearch().substring(1);
 
-		const searchFor: string = '&' + param;
+		const searchFor= '&' + param;
 		const index: number = params.indexOf(searchFor);
 		if (index >= -1) {
 			let start: number = index + searchFor.length;
@@ -97,8 +97,7 @@ export default {
 		if (typeof max === 'undefined') {
 			realMin = 0;
 			realMax = min;
-		}
-		else {
+		} else {
 			realMin = min;
 			realMax = max;
 		}
@@ -123,7 +122,7 @@ export default {
 	 * Defines console functions for IE9 and other braindead browsers.
 	 */
 	initConsole() {
-			if (!window.console) {
+		if (!window.console) {
 			const noOp = () => {};
 			(window as any).console = {
 				info: noOp,

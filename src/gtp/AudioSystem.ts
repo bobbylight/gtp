@@ -1,10 +1,7 @@
 import Sound from './Sound';
-import { Window } from './GtpBase';
 import { SoundCompletedCallback } from './SoundCompletedCallback';
 
-export interface OnEndedGenerator {
-	(playingSoundId: number): ((this: AudioScheduledSourceNode, ev: Event) => any) | null;
-}
+export type OnEndedGenerator = (playingSoundId: number) => ((this: AudioScheduledSourceNode, ev: Event) => any) | null;
 
 /**
  * Configuration for a playing sound.
@@ -61,8 +58,7 @@ class PlayingSound {
 			this.config.connectTo.forEach((node: AudioNode) => {
 				this.source!.connect(node);
 			});
-		}
-		else {
+		} else {
 			this.source.connect(this.config.connectTo);
 		}
 
@@ -112,8 +108,8 @@ class PlayingSound {
 
 }
 
-const DEFAULT_MUSIC_FADE_SECONDS: number = 0.3;
-const MILLIS_PER_SECOND: number = 1000;
+const DEFAULT_MUSIC_FADE_SECONDS= 0.3;
+const MILLIS_PER_SECOND= 1000;
 
 /**
  * A wrapper around web audio for games.
@@ -121,7 +117,7 @@ const MILLIS_PER_SECOND: number = 1000;
 export default class AudioSystem {
 
 	private currentMusic?: AudioBufferSourceNode;
-	private readonly sounds: { [id: string]: Sound };
+	private readonly sounds: Record<string, Sound>;
 	private musicFade: number;
 	private doFadeMusic: boolean;
 	private muted: boolean;
@@ -160,8 +156,8 @@ export default class AudioSystem {
 		this.soundEffectIdGenerator = 0;
 	}
 
-	private createPlayingSound(id: string, loop: boolean = false,
-			startOffset: number = 0, doneCallback?: SoundCompletedCallback): PlayingSound {
+	private createPlayingSound(id: string, loop= false,
+		startOffset= 0, doneCallback?: SoundCompletedCallback): PlayingSound {
 
 		const soundEffectId: number = this.createSoundEffectId();
 
@@ -191,24 +187,13 @@ export default class AudioSystem {
 	 */
 	init(): boolean {
 
-		// Effectively cast to our window extension for static typing
-		const w: Window = window as any;
-
 		try {
-
-			w.AudioContext = w.AudioContext ?? w.webkitAudioContext;
-
-			if (w.AudioContext) {
-				this.context = new w.AudioContext();
-				this.volumeFaderGain = this.context.createGain();
-				this.volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
-				this.volumeFaderGain.gain.value = 1;
-				this.volumeFaderGain.connect(this.context.destination);
-				this.initialized = true;
-			}
-			else {
-				console.log('The Web Audio API is not supported in this browser.');
-			}
+			this.context = new AudioContext();
+			this.volumeFaderGain = this.context.createGain();
+			this.volumeFaderGain.gain.setValueAtTime(1, this.context.currentTime);
+			this.volumeFaderGain.gain.value = 1;
+			this.volumeFaderGain.connect(this.context.destination);
+			this.initialized = true;
 		} catch (e) {
 			console.error('The Web Audio API is not supported in this browser.');
 			console.error(e);
@@ -239,8 +224,7 @@ export default class AudioSystem {
 				setTimeout(() => {
 					this.playMusic(newMusicId);
 				}, this.musicFade * MILLIS_PER_SECOND);
-			}
-			else {
+			} else {
 				this.playMusic(newMusicId);
 			}
 		}
@@ -335,7 +319,7 @@ export default class AudioSystem {
 	 *         stop a looping sound via <code>stopSound(id)</code>.
 	 * @see stopSound
 	 */
-	playSound(id: string, loop: boolean = false, doneCallback?: SoundCompletedCallback): number {
+	playSound(id: string, loop= false, doneCallback?: SoundCompletedCallback): number {
 
 		if (this.context) {
 			const playingSound: PlayingSound = this.createPlayingSound(id, loop, 0, doneCallback);
@@ -353,7 +337,7 @@ export default class AudioSystem {
 	 * @return The sound just removed, or <code>null</code> if there was no such sound.
 	 */
 	private removePlayingSound(id: number): PlayingSound | null {
-		for (let i: number = 0; i < this.playingSounds.length; i++) {
+		for (let i= 0; i < this.playingSounds.length; i++) {
 			if (this.playingSounds[i].id === id) {
 				const sound: PlayingSound = this.playingSounds[i];
 				this.playingSounds.splice(i, 1);
@@ -369,8 +353,7 @@ export default class AudioSystem {
 	 */
 	resumeAll() {
 
-		for (let i: number = 0; i < this.playingSounds.length; i++) {
-			const sound: PlayingSound = this.playingSounds[i];
+		for (const sound of this.playingSounds) {
 			if (sound.isPaused()) {
 				sound.resume();
 			}
@@ -383,7 +366,7 @@ export default class AudioSystem {
 	 *        native resources are freed and the music cannot be resumed.
 	 * @see playMusic
 	 */
-	stopMusic(pause: boolean = false) {
+	stopMusic(pause= false) {
 		if (this.currentMusic) {
 			this.currentMusic.stop();
 			if (!pause) {

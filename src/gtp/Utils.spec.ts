@@ -8,7 +8,7 @@ describe('Utils', () => {
 
 	it('getObjectSize() happy path', () => {
 
-		let obj: unknown = {};
+		let obj: object = {};
 		expect(Utils.getObjectSize(obj)).toBe(0);
 
 		obj = { one: 1, two: 2 };
@@ -77,7 +77,7 @@ describe('Utils', () => {
 	it('timestamp()', () => {
 
 		// Smaller delays cause occasional issues due to our use of window.performance
-		const DELAY: number = 300;
+		const DELAY= 300;
 
 		const start: number = Utils.timestamp();
 		const waitUntil: number = Date.now() + DELAY + 1; // Wait > 300 milliseconds

@@ -48,9 +48,7 @@ export interface ImageAtlasInfo {
 /**
  * A mapping from ID to image of all images parsed out of the image atlas.
  */
-export interface ImageMap {
-	[ id: string ]: Image;
-}
+export type ImageMap = Record<string, Image>;
 
 /**
  * Parses images out of an image atlas.
@@ -83,7 +81,7 @@ export default class ImageAtlas {
 	 *        by this value.
 	 * @returns The parsed images.
 	 */
-	parse(scale: number = 1): ImageMap {
+	parse(scale= 1): ImageMap {
 
 		const images: ImageMap = {};
 
@@ -104,14 +102,12 @@ export default class ImageAtlas {
 				y = parseInt(dim[1], 10);
 				w = parseInt(dim[2], 10);
 				h = parseInt(dim[3], 10);
-			}
-			else {
+			} else {
 				x = typeof imgInfo.x === 'number' ? imgInfo.x : -1;
 				y = typeof imgInfo.y === 'number' ? imgInfo.y : -1;
 				if (typeof imgInfo.s === 'number') {
 					w = h = imgInfo.s;
-				}
-				else {
+				} else {
 					w = typeof imgInfo.w === 'number' ? imgInfo.w : -1;
 					h = typeof imgInfo.h === 'number' ? imgInfo.h : -1;
 				}

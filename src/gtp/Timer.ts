@@ -4,9 +4,7 @@ import Utils from './Utils';
  * A mapping from string keys to numbers.  Used to map named events to their
  * run times.
  */
-interface TimeMap {
-	[ key: string ]: number;
-}
+type TimeMap = Record<string, number>;
 
 /**
  * Allows you to time actions and log their runtimes to the console.
@@ -14,20 +12,14 @@ interface TimeMap {
 export default class Timer {
 
 	private readonly startTimes: TimeMap = {};
-	private prefix: string = 'DEBUG';
-
-	/**
-	 * Allows you to time actions and log their runtimes to the console.
-	 */
-	constructor() {
-	}
+	private prefix= 'DEBUG';
 
 	/**
 	 * Sets the prefix to prepend to each line printed to the console.
 	 *
 	 * @param prefix The new prefix.  'DEBUG' is used if not defined.
 	 */
-	setLogPrefix(prefix: string = 'DEBUG') {
+	setLogPrefix(prefix= 'DEBUG') {
 		this.prefix = prefix;
 	}
 

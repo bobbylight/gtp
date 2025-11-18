@@ -16,9 +16,9 @@
     "preserveConstEnums": true,
     "removeComments": false,
     "strict": true,
-    //"moduleResolution": "node",
-    "module": "commonjs",
-    "target": "es5",
+    "moduleResolution": "node",
+    "target": "es6",
+    "module": "es2020",
     "outDir": "lib/",
     "sourceMap": true,
     "diagnostics": true

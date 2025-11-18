@@ -64,7 +64,7 @@ export default class GameTimer {
 	 */
 	resetPlayTime() {
 		if (this.paused || !this.updating) {
-			throw 'Cannot reset playtime millis when paused or not updating';
+			throw new Error('Cannot reset playtime millis when paused or not updating');
 		}
 		this.startShift = Utils.timestamp();
 	}
@@ -84,8 +84,7 @@ export default class GameTimer {
 			this.isPaused = paused;
 			if (paused) {
 				this.pauseStart = Utils.timestamp();
-			}
-			else {
+			} else {
 				const pauseTime: number = Utils.timestamp() - this.pauseStart;
 				this.startShift += pauseTime;
 				this.pauseStart = 0;
@@ -109,8 +108,7 @@ export default class GameTimer {
 			if (!this.paused) { // "pause" state "encompasses" update state.
 				if (!this.isUpdating) {
 					this.notUpdatingStart = Utils.timestamp();
-				}
-				else {
+				} else {
 					const notUpdatingTime: number = Utils.timestamp() - this.notUpdatingStart;
 					this.startShift += notUpdatingTime;
 					this.notUpdatingStart = 0;

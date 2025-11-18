@@ -12,7 +12,7 @@ export default class InputManager {
 
 	private readonly keys: boolean[];
 	private readonly refireMillis: number;
-	private readonly repeatTimers: { [key: number/*Keys*/]: number };
+	private readonly repeatTimers: Record<number/*Keys*/, number>;
 
 	/**
 	 * Handles input for games.<p>
@@ -26,7 +26,7 @@ export default class InputManager {
 	 *        milliseconds.  A value of 0 means to take the operating system
 	 *        default.
 	 */
-	constructor(keyRefireMillis: number = 0) {
+	constructor(keyRefireMillis= 0) {
 		this.keys = [];
 		this.refireMillis = keyRefireMillis;
 		this.repeatTimers = [];
@@ -50,7 +50,7 @@ export default class InputManager {
 	 * Resets all keys to be in their "not depressed" states.
 	 */
 	clearKeyStates() {
-		for (let i: number = 0; i < this.keys.length; i++) {
+		for (let i= 0; i < this.keys.length; i++) {
 			this.clearKeyState(i);
 		}
 	}
@@ -62,7 +62,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	ctrl(clear: boolean = false) {
+	ctrl(clear= false) {
 		return this.isKeyDown(Keys.KEY_CTRL, clear);
 	}
 
@@ -73,7 +73,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	down(clear: boolean = false) {
+	down(clear= false) {
 		return this.isKeyDown(Keys.KEY_DOWN_ARROW, clear);
 	}
 
@@ -84,7 +84,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	enter(clear: boolean = false) {
+	enter(clear= false) {
 		return this.isKeyDown(Keys.KEY_ENTER, clear);
 	}
 
@@ -93,8 +93,8 @@ export default class InputManager {
 	 * initialization.
 	 */
 	install() {
-		document.onkeydown = (e: KeyboardEvent) => { this._keyDown(e); };
-		document.onkeyup = (e:  KeyboardEvent) => { this._keyUp(e); };
+		document.onkeydown = (e: KeyboardEvent) => { this.keyDown(e); };
+		document.onkeyup = (e: KeyboardEvent) => { this.keyUp(e); };
 	}
 
 	/**
@@ -105,7 +105,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	isKeyDown(keyCode: number, clear: boolean = false) {
+	isKeyDown(keyCode: number, clear= false) {
 		const down: boolean = this.keys[keyCode];
 		if (down && clear) {
 			this.keys[keyCode] = false;
@@ -113,7 +113,8 @@ export default class InputManager {
 		return down;
 	}
 
-	_keyDown(e: KeyboardEvent) {
+	private keyDown(e: KeyboardEvent) {
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const keyCode: number = e.keyCode;
 		if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) { // An arrow key or space
 			e.preventDefault();
@@ -126,26 +127,24 @@ export default class InputManager {
 					this.keys[keyCode] = true;
 				}, this.refireMillis);
 			}
-		}
-		else {
+		} else {
 			this.keys[keyCode] = true;
 		}
 		e.stopPropagation();
 	}
 
-	_keyUp(e: KeyboardEvent) {
+	private keyUp(e: KeyboardEvent) {
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const key: number = e.keyCode;
 		if (this.refireMillis) {
 			if (this.repeatTimers[key]) { // Should always be true
 				this.keys[key] = false;
 				clearInterval(this.repeatTimers[key]);
 				delete this.repeatTimers[key];
-			}
-			else {
+			} else {
 				console.error(`_keyUp: Timer does not exist for key: ${key}!`);
 			}
-		}
-		else {
+		} else {
 			this.keys[key] = false;
 		}
 		e.stopPropagation();
@@ -158,7 +157,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	left(clear: boolean = false) {
+	left(clear= false) {
 		return this.isKeyDown(Keys.KEY_LEFT_ARROW, clear);
 	}
 
@@ -169,7 +168,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	right(clear: boolean = false) {
+	right(clear= false) {
 		return this.isKeyDown(Keys.KEY_RIGHT_ARROW, clear);
 	}
 
@@ -180,7 +179,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	shift(clear: boolean = false) {
+	shift(clear= false) {
 		return this.isKeyDown(Keys.KEY_SHIFT, clear);
 	}
 
@@ -191,7 +190,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	up(clear: boolean = false) {
+	up(clear= false) {
 		return this.isKeyDown(Keys.KEY_UP_ARROW, clear);
 	}
 }

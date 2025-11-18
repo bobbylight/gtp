@@ -8,7 +8,7 @@ export function getProperty<T>(container: TiledPropertiesContainer, name: string
 		}
 		throw new Error(`No such property on object, or named properties not initialized: ${name}`);
 	}
-	return result.value;
+	return result.value as T;
 }
 
 export function initPropertiesByName(container: TiledPropertiesContainer) {

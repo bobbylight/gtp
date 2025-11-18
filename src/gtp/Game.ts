@@ -8,10 +8,10 @@ import Utils from './Utils';
 import AudioSystem from './AudioSystem';
 import AssetLoader from './AssetLoader';
 
-const STATUS_MESSAGE_TIME_INC: number = 100;
-const STATUS_MESSAGE_ALPHA_DEC: number = 0.1;
-const MILLIS_PER_SECOND: number = 1000;
-const DEFAULT_TARGET_FPS: number = 30;
+const STATUS_MESSAGE_TIME_INC= 100;
+const STATUS_MESSAGE_ALPHA_DEC= 0.1;
+const MILLIS_PER_SECOND= 1000;
+const DEFAULT_TARGET_FPS= 30;
 
 /**
  * Optional arguments that can be passed to the <code>Game</code> constructor.
@@ -135,7 +135,7 @@ export default class Game {
 	 * @return The random number.
 	 */
 	randomInt(max: number): number {
-		const min: number = 0;
+		const min= 0;
 		max = Math.floor(max);
 		// Using Math.round() would give a non-uniform distribution!
 		return Math.floor(Math.random() * (max - min) + min);
@@ -164,8 +164,8 @@ export default class Game {
 			this.lastTime = now;
 		}
 
-		const x: number = 10;
-		const y: number = 15;
+		const x= 10;
+		const y= 15;
 		ctx.font = '10pt Arial';
 		ctx.fillStyle = this.fpsColor;
 		ctx.fillText(this.fpsMsg, x, y);
@@ -174,7 +174,7 @@ export default class Game {
 
 	private renderStatusMessage(ctx: CanvasRenderingContext2D) {
 		if (this.statusMessage) {
-			const x: number = 10;
+			const x= 10;
 			const y: number = this.canvas.height - 6;
 			ctx.font = '10pt Arial';
 			ctx.fillStyle = this.statusMessageColor ?? '#fff';
@@ -202,8 +202,7 @@ export default class Game {
 	set paused(paused: boolean) {
 		if (paused) {
 			this.audio.pauseAll();
-		}
-		else {
+		} else {
 			this.audio.resumeAll();
 		}
 		this.gameTimer.paused = paused;

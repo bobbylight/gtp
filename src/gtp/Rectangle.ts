@@ -28,7 +28,7 @@ export default class Rectangle implements RectangularData {
 	 * @param w The width of the rectangle, defaulting to <code>0</code>.
 	 * @param h The height of the rectangle, defaulting to <code>0</code>.
 	 */
-	constructor(x: number = 0, y: number = 0, w: number = 0, h: number = 0) {
+	constructor(x= 0, y= 0, w= 0, h= 0) {
 		this.set(x, y, w, h);
 	}
 
@@ -55,7 +55,7 @@ export default class Rectangle implements RectangularData {
 	 *        specifying the dimensions as separate arguments.
 	 * @return Whether this rectangle contains the specified rectangle.
 	 */
-	containsRect(x2: number | RectangularData, y2: number = 0, w2: number = 0, h2: number = 0): boolean {
+	containsRect(x2: number | RectangularData, y2= 0, w2= 0, h2= 0): boolean {
 
 		if (typeof x2 !== 'number') {
 			const r: RectangularData = x2;
@@ -68,35 +68,43 @@ export default class Rectangle implements RectangularData {
 		let w: number = this.w;
 		let h: number = this.h;
 		if ((w | h | w2 | h2) < 0) {
-				// At least one of the dimensions is negative...
-				return false;
+			// At least one of the dimensions is negative...
+			return false;
 		}
 		// Note: if any dimension is zero, tests below must return false...
 		const x: number = this.x;
 		const y: number = this.y;
 		if (x2 < x || y2 < y) {
-				return false;
+			return false;
 		}
 		w += x;
 		w2 += x2;
 		if (w2 <= x2) {
-				// X+W overflowed or W was zero, return false if...
-				// either original w or W was zero or
-				// x+w did not overflow or
-				// the overflowed x+w is smaller than the overflowed X+W
-				if (w >= x || w2 > w) { return false; }
+			// X+W overflowed or W was zero, return false if...
+			// either original w or W was zero or
+			// x+w did not overflow or
+			// the overflowed x+w is smaller than the overflowed X+W
+			if (w >= x || w2 > w) {
+				return false;
+			}
 		} else {
-				// X+W did not overflow and W was not zero, return false if...
-				// original w was zero or
-				// x+w did not overflow and x+w is smaller than X+W
-				if (w >= x && w2 > w) { return false; }
+			// X+W did not overflow and W was not zero, return false if...
+			// original w was zero or
+			// x+w did not overflow and x+w is smaller than X+W
+			if (w >= x && w2 > w) {
+				return false;
+			}
 		}
 		h += y;
 		h2 += y2;
 		if (h2 <= y2) {
-				if (h >= y || h2 > h) { return false; }
+			if (h >= y || h2 > h) {
+				return false;
+			}
 		} else {
-				if (h >= y && h2 > h) { return false; }
+			if (h >= y && h2 > h) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -154,8 +162,7 @@ export default class Rectangle implements RectangularData {
 			if (typeof h !== 'undefined') {
 				this.h = h;
 			}
-		}
-		else {
+		} else {
 			this.x = x.x;
 			this.y = x.y;
 			this.w = x.w;

@@ -1,6 +1,4 @@
-export interface DelayCallback {
-	(delay: Delay): void;
-}
+export type DelayCallback = (delay: Delay) => void;
 
 /**
  * Arguments to the Delay constructor.
@@ -52,7 +50,7 @@ export default class Delay {
 
 	constructor(args: DelayArgs) {
 		if (!args?.millis) {
-			throw 'Missing required "millis" argument to Delay';
+			throw new Error('Missing required "millis" argument to Delay');
 		}
 		this.initial = Array.isArray(args.millis) ? args.millis : [ args.millis ];
 		this.initialIndex = 0;
@@ -87,13 +85,11 @@ export default class Delay {
 				if (this.maxLoopCount === -1 || this.loopCount < this.maxLoopCount - 1) {
 					this.loopCount++;
 					this.nextInitial(true);
-				}
-				else {
+				} else {
 					this.loopCount = this.maxLoopCount;
 					this.remaining = -1;
 				}
-			}
-			else {
+			} else {
 				this.remaining = Math.max(0, this.remaining);
 			}
 		}
@@ -164,7 +160,7 @@ export default class Delay {
 	 *
 	 * @param smooth Whether to do so smoothly.
 	 */
-	private nextInitial(smooth: boolean = false) {
+	private nextInitial(smooth= false) {
 		const prevRemaining: number = this.remaining;
 		this.initialIndex = (this.initialIndex + 1) % this.initial.length;
 		this.curInitial = this.remaining = this.initial[this.initialIndex];
@@ -198,11 +194,10 @@ export default class Delay {
 	}
 
 	toString() {
-		return `[Delay: initial=${this.initial}, ` +
+		return `[Delay: initial=${this.initial.join(',')}, ` +
 			`remaining=${this.remaining}, ` +
 			`loop=${this.loop}, ` +
-			`callback=${!!this.callback}` +
-			']';
+			`callback=${!!this.callback}]`;
 	}
 
 }

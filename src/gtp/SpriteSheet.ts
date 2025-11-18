@@ -28,7 +28,7 @@ export default class SpriteSheet {
 	 *        by this value.
 	 */
 	constructor(gtpImage: Image, cellW: number, cellH: number,
-		spacing: number = 1, spacingY: number = spacing, scale: number = 1) {
+		spacing= 1, spacingY: number = spacing, scale= 1) {
 
 		this.gtpImage = gtpImage;
 		this.cellW = cellW;

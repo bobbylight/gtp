@@ -24,11 +24,9 @@ export class State<T extends Game> {
 	constructor(args?: T | BaseStateArgs<T>) {
 		if (args && args instanceof Game) {
 			this.game = args;
-		}
-		else if (args) {
+		} else if (args) {
 			this.game = args.game;
-		}
-		else { // Default to global game object
+		} else { // Default to global game object
 			const gameWindow: Window = window as any;
 			this.game = gameWindow.game as T;
 		}

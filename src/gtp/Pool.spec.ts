@@ -44,7 +44,7 @@ describe('Pool', () => {
 
 	it('borrowObj() until pool grown', () => {
 
-		const growCount: number = 7;
+		const growCount= 7;
 		const pool: Pool<Widget> = new Pool<Widget>(Widget, 3, growCount);
 		expect(pool.borrowedCount).toBe(0);
 

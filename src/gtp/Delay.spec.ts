@@ -38,7 +38,7 @@ describe('Delay', () => {
 
 	it('update() calls callback when not looping', () => {
 
-		let callbackCalled: boolean = false;
+		let callbackCalled= false;
 		const cb: DelayCallback = () => {
 			callbackCalled = true;
 		};
@@ -57,7 +57,7 @@ describe('Delay', () => {
 
 	it('update() calls callback when looping', () => {
 
-		let callbackCalled: boolean = false;
+		let callbackCalled= false;
 		const cb: DelayCallback = () => {
 			callbackCalled = true;
 		};

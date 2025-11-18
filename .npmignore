@@ -4,13 +4,11 @@ doc/
 src/
 typings/
 .editorconfig
-.eslintrc.js
 .gitattributes
 .npmignore
-.travis.yml
+eslint.config.js
 gtp.iml
-gulpfile.js
-jest.conf.js
+jest.config.js
 npm-debug.log
 test-main.js
 Thumbs.db

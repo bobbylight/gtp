@@ -171,7 +171,7 @@ describe('AssetLoader', () => {
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			// Add something to load, now we're waiting
-			let imageSrc: string = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+			let imageSrc= 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 			if (assetRoot) {
 				imageSrc = imageSrc.substring(assetRoot.length);
 			}
@@ -207,7 +207,7 @@ describe('AssetLoader', () => {
 			};
 
 			// Add something to load, now we're waiting
-			let imageSrc: string = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+			let imageSrc= 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 			if (assetRoot) {
 				imageSrc = imageSrc.substring(assetRoot.length);
 			}
