@@ -11,7 +11,6 @@ export default [
 
     {
         ignores: [
-            "**/*.spec.ts", // TODO: Remove me
         ],
     },
     {

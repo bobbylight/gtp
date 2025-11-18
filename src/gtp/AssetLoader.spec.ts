@@ -8,6 +8,7 @@ describe('AssetLoader', () => {
 		open: jest.fn(),
 		send: jest.fn(),
 		onerror: jest.fn(),
+		onload: jest.fn(),
 	};
 
 	const mockAudioContext: any/*AudioContext*/ = jest.fn(() => ({
@@ -54,11 +55,10 @@ describe('AssetLoader', () => {
 	});
 
 	// Loop through no assetRoot value and an assetRoot value
-	describe.each`
-		assetRoot
-		${undefined}
-		${'data:'} // Kind of hacky, but use the start of our inline GIF image URL
-	`('when assetRoot is $assetRoot', ({ assetRoot }) => {
+	describe.each<{ assetRoot: string | undefined }>([
+		{ assetRoot: undefined },
+		{ assetRoot: 'data:' }, // Kind of hacky, but use the start of our inline GIF image URL
+	])('when assetRoot is %d', ({ assetRoot }) => {
 
 		it('constructor, happy path', () => {
 			new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -66,7 +66,7 @@ describe('AssetLoader', () => {
 
 		it('addJson() loads the data', () => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -79,7 +79,7 @@ describe('AssetLoader', () => {
 			// Mock a response, which triggers AssetLoader to receive the response as well
 			xhrMock.readyState = XMLHttpRequest.DONE;
 			xhrMock.responseText = '{"test": "json"}';
-			xhrMock.onreadystatechange();
+			(xhrMock as XMLHttpRequest).onreadystatechange?.({} as Event);
 
 			// Now that we've received the response, check that we're "done loading" again
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
@@ -90,7 +90,7 @@ describe('AssetLoader', () => {
 		// verify the behavior here
 		it('addJson() does nothing if data with the given ID is currently being loaded', () => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -107,7 +107,7 @@ describe('AssetLoader', () => {
 			// Mock a response, which triggers AssetLoader to receive the response as well
 			xhrMock.readyState = XMLHttpRequest.DONE;
 			xhrMock.responseText = '{"test": "json"}';
-			xhrMock.onreadystatechange();
+			(xhrMock as XMLHttpRequest).onreadystatechange?.({} as Event);
 
 			// Now that we've received the response, check that we're "done loading" again
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
@@ -118,7 +118,7 @@ describe('AssetLoader', () => {
 		// verify the behavior here
 		it('addJson() does nothing if data with the given ID has already been loaded', () => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -131,7 +131,7 @@ describe('AssetLoader', () => {
 			// Mock a response, which triggers AssetLoader to receive the response as well
 			xhrMock.readyState = XMLHttpRequest.DONE;
 			xhrMock.responseText = '{"test": "json"}';
-			xhrMock.onreadystatechange();
+			(xhrMock as XMLHttpRequest).onreadystatechange?.({} as Event);
 
 			// Now that we've received the response, check that we're "done loading" again
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
@@ -144,7 +144,7 @@ describe('AssetLoader', () => {
 
 		it('addCanvas() loads the data', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -164,7 +164,7 @@ describe('AssetLoader', () => {
 
 		it('addImage() loads the data', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -187,7 +187,7 @@ describe('AssetLoader', () => {
 
 		it('addImageAtlasContents() loads the data', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -223,7 +223,7 @@ describe('AssetLoader', () => {
 
 		it('addSound() loads sound data if audio is enabled in this browser', () => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const audioSystem: AudioSystem = new AudioSystem();
@@ -238,7 +238,7 @@ describe('AssetLoader', () => {
 			// Mock a response, which triggers AssetLoader to receive the response as well
 			xhrMock.readyState = XMLHttpRequest.DONE;
 			xhrMock.response = new ArrayBuffer(10);
-			xhrMock.onload();
+			(xhrMock as XMLHttpRequest).onload?.({} as ProgressEvent);
 
 			// Now that we've received the response, check that we're "done loading" again
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
@@ -247,7 +247,7 @@ describe('AssetLoader', () => {
 
 		it('addSpriteSheet() loads the data', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock) as any;
+			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
