@@ -1,5 +1,14 @@
 import ImageUtils from './ImageUtils';
 
+export interface ColorChange {
+	fromR: number;
+	fromG: number;
+	fromB: number;
+	toR: number;
+	toG: number;
+	toB: number;
+}
+
 /**
  * A wrapper around images.  Handles browser-specific quirks and other things a game shouldn't have
  * to know about.
@@ -29,6 +38,43 @@ export default class Image {
 			this.h = canvas.height;
 		}
 		this.canvas = ImageUtils.ensure256Square(canvas);
+	}
+
+	/**
+	 * Creates a copy of this image with one or more colors changed.
+	 *
+	 * @param colorChanges The colors to change.
+	 * @returns A new image with the specified colors changed.
+	 */
+	createRecoloredCopy(...colorChanges: ColorChange[]): Image {
+		const newCanvas = document.createElement('canvas');
+		newCanvas.width = this.width;
+		newCanvas.height = this.height;
+		const newCtx = newCanvas.getContext('2d');
+		if (!newCtx) {
+			throw new Error('Could not render to a temporary canvas!');
+		}
+		this.draw(newCtx, 0, 0);
+
+		const imageData = newCtx.getImageData(0, 0, newCanvas.width, newCanvas.height);
+		const pixels = imageData.data;
+		for (let i = 0; i < pixels.length; i += 4) {
+			const r = pixels[i];
+			const g = pixels[i + 1];
+			const b = pixels[i + 2];
+
+			for (const colorChange of colorChanges) {
+				if (r === colorChange.fromR && g === colorChange.fromG && b === colorChange.fromB) {
+					pixels[i] = colorChange.toR;
+					pixels[i + 1] = colorChange.toG;
+					pixels[i + 2] = colorChange.toB;
+					break;
+				}
+			}
+		}
+
+		newCtx.putImageData(imageData, 0, 0);
+		return new Image(newCanvas);
 	}
 
 	/**
