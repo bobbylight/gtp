@@ -1,9 +1,9 @@
-# GTP - A very basic 2D HTML5 game library
+# GTP - A very basic TypeScript 2D game library
 ![Build](https://github.com/bobbylight/gtp/actions/workflows/build.js.yml/badge.svg)
 ![CodeQL](https://github.com/bobbylight/gtp/actions/workflows/codeql-analysis.yml/badge.svg)
 [![codecov](https://codecov.io/gh/bobbylight/gtp/branch/master/graph/badge.svg?token=)](https://codecov.io/gh/bobbylight/gtp)
 
-This is a basic game library for 2D HTML5 games, written in TypeScript.
+This is a basic game library for 2D games, written in TypeScript.
 
 Features include:
 
