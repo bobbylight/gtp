@@ -50,6 +50,6 @@ describe('TiledPropertiesContainer', () => {
 
 			expect(object.propertiesByName.get('foo')).toBe(object.properties![0]);
 			expect(object.propertiesByName.get('bar')).toBe(object.properties![1]);
-		})
+		});
 	});
-})
+});

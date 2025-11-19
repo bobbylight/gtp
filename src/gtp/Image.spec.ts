@@ -44,7 +44,7 @@ describe('Image', () => {
 			origPixelData.data[2] = 0xff;
 			origPixelData.data[3] = 0xff;
 			origPixelData.data[4] = 0x00;
-			origPixelData.data[5] = 0x00
+			origPixelData.data[5] = 0x00;
 			origPixelData.data[6] = 0x00;
 			origPixelData.data[7] = 0xff;
 			origCtx.putImageData(origPixelData, 0, 0);

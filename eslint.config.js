@@ -42,6 +42,8 @@ export default [
             "@stylistic/indent": ["error", "tab"],
             "@stylistic/no-multi-spaces": "error",
             "@stylistic/no-trailing-spaces": "error",
+            //"@stylistic/padded-blocks": ["error", "never"],
+            "@stylistic/semi": ["error", "always"],
             "@typescript-eslint/adjacent-overload-signatures": 0,
             '@typescript-eslint/array-type': [ 'error', { default: 'array' } ],
             '@typescript-eslint/ban-types': 0, // We use 'Function'
