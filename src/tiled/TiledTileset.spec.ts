@@ -24,5 +24,5 @@ describe('TiledTileset', () => {
 			expect(tileset.margin).toBe(12);
 			expect(tileset.spacing).toBe(14);
 		});
-	})
+	});
 });

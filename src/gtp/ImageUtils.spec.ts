@@ -121,5 +121,5 @@ describe('ImageUtils', () => {
 		expect(pixels.data[(canvas.height * canvas.width - 1) * 4 + 2]).toEqual(0);
 		expect(pixels.data[(canvas.height * canvas.width - 1) * 4 + 3]).toEqual(0);
 
-	})
-})
+	});
+});

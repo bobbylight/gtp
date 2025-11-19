@@ -367,11 +367,11 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 		// Unnecessary curly braces in fat arrow functions required by eslint
 		this.layers.forEach(layer => {
 			layer.objects?.forEach(object => {
-				scaleObject(object, scale)
+				scaleObject(object, scale);
 			});
 		});
 		this.tilesets.forEach(tileset => {
-			scaleTileset(tileset, scale)
+			scaleTileset(tileset, scale);
 		});
 	}
 }
