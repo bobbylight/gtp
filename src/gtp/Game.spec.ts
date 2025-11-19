@@ -42,7 +42,12 @@ describe('Game', () => {
 		expect(game.getHeight()).toEqual(240);
 	});
 
-	it('getHeight() returns the canvas width', () => {
+	it('getRenderingContext() returns the canvas context', () => {
+		const game: Game = new Game();
+		expect(game.getRenderingContext()).toBeDefined();
+	});
+
+	it('getWidth() returns the canvas width', () => {
 
 		const game: Game = new Game({
 			width: 320,
