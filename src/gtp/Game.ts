@@ -102,6 +102,21 @@ export default class Game {
 		return this.canvas.height;
 	}
 
+	/**
+	 * A utility method that returns the rendering context for this game's canvas without having
+	 * to assert that it's non-null. This is just a simple utility to avoid non-null assertions
+	 * in games.
+	 *
+	 * @return The rendering context for this game's canvas.
+	 */
+	getRenderingContext(): CanvasRenderingContext2D {
+		const ctx = this.canvas.getContext('2d');
+		if (!ctx) {
+			throw new Error('Failed to get 2D rendering context from canvas.');
+		}
+		return ctx;
+	}
+
 	getWidth(): number {
 		return this.canvas.width;
 	}
