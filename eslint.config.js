@@ -77,7 +77,6 @@ export default [
             "import/no-duplicates": "error",
             "import/no-relative-packages": "error",
             "import/order": "error",
-            //indent: ["error", 4, {"SwitchCase": 1}],
             "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
             "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
             semi: "off",

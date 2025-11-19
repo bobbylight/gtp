@@ -9,7 +9,7 @@ import BrowserUtil from './gtp/BrowserUtil';
 import CanvasResizer from './gtp/CanvasResizer';
 import Delay from './gtp/Delay';
 import FadeOutInState from './gtp/FadeOutInState';
-import Game from './gtp/Game';
+import Game, { GameArgs } from './gtp/Game';
 //import { GtpBase } from './gtp/GtpBase';
 import Image from './gtp/Image';
 import ImageAtlas, { ImageAtlasInfo, ImageInfo, ImageMap } from './gtp/ImageAtlas';
@@ -43,6 +43,7 @@ export {
 	Delay,
 	FadeOutInState,
 	Game,
+	GameArgs,
 	//GtpBase,
 	Image,
 	ImageAtlas,
