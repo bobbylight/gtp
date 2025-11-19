@@ -1,6 +1,6 @@
 {
   "name": "gtp",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "license": "MIT",
   "type": "module",
   "repository": {
@@ -23,7 +23,7 @@
     "lib/"
   ],
   "devDependencies": {
-    "@stylistic/eslint-plugin": "5.5.0",
+    "@stylistic/eslint-plugin": "5.6.0",
     "@types/jest": "30.0.0",
     "@typescript-eslint/eslint-plugin": "8.46.4",
     "@typescript-eslint/parser": "8.46.4",

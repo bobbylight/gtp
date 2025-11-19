@@ -326,8 +326,9 @@ export default class AssetLoader {
 	 * @param res The ID of the resource.
 	 * @return The resource. An error is thrown if the resource isn't found.
 	 */
-	get(res: string): unknown {
-		const resource: unknown = this.responses[res];
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+	get<T>(res: string): T {
+		const resource: T | undefined = this.responses[res];
 		if (!resource) {
 			throw new Error(`Resource is not loaded: ${res}`);
 		}
