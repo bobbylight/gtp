@@ -21,6 +21,26 @@ describe('BitmapFont', () => {
 		expect(font.size).toEqual(6);
 	});
 
+	describe('addVariant()', () => {
+
+		const gameWindow: Window = window as any;
+		gameWindow.game = new Game();
+
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
+		canvas.width = 40;
+		canvas.height = 60;
+		const image: Image = new Image(canvas);
+
+		it('adds another color of the font to render', () => {
+			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
+			font.addVariant('test', {
+				fromR: 0, fromG: 0, fromB: 0, toR: 255, toG: 255, toB: 255,
+			});
+			jest.spyOn(font, 'drawByIndex').mockImplementation(() => {});
+			expect(() => { font.drawString('      ', 0, 0, 'test'); }).not.toThrow();
+		});
+	});
+
 	describe('drawString()', () => {
 
 		const gameWindow: Window = window as any;
@@ -66,6 +86,12 @@ describe('BitmapFont', () => {
 					expect.anything(), expect.anything(), expect.anything(), 0,
 				);
 			}
+		});
+
+		it('does not error if an invalid color is specified', () => {
+			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
+			jest.spyOn(font, 'drawByIndex').mockImplementation(() => {});
+			expect(() => { font.drawString('      ', 0, 0, 'invalidVariant'); }).not.toThrow();
 		});
 	});
 });

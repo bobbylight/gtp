@@ -1,6 +1,12 @@
-import Image from './Image';
+import Image, { ColorChange } from './Image';
 import SpriteSheet from './SpriteSheet';
 import { Window } from './GtpBase';
+
+/**
+ * Specifies the default color for this font in calls to drawString() (that is, the
+ * color of the original image).
+ */
+export const DEFAULT_COLOR = 'default';
 
 const FIRST_PRINTABLE_CODE_POINT= 0x20; // === ' '
 
@@ -9,23 +15,39 @@ const FIRST_PRINTABLE_CODE_POINT= 0x20; // === ' '
  */
 export default class BitmapFont extends SpriteSheet {
 
+	private fontMap: Record<string, SpriteSheet> = {};
+
 	constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number, scale= 1) {
 		super(gtpImage, cellW, cellH, spacing, spacingY, scale);
+		this.fontMap[DEFAULT_COLOR] = this;
 	}
 
-	drawString(str: string, x: number, y: number) {
+	/**
+	 * Adds a named color variant of this font. Games can use this method to load a font once,
+	 * say with white text, then programmatically define red, green, etc. variants of it.
+	 * The color specified can be passed to drawString() to render the font in that color.
+	 *
+	 * @param color The logical ID for the color.
+	 * @param colorChanges The color changes to apply to the original image.
+	 */
+	addVariant(color: string, ...colorChanges: ColorChange[]) {
+		this.fontMap[color] = this.createRecoloredCopy(...colorChanges);
+	}
+
+	drawString(str: string, x: number, y: number, color = DEFAULT_COLOR) {
 
 		const glyphCount: number = this.size;
 		const gameWindow: Window = window as any;
 		const ctx: CanvasRenderingContext2D = gameWindow.game.canvas.getContext('2d')!;
 		const charWidth: number = this.cellW;
+		const variant = this.fontMap[color] ?? this;
 
 		for (let i= 0; i < str.length; i++) {
 			let ch: number = str.charCodeAt(i) - FIRST_PRINTABLE_CODE_POINT;
 			if (ch < 0 || ch >= glyphCount) {
 				ch = 0;
 			}
-			this.drawByIndex(ctx, x, y, ch);
+			variant.drawByIndex(ctx, x, y, ch);
 			x += charWidth;
 		}
 
