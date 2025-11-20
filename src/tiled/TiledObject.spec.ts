@@ -1,4 +1,4 @@
-import TiledObject, { intersects, scaleObject } from './TiledObject';
+import TiledObject, { intersects, scaleObject } from './TiledObject.js';
 
 describe('TiledObject', () => {
 

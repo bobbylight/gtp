@@ -1,5 +1,5 @@
 
-import { StretchMode } from './StretchMode';
+import { StretchMode } from './StretchMode.js';
 
 /**
  * Utility methods to allow desktop games to resize to fit their parent document.  Typically, you will

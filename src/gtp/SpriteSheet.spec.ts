@@ -1,4 +1,4 @@
-import { SpriteSheet, Image } from '../index';
+import { SpriteSheet, Image } from '../index.js';
 
 describe('Spritesheet', () => {
 

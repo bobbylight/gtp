@@ -1,5 +1,5 @@
-import { State, FadeOutInState } from '../index';
-import Game from './Game';
+import { State, FadeOutInState } from '../index.js';
+import Game from './Game.js';
 
 interface FunctionWrapperForTesting {
 	transitionLogic: () => string;

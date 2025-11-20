@@ -1,6 +1,6 @@
-import TiledProperty from './TiledProperty';
-import TiledTileset from './TiledTileset';
-import { TiledLayerData } from './TiledLayerData';
+import TiledProperty from './TiledProperty.js';
+import TiledTileset from './TiledTileset.js';
+import { TiledLayerData } from './TiledLayerData.js';
 
 /**
  * The data stored by Tiled for a <code>TiledMap</code>.

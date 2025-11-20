@@ -1,12 +1,12 @@
-import AssetLoader from '../gtp/AssetLoader';
-import AudioSystem from '../gtp/AudioSystem';
-import TiledLayer from './TiledLayer';
-import { TiledMapData } from './TiledMapData';
-import TiledMap from './TiledMap';
-import { TiledMapArgs } from './TiledMapArgs';
-import { TiledLayerData } from './TiledLayerData';
-import TiledTileset from './TiledTileset';
-import TiledObject from './TiledObject';
+import AssetLoader from '../gtp/AssetLoader.js';
+import AudioSystem from '../gtp/AudioSystem.js';
+import TiledLayer from './TiledLayer.js';
+import { TiledMapData } from './TiledMapData.js';
+import TiledMap from './TiledMap.js';
+import { TiledMapArgs } from './TiledMapArgs.js';
+import { TiledLayerData } from './TiledLayerData.js';
+import TiledTileset from './TiledTileset.js';
+import TiledObject from './TiledObject.js';
 
 const TEST_TILE_LAYER_NAME = 'test-tile-layer';
 const TEST_OBJECT_GROUP_LAYER_NAME = 'test-object-group-layer';

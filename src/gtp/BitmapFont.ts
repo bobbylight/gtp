@@ -1,6 +1,6 @@
-import Image, { ColorChange } from './Image';
-import SpriteSheet from './SpriteSheet';
-import { Window } from './GtpBase';
+import Image, { ColorChange } from './Image.js';
+import SpriteSheet from './SpriteSheet.js';
+import { Window } from './GtpBase.js';
 
 /**
  * Specifies the default color for this font in calls to drawString() (that is, the

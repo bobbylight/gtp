@@ -1,4 +1,4 @@
-import TiledTileset, { scaleTileset } from './TiledTileset';
+import TiledTileset, { scaleTileset } from './TiledTileset.js';
 
 describe('TiledTileset', () => {
 

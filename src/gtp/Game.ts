@@ -1,12 +1,12 @@
-import { Keys } from './Keys';
-import InputManager from './InputManager';
-import State from './State';
-import GameTimer from './GameTimer';
-import Timer from './Timer';
-import ImageUtils from './ImageUtils';
-import Utils from './Utils';
-import AudioSystem from './AudioSystem';
-import AssetLoader from './AssetLoader';
+import { Keys } from './Keys.js';
+import InputManager from './InputManager.js';
+import State from './State.js';
+import GameTimer from './GameTimer.js';
+import Timer from './Timer.js';
+import ImageUtils from './ImageUtils.js';
+import Utils from './Utils.js';
+import AudioSystem from './AudioSystem.js';
+import AssetLoader from './AssetLoader.js';
 
 const STATUS_MESSAGE_TIME_INC= 100;
 const STATUS_MESSAGE_ALPHA_DEC= 0.1;
