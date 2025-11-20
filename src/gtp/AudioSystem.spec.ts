@@ -1,5 +1,5 @@
-import AudioSystem from './AudioSystem';
-import Sound from './Sound';
+import AudioSystem from './AudioSystem.js';
+import Sound from './Sound.js';
 
 describe('AudioSystem', () => {
 

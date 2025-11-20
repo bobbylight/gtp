@@ -1,5 +1,5 @@
-import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer';
-import TiledProperty from './TiledProperty';
+import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer.js';
+import TiledProperty from './TiledProperty.js';
 
 describe('TiledPropertiesContainer', () => {
 

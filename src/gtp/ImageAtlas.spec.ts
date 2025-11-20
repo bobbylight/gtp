@@ -1,4 +1,4 @@
-import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
+import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas.js';
 
 describe('ImageAtlas', () => {
 

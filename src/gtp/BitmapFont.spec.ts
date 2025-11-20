@@ -1,5 +1,5 @@
-import { BitmapFont, Game, Image } from '../index';
-import { Window } from './GtpBase';
+import { BitmapFont, Game, Image } from '../index.js';
+import { Window } from './GtpBase.js';
 
 describe('BitmapFont', () => {
 

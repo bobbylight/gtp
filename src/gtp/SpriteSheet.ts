@@ -1,4 +1,4 @@
-import Image, { ColorChange } from './Image';
+import Image, { ColorChange } from './Image.js';
 
 /**
  * A collection of images contained in some sort of rectangular grid in a single image file.

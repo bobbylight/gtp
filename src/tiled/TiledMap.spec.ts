@@ -1,10 +1,10 @@
-import AssetLoader from '../gtp/AssetLoader';
-import AudioSystem from '../gtp/AudioSystem';
-import TiledMap from './TiledMap';
-import TiledLayer from './TiledLayer';
-import { TiledMapData } from './TiledMapData';
-import TiledTileset from './TiledTileset';
-import { TiledMapArgs } from './TiledMapArgs';
+import AssetLoader from '../gtp/AssetLoader.js';
+import AudioSystem from '../gtp/AudioSystem.js';
+import TiledMap from './TiledMap.js';
+import TiledLayer from './TiledLayer.js';
+import { TiledMapData } from './TiledMapData.js';
+import TiledTileset from './TiledTileset.js';
+import { TiledMapArgs } from './TiledMapArgs.js';
 
 const simpleMapData: TiledMapData = {
 	compressionlevel: -1,

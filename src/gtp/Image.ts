@@ -1,4 +1,4 @@
-import ImageUtils from './ImageUtils';
+import ImageUtils from './ImageUtils.js';
 
 export interface ColorChange {
 	fromR: number;

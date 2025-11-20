@@ -1,5 +1,5 @@
-import Image from './Image';
-import ImageUtils from './ImageUtils';
+import Image from './Image.js';
+import ImageUtils from './ImageUtils.js';
 
 /**
  * Information about a single image in an image atlas.  One of the following sets of optional

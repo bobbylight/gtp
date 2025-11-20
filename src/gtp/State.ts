@@ -1,5 +1,5 @@
-import Game from './Game';
-import { Window } from './GtpBase';
+import Game from './Game.js';
+import { Window } from './GtpBase.js';
 
 /**
  * Arguments to pass to a state's constructor.

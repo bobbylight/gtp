@@ -1,4 +1,4 @@
-import InputManager from './InputManager';
+import InputManager from './InputManager.js';
 
 describe('InputManager', () => {
 

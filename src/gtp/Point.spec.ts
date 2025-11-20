@@ -1,4 +1,4 @@
-import { Point } from '../index';
+import { Point } from '../index.js';
 
 describe('Point', () => {
 

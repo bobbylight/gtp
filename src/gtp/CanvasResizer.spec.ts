@@ -1,4 +1,4 @@
-import { CanvasResizer, StretchMode } from '../index';
+import { CanvasResizer, StretchMode } from '../index.js';
 
 describe('CanvasResizer', () => {
 

@@ -1,6 +1,6 @@
-import { AssetLoader, AudioSystem, ImageAtlasInfo, TiledMapData } from '../index';
-import TiledMap from '../tiled/TiledMap';
-import { TiledMapArgs } from '../tiled/TiledMapArgs';
+import { AssetLoader, AudioSystem, ImageAtlasInfo, TiledMapData } from '../index.js';
+import TiledMap from '../tiled/TiledMap.js';
+import { TiledMapArgs } from '../tiled/TiledMapArgs.js';
 
 describe('AssetLoader', () => {
 

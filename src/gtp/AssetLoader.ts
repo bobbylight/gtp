@@ -1,13 +1,13 @@
-import TiledTileset from '../tiled/TiledTileset';
-import TiledMap from '../tiled/TiledMap';
-import SpriteSheet from './SpriteSheet';
-import { AssetType } from './AssetType';
-import AudioSystem from './AudioSystem';
-import Utils from './Utils';
-import ImageUtils from './ImageUtils';
-import Image from './Image';
-import Sound from './Sound';
-import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas';
+import TiledTileset from '../tiled/TiledTileset.js';
+import TiledMap from '../tiled/TiledMap.js';
+import SpriteSheet from './SpriteSheet.js';
+import { AssetType } from './AssetType.js';
+import AudioSystem from './AudioSystem.js';
+import Utils from './Utils.js';
+import ImageUtils from './ImageUtils.js';
+import Image from './Image.js';
+import Sound from './Sound.js';
+import ImageAtlas, { ImageAtlasInfo, ImageMap } from './ImageAtlas.js';
 
 /**
  * Callback for when the asset loader completes loading everything requested.

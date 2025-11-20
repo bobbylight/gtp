@@ -1,4 +1,4 @@
-import Game from './Game';
+import Game from './Game.js';
 
 /**
  * Extending TypeScript's Window definition with miscellaneous properties it

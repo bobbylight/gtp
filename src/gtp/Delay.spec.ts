@@ -1,5 +1,5 @@
-import { Delay } from '../index';
-import { DelayCallback } from './Delay';
+import { Delay } from '../index.js';
+import { DelayCallback } from './Delay.js';
 
 describe('Delay', () => {
 

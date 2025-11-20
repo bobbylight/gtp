@@ -1,5 +1,5 @@
-import State from './State';
-import Game from './Game';
+import State from './State.js';
+import Game from './Game.js';
 
 const DEFAULT_HALF_TIME_MILLIS= 800;
 

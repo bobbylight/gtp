@@ -1,5 +1,5 @@
-import { Rectangle } from '../index';
-import { RectangularData } from './Rectangle';
+import { Rectangle } from '../index.js';
+import { RectangularData } from './Rectangle.js';
 
 describe('Rectangle', () => {
 

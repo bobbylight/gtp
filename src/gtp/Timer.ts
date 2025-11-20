@@ -1,4 +1,4 @@
-import Utils from './Utils';
+import Utils from './Utils.js';
 
 /**
  * A mapping from string keys to numbers.  Used to map named events to their
