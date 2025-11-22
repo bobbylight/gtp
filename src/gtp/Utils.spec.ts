@@ -1,4 +1,4 @@
-import { Utils, BrowserUtil } from '../index';
+import { Utils, BrowserUtil } from '../index.js';
 
 describe('Utils', () => {
 

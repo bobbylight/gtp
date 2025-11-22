@@ -1,5 +1,5 @@
-import { Game } from '../index';
-import State from './State';
+import { Game } from '../index.js';
+import State from './State.js';
 
 class DummyState extends State<Game> {
 }

@@ -1,9 +1,9 @@
-import TiledObject, { intersects } from './TiledObject';
-import TiledMap from './TiledMap';
-import { TiledLayerData } from './TiledLayerData';
-import TiledProperty from './TiledProperty';
-import { TiledChunk } from './TiledChunk';
-import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer';
+import TiledObject, { intersects } from './TiledObject.js';
+import TiledMap from './TiledMap.js';
+import { TiledLayerData } from './TiledLayerData.js';
+import TiledProperty from './TiledProperty.js';
+import { TiledChunk } from './TiledChunk.js';
+import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer.js';
 
 /**
  * A layer in a <code>Tiled</code> map, along with a few utility
@@ -121,7 +121,6 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 	 * @param defaultValue The default value to return if the property does not exist,
 	 *        or omitted or <code>undefined</code>.
 	 * @return The property's value.
-	 * @method
 	 */
 	getProperty<T>(name: string, defaultValue?: T): T {
 		return getProperty(this, name, defaultValue);

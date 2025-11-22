@@ -1,4 +1,4 @@
-import { Sound } from '../index';
+import { Sound } from '../index.js';
 
 describe('Sound', () => {
 

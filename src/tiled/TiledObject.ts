@@ -1,5 +1,5 @@
-import TiledProperty from './TiledProperty';
-import TiledPropertiesContainer from './TiledPropertiesContainer';
+import TiledProperty from './TiledProperty.js';
+import TiledPropertiesContainer from './TiledPropertiesContainer.js';
 
 export function scaleObject(object: TiledObject, scale: number) {
 	object.x *= scale;

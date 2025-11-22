@@ -1,8 +1,8 @@
 /**
  * A function that modifies a file path (for example, prepends a root directory to it).
  */
-import TiledProperty from './TiledProperty';
-import TiledLayer from './TiledLayer';
+import TiledProperty from './TiledProperty.js';
+import TiledLayer from './TiledLayer.js';
 
 export type TiledImagePathModifier = (path: string) => string;
 
