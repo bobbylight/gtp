@@ -1,4 +1,4 @@
-import TiledProperty from './TiledProperty';
+import TiledProperty from './TiledProperty.js';
 
 export function getProperty<T>(container: TiledPropertiesContainer, name: string, defaultValue?: T): T {
 	const result: TiledProperty | undefined = container.propertiesByName.get(name);

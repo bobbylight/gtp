@@ -16,9 +16,9 @@
     "preserveConstEnums": true,
     "removeComments": false,
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "target": "es6",
-    "module": "es2020",
+    "module": "NodeNext",
     "outDir": "lib/",
     "sourceMap": true,
     "diagnostics": true

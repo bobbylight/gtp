@@ -1,5 +1,5 @@
-import Sound from './Sound';
-import { SoundCompletedCallback } from './SoundCompletedCallback';
+import Sound from './Sound.js';
+import { SoundCompletedCallback } from './SoundCompletedCallback.js';
 
 export type OnEndedGenerator = (playingSoundId: number) => ((this: AudioScheduledSourceNode, ev: Event) => any) | null;
 

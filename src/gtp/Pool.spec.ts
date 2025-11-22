@@ -1,4 +1,4 @@
-import { Pool } from '../index';
+import { Pool } from '../index.js';
 
 describe('Pool', () => {
 

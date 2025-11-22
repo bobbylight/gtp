@@ -1,14 +1,14 @@
-import Image from '../gtp/Image';
-import Game from '../gtp/Game';
-import {Window} from '../gtp/GtpBase';
-import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTileset';
-import TiledProperty from './TiledProperty';
-import { TiledMapData } from './TiledMapData';
-import { TiledMapArgs } from './TiledMapArgs';
-import { TiledLayerData } from './TiledLayerData';
-import TiledLayer from './TiledLayer';
-import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer';
-import { scaleObject } from './TiledObject';
+import Image from '../gtp/Image.js';
+import Game from '../gtp/Game.js';
+import {Window} from '../gtp/GtpBase.js';
+import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTileset.js';
+import TiledProperty from './TiledProperty.js';
+import { TiledMapData } from './TiledMapData.js';
+import { TiledMapArgs } from './TiledMapArgs.js';
+import { TiledLayerData } from './TiledLayerData.js';
+import TiledLayer from './TiledLayer.js';
+import TiledPropertiesContainer, { getProperty, initPropertiesByName } from './TiledPropertiesContainer.js';
+import { scaleObject } from './TiledObject.js';
 
 /**
  * A <code>Tiled</code> map.
@@ -246,7 +246,6 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 *
 	 * @param name The name of the layer.
 	 * @return The layer.
-	 * @method
 	 */
 	getLayer(name: string): TiledLayer {
 		const layer = this.layersByName.get(name);
@@ -261,7 +260,6 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 *
 	 * @param name The layer to return.
 	 * @return The layer, or <code>undefined</code> if it does not exist.
-	 * @method
 	 */
 	getLayerIfExists(name: string): TiledLayer | undefined {
 		return this.layersByName.get(name);
@@ -273,7 +271,6 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 * @param index The index of the layer.
 	 * @return The layer, or undefined if there is no layer at
 	 *         that index.
-	 * @method
 	 */
 	getLayerByIndex(index: number): TiledLayer {
 		return this.layers[index];
@@ -292,7 +289,6 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 * Returns the pixel height of this map.
 	 *
 	 * @return The pixel height of this map.
-	 * @method
 	 */
 	getPixelHeight(): number {
 		return this.height * this.tileheight;
@@ -302,7 +298,6 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 * Returns the pixel width of this map.
 	 *
 	 * @return The pixel width of this map.
-	 * @method
 	 */
 	getPixelWidth(): number {
 		return this.width * this.tilewidth;
@@ -317,7 +312,6 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 * @param defaultValue The default value to return if the property does not exist,
 	 *        or omitted or <code>undefined</code>.
 	 * @return The property's value.
-	 * @method
 	 */
 	getProperty<T>(name: string, defaultValue?: T): T {
 		return getProperty(this, name, defaultValue);
@@ -341,7 +335,6 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 *
 	 * @param layerName The name of the layer to remove.
 	 * @return Whether a layer by that name was found.
-	 * @method
 	 */
 	removeLayer(layerName: string): boolean {
 		for (let i= 0; i < this.layers.length; i++) {

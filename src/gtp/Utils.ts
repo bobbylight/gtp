@@ -1,4 +1,4 @@
-import BrowserUtil from './BrowserUtil';
+import BrowserUtil from './BrowserUtil.js';
 
 /**
  * Obligatory utility methods for games.

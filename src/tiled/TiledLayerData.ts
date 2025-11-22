@@ -1,6 +1,6 @@
-import TiledObject from './TiledObject';
-import TiledProperty from './TiledProperty';
-import { TiledChunk } from './TiledChunk';
+import TiledObject from './TiledObject.js';
+import TiledProperty from './TiledProperty.js';
+import { TiledChunk } from './TiledChunk.js';
 
 /**
  * A layer in a <code>Tiled</code> map.
