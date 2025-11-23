@@ -34,7 +34,7 @@ import { TiledLayerData } from './tiled/TiledLayerData.js';
 import TiledMap from './tiled/TiledMap.js';
 import { TiledMapData } from './tiled/TiledMapData.js';
 import TiledObject, { TiledPoint, TiledText } from './tiled/TiledObject.js';
-import TiledPropertiesContainer from './tiled/TiledPropertiesContainer.js';
+import TiledPropertiesContainer, { getProperty } from './tiled/TiledPropertiesContainer.js';
 import TiledProperty, { TiledPropertyType } from './tiled/TiledProperty.js';
 import TiledTileset, { TiledImagePathModifier, TiledTileOffset, TiledTilesetGrid, TiledTilesetTerrain, TiledTilesetTile, TiledTilesetTileFrame, TiledTilesetTransformations, TiledWangColor, TiledWangSet, TiledWangTile } from './tiled/TiledTileset.js';
 
@@ -76,6 +76,7 @@ export {
 	TransitionLogicCallback,
 	Utils,
 
+	getProperty,
 	TiledChunk,
 	TiledImagePathModifier,
 	TiledLayer,

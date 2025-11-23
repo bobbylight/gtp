@@ -1,5 +1,9 @@
 import TiledProperty from './TiledProperty.js';
 
+/**
+ * Returns the value of a property on a Tiled object, or the default value if
+ * the property does not exist.
+ */
 export function getProperty<T>(container: TiledPropertiesContainer, name: string, defaultValue?: T): T {
 	const result: TiledProperty | undefined = container.propertiesByName.get(name);
 	if (!result) {
