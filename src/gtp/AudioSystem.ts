@@ -187,6 +187,10 @@ export default class AudioSystem {
 	 */
 	init(): boolean {
 
+		if (!window.AudioContext) {
+			return false;
+		}
+
 		try {
 			this.context = new AudioContext();
 			this.volumeFaderGain = this.context.createGain();
@@ -195,8 +199,11 @@ export default class AudioSystem {
 			this.volumeFaderGain.connect(this.context.destination);
 			this.initialized = true;
 		} catch (e) {
-			console.error('The Web Audio API is not supported in this browser.');
-			console.error(e);
+			// Don't print stack traces in environments like node/jsdom
+			if (!(e instanceof ReferenceError)) {
+				console.error('The Web Audio API is not supported in this browser.');
+				console.error(e);
+			}
 		}
 
 		return this.initialized;
