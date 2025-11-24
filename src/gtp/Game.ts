@@ -93,7 +93,7 @@ export default class Game {
 	 *        If unspecified, <code>this.clearScreenColor</code> is used.
 	 */
 	clearScreen(clearScreenColor: string = this.clearScreenColor) {
-		const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
+		const ctx: CanvasRenderingContext2D = this.getRenderingContext();
 		ctx.fillStyle = clearScreenColor;
 		ctx.fillRect(0, 0, this.getWidth(), this.getHeight());
 	}
@@ -158,7 +158,7 @@ export default class Game {
 
 	render() {
 
-		const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
+		const ctx: CanvasRenderingContext2D = this.getRenderingContext();
 		this.state.render(ctx);
 
 		if (this.showFps) {

@@ -1,5 +1,6 @@
 import AssetLoader from '../gtp/AssetLoader.js';
 import AudioSystem from '../gtp/AudioSystem.js';
+import Utils from '../gtp/Utils.js';
 import TiledMap from './TiledMap.js';
 import TiledLayer from './TiledLayer.js';
 import { TiledMapData } from './TiledMapData.js';
@@ -96,7 +97,7 @@ describe('TiledMap', () => {
 		// Validate layers
 		expect(tiledMap.layers.length).toEqual(3);
 		tiledMap.layers.forEach((layer: TiledLayer, index: number) => {
-			expect(layer.data![0]).toEqual(index + 1);
+			expect(layer.data?.[0]).toEqual(index + 1);
 		});
 
 		// Validate tilesets
@@ -122,7 +123,7 @@ describe('TiledMap', () => {
 		};
 
 		const canvas: HTMLCanvasElement = document.createElement('canvas');
-		const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
+		const ctx: CanvasRenderingContext2D = Utils.getRenderingContext(canvas);
 		tiledMap.draw(ctx, 1, 1);
 		expect(mockImage.drawScaled2).toHaveBeenCalled();
 	});

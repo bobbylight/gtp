@@ -22,7 +22,7 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 	layer?: TiledLayerData[];
 	locked?: boolean;
 	name: string;
-	objects?: TiledObject[];
+	objects: TiledObject[] = [];
 	offsetx?: number;
 	offsety?: number;
 	opacity: number;
@@ -43,7 +43,7 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 
 	map: TiledMap;
 	propertiesByName!: Map<string, TiledProperty>;
-	objectsByName?: Map<string, TiledObject>;
+	objectsByName: Map<string, TiledObject> = new Map<string, TiledObject>();
 
 	constructor(map: TiledMap, data: TiledLayerData) {
 
@@ -132,13 +132,13 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 
 	private setObjects(objects?: TiledObject[]) {
 		if (objects) {
-			this.objects = [];
-			this.objectsByName = new Map<string, TiledObject>();
+			this.objects.length = 0;
+			this.objectsByName.clear();
 
 			objects.forEach(object => {
 				initPropertiesByName(object);
-				this.objects!.push(object);
-				this.objectsByName!.set(object.name, object);
+				this.objects.push(object);
+				this.objectsByName.set(object.name, object);
 			});
 		}
 	}

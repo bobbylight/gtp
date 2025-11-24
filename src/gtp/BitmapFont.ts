@@ -38,7 +38,7 @@ export default class BitmapFont extends SpriteSheet {
 
 		const glyphCount: number = this.size;
 		const gameWindow: Window = window as any;
-		const ctx: CanvasRenderingContext2D = gameWindow.game.canvas.getContext('2d')!;
+		const ctx: CanvasRenderingContext2D = gameWindow.game.getRenderingContext();
 		const charWidth: number = this.cellW;
 		const variant = this.fontMap[color] ?? this;
 

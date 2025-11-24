@@ -45,18 +45,25 @@ class PlayingSound {
 	/**
 	 * We delay setting up the audio resources until the first time this sound is played as a
 	 * micro-optimization.
+	 *
+	 * @return Returns this.source so we don't have to do optional chaining.
 	 */
-	private initFromConfig() {
+	private initFromConfig(): AudioBufferSourceNode {
 
 		this.id = this.config.id;
 		this.soundId = this.config.soundId;
 
-		this.source = this.config.audioSystem.context!.createBufferSource();
+		// Never happens
+		if (!this.config.audioSystem.context) {
+			throw new Error('Audio system not initialized');
+		}
+		const source = this.config.audioSystem.context.createBufferSource();
+		this.source = source;
 		this.source.loop = this.config.loop;
 		this.source.buffer = this.config.buffer;
 		if (this.config.connectTo instanceof Array) {
 			this.config.connectTo.forEach((node: AudioNode) => {
-				this.source!.connect(node);
+				source.connect(node);
 			});
 		} else {
 			this.source.connect(this.config.connectTo);
@@ -68,6 +75,8 @@ class PlayingSound {
 			this.source.onended = this.config.onendedGenerator(this.id) as
 				(this: AudioScheduledSourceNode, ev: Event) => any;
 		}
+
+		return this.source;
 	}
 
 	isPaused(): boolean {
@@ -75,9 +84,10 @@ class PlayingSound {
 	}
 
 	pause() {
-		if (!this.paused) {
-			this.source!.stop();
-			this.playedTime += this.source!.context.currentTime - this.startTime;
+		// Check this.source for tsc
+		if (!this.paused && this.source) {
+			this.source.stop();
+			this.playedTime += this.source.context.currentTime - this.startTime;
 			this.paused = true;
 			this.startTime = 0;
 		}
@@ -87,11 +97,12 @@ class PlayingSound {
 		if (this.paused) {
 			this.paused = false;
 			const prevStartOffset: number = this.startOffset;
-			this.initFromConfig();
+			const source = this.initFromConfig();
 			this.startOffset = prevStartOffset + this.playedTime;
-			this.startOffset = this.startOffset % this.source!.buffer!.duration;
-			const curAudioTime: number = this.source!.context.currentTime;
-			this.source!.start(curAudioTime, this.startOffset);
+			// In practice, source.buffer is always defined
+			this.startOffset = this.startOffset % (source.buffer?.duration ?? 0);
+			const curAudioTime: number = source.context.currentTime;
+			source.start(curAudioTime, this.startOffset);
 			this.startTime = curAudioTime;
 			this.playedTime = 0;
 		}
@@ -99,9 +110,9 @@ class PlayingSound {
 
 	start() {
 		this.paused = false;
-		this.initFromConfig();
-		const curAudioTime: number = this.source!.context.currentTime;
-		this.source!.start(curAudioTime, this.startOffset);
+		const source = this.initFromConfig();
+		const curAudioTime: number = source.context.currentTime;
+		source.start(curAudioTime, this.startOffset);
 		this.startTime = curAudioTime;
 		this.playedTime = 0;
 	}
@@ -223,10 +234,11 @@ export default class AudioSystem {
 
 		if (this.context) {
 			if (this.currentMusic) {
-				if (!this.muted) {
+				// Check this.musicFaderGain for tsc
+				if (!this.muted && this.musicFaderGain) {
 					// We must "anchor" via setValueAtTime() before calling a *rampToValue() method (???)
-					this.musicFaderGain!.gain.setValueAtTime(this.musicFaderGain!.gain.value, this.context.currentTime);
-					this.musicFaderGain!.gain.linearRampToValueAtTime(0, this.context.currentTime + this.musicFade);
+					this.musicFaderGain.gain.setValueAtTime(this.musicFaderGain.gain.value, this.context.currentTime);
+					this.musicFaderGain.gain.linearRampToValueAtTime(0, this.context.currentTime + this.musicFade);
 				}
 				setTimeout(() => {
 					this.playMusic(newMusicId);
@@ -378,7 +390,7 @@ export default class AudioSystem {
 			this.currentMusic.stop();
 			if (!pause) {
 				this.currentMusic.disconnect();
-				this.musicFaderGain!.disconnect();
+				this.musicFaderGain?.disconnect();
 				delete this.currentMusic;
 				delete this.currentMusicId;
 				delete this.musicFaderGain;
