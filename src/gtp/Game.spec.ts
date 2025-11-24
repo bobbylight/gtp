@@ -21,7 +21,7 @@ describe('Game', () => {
 		const game: Game = new Game();
 		game.clearScreen('#0000ff');
 
-		const ctx: CanvasRenderingContext2D = game.canvas.getContext('2d')!;
+		const ctx: CanvasRenderingContext2D = game.getRenderingContext();
 		const imageData: ImageData = ctx.getImageData(0, 0, 1, 1);
 		const pixels: Uint8ClampedArray = imageData.data;
 

@@ -16,6 +16,17 @@ export default {
 	},
 
 	/**
+	 * Returns the rendering context from a canvas. Throws an error if it cannot be obtained.
+	 */
+	getRenderingContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+		const ctx = canvas.getContext('2d');
+		if (!ctx) {
+			throw new Error('Could not get 2D context from canvas!');
+		}
+		return ctx;
+	},
+
+	/**
 	 * Returns the value of a request parameter.
 	 *
 	 * @param param The name of the request parameter.

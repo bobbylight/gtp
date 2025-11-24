@@ -230,7 +230,7 @@ export default class AssetLoader {
 			xhr.onload = () => {
 				// this.audio.context is definitely defined since audio initialized
 				// TODO: Clean up this API
-				void this.audio.context!.decodeAudioData(xhr.response as ArrayBuffer, (buffer: AudioBuffer) => {
+				void this.audio.context?.decodeAudioData(xhr.response as ArrayBuffer, (buffer: AudioBuffer) => {
 					const sound: Sound = new Sound(id, buffer, loopStart || 0);
 					sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
 					this.audio.addSound(sound);

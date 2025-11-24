@@ -64,7 +64,6 @@ export default [
             "@typescript-eslint/no-empty-function": 0,
             "@typescript-eslint/no-explicit-any": 0, // TODO: Remove me
             "@typescript-eslint/no-extraneous-class": 0, // TODO
-            "@typescript-eslint/no-non-null-assertion": 0, // TODO: Remove me
             // TODO: Re-enable when "any" situation is addressed
             "@typescript-eslint/no-unnecessary-condition": 0,
             //"@typescript-eslint/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],

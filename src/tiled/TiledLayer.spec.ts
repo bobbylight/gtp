@@ -91,7 +91,12 @@ describe('TiledLayer', () => {
 	describe('getData()', () => {
 
 		it('returns the expected value in the happy path', () => {
-			expect(tileLayer.getData(1, 1)).toEqual(tileLayer.data![3]);
+			const tileLayerData = tileLayer.data;
+			if (!tileLayerData) {
+				throw new Error('Tile layer data is undefined');
+			}
+			expect(tileLayerData).toBeInstanceOf(Array);
+			expect(tileLayer.getData(1, 1)).toEqual(tileLayerData[3]);
 		});
 
 		it('returns -1 if this is not a data layer', () => {

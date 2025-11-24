@@ -29,7 +29,8 @@ describe('TiledPropertiesContainer', () => {
 
 		it('returns the expected value in the happy path', () => {
 			initPropertiesByName(object);
-			expect(getProperty(object, 'foo')).toBe(object.properties![0].value);
+			expect(getProperty(object, 'foo')).toBeDefined();
+			expect(getProperty(object, 'foo')).toBe(object.properties?.[0].value);
 		});
 
 		it('returns the default value if one is specified and the property is not defined', () => {
@@ -48,8 +49,10 @@ describe('TiledPropertiesContainer', () => {
 
 			initPropertiesByName(object);
 
-			expect(object.propertiesByName.get('foo')).toBe(object.properties![0]);
-			expect(object.propertiesByName.get('bar')).toBe(object.properties![1]);
+			expect(object.propertiesByName.get('foo')).toBeDefined();
+			expect(object.propertiesByName.get('foo')).toBe(object.properties?.[0]);
+			expect(object.propertiesByName.get('bar')).toBeDefined();
+			expect(object.propertiesByName.get('bar')).toBe(object.properties?.[1]);
 		});
 	});
 });

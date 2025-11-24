@@ -1,4 +1,5 @@
 import {ImageUtils} from '../index.js';
+import Utils from './Utils.js';
 
 describe('ImageUtils', () => {
 
@@ -103,7 +104,7 @@ describe('ImageUtils', () => {
 		canvas.width = 256;
 		canvas.height = 128;
 
-		const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
+		const ctx: CanvasRenderingContext2D = Utils.getRenderingContext(canvas);
 		ctx.fillStyle = '#ffffff';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 

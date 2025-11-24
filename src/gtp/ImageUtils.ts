@@ -1,3 +1,5 @@
+import Utils from './Utils.js';
+
 const MIN_CANVAS_DIMENSION= 256;
 
 /**
@@ -25,11 +27,11 @@ export default class ImageUtils {
 
 		if (img instanceof HTMLImageElement) {
 			orig = ImageUtils.createCanvas(img.width, img.height);
-			origCtx = orig.getContext('2d')!;
+			origCtx = Utils.getRenderingContext(orig);
 			origCtx.drawImage(img, 0, 0);
 		} else {
 			orig = img;
-			origCtx = orig.getContext('2d')!;
+			origCtx = Utils.getRenderingContext(orig);
 		}
 
 		if (scale === 1) {
@@ -41,7 +43,7 @@ export default class ImageUtils {
 		const widthScaled: number = img.width * scale;
 		const heightScaled: number = img.height * scale;
 		const scaled: HTMLCanvasElement = ImageUtils.createCanvas(widthScaled, heightScaled);
-		const scaledCtx: CanvasRenderingContext2D = scaled.getContext('2d')!;
+		const scaledCtx: CanvasRenderingContext2D = Utils.getRenderingContext(scaled);
 		const scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
 
 		for (let y= 0; y < heightScaled; y++) {
@@ -59,7 +61,7 @@ export default class ImageUtils {
 		return scaled;
 	}
 
-	static createCanvas(width: number, height: number, parentDiv?: HTMLElement|string) {
+	static createCanvas(width: number, height: number, parentDiv?: HTMLElement | string) {
 
 		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = width;
@@ -68,8 +70,11 @@ export default class ImageUtils {
 
 		if (parentDiv) {
 
-			const actualParent: HTMLElement = typeof parentDiv === 'string' ?
-				document.getElementById(parentDiv)! : parentDiv;
+			const actualParent = typeof parentDiv === 'string' ?
+				document.getElementById(parentDiv) : parentDiv;
+			if (!actualParent) {
+				throw new Error('Cannot find parent div');
+			}
 
 			// Clear previous contents in place there was a placeholder image
 			actualParent.innerHTML = '';
@@ -89,7 +94,7 @@ export default class ImageUtils {
 			const w: number = Math.max(MIN_CANVAS_DIMENSION, canvas.width);
 			const h: number = Math.max(MIN_CANVAS_DIMENSION, canvas.height);
 			const canvas2: HTMLCanvasElement = ImageUtils.createCanvas(w, h);
-			const ctx2: CanvasRenderingContext2D = canvas2.getContext('2d')!;
+			const ctx2: CanvasRenderingContext2D = Utils.getRenderingContext(canvas2);
 			ctx2.drawImage(canvas, 0, 0);
 			canvas = canvas2;
 		}
@@ -100,7 +105,7 @@ export default class ImageUtils {
 	static prepCanvas(canvas: HTMLCanvasElement) {
 		// Use "any" instead of "CanvasRenderingContext2D" since  the TypeScript definition
 		// files don't like the experimental *imageSmoothingEnabled properties
-		const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
+		const ctx: CanvasRenderingContext2D = Utils.getRenderingContext(canvas);
 		ctx.imageSmoothingEnabled = false;
 		(ctx as any).mozImageSmoothingEnabled = false;
 		(ctx as any).oImageSmoothingEnabled = false;
@@ -122,7 +127,7 @@ export default class ImageUtils {
 	 */
 	static makeColorTranslucent(canvas: HTMLCanvasElement, x= 0, y= 0) {
 
-		const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
+		const ctx = Utils.getRenderingContext(canvas);
 		const w: number = canvas.width;
 		const h: number = canvas.height;
 		const pixels: ImageData = ctx.getImageData(0, 0, w, h);
