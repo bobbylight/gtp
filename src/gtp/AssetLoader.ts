@@ -23,7 +23,7 @@ interface ResourceType {
 
 /**
  * Loads resources for a game.  All games have to load resources such as
- * images, sound effects, JSON data, sprite sheets, etc.  This class provides
+ * images, sound effects, JSON data, sprite sheets, etc. This class provides
  * a wrapper around the loading of such resources, as well as a callback
  * mechanism to know when loading completes.  Games can use this class in a
  * "loading" state, for example.<p>
@@ -71,31 +71,35 @@ export default class AssetLoader {
 	 * @param [url=id] The URL of the resource, defaulting to
 	 *        "id" if not specified.
 	 */
-	addJson(id: string, url: string = id) {
+	addJson(id: string, url: string = id): Promise<string> | null {
 
 		if (this.assetRoot) {
 			url = this.assetRoot + url;
 		}
 
 		if (this.isAlreadyTracked(id)) {
-			return;
+			return null;
 		}
 		this.loadingAssetData[id] = { type: AssetType.JSON };
 		console.log(`Adding: ${id} => ${url}, ` +
 			`remaining == ${Utils.getObjectSize(this.loadingAssetData)}, ` +
 			`callback == ${this.callback !== null}`);
 
-		const xhr: XMLHttpRequest = new XMLHttpRequest();
-		xhr.onreadystatechange = () => {
-			if (xhr.readyState === XMLHttpRequest.DONE) {
-				const response: string = xhr.responseText;
-				this.completed(id, response);
-			}
-		};
-
-		xhr.open('GET', url, true);
-		xhr.send(null);
-
+		return fetch(url)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`Error fetching ${response.url}: ${response.status} ${response.statusText}`);
+				}
+				return response.text();
+			})
+			.then(text => {
+				this.completed(id, text);
+				return text;
+			})
+			.catch((error: unknown) => {
+				console.error('Error fetching JSON:', error);
+				throw new Error(`Error fetching JSON ${id}`);
+			});
 	}
 
 	/**
@@ -213,12 +217,12 @@ export default class AssetLoader {
 	 *        loop by default when it is played as music.
 	 */
 	addSound(id: string, soundSrc: string, loopStart= 0,
-		loopByDefaultIfMusic= true) {
+		loopByDefaultIfMusic= true): Promise<ArrayBuffer> | null {
 
 		if (this.audio.isInitialized()) {
 
 			if (this.isAlreadyTracked(id)) {
-				return;
+				return null;
 			}
 			this.loadingAssetData[id] = { type: AssetType.AUDIO };
 
@@ -226,24 +230,30 @@ export default class AssetLoader {
 				soundSrc = this.assetRoot + soundSrc;
 			}
 
-			const xhr: XMLHttpRequest = new XMLHttpRequest();
-			xhr.onload = () => {
-				// this.audio.context is definitely defined since audio initialized
-				// TODO: Clean up this API
-				void this.audio.context?.decodeAudioData(xhr.response as ArrayBuffer, (buffer: AudioBuffer) => {
-					const sound: Sound = new Sound(id, buffer, loopStart || 0);
-					sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
-					this.audio.addSound(sound);
-					this.completed(id, buffer);
+			return fetch(soundSrc)
+				.then(response => {
+					if (!response.ok) {
+						throw new Error(`Error fetching ${response.url}: ${response.status} ${response.statusText}`);
+					}
+					return response.arrayBuffer();
+				})
+				.then(arrayBuffer => {
+					// this.audio.context is definitely defined since audio initialized
+					// TODO: Clean up this API
+					void this.audio.context?.decodeAudioData(arrayBuffer, (buffer: AudioBuffer) => {
+						const sound: Sound = new Sound(id, buffer, loopStart || 0);
+						sound.setLoopsByDefaultIfMusic(loopByDefaultIfMusic);
+						this.audio.addSound(sound);
+						this.completed(id, buffer);
+					});
+					return arrayBuffer;
+				})
+				.catch((error: unknown) => {
+					console.error('Error fetching JSON:', error);
+					throw new Error(`Error fetching JSON ${id}`);
 				});
-			};
-
-			xhr.open('GET', soundSrc, true);
-			xhr.responseType = 'arraybuffer';
-			xhr.send(null);
-
 		}
-
+		return null;
 	}
 
 	/**

@@ -4,13 +4,6 @@ import { TiledMapArgs } from '../tiled/TiledMapArgs.js';
 
 describe('AssetLoader', () => {
 
-	const xhrMock: any = {
-		open: jest.fn(),
-		send: jest.fn(),
-		onerror: jest.fn(),
-		onload: jest.fn(),
-	};
-
 	const mockAudioContext: any/*AudioContext*/ = jest.fn(() => ({
 		decodeAudioData: (audioData: ArrayBuffer, successCallback: DecodeSuccessCallback) => {
 			successCallback({} as AudioBuffer);
@@ -38,17 +31,14 @@ describe('AssetLoader', () => {
 		},
 	}));
 
-	let origXmlHttpRequest: any = undefined;
 	let origAudioContext: any = undefined;
 
 	beforeAll(() => {
-		origXmlHttpRequest = window.XMLHttpRequest;
 		origAudioContext = window.AudioContext;
 		window.AudioContext = mockAudioContext;
 	});
 
 	afterAll(() => {
-		window.XMLHttpRequest = origXmlHttpRequest;
 		window.AudioContext = origAudioContext;
 		jest.resetAllMocks();
 		jest.restoreAllMocks();
@@ -64,87 +54,97 @@ describe('AssetLoader', () => {
 			new AssetLoader(1, new AudioSystem(), assetRoot);
 		});
 
-		it('addJson() loads the data', () => {
+		it('addJson() loads the data', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
+			global.fetch = jest.fn(() =>
+				Promise.resolve({
+					ok: true,
+					text: () => Promise.resolve('{ "test": "json" }'),
+				} as unknown as Response),
+			);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			// Add something to load, now we're waiting
-			assetLoader.addJson('testJson', '/fake/url.json');
+			const promise = assetLoader.addJson('testJson', '/fake/url.json');
+			if (!promise) {
+				fail('addJson() returned null');
+			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
-			// Mock a response, which triggers AssetLoader to receive the response as well
-			xhrMock.readyState = XMLHttpRequest.DONE;
-			xhrMock.responseText = '{"test": "json"}';
-			(xhrMock as XMLHttpRequest).onreadystatechange?.({} as Event);
-
-			// Now that we've received the response, check that we're "done loading" again
+			// Wait for the response and check that we're "done loading" again
+			await promise;
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 			expect(assetLoader.get('testJson')).toEqual({ test: 'json' });
 		});
 
 		// Asking to load two things with the same ID is likely a bug in the app, but still
 		// verify the behavior here
-		it('addJson() does nothing if data with the given ID is currently being loaded', () => {
+		it('addJson() does nothing if data with the given ID is currently being loaded', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
+			global.fetch = jest.fn(() =>
+				Promise.resolve({
+					ok: true,
+					text: () => Promise.resolve('{ "test": "json" }'),
+				} as unknown as Response),
+			);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			// Add something to load, now we're waiting
-			assetLoader.addJson('testJson', '/fake/url.json');
+			const promise = assetLoader.addJson('testJson', '/fake/url.json');
+			if (!promise) {
+				fail('addJson() returned null');
+			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
 			// Try to load the same item again - this should change nothing
-			assetLoader.addJson('testJson', '/fake/url.json');
+			void assetLoader.addJson('testJson', '/fake/url.json');
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
-			// Mock a response, which triggers AssetLoader to receive the response as well
-			xhrMock.readyState = XMLHttpRequest.DONE;
-			xhrMock.responseText = '{"test": "json"}';
-			(xhrMock as XMLHttpRequest).onreadystatechange?.({} as Event);
-
-			// Now that we've received the response, check that we're "done loading" again
+			// Wait for the response and check that we're "done loading" again
+			await promise;
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 			expect(assetLoader.get('testJson')).toEqual({ test: 'json' });
 		});
 
 		// Asking to load two things with the same ID is likely a bug in the app, but still
 		// verify the behavior here
-		it('addJson() does nothing if data with the given ID has already been loaded', () => {
+		it('addJson() does nothing if data with the given ID has already been loaded', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
+			global.fetch = jest.fn(() =>
+				Promise.resolve({
+					ok: true,
+					text: () => Promise.resolve('{ "test": "json" }'),
+				} as unknown as Response),
+			);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			// Add something to load, now we're waiting
-			assetLoader.addJson('testJson', '/fake/url.json');
+			const promise = assetLoader.addJson('testJson', '/fake/url.json');
+			if (!promise) {
+				fail('addJson() returned null');
+			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
-			// Mock a response, which triggers AssetLoader to receive the response as well
-			xhrMock.readyState = XMLHttpRequest.DONE;
-			xhrMock.responseText = '{"test": "json"}';
-			(xhrMock as XMLHttpRequest).onreadystatechange?.({} as Event);
-
-			// Now that we've received the response, check that we're "done loading" again
+			// Wait for the response and check that we're "done loading" again
+			await promise;
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 			expect(assetLoader.get('testJson')).toEqual({ test: 'json' });
 
 			// Try to load the same item again - this should change nothing
-			assetLoader.addJson('testJson', '/fake/url.json');
+			void assetLoader.addJson('testJson', '/fake/url.json');
 			expect(assetLoader.isDoneLoading()).toBeTruthy(); // Already loaded 'testJson'
 		});
 
 		it('addCanvas() loads the data', async() => {
-
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -163,8 +163,6 @@ describe('AssetLoader', () => {
 		});
 
 		it('addImage() loads the data', async() => {
-
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -186,8 +184,6 @@ describe('AssetLoader', () => {
 		});
 
 		it('addImageAtlasContents() loads the data', async() => {
-
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -221,9 +217,14 @@ describe('AssetLoader', () => {
 			expect(assetLoader.get('testAtlasImagesfoo')).toBeDefined();
 		});
 
-		it('addSound() loads sound data if audio is enabled in this browser', () => {
+		it('addSound() loads sound data if audio is enabled in this browser', async() => {
 
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
+			global.fetch = jest.fn(() =>
+				Promise.resolve({
+					ok: true,
+					arrayBuffer: () => Promise.resolve('soundData'),
+				} as unknown as Response),
+			);
 
 			// Initially nothing queued up, so we're "done loading"
 			const audioSystem: AudioSystem = new AudioSystem();
@@ -232,22 +233,19 @@ describe('AssetLoader', () => {
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 
 			// Add something to load, now we're waiting
-			assetLoader.addSound('testSound', '/fake/sound.ogg');
+			const promise = assetLoader.addSound('testSound', '/fake/sound.ogg');
+			if (!promise) {
+				fail('addSound() returned null');
+			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
-			// Mock a response, which triggers AssetLoader to receive the response as well
-			xhrMock.readyState = XMLHttpRequest.DONE;
-			xhrMock.response = new ArrayBuffer(10);
-			(xhrMock as XMLHttpRequest).onload?.({} as ProgressEvent);
-
-			// Now that we've received the response, check that we're "done loading" again
+			// Wait for the response and check that we're "done loading" again
+			await promise;
 			expect(assetLoader.isDoneLoading()).toBeTruthy();
 			expect(assetLoader.get('testSound')).toBeDefined();
 		});
 
 		it('addSpriteSheet() loads the data', async() => {
-
-			window.XMLHttpRequest = jest.fn().mockImplementation(() => xhrMock as XMLHttpRequest) as any;
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
