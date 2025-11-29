@@ -1,47 +1,67 @@
 import { AssetLoader, AudioSystem, ImageAtlasInfo, TiledMapData } from '../index.js';
 import TiledMap from '../tiled/TiledMap.js';
 import { TiledMapArgs } from '../tiled/TiledMapArgs.js';
+import { createMockAudioContext } from './TestUtils.js';
+import ImageUtils from './ImageUtils.js';
 
 describe('AssetLoader', () => {
 
-	const mockAudioContext: any/*AudioContext*/ = jest.fn(() => ({
-		decodeAudioData: (audioData: ArrayBuffer, successCallback: DecodeSuccessCallback) => {
-			successCallback({} as AudioBuffer);
-		},
-		createBufferSource(): AudioBufferSourceNode {
-			return {
-				connect: jest.fn(),
-				start: jest.fn(),
-				stop: jest.fn(),
-				disconnect: jest.fn(),
-				context: {
-					currentTime: 0,
-				},
-			} as unknown as AudioBufferSourceNode;
-		},
-		createGain: () => {
-			return {
-				gain: {
-					setValueAtTime: () => {},
-					linearRampToValueAtTime: () => {},
-				},
-				connect: () => {},
-				disconnect: () => {},
-			};
-		},
-	}));
-
-	let origAudioContext: any = undefined;
-
 	beforeAll(() => {
-		origAudioContext = window.AudioContext;
-		window.AudioContext = mockAudioContext;
+		vi.stubGlobal('AudioContext', createMockAudioContext());
 	});
 
 	afterAll(() => {
-		window.AudioContext = origAudioContext;
-		jest.resetAllMocks();
-		jest.restoreAllMocks();
+		vi.unstubAllGlobals();
+	});
+
+	beforeEach(() => {
+		// eslint-disable-next-line @typescript-eslint/no-deprecated
+		const originalCreateElement = document.createElement.bind(document);
+
+		vi.spyOn(document, 'createElement').mockImplementation((tag: string, options?: ElementCreationOptions) => {
+			// jsdom's implementation of HTMLImageElement doesn't fire the 'load' event when "src" is set.
+			// This mock simulates that behavior so behavior matches what occurs in a browser. Note that since
+			// we're not returning a true HTMLImageElement, we have to also mock ImageUtils.resizes() below.
+			if (tag === 'img') {
+				const mockImage = {
+					listeners: new Map<string, (() => void)[]>(),
+					addEventListener(event: string, callback: () => void) {
+						if (!this.listeners.has(event)) {
+							this.listeners.set(event, []);
+						}
+						this.listeners.get(event)?.push(callback);
+					},
+					dispatchEvent(event: { type: string }) {
+						if (this.listeners.has(event.type)) {
+							this.listeners.get(event.type)?.forEach(cb => { cb(); });
+						}
+					},
+					set src(value: string) {
+						// When src is set, fire 'load' event asynchronously.
+						setTimeout(() => {
+							this.dispatchEvent({ type: 'load' });
+						}, 0);
+					},
+				};
+				return mockImage as unknown as HTMLImageElement;
+			}
+			return originalCreateElement.call(document, tag, options);
+		});
+
+		// The real implementation keys off of the type of "img", which we can't do since it's a mock, so here we
+		// return a dummy canvas.
+		vi.spyOn(ImageUtils, 'resize').mockImplementation(
+			(img: HTMLImageElement|HTMLCanvasElement, scale= 1): HTMLCanvasElement => {
+				const canvas = document.createElement('canvas');
+				canvas.width = img.width * scale;
+				canvas.height = img.height * scale;
+				return canvas;
+			});
+	});
+
+	afterEach(() => {
+		vi.resetAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	// Loop through no assetRoot value and an assetRoot value
@@ -56,9 +76,10 @@ describe('AssetLoader', () => {
 
 		it('addJson() loads the data', async() => {
 
-			global.fetch = jest.fn(() =>
+			window.fetch = vi.fn(() =>
 				Promise.resolve({
 					ok: true,
+					status: 200,
 					text: () => Promise.resolve('{ "test": "json" }'),
 				} as unknown as Response),
 			);
@@ -70,7 +91,7 @@ describe('AssetLoader', () => {
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addJson('testJson', '/fake/url.json');
 			if (!promise) {
-				fail('addJson() returned null');
+				throw new Error('addJson() returned null');
 			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
@@ -84,7 +105,7 @@ describe('AssetLoader', () => {
 		// verify the behavior here
 		it('addJson() does nothing if data with the given ID is currently being loaded', async() => {
 
-			global.fetch = jest.fn(() =>
+			window.fetch = vi.fn(() =>
 				Promise.resolve({
 					ok: true,
 					text: () => Promise.resolve('{ "test": "json" }'),
@@ -98,7 +119,7 @@ describe('AssetLoader', () => {
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addJson('testJson', '/fake/url.json');
 			if (!promise) {
-				fail('addJson() returned null');
+				throw new Error('addJson() returned null');
 			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
@@ -116,7 +137,7 @@ describe('AssetLoader', () => {
 		// verify the behavior here
 		it('addJson() does nothing if data with the given ID has already been loaded', async() => {
 
-			global.fetch = jest.fn(() =>
+			window.fetch = vi.fn(() =>
 				Promise.resolve({
 					ok: true,
 					text: () => Promise.resolve('{ "test": "json" }'),
@@ -130,7 +151,7 @@ describe('AssetLoader', () => {
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addJson('testJson', '/fake/url.json');
 			if (!promise) {
-				fail('addJson() returned null');
+				throw new Error('addJson() returned null');
 			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 
@@ -163,6 +184,13 @@ describe('AssetLoader', () => {
 		});
 
 		it('addImage() loads the data', async() => {
+
+			window.fetch = vi.fn(() =>
+				Promise.resolve({
+					ok: true,
+					text: () => Promise.resolve('{ "test": "json" }'),
+				} as unknown as Response),
+			);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
@@ -219,7 +247,7 @@ describe('AssetLoader', () => {
 
 		it('addSound() loads sound data if audio is enabled in this browser', async() => {
 
-			global.fetch = jest.fn(() =>
+			window.fetch = vi.fn(() =>
 				Promise.resolve({
 					ok: true,
 					arrayBuffer: () => Promise.resolve('soundData'),
@@ -235,7 +263,7 @@ describe('AssetLoader', () => {
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addSound('testSound', '/fake/sound.ogg');
 			if (!promise) {
-				fail('addSound() returned null');
+				throw new Error('addSound() returned null');
 			}
 			expect(assetLoader.isDoneLoading()).toBeFalsy();
 

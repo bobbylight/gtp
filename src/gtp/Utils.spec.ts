@@ -17,7 +17,7 @@ describe('Utils', () => {
 
 	it('getRequestParam() param found, no values, multiple params', () => {
 
-		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+		vi.spyOn(BrowserUtil, 'getWindowLocationSearch')
 			.mockReturnValue('?foo&bar&bas');
 
 		expect(Utils.getRequestParam('foo')).toBe('');
@@ -27,7 +27,7 @@ describe('Utils', () => {
 
 	it('getRequestParam() param found, values, multiple params', () => {
 
-		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+		vi.spyOn(BrowserUtil, 'getWindowLocationSearch')
 			.mockReturnValue('?foo=fooValue&bar=barValue&bas=basValue');
 
 		expect(Utils.getRequestParam('foo')).toBe('fooValue');
@@ -37,7 +37,7 @@ describe('Utils', () => {
 
 	it('getRequestParam() param not found', () => {
 
-		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+		vi.spyOn(BrowserUtil, 'getWindowLocationSearch')
 			.mockReturnValue('?foo=fooValue&bar=barValue&bas=basValue');
 
 		expect(Utils.getRequestParam('notFound')).toBeNull();
@@ -45,7 +45,7 @@ describe('Utils', () => {
 
 	it('getRequestParam() param not found, substring of param', () => {
 
-		jest.spyOn(BrowserUtil, 'getWindowLocationSearch')
+		vi.spyOn(BrowserUtil, 'getWindowLocationSearch')
 			.mockReturnValue('?debugMode=true');
 
 		expect(Utils.getRequestParam('debug')).toBeNull();

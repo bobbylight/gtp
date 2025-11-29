@@ -111,7 +111,7 @@ describe('TiledMap', () => {
 	it('draw() renders the map', () => {
 
 		const mockImage = {
-			drawScaled2: jest.fn(),
+			drawScaled2: vi.fn(),
 		};
 
 		(window as any).game = {

@@ -1,59 +1,21 @@
 import AudioSystem from './AudioSystem.js';
 import Sound from './Sound.js';
+import { createMockAudioContext } from './TestUtils.js';
 
 describe('AudioSystem', () => {
 
-	const mockAudioContext: any/*AudioContext*/ = jest.fn(() => ({
-		decodeAudioData: (audioData: ArrayBuffer, successCallback: DecodeSuccessCallback) => {
-			successCallback({} as AudioBuffer);
-		},
-		createBufferSource(): AudioBufferSourceNode {
-			return {
-				connect: jest.fn(),
-				start: jest.fn(),
-				stop: jest.fn(),
-				disconnect: jest.fn(),
-				context: {
-					currentTime: 0,
-				},
-			} as unknown as AudioBufferSourceNode;
-		},
-		createGain: () => {
-			return {
-				gain: {
-					setValueAtTime: () => {},
-					linearRampToValueAtTime: () => {},
-				},
-				connect: () => {},
-				disconnect: () => {},
-			};
-		},
-	}));
-
-	let origAudioContext: any = undefined;
-	let origAudioNode: any = undefined;
-
 	beforeAll(() => {
-
-		origAudioContext = window.AudioContext;
-		window.AudioContext = mockAudioContext;
-
-		origAudioNode = window.AudioNode;
-		if (!window.AudioNode) {
-			(window as any).AudioNode = () => {
-			};
-		}
+		vi.stubGlobal('AudioContext', createMockAudioContext());
 	});
 
 	afterAll(() => {
-		window.AudioContext = origAudioContext;
-		window.AudioNode = origAudioNode;
-		jest.resetAllMocks();
-		jest.restoreAllMocks();
+		vi.unstubAllGlobals();
+		vi.resetAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	afterEach(() => {
-		jest.useRealTimers(); // Some tests use fake timers
+		vi.useRealTimers(); // Some tests use fake timers
 	});
 
 	it('when web audio is available, it is marked as initialized', () => {
@@ -64,7 +26,7 @@ describe('AudioSystem', () => {
 
 	it('fadeOutMusic() fades out the current music, and plays nothing if no new music is specified', () => {
 
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
 		const audio: AudioSystem = new AudioSystem();
 		audio.init();
@@ -75,13 +37,13 @@ describe('AudioSystem', () => {
 		audio.playMusic('musicId', true);
 
 		audio.fadeOutMusic();
-		jest.runAllTimers();
+		vi.runAllTimers();
 		expect(audio.getCurrentMusic()).toBeUndefined();
 	});
 
 	it('fadeOutMusic() fades out the current music, then starts the new one', () => {
 
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
 		const audio: AudioSystem = new AudioSystem();
 		audio.init();
@@ -93,7 +55,7 @@ describe('AudioSystem', () => {
 		audio.playMusic('musicId1', true);
 
 		audio.fadeOutMusic('musicId2');
-		jest.runAllTimers();
+		vi.runAllTimers();
 		expect(audio.getCurrentMusic()).toEqual('musicId2');
 	});
 
@@ -151,6 +113,7 @@ describe('AudioSystem', () => {
 	it('playSound() returns -1 if audio is not available in this browser', () => {
 
 		// Simulate no web audio support
+		const origAudioContext = window.AudioContext;
 		(window as any).AudioContext = undefined;
 
 		try {
@@ -164,7 +127,7 @@ describe('AudioSystem', () => {
 			audio.addSound(mockSound);
 			expect(audio.playSound('musicId')).toEqual(-1);
 		} finally {
-			window.AudioContext = mockAudioContext;
+			window.AudioContext = origAudioContext;
 		}
 	});
 

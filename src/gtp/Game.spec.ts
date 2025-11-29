@@ -7,9 +7,9 @@ class DummyState extends State<Game> {
 describe('Game', () => {
 
 	afterEach(() => {
-		jest.clearAllMocks();
-		jest.resetAllMocks();
-		jest.restoreAllMocks();
+		vi.clearAllMocks();
+		vi.resetAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it('constructor happy path', () => {
@@ -111,8 +111,8 @@ describe('Game', () => {
 		game.start();
 		game.toggleShowFps();
 
-		const updateSpy: jest.SpyInstance = jest.spyOn(game, 'update');
-		const renderSpy: jest.SpyInstance = jest.spyOn(game, 'render');
+		const updateSpy = vi.spyOn(game, 'update');
+		const renderSpy = vi.spyOn(game, 'render');
 
 		await new Promise(r => setTimeout(r, 50));
 		expect(updateSpy).toHaveBeenCalled();

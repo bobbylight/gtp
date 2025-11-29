@@ -21,6 +21,8 @@
     "module": "NodeNext",
     "outDir": "lib/",
     "sourceMap": true,
-    "diagnostics": true
+    "diagnostics": true,
+    "lib": ["esnext", "dom", "esnext.disposable"],
+    "types": ["vitest/globals"]
   }
 }

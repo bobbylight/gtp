@@ -4,8 +4,8 @@ import { Window } from './GtpBase.js';
 describe('BitmapFont', () => {
 
 	afterEach(() => {
-		jest.resetAllMocks();
-		jest.restoreAllMocks();
+		vi.resetAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it('constructor sets up the instance properly', () => {
@@ -36,7 +36,7 @@ describe('BitmapFont', () => {
 			font.addVariant('test', {
 				fromR: 0, fromG: 0, fromB: 0, toR: 255, toG: 255, toB: 255,
 			});
-			jest.spyOn(font, 'drawByIndex').mockImplementation(() => {});
+			vi.spyOn(font, 'drawByIndex').mockImplementation(() => {});
 			expect(() => { font.drawString('      ', 0, 0, 'test'); }).not.toThrow();
 		});
 	});
@@ -53,7 +53,7 @@ describe('BitmapFont', () => {
 
 		it('renders all printable chars', () => {
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
-			const drawByIndexSpy = jest.spyOn(font, 'drawByIndex');
+			const drawByIndexSpy = vi.spyOn(font, 'drawByIndex');
 			font.drawString('      ', 0, 0);
 			expect(drawByIndexSpy).toHaveBeenCalledTimes(6);
 		});
@@ -61,7 +61,7 @@ describe('BitmapFont', () => {
 		it('converts unprintable chars to spaces', () => {
 
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
-			const drawByIndexSpy = jest.spyOn(font, 'drawByIndex');
+			const drawByIndexSpy = vi.spyOn(font, 'drawByIndex');
 			font.drawString(' \x13 ', 0, 0);
 
 			// All 3 chars rendered are for font index 0
@@ -76,7 +76,7 @@ describe('BitmapFont', () => {
 		it('converts printable chars not in the bitmap font to spaces', () => {
 
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
-			const drawByIndexSpy = jest.spyOn(font, 'drawByIndex');
+			const drawByIndexSpy = vi.spyOn(font, 'drawByIndex');
 			font.drawString(' \x70 ', 0, 0); // 0x70 > the font size of 6 chars
 
 			// All 3 chars rendered are for font index 0
@@ -90,7 +90,7 @@ describe('BitmapFont', () => {
 
 		it('does not error if an invalid color is specified', () => {
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
-			jest.spyOn(font, 'drawByIndex').mockImplementation(() => {});
+			vi.spyOn(font, 'drawByIndex').mockImplementation(() => {});
 			expect(() => { font.drawString('      ', 0, 0, 'invalidVariant'); }).not.toThrow();
 		});
 	});

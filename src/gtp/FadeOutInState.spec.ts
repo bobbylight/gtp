@@ -8,7 +8,7 @@ interface FunctionWrapperForTesting {
 describe('FadeOutInState', () => {
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	it('constructor happy path', () => {
@@ -16,7 +16,7 @@ describe('FadeOutInState', () => {
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
 		const temp: FunctionWrapperForTesting = {
-			transitionLogic: jest.fn(),
+			transitionLogic: vi.fn(),
 		};
 		const timeMillis= 500;
 
@@ -31,7 +31,7 @@ describe('FadeOutInState', () => {
 		const leavingState: State<Game> = new State<Game>();
 		const enteringState: State<Game> = new State<Game>();
 		const temp: FunctionWrapperForTesting = {
-			transitionLogic: jest.fn(),
+			transitionLogic: vi.fn(),
 		};
 		const timeMillis= 500;
 
