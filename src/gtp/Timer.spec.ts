@@ -11,16 +11,16 @@ describe('Timer', () => {
 
 		// Note we are assuming that console.log/error are called with 1 argument
 		// here...
-		jest.spyOn(console, 'log').mockImplementation((arg: string) => {
+		vi.spyOn(console, 'log').mockImplementation((arg: string) => {
 			debugContent += arg + '\n';
 		});
-		jest.spyOn(console, 'error').mockImplementation((arg: string) => {
+		vi.spyOn(console, 'error').mockImplementation((arg: string) => {
 			errorContent += arg + '\n';
 		});
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	it('logging, happy path, single event', () => {
