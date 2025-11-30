@@ -109,7 +109,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	}
 
 	draw(ctx: CanvasRenderingContext2D, centerRow: number, centerCol: number,
-		dx= 0, dy= 0) {
+		dx = 0, dy = 0) {
 
 		const colCount: number = this.width;
 		const rowCount: number = this.height;
@@ -174,7 +174,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 
 				if (layer.visible) {
 
-					let prevOpacity= 1; // Default value needed for strict null checks
+					let prevOpacity = 1; // Default value needed for strict null checks
 					if (layer.opacity < 1) {
 						prevOpacity = ctx.globalAlpha;
 						ctx.globalAlpha = prevOpacity * layer.opacity;
@@ -319,7 +319,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 
 	private getTilesetForGid(gid: number): TiledTileset {
 		const tilesetCount: number = this.tilesets.length;
-		for (let i= 0; i < tilesetCount; i++) {
+		for (let i = 0; i < tilesetCount; i++) {
 			if (this.tilesets[i].firstgid > gid) {
 				return this.tilesets[i - 1];
 			}
@@ -337,7 +337,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	 * @return Whether a layer by that name was found.
 	 */
 	removeLayer(layerName: string): boolean {
-		for (let i= 0; i < this.layers.length; i++) {
+		for (let i = 0; i < this.layers.length; i++) {
 			if (this.layers[i].name === layerName) {
 				this.layers.splice(i, 1);
 				this.layersByName.delete(layerName);

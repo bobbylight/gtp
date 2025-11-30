@@ -56,7 +56,7 @@ export default class AssetLoader {
 	 *        directory for all assets to load.  Use this if all assets are
 	 *        in a subfolder or different hierarchy than the project itself.
 	 */
-	constructor(scale= 1, audio: AudioSystem, assetRoot?: string) {
+	constructor(scale = 1, audio: AudioSystem, assetRoot?: string) {
 		this.scale = scale || 1;
 		this.loadingAssetData = {};
 		this.responses = {};
@@ -138,7 +138,7 @@ export default class AssetLoader {
 	 *        is made translucent, along with all other pixels of the same
 	 *        color.  The default value is <code>false</code>.
 	 */
-	addImage(id: string, imageSrc: string, firstPixelTranslucent= false) {
+	addImage(id: string, imageSrc: string, firstPixelTranslucent = false) {
 
 		if (this.assetRoot) {
 			imageSrc = this.assetRoot + imageSrc;
@@ -216,8 +216,8 @@ export default class AssetLoader {
 	 * @param [loopByDefaultIfMusic=true] Whether this sound should
 	 *        loop by default when it is played as music.
 	 */
-	addSound(id: string, soundSrc: string, loopStart= 0,
-		loopByDefaultIfMusic= true): Promise<ArrayBuffer> | null {
+	addSound(id: string, soundSrc: string, loopStart = 0,
+		loopByDefaultIfMusic = true): Promise<ArrayBuffer> | null {
 
 		if (this.audio.isInitialized()) {
 
@@ -270,8 +270,8 @@ export default class AssetLoader {
 	 *        is made translucent, along with all other pixels of the same color.
 	 */
 	addSpriteSheet(id: string, imageSrc: string, cellW: number, cellH: number,
-		spacingX= 0, spacingY= 0,
-		firstPixelTranslucent= false) {
+		spacingX = 0, spacingY = 0,
+		firstPixelTranslucent = false) {
 
 		spacingX = spacingX || 0;
 		spacingY = spacingY || 0;
@@ -314,7 +314,7 @@ export default class AssetLoader {
 	 */
 	addTmxMap(map: TiledMap) {
 		map.tilesets.forEach(tileset => {
-			const id= `_tilesetImage_${tileset.name}`;
+			const id = `_tilesetImage_${tileset.name}`;
 			this.addImage(id, tileset.image);
 		});
 	}

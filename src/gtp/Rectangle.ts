@@ -28,7 +28,7 @@ export default class Rectangle implements RectangularData {
 	 * @param w The width of the rectangle, defaulting to <code>0</code>.
 	 * @param h The height of the rectangle, defaulting to <code>0</code>.
 	 */
-	constructor(x= 0, y= 0, w= 0, h= 0) {
+	constructor(x = 0, y = 0, w = 0, h = 0) {
 		this.set(x, y, w, h);
 	}
 
@@ -55,7 +55,7 @@ export default class Rectangle implements RectangularData {
 	 *        specifying the dimensions as separate arguments.
 	 * @return Whether this rectangle contains the specified rectangle.
 	 */
-	containsRect(x2: number | RectangularData, y2= 0, w2= 0, h2= 0): boolean {
+	containsRect(x2: number | RectangularData, y2 = 0, w2 = 0, h2 = 0): boolean {
 
 		if (typeof x2 !== 'number') {
 			const r: RectangularData = x2;

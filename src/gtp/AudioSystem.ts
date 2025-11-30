@@ -12,7 +12,7 @@ interface PlayingSoundConfig {
 	soundId: string;
 	loop: boolean;
 	buffer: AudioBuffer;
-	connectTo: AudioNode|AudioNode[];
+	connectTo: AudioNode | AudioNode[];
 	onendedGenerator: OnEndedGenerator;
 	startOffset?: number;
 }
@@ -119,8 +119,8 @@ class PlayingSound {
 
 }
 
-const DEFAULT_MUSIC_FADE_SECONDS= 0.3;
-const MILLIS_PER_SECOND= 1000;
+const DEFAULT_MUSIC_FADE_SECONDS = 0.3;
+const MILLIS_PER_SECOND = 1000;
 
 /**
  * A wrapper around web audio for games.
@@ -167,8 +167,8 @@ export default class AudioSystem {
 		this.soundEffectIdGenerator = 0;
 	}
 
-	private createPlayingSound(id: string, loop= false,
-		startOffset= 0, doneCallback?: SoundCompletedCallback): PlayingSound {
+	private createPlayingSound(id: string, loop = false,
+		startOffset = 0, doneCallback?: SoundCompletedCallback): PlayingSound {
 
 		const soundEffectId: number = this.createSoundEffectId();
 
@@ -338,7 +338,7 @@ export default class AudioSystem {
 	 *         stop a looping sound via <code>stopSound(id)</code>.
 	 * @see stopSound
 	 */
-	playSound(id: string, loop= false, doneCallback?: SoundCompletedCallback): number {
+	playSound(id: string, loop = false, doneCallback?: SoundCompletedCallback): number {
 
 		if (this.context) {
 			const playingSound: PlayingSound = this.createPlayingSound(id, loop, 0, doneCallback);
@@ -356,7 +356,7 @@ export default class AudioSystem {
 	 * @return The sound just removed, or <code>null</code> if there was no such sound.
 	 */
 	private removePlayingSound(id: number): PlayingSound | null {
-		for (let i= 0; i < this.playingSounds.length; i++) {
+		for (let i = 0; i < this.playingSounds.length; i++) {
 			if (this.playingSounds[i].id === id) {
 				const sound: PlayingSound = this.playingSounds[i];
 				this.playingSounds.splice(i, 1);
@@ -385,7 +385,7 @@ export default class AudioSystem {
 	 *        native resources are freed and the music cannot be resumed.
 	 * @see playMusic
 	 */
-	stopMusic(pause= false) {
+	stopMusic(pause = false) {
 		if (this.currentMusic) {
 			this.currentMusic.stop();
 			if (!pause) {

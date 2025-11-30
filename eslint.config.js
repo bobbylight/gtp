@@ -47,6 +47,7 @@ export default [
             "@stylistic/no-trailing-spaces": "error",
             //"@stylistic/padded-blocks": ["error", "never"],
             "@stylistic/semi": ["error", "always"],
+            "@stylistic/space-infix-ops": "error",
             "@typescript-eslint/adjacent-overload-signatures": 0,
             '@typescript-eslint/array-type': [ 'error', { default: 'array' } ],
             "@typescript-eslint/explicit-module-boundary-types": 0, // We don't want to specify ": void" everywhere

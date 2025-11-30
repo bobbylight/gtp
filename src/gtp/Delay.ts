@@ -160,7 +160,7 @@ export default class Delay {
 	 *
 	 * @param smooth Whether to do so smoothly.
 	 */
-	private nextInitial(smooth= false) {
+	private nextInitial(smooth = false) {
 		const prevRemaining: number = this.remaining;
 		this.initialIndex = (this.initialIndex + 1) % this.initial.length;
 		this.curInitial = this.remaining = this.initial[this.initialIndex];

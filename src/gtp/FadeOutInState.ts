@@ -1,7 +1,7 @@
 import State from './State.js';
 import Game from './Game.js';
 
-const DEFAULT_HALF_TIME_MILLIS= 800;
+const DEFAULT_HALF_TIME_MILLIS = 800;
 
 /**
  * An optional callback called when this transition hits its halfway point (completely faded out,

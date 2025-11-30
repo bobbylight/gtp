@@ -1,6 +1,6 @@
 import Utils from './Utils.js';
 
-const MIN_CANVAS_DIMENSION= 256;
+const MIN_CANVAS_DIMENSION = 256;
 
 /**
  * General-purpose utilities for manipulating images in canvases.
@@ -11,12 +11,12 @@ export default class ImageUtils {
 	 * If <code>true</code>, subpixel rendering is allowed; otherwise, x- and
 	 * y-coordinates are rounded to the nearest integer when rendering images.
 	 */
-	static allowSubpixelImageRendering= false;
+	static allowSubpixelImageRendering = false;
 
 	/**
 	 * Takes an img/canvas and a scaling factor and returns the scaled image.
 	 */
-	static resize(img: HTMLImageElement|HTMLCanvasElement, scale= 1): HTMLCanvasElement {
+	static resize(img: HTMLImageElement | HTMLCanvasElement, scale = 1): HTMLCanvasElement {
 
 		// The original image is drawn into an offscreen canvas of the same size
 		// and copied, pixel by pixel into another offscreen canvas with the
@@ -46,8 +46,8 @@ export default class ImageUtils {
 		const scaledCtx: CanvasRenderingContext2D = Utils.getRenderingContext(scaled);
 		const scaledPixels: ImageData = scaledCtx.getImageData(0, 0, widthScaled, heightScaled);
 
-		for (let y= 0; y < heightScaled; y++) {
-			for (let x= 0; x < widthScaled; x++) {
+		for (let y = 0; y < heightScaled; y++) {
+			for (let x = 0; x < widthScaled; x++) {
 				const index: number = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
 				const indexScaled: number = (y * widthScaled + x) * 4;
 				scaledPixels.data[indexScaled] = origPixels.data[index];
@@ -125,7 +125,7 @@ export default class ImageUtils {
 	 *        be used if this parameter is undefined.
 	 * @return The original canvas, which has been modified.
 	 */
-	static makeColorTranslucent(canvas: HTMLCanvasElement, x= 0, y= 0) {
+	static makeColorTranslucent(canvas: HTMLCanvasElement, x = 0, y = 0) {
 
 		const ctx = Utils.getRenderingContext(canvas);
 		const w: number = canvas.width;
@@ -134,7 +134,7 @@ export default class ImageUtils {
 
 		const color: number[] = [];
 		const offs: number = (y * w + x) * 4;
-		for (let i= 0; i < 4; i++) {
+		for (let i = 0; i < 4; i++) {
 			color[i] = pixels.data[offs + i];
 		}
 

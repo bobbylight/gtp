@@ -26,7 +26,7 @@ export default class InputManager {
 	 *        milliseconds.  A value of 0 means to take the operating system
 	 *        default.
 	 */
-	constructor(keyRefireMillis= 0) {
+	constructor(keyRefireMillis = 0) {
 		this.keys = [];
 		this.refireMillis = keyRefireMillis;
 		this.repeatTimers = [];
@@ -50,7 +50,7 @@ export default class InputManager {
 	 * Resets all keys to be in their "not depressed" states.
 	 */
 	clearKeyStates() {
-		for (let i= 0; i < this.keys.length; i++) {
+		for (let i = 0; i < this.keys.length; i++) {
 			this.clearKeyState(i);
 		}
 	}
@@ -62,7 +62,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	ctrl(clear= false) {
+	ctrl(clear = false) {
 		return this.isKeyDown(Keys.KEY_CTRL, clear);
 	}
 
@@ -73,7 +73,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	down(clear= false) {
+	down(clear = false) {
 		return this.isKeyDown(Keys.KEY_DOWN_ARROW, clear);
 	}
 
@@ -84,7 +84,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	enter(clear= false) {
+	enter(clear = false) {
 		return this.isKeyDown(Keys.KEY_ENTER, clear);
 	}
 
@@ -105,7 +105,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	isKeyDown(keyCode: number, clear= false) {
+	isKeyDown(keyCode: number, clear = false) {
 		const down: boolean = this.keys[keyCode];
 		if (down && clear) {
 			this.keys[keyCode] = false;
@@ -157,7 +157,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	left(clear= false) {
+	left(clear = false) {
 		return this.isKeyDown(Keys.KEY_LEFT_ARROW, clear);
 	}
 
@@ -168,7 +168,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	right(clear= false) {
+	right(clear = false) {
 		return this.isKeyDown(Keys.KEY_RIGHT_ARROW, clear);
 	}
 
@@ -179,7 +179,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	shift(clear= false) {
+	shift(clear = false) {
 		return this.isKeyDown(Keys.KEY_SHIFT, clear);
 	}
 
@@ -190,7 +190,7 @@ export default class InputManager {
 	 *        enable the keyboard's buffering.
 	 * @return Whether the key was pressed.
 	 */
-	up(clear= false) {
+	up(clear = false) {
 		return this.isKeyDown(Keys.KEY_UP_ARROW, clear);
 	}
 }
