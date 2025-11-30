@@ -8,7 +8,6 @@ typings/
 .npmignore
 eslint.config.js
 gtp.iml
-jest.config.js
 npm-debug.log
 test-main.js
 Thumbs.db
