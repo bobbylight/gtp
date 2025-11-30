@@ -155,7 +155,7 @@ export default class Image {
 	 *        be used if this parameter is undefined.
 	 * @return This image, which has been modified.
 	 */
-	makeColorTranslucent(x= 0, y= 0) {
+	makeColorTranslucent(x = 0, y = 0) {
 		ImageUtils.makeColorTranslucent(this.canvas, x, y);
 	}
 

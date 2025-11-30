@@ -36,9 +36,9 @@ export default {
 	getRequestParam(param: string): string | null {
 
 		// Replace leading '?' with '&'
-		const params= '&' + BrowserUtil.getWindowLocationSearch().substring(1);
+		const params = '&' + BrowserUtil.getWindowLocationSearch().substring(1);
 
-		const searchFor= '&' + param;
+		const searchFor = '&' + param;
 		const index: number = params.indexOf(searchFor);
 		if (index >= -1) {
 			let start: number = index + searchFor.length;

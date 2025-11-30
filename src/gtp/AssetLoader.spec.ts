@@ -51,7 +51,7 @@ describe('AssetLoader', () => {
 		// The real implementation keys off of the type of "img", which we can't do since it's a mock, so here we
 		// return a dummy canvas.
 		vi.spyOn(ImageUtils, 'resize').mockImplementation(
-			(img: HTMLImageElement|HTMLCanvasElement, scale= 1): HTMLCanvasElement => {
+			(img: HTMLImageElement | HTMLCanvasElement, scale = 1): HTMLCanvasElement => {
 				const canvas = document.createElement('canvas');
 				canvas.width = img.width * scale;
 				canvas.height = img.height * scale;
@@ -191,7 +191,7 @@ describe('AssetLoader', () => {
 			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
-			let imageSrc= 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+			let imageSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 			if (assetRoot) {
 				imageSrc = imageSrc.substring(assetRoot.length);
 			}
@@ -225,7 +225,7 @@ describe('AssetLoader', () => {
 			};
 
 			// Add something to load, now we're waiting
-			let imageSrc= 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+			let imageSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 			if (assetRoot) {
 				imageSrc = imageSrc.substring(assetRoot.length);
 			}

@@ -81,7 +81,7 @@ export default class ImageAtlas {
 	 *        by this value.
 	 * @returns The parsed images.
 	 */
-	parse(scale= 1): ImageMap {
+	parse(scale = 1): ImageMap {
 
 		const images: ImageMap = {};
 

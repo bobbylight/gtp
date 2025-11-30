@@ -77,7 +77,7 @@ describe('Utils', () => {
 	it('timestamp()', () => {
 
 		// Smaller delays cause occasional issues due to our use of window.performance
-		const DELAY= 300;
+		const DELAY = 300;
 
 		const start: number = Utils.timestamp();
 		const waitUntil: number = Date.now() + DELAY + 1; // Wait > 300 milliseconds

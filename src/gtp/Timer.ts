@@ -12,14 +12,14 @@ type TimeMap = Record<string, number>;
 export default class Timer {
 
 	private readonly startTimes: TimeMap = {};
-	private prefix= 'DEBUG';
+	private prefix = 'DEBUG';
 
 	/**
 	 * Sets the prefix to prepend to each line printed to the console.
 	 *
 	 * @param prefix The new prefix.  'DEBUG' is used if not defined.
 	 */
-	setLogPrefix(prefix= 'DEBUG') {
+	setLogPrefix(prefix = 'DEBUG') {
 		this.prefix = prefix;
 	}
 

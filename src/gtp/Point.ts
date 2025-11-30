@@ -11,7 +11,7 @@ export default class Point {
 	 * @param x The x-coordinate, or <code>0</code> if unspecified.
 	 * @param y The y-coordinate, or <code>0</code> if unspecified.
 	 */
-	constructor(x= 0, y= 0) {
+	constructor(x = 0, y = 0) {
 		this.x = x;
 		this.y = y;
 	}

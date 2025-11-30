@@ -21,10 +21,10 @@ export default class Pool<T> {
 	 * @param growCount The amount to grow this pool by if too many
 	 *        objects are borrowed; defaults to <code>10</code>.
 	 */
-	constructor(ctorFunc: new() => T, initialSize= 20, growCount= 10) {
+	constructor(ctorFunc: new() => T, initialSize = 20, growCount = 10) {
 		this.c = ctorFunc;
 		this.pool = [];
-		for (let i= 0; i < initialSize; i++) {
+		for (let i = 0; i < initialSize; i++) {
 			this.pool.push(new this.c());
 		}
 		this.index = 0;
@@ -39,7 +39,7 @@ export default class Pool<T> {
 	borrowObj(): T {
 		const obj: T = this.pool[this.index++];
 		if (this.index >= this.pool.length) {
-			for (let i= 0; i < this.growCount; i++) {
+			for (let i = 0; i < this.growCount; i++) {
 				this.pool.push(new this.c());
 			}
 		}
@@ -79,7 +79,7 @@ export default class Pool<T> {
 
 		// Get the index of the object being returned.
 		let objIndex = -1;
-		for (let i= 0; i < this.index; i++) {
+		for (let i = 0; i < this.index; i++) {
 			if (obj === this.pool[i]) {
 				objIndex = i;
 				break;

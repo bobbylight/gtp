@@ -8,7 +8,7 @@ import { Window } from './GtpBase.js';
  */
 export const DEFAULT_COLOR = 'default';
 
-const FIRST_PRINTABLE_CODE_POINT= 0x20; // === ' '
+const FIRST_PRINTABLE_CODE_POINT = 0x20; // === ' '
 
 /**
  * A font renderer that uses a bitmap for its glyphs.
@@ -17,7 +17,7 @@ export default class BitmapFont extends SpriteSheet {
 
 	private fontMap: Record<string, SpriteSheet> = {};
 
-	constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number, scale= 1) {
+	constructor(gtpImage: Image, cellW: number, cellH: number, spacing: number, spacingY: number, scale = 1) {
 		super(gtpImage, cellW, cellH, spacing, spacingY, scale);
 		this.fontMap[DEFAULT_COLOR] = this;
 	}
@@ -42,7 +42,7 @@ export default class BitmapFont extends SpriteSheet {
 		const charWidth: number = this.cellW;
 		const variant = this.fontMap[color] ?? this;
 
-		for (let i= 0; i < str.length; i++) {
+		for (let i = 0; i < str.length; i++) {
 			let ch: number = str.charCodeAt(i) - FIRST_PRINTABLE_CODE_POINT;
 			if (ch < 0 || ch >= glyphCount) {
 				ch = 0;
