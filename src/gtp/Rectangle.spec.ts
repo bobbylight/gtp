@@ -21,17 +21,17 @@ describe('Rectangle', () => {
 
 	it('contains happy path - true', () => {
 		const r1: Rectangle = new Rectangle(5, 5, 20, 20);
-		expect(r1.contains(5, 5)).toBeTruthy();
-		expect(r1.contains(10, 10)).toBeTruthy();
-		expect(r1.contains(24, 24)).toBeTruthy();
+		expect(r1.contains(5, 5)).toEqual(true);
+		expect(r1.contains(10, 10)).toEqual(true);
+		expect(r1.contains(24, 24)).toEqual(true);
 	});
 
 	it('contains happy path - false', () => {
 		const r1: Rectangle = new Rectangle(5, 5, 20, 20);
-		expect(r1.contains(4, 5)).toBeFalsy();
-		expect(r1.contains(5, 4)).toBeFalsy();
-		expect(r1.contains(24, 25)).toBeFalsy();
-		expect(r1.contains(25, 24)).toBeFalsy();
+		expect(r1.contains(4, 5)).toEqual(false);
+		expect(r1.contains(5, 4)).toEqual(false);
+		expect(r1.contains(24, 25)).toEqual(false);
+		expect(r1.contains(25, 24)).toEqual(false);
 	});
 
 	it('containsRect happy path - true', () => {

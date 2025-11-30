@@ -21,7 +21,7 @@ describe('AudioSystem', () => {
 	it('when web audio is available, it is marked as initialized', () => {
 		const audio: AudioSystem = new AudioSystem();
 		audio.init();
-		expect(audio.isInitialized()).toBeTruthy();
+		expect(audio.isInitialized()).toEqual(true);
 	});
 
 	it('fadeOutMusic() fades out the current music, and plays nothing if no new music is specified', () => {
@@ -107,7 +107,9 @@ describe('AudioSystem', () => {
 		const audio: AudioSystem = new AudioSystem();
 		audio.init();
 		audio.addSound(mockSound);
+		expect(audio.getCurrentMusic()).toBeUndefined();
 		audio.playMusic('musicId', true);
+		expect(audio.getCurrentMusic()).toEqual('musicId');
 	});
 
 	it('playSound() returns -1 if audio is not available in this browser', () => {
@@ -119,7 +121,7 @@ describe('AudioSystem', () => {
 		try {
 
 			const audio: AudioSystem = new AudioSystem();
-			expect(audio.init()).toBeFalsy(); // Notified of no support
+			expect(audio.init()).toEqual(false); // Notified of no support
 
 			// But can still call the sound API - no need for wrapping in if-blocks
 			const buffer: AudioBuffer = {} as unknown as AudioBuffer;
@@ -147,7 +149,9 @@ describe('AudioSystem', () => {
 		const audio: AudioSystem = new AudioSystem();
 		audio.init();
 
-		audio.stopMusic();
+		expect(() => {
+			audio.stopMusic();
+		}).not.toThrowError();
 	});
 
 	it('stopMusic() will pause the currently-playing music', () => {
@@ -159,7 +163,9 @@ describe('AudioSystem', () => {
 		audio.init();
 		audio.addSound(mockSound);
 		audio.playMusic('musicId', true);
+		expect(audio.getCurrentMusic()).toBeDefined();
 		audio.stopMusic(true);
+		expect(audio.getCurrentMusic()).toBeDefined(); // Still defined, just paused)
 	});
 
 	it('stopMusic() will stop currently-playing music', () => {
@@ -171,7 +177,9 @@ describe('AudioSystem', () => {
 		audio.init();
 		audio.addSound(mockSound);
 		audio.playMusic('musicId', true);
+		expect(audio.getCurrentMusic()).toBeDefined();
 		audio.stopMusic();
+		expect(audio.getCurrentMusic()).toBeUndefined();
 	});
 
 	it('stopSound() stops a playing sound effect', () => {
@@ -184,27 +192,27 @@ describe('AudioSystem', () => {
 		audio.addSound(mockSound);
 		const id: number = audio.playSound('soundId');
 
-		expect(audio.stopSound(id)).toBeTruthy();
+		expect(audio.stopSound(id)).toEqual(true);
 	});
 
 	it('stopSound() returns false if a sound effect is not playing', () => {
 		const audio: AudioSystem = new AudioSystem();
 		audio.init();
-		expect(audio.stopSound(1)).toBeFalsy();
+		expect(audio.stopSound(1)).toEqual(false);
 	});
 
 	it('toggleMuted() returns the new mute state', () => {
 		const audio: AudioSystem = new AudioSystem();
 		audio.init();
-		expect(audio.toggleMuted()).toBeTruthy();
-		expect(audio.toggleMuted()).toBeFalsy();
+		expect(audio.toggleMuted()).toEqual(true);
+		expect(audio.toggleMuted()).toEqual(false);
 	});
 
 	it('get/set fadeMusic works', () => {
 		const audio: AudioSystem = new AudioSystem();
-		expect(audio.fadeMusic).toBeTruthy();
+		expect(audio.fadeMusic).toEqual(true);
 		audio.fadeMusic = false;
-		expect(audio.fadeMusic).toBeFalsy();
+		expect(audio.fadeMusic).toEqual(false);
 	});
 
 	it('get/set musicFadeSeconds works', () => {

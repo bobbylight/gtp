@@ -22,20 +22,20 @@ describe('Point', () => {
 
 	it('equals null arg', () => {
 		const point: Point = new Point(3, 4);
-		expect(point.equals(null)).toBeFalsy();
+		expect(point.equals(null)).toEqual(false);
 	});
 
 	it('equals false', () => {
 		const point: Point = new Point(3, 4);
 		const point2: Point = new Point(3, 5);
-		expect(point.equals(point2)).toBeFalsy();
+		expect(point.equals(point2)).toEqual(false);
 	});
 
 	it('equals true', () => {
 		const point: Point = new Point(3, 4);
 		const point2: Point = new Point(3, 4);
-		expect(point.equals(point2)).toBeTruthy();
-		expect(point.equals(point)).toBeTruthy();
+		expect(point.equals(point2)).toEqual(true);
+		expect(point.equals(point)).toEqual(true);
 	});
 
 });

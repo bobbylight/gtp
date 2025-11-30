@@ -71,33 +71,33 @@ describe('AssetLoader', () => {
 	])('when assetRoot is %d', ({ assetRoot }) => {
 
 		it('constructor, happy path', () => {
-			new AssetLoader(1, new AudioSystem(), assetRoot);
+			expect(() => {
+				new AssetLoader(1, new AudioSystem(), assetRoot);
+			}).not.toThrowError();
 		});
 
 		it('addJson() loads the data', async() => {
 
-			window.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					status: 200,
-					text: () => Promise.resolve('{ "test": "json" }'),
-				} as unknown as Response),
-			);
+			vi.spyOn(window, 'fetch').mockResolvedValue({
+				ok: true,
+				status: 200,
+				text: () => Promise.resolve('{ "test": "json" }'),
+			} as unknown as Response);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addJson('testJson', '/fake/url.json');
 			if (!promise) {
 				throw new Error('addJson() returned null');
 			}
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			// Wait for the response and check that we're "done loading" again
 			await promise;
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testJson')).toEqual({ test: 'json' });
 		});
 
@@ -105,31 +105,29 @@ describe('AssetLoader', () => {
 		// verify the behavior here
 		it('addJson() does nothing if data with the given ID is currently being loaded', async() => {
 
-			window.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					text: () => Promise.resolve('{ "test": "json" }'),
-				} as unknown as Response),
-			);
+			vi.spyOn(window, 'fetch').mockResolvedValue({
+				ok: true,
+				text: () => Promise.resolve('{ "test": "json" }'),
+			} as unknown as Response);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addJson('testJson', '/fake/url.json');
 			if (!promise) {
 				throw new Error('addJson() returned null');
 			}
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			// Try to load the same item again - this should change nothing
 			void assetLoader.addJson('testJson', '/fake/url.json');
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			// Wait for the response and check that we're "done loading" again
 			await promise;
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testJson')).toEqual({ test: 'json' });
 		});
 
@@ -137,64 +135,60 @@ describe('AssetLoader', () => {
 		// verify the behavior here
 		it('addJson() does nothing if data with the given ID has already been loaded', async() => {
 
-			window.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					text: () => Promise.resolve('{ "test": "json" }'),
-				} as unknown as Response),
-			);
+			vi.spyOn(window, 'fetch').mockResolvedValue({
+				ok: true,
+				text: () => Promise.resolve('{ "test": "json" }'),
+			} as unknown as Response);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addJson('testJson', '/fake/url.json');
 			if (!promise) {
 				throw new Error('addJson() returned null');
 			}
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			// Wait for the response and check that we're "done loading" again
 			await promise;
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testJson')).toEqual({ test: 'json' });
 
 			// Try to load the same item again - this should change nothing
 			void assetLoader.addJson('testJson', '/fake/url.json');
-			expect(assetLoader.isDoneLoading()).toBeTruthy(); // Already loaded 'testJson'
+			expect(assetLoader.isDoneLoading()).toEqual(true); // Already loaded 'testJson'
 		});
 
 		it('addCanvas() loads the data', async() => {
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
 			assetLoader.addCanvas('testCanvas',
 				'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			await new Promise(r => setTimeout(r, 50));
 
 			// Now that we've received the response, check that we're "done loading" again
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testCanvas')).toBeDefined();
 		});
 
 		it('addImage() loads the data', async() => {
 
-			window.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					text: () => Promise.resolve('{ "test": "json" }'),
-				} as unknown as Response),
-			);
+			vi.spyOn(window, 'fetch').mockResolvedValue({
+				ok: true,
+				text: () => Promise.resolve('{ "test": "json" }'),
+			} as unknown as Response);
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
 			let imageSrc= 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
@@ -202,12 +196,12 @@ describe('AssetLoader', () => {
 				imageSrc = imageSrc.substring(assetRoot.length);
 			}
 			assetLoader.addImage('testImage', imageSrc);
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			await new Promise(r => setTimeout(r, 50));
 
 			// Now that we've received the response, check that we're "done loading" again
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testImage')).toBeDefined();
 		});
 
@@ -215,7 +209,7 @@ describe('AssetLoader', () => {
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			const atlasInfo: ImageAtlasInfo = {
 				prefix: 'testAtlasImages',
@@ -236,40 +230,38 @@ describe('AssetLoader', () => {
 				imageSrc = imageSrc.substring(assetRoot.length);
 			}
 			assetLoader.addImageAtlasContents('unused', imageSrc, atlasInfo);
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			await new Promise(r => setTimeout(r, 50));
 
 			// Now that we've received the response, check that we're "done loading" again
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testAtlasImagesfoo')).toBeDefined();
 		});
 
 		it('addSound() loads sound data if audio is enabled in this browser', async() => {
 
-			window.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					arrayBuffer: () => Promise.resolve('soundData'),
-				} as unknown as Response),
-			);
+			vi.spyOn(window, 'fetch').mockResolvedValue({
+				ok: true,
+				arrayBuffer: () => Promise.resolve('soundData'),
+			} as unknown as Response);
 
 			// Initially nothing queued up, so we're "done loading"
 			const audioSystem: AudioSystem = new AudioSystem();
-			expect(audioSystem.init()).toBeTruthy();
+			expect(audioSystem.init()).toEqual(true);
 			const assetLoader: AssetLoader = new AssetLoader(1, audioSystem, assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
 			const promise = assetLoader.addSound('testSound', '/fake/sound.ogg');
 			if (!promise) {
 				throw new Error('addSound() returned null');
 			}
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			// Wait for the response and check that we're "done loading" again
 			await promise;
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testSound')).toBeDefined();
 		});
 
@@ -277,18 +269,18 @@ describe('AssetLoader', () => {
 
 			// Initially nothing queued up, so we're "done loading"
 			const assetLoader: AssetLoader = new AssetLoader(1, new AudioSystem(), assetRoot);
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 
 			// Add something to load, now we're waiting
 			assetLoader.addSpriteSheet('testSheet',
 				'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
 				1, 1, 0, 0, true);
-			expect(assetLoader.isDoneLoading()).toBeFalsy();
+			expect(assetLoader.isDoneLoading()).toEqual(false);
 
 			await new Promise(r => setTimeout(r, 50));
 
 			// Now that we've received the response, check that we're "done loading" again
-			expect(assetLoader.isDoneLoading()).toBeTruthy();
+			expect(assetLoader.isDoneLoading()).toEqual(true);
 			expect(assetLoader.get('testSheet')).toBeDefined();
 		});
 
@@ -321,7 +313,9 @@ describe('AssetLoader', () => {
 
 			const map: TiledMap = new TiledMap(data, args);
 
-			assetLoader.addTmxMap(map); // No errors
+			expect(() => {
+				assetLoader.addTmxMap(map);
+			}).not.toThrowError();
 		});
 
 		it('addTmxMap() works with empty tilesets', () => {
@@ -353,7 +347,9 @@ describe('AssetLoader', () => {
 
 			const map: TiledMap = new TiledMap(data, args);
 
-			assetLoader.addTmxMap(map); // No errors
+			expect(() => {
+				assetLoader.addTmxMap(map);
+			}).not.toThrowError();
 		});
 
 		it('set() works to manually add a resource', () => {

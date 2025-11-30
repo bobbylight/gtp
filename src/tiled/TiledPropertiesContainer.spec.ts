@@ -39,7 +39,7 @@ describe('TiledPropertiesContainer', () => {
 		});
 
 		it('throws an error if the property is not defined and there is no default', () => {
-			expect(() => getProperty(object, 'unknown')).toThrow();
+			expect(() => getProperty(object, 'unknown')).toThrowError();
 		});
 	});
 

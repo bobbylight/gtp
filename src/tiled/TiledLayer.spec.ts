@@ -107,12 +107,12 @@ describe('TiledLayer', () => {
 	describe('setData()', () => {
 
 		it('sets the expected value in the happy path', () => {
-			expect(tileLayer.setData(1, 1, 42)).toBeTruthy();
+			expect(tileLayer.setData(1, 1, 42)).toEqual(true);
 			expect(tileLayer.getData(1, 1)).toEqual(42);
 		});
 
 		it('false if this is not a data layer', () => {
-			expect(objectGroupLayer.setData(1, 1, 42)).toBeFalsy();
+			expect(objectGroupLayer.setData(1, 1, 42)).toEqual(false);
 			expect(objectGroupLayer.getData(1, 1)).toEqual(-1);
 		});
 	});
@@ -156,18 +156,18 @@ describe('TiledLayer', () => {
 		});
 
 		it('throws an error if the property requested is not defined and there is no default', () => {
-			expect(() => tileLayer.getProperty('unknown')).toThrow();
+			expect(() => tileLayer.getProperty('unknown')).toThrowError();
 		});
 	});
 
 	describe('isObjectGroup()', () => {
 
 		it('returns true for objectgroups', () => {
-			expect(objectGroupLayer.isObjectGroup()).toBeTruthy();
+			expect(objectGroupLayer.isObjectGroup()).toEqual(true);
 		});
 
 		it('return falsae for non-objectgroups', () => {
-			expect(tileLayer.isObjectGroup()).toBeFalsy();
+			expect(tileLayer.isObjectGroup()).toEqual(false);
 		});
 	});
 });

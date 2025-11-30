@@ -135,7 +135,7 @@ describe('TiledMap', () => {
 		});
 
 		it('throws an error if the layer requested is not defined', () => {
-			expect(() => tiledMap.getLayer('unknown')).toThrow();
+			expect(() => tiledMap.getLayer('unknown')).toThrowError();
 		});
 	});
 
@@ -170,7 +170,7 @@ describe('TiledMap', () => {
 		});
 
 		it('throws an error if the property requested is not defined and there is no default', () => {
-			expect(() => tiledMap.getProperty('unknown')).toThrow();
+			expect(() => tiledMap.getProperty('unknown')).toThrowError();
 		});
 	});
 
@@ -183,9 +183,9 @@ describe('TiledMap', () => {
 	});
 
 	it('removeLayer() works properly', () => {
-		expect(tiledMap.removeLayer('layer-1')).toBeTruthy();
-		expect(tiledMap.removeLayer('layer-1')).toBeFalsy();
-		expect(tiledMap.removeLayer('unknown')).toBeFalsy();
+		expect(tiledMap.removeLayer('layer-1')).toEqual(true);
+		expect(tiledMap.removeLayer('layer-1')).toEqual(false);
+		expect(tiledMap.removeLayer('unknown')).toEqual(false);
 	});
 
 	it('setScale() works properly', () => {

@@ -13,7 +13,9 @@ describe('Game', () => {
 	});
 
 	it('constructor happy path', () => {
-		new Game();
+		expect(() => {
+			new Game();
+		}).not.toThrowError();
 	});
 
 	it('clearScreen() works', () => {
@@ -60,11 +62,11 @@ describe('Game', () => {
 
 		const game: Game = new Game();
 
-		expect(game.paused).toBeFalsy();
+		expect(game.paused).toEqual(false);
 		game.paused = true;
-		expect(game.paused).toBeTruthy();
+		expect(game.paused).toEqual(true);
 		game.paused = false;
-		expect(game.paused).toBeFalsy();
+		expect(game.paused).toEqual(false);
 	});
 
 	it('getting playTime works', async() => {
@@ -101,7 +103,7 @@ describe('Game', () => {
 
 		game.setState(new DummyState());
 
-		game.render();
+		expect(() => { game.render(); }).not.toThrowError();
 	});
 
 	it('start() starts an event loop', async() => {
@@ -122,7 +124,7 @@ describe('Game', () => {
 
 	it('toggleMuted() toggles mute state', () => {
 		const game: Game = new Game();
-		expect(game.toggleMuted()).toBeTruthy();
-		expect(game.toggleMuted()).toBeFalsy();
+		expect(game.toggleMuted()).toEqual(true);
+		expect(game.toggleMuted()).toEqual(false);
 	});
 });

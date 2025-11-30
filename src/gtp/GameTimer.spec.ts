@@ -5,17 +5,17 @@ describe('_GameTimer', () => {
 	it('get/set paused should work', () => {
 
 		const timer: GameTimer = new GameTimer();
-		expect(timer.paused).toBeFalsy();
+		expect(timer.paused).toEqual(false);
 		timer.paused = true;
-		expect(timer.paused).toBeTruthy();
+		expect(timer.paused).toEqual(true);
 	});
 
 	it('get/set updating should work', () => {
 
 		const timer: GameTimer = new GameTimer();
-		expect(timer.updating).toBeTruthy();
+		expect(timer.updating).toEqual(true);
 		timer.updating = false;
-		expect(timer.updating).toBeFalsy();
+		expect(timer.updating).toEqual(false);
 	});
 
 	it('playTime increases as time goes on', async() => {
@@ -40,13 +40,13 @@ describe('_GameTimer', () => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		timer.paused = true;
-		expect(() => { timer.resetPlayTime(); }).toThrow();
+		expect(() => { timer.resetPlayTime(); }).toThrowError();
 	});
 
 	it('resetPlayTime should throw an error if called when not updating', () => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		timer.updating = false;
-		expect(() => { timer.resetPlayTime(); }).toThrow();
+		expect(() => { timer.resetPlayTime(); }).toThrowError();
 	});
 });
