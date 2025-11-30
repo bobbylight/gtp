@@ -49,7 +49,6 @@ export default [
             "@stylistic/semi": ["error", "always"],
             "@typescript-eslint/adjacent-overload-signatures": 0,
             '@typescript-eslint/array-type': [ 'error', { default: 'array' } ],
-            '@typescript-eslint/ban-types': 0, // We use 'Function'
             "@typescript-eslint/explicit-module-boundary-types": 0, // We don't want to specify ": void" everywhere
             "@typescript-eslint/naming-convention": [
                 "error",
