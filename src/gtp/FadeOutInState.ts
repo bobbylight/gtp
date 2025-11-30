@@ -37,6 +37,11 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 		this.curTime = 0;
 	}
 
+	override enter(game: T) {
+		super.enter(game);
+		this.game = game;
+	}
+
 	override update(delta: number) {
 
 		super.update(delta);
