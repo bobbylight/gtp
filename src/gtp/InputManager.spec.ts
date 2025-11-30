@@ -5,7 +5,7 @@ describe('InputManager', () => {
 	const im = new InputManager();
 	im.install();
 
-	it.skip('ctrl works', () => {
+	it.todo('ctrl works', () => {
 		// TODO: Implement me
 	});
 });

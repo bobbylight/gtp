@@ -16,11 +16,11 @@ describe('CanvasResizer', () => {
 		expect(canvas.style.height).toEqual('50px');
 	});
 
-	it.skip('resize() with STRETCH_FILL works', () => {
+	it.todo('resize() with STRETCH_FILL works', () => {
 		// TODO: Implement me once we switch from jsdom to a headless browser setup
 	});
 
-	it.skip('resize() with STRETCH_PROPORTIONAL works', () => {
+	it.todo('resize() with STRETCH_PROPORTIONAL works', () => {
 		// TODO: Implement me once we switch from jsdom to a headless browser setup
 	});
 });

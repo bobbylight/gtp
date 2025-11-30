@@ -37,7 +37,7 @@ describe('BitmapFont', () => {
 				fromR: 0, fromG: 0, fromB: 0, toR: 255, toG: 255, toB: 255,
 			});
 			vi.spyOn(font, 'drawByIndex').mockImplementation(() => {});
-			expect(() => { font.drawString('      ', 0, 0, 'test'); }).not.toThrow();
+			expect(() => { font.drawString('      ', 0, 0, 'test'); }).not.toThrowError();
 		});
 	});
 
@@ -91,7 +91,7 @@ describe('BitmapFont', () => {
 		it('does not error if an invalid color is specified', () => {
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
 			vi.spyOn(font, 'drawByIndex').mockImplementation(() => {});
-			expect(() => { font.drawString('      ', 0, 0, 'invalidVariant'); }).not.toThrow();
+			expect(() => { font.drawString('      ', 0, 0, 'invalidVariant'); }).not.toThrowError();
 		});
 	});
 });

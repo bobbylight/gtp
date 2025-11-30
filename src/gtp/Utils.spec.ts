@@ -56,7 +56,7 @@ describe('Utils', () => {
 		expect(Utils.randomInt(1)).toBe(0);
 
 		const result: number = Utils.randomInt(5);
-		expect(result >= 0).toBeTruthy();
+		expect(result >= 0).toEqual(true);
 		expect(result).toBeLessThan(5);
 	});
 
@@ -66,11 +66,11 @@ describe('Utils', () => {
 		expect(result).toBe(0);
 
 		result = Utils.randomInt(0, 5);
-		expect(result >= 0).toBeTruthy();
+		expect(result >= 0).toEqual(true);
 		expect(result).toBeLessThan(5);
 
 		result = Utils.randomInt(100, 150);
-		expect(result >= 100).toBeTruthy();
+		expect(result >= 100).toEqual(true);
 		expect(result).toBeLessThan(150);
 	});
 

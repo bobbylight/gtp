@@ -66,7 +66,7 @@ describe('Pool', () => {
 		expect(widget.price).toBe(0);
 
 		const result: any = pool.returnObj(widget);
-		expect(result).toBeTruthy();
+		expect(result).toEqual(true);
 		expect(pool.borrowedCount).toBe(0);
 	});
 
@@ -77,7 +77,7 @@ describe('Pool', () => {
 
 		const invalidWidget: Widget = new Widget();
 		const result: any = pool.returnObj(invalidWidget);
-		expect(result).toBeFalsy();
+		expect(result).toEqual(false);
 		expect(pool.borrowedCount).toBe(0);
 	});
 
