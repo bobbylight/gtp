@@ -22,9 +22,11 @@ export default class InputManager {
 	 *
 	 * Touch and mouse input are currently not supported.
 	 *
-	 * @param [keyRefireMillis=0] What the key refiring time should be, in
-	 *        milliseconds.  A value of 0 means to take the operating system
-	 *        default.
+	 * @param [keyRefireMillis=0] What the key refiring time should be, in milliseconds.
+	 *        This is useful if you plan on using the <code>clear</code> argument when querying
+	 *        for key states, as it dictates how frequently the key's down status will refire.
+	 *        It's not useful and effectively ignored if you never use <code>clear</code>.
+	 *        A value of 0 means keys will not send repeat "pressed" events.
 	 */
 	constructor(keyRefireMillis = 0) {
 		this.keys = [];
@@ -106,7 +108,7 @@ export default class InputManager {
 	 * @return Whether the key was pressed.
 	 */
 	isKeyDown(keyCode: number, clear = false) {
-		const down: boolean = this.keys[keyCode];
+		const down: boolean = this.keys[keyCode] ?? false;
 		if (down && clear) {
 			this.keys[keyCode] = false;
 		}
@@ -142,7 +144,7 @@ export default class InputManager {
 				clearInterval(this.repeatTimers[key]);
 				delete this.repeatTimers[key];
 			} else {
-				console.error(`_keyUp: Timer does not exist for key: ${key}!`);
+				console.error(`keyUp: Timer does not exist for key: ${key}!`);
 			}
 		} else {
 			this.keys[key] = false;
