@@ -2,14 +2,13 @@
 coverage/
 doc/
 src/
-typings/
 .editorconfig
 .gitattributes
 .npmignore
 eslint.config.js
 gtp.iml
 npm-debug.log
-test-main.js
 Thumbs.db
 tsconfig.json
-typings.json
+typedoc-class-name-fixing-plugin.cjs
+vite.config.js
