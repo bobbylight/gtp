@@ -27,10 +27,10 @@ export function intersects(object: TiledObject, ox: number, oy: number, ow: numb
 	tw += tx;
 	th += ty;
 	//      overflow || intersect
-	return ((rw < rx || rw > tx) &&
+	return (rw < rx || rw > tx) &&
 		(rh < ry || rh > ty) &&
 		(tw < tx || tw > rx) &&
-		(th < ty || th > ry));
+		(th < ty || th > ry);
 }
 
 /**

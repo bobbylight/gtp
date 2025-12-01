@@ -44,11 +44,11 @@ export default class SpriteSheet {
 		}
 
 		this.rowCount = Math.floor(gtpImage.height / (this.cellH + this.spacingY));
-		if ((gtpImage.height - this.rowCount * (this.cellH + this.spacingY)) >= this.cellH) {
+		if (gtpImage.height - this.rowCount * (this.cellH + this.spacingY) >= this.cellH) {
 			this.rowCount++;
 		}
 		this.colCount = Math.floor(gtpImage.width / (this.cellW + this.spacingX));
-		if ((gtpImage.width - this.colCount * (this.cellW + this.spacingX)) >= this.cellW) {
+		if (gtpImage.width - this.colCount * (this.cellW + this.spacingX) >= this.cellW) {
 			this.colCount++;
 		}
 

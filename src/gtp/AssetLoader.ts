@@ -190,7 +190,7 @@ export default class AssetLoader {
 			const atlas: ImageAtlas = new ImageAtlas(canvas, atlasInfo);
 
 			const prefix: string = typeof atlasInfo.prefix === 'string' ? atlasInfo.prefix :
-				(atlasInfo.prefix ? `${id}.` : '');
+				atlasInfo.prefix ? `${id}.` : '';
 
 			const imageMap: ImageMap = atlas.parse();
 			for (const key in imageMap) {

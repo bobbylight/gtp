@@ -140,13 +140,13 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 		const y0: number = cy - screenHeight / 2;
 
 		let topLeftCol: number = Math.floor(x0 / tileW);
-		if ((x0 % tileSize) < 0) {
+		if (x0 % tileSize < 0) {
 			topLeftCol--;
 		}
 		const tileEdgeX: number = topLeftCol * tileW;
 
 		let topLeftRow: number = Math.floor(y0 / tileH);
-		if ((y0 % tileSize) < 0) { // e.g. is < 0 and not a multiple of tileSize
+		if (y0 % tileSize < 0) { // e.g. is < 0 and not a multiple of tileSize
 			topLeftRow--;
 		}
 		const tileEdgeY: number = topLeftRow * tileH; // getTileEdge(topLeftY);
@@ -230,11 +230,11 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 
 		// TODO: "+ 1" is based on extra space at end of image.  Should be configured/calculated
 		let imgColCount: number = Math.floor(img.width / sw);
-		if (tileset.spacing > 0 && ((img.width % sw) === tileW)) {
+		if (tileset.spacing > 0 && img.width % sw === tileW) {
 			imgColCount++;
 		}
 		const imgY: number = Math.floor(value / imgColCount) * sh;
-		const imgX: number = (value % imgColCount) * sw;
+		const imgX: number = value % imgColCount * sw;
 
 		//ctx.drawImage(img, imgX,imgY,tileW,tileH, x,y,tileW,tileH);
 		img.drawScaled2(ctx, imgX, imgY, tileW, tileH, x, y, tileW, tileH);

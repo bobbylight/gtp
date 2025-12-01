@@ -3,7 +3,7 @@ import Utils from './Utils.js';
 
 describe('ImageUtils', () => {
 
-	it.todo('resizing an HTMLImageElement works', (done) => {
+	it.todo('resizing an HTMLImageElement works', done => {
 
 		const image: HTMLImageElement = document.createElement('img');
 		image.width = 10;
@@ -15,7 +15,7 @@ describe('ImageUtils', () => {
 			expect(canvas.height).toEqual(20);
 			//done();
 		};
-		image.onerror = (e) => {
+		image.onerror = e => {
 			//done(`Error loading image data: ${e}`);
 		};
 
