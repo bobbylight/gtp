@@ -118,7 +118,7 @@ export default class InputManager {
 	private keyDown(e: KeyboardEvent) {
 		// eslint-disable-next-line @typescript-eslint/no-deprecated
 		const keyCode: number = e.keyCode;
-		if (keyCode === 32 || (keyCode >= 37 && keyCode <= 40)) { // An arrow key or space
+		if (keyCode === 32 || keyCode >= 37 && keyCode <= 40) { // An arrow key or space
 			e.preventDefault();
 		}
 		if (this.refireMillis) {

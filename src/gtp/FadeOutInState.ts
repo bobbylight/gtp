@@ -57,7 +57,7 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 			}
 		}
 
-		this.alpha = this.fadingOut ? 1 - (this.curTime / this.halfTime) : (this.curTime / this.halfTime);
+		this.alpha = this.fadingOut ? 1 - this.curTime / this.halfTime : this.curTime / this.halfTime;
 	}
 
 	override render(ctx: CanvasRenderingContext2D) {
