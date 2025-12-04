@@ -1,6 +1,6 @@
 import Image from '../gtp/Image.js';
 import Game from '../gtp/Game.js';
-import {Window} from '../gtp/GtpBase.js';
+import { Window } from '../gtp/GtpBase.js';
 import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTileset.js';
 import TiledProperty from './TiledProperty.js';
 import { TiledMapData } from './TiledMapData.js';

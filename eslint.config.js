@@ -52,6 +52,7 @@ export default [
             "@stylistic/no-extra-semi": "error",
             "@stylistic/no-multi-spaces": "error",
             "@stylistic/no-trailing-spaces": "error",
+            "@stylistic/object-curly-spacing": ["error", "always"],
             //"@stylistic/padded-blocks": ["error", "never"],
             "@stylistic/semi": ["error", "always"],
             "@stylistic/space-infix-ops": "error",
