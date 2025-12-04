@@ -1,4 +1,4 @@
-import {ImageUtils} from '../index.js';
+import { ImageUtils } from '../index.js';
 import Utils from './Utils.js';
 
 describe('ImageUtils', () => {
