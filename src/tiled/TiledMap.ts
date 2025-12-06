@@ -1,6 +1,5 @@
+import AssetLoader from '../gtp/AssetLoader.js';
 import Image from '../gtp/Image.js';
-import Game from '../gtp/Game.js';
-import { Window } from '../gtp/GtpBase.js';
 import TiledTileset, { scaleTileset, TiledImagePathModifier } from './TiledTileset.js';
 import TiledProperty from './TiledProperty.js';
 import { TiledMapData } from './TiledMapData.js';
@@ -38,6 +37,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 	version: string;
 	width: number;
 
+	assets: AssetLoader;
 	screenWidth: number;
 	screenHeight: number;
 	screenRows: number;
@@ -76,6 +76,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 		this.width = data.width;
 
 		// Properties we've added for convenience
+		this.assets = args.assets;
 		this.screenWidth = args.screenWidth;
 		this.screenHeight = args.screenHeight;
 		this.screenRows = Math.ceil(this.screenHeight / this.tileheight);
@@ -219,10 +220,7 @@ export default class TiledMap implements TiledMapData, TiledPropertiesContainer 
 			return;
 		}
 
-		const gameWindow: Window = window as any;
-		const game: Game = gameWindow.game;
-		const img: Image = game.assets.getTmxTilesetImage(tileset);
-
+		const img: Image = this.assets.getTmxTilesetImage(tileset);
 		const tileW: number = this.tilewidth;
 		const sw: number = tileW + tileset.spacing;
 		const tileH: number = this.tileheight;

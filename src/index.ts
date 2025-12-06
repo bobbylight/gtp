@@ -21,7 +21,7 @@ import Pool from './gtp/Pool.js';
 import Rectangle, { RectangularData } from './gtp/Rectangle.js';
 import Sound from './gtp/Sound.js';
 import SpriteSheet from './gtp/SpriteSheet.js';
-import { State, BaseStateArgs } from './gtp/State.js';
+import { State } from './gtp/State.js';
 import { StretchMode } from './gtp/StretchMode.js';
 import { SoundCompletedCallback } from './gtp/SoundCompletedCallback.js';
 import { TiledMapArgs } from './tiled/TiledMapArgs.js';
@@ -43,7 +43,6 @@ export {
 	AssetLoaderCallback,
 	AssetType,
 	AudioSystem,
-	BaseStateArgs,
 	BitmapFont,
 	BrowserUtil,
 	CanvasResizer,

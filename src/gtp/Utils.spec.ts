@@ -87,26 +87,4 @@ describe('Utils', () => {
 		const end: number = Utils.timestamp();
 		expect(end).toBeGreaterThan(start + 1);
 	});
-
-	it('initConsole() with console defined', () => {
-		const mockConsole: any = {
-			info: 1,
-			log: 2,
-			warn: 3,
-			'error': 4,
-		};
-		const origConsole: Console = window.console;
-		(window as any).console = mockConsole;
-		Utils.initConsole();
-		expect((window as any).console).toBe(mockConsole);
-		(window as any).console = origConsole;
-	});
-
-	it('initConsole() with console undefined', () => {
-		const origConsole: Console = window.console;
-		(window as any).console = null;
-		Utils.initConsole();
-		expect(window.console).not.toBeNull();
-		(window as any).console = origConsole;
-	});
 });

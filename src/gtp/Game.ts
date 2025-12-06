@@ -55,8 +55,6 @@ export default class Game {
 
 	constructor(args: GameArgs = { width: 640, height: 480 }) {
 
-		Utils.initConsole();
-
 		this.scale = args.scale ?? 1;
 		this.canvas = ImageUtils.createCanvas(args.width, args.height, args.parent);
 
@@ -225,10 +223,10 @@ export default class Game {
 
 	setState(state: State<Game>) {
 		if (this.state) {
-			this.state.leaving(this);
+			this.state.leaving();
 		}
 		this.state = state;
-		this.state.enter(this);
+		this.state.enter();
 	}
 
 	setStatusMessage(message: string) {

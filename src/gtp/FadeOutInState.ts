@@ -27,7 +27,7 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 	 */
 	constructor(leavingState: State<T>, enteringState: State<T>,
 		transitionLogic?: TransitionLogicCallback, timeMillis?: number) {
-		super();
+		super(enteringState.game);
 		this.leavingState = leavingState;
 		this.enteringState = enteringState;
 		this.transitionLogic = transitionLogic;
@@ -35,11 +35,6 @@ export default class FadeOutInState<T extends Game> extends State<T> {
 		this.alpha = 1;
 		this.halfTime = timeMillis && timeMillis > 0 ? timeMillis / 2 : DEFAULT_HALF_TIME_MILLIS;
 		this.curTime = 0;
-	}
-
-	override enter(game: T) {
-		super.enter(game);
-		this.game = game;
 	}
 
 	override update(delta: number) {

@@ -1,6 +1,5 @@
-import { Mock, MockInstance } from 'vitest';
-import { State, FadeOutInState } from '../index.js';
-import Game from './Game.js';
+import { beforeEach, Mock, MockInstance } from 'vitest';
+import { State, FadeOutInState, Game } from '../index.js';
 
 interface FunctionWrapperForTesting {
 	transitionLogic: () => string;
@@ -8,14 +7,21 @@ interface FunctionWrapperForTesting {
 
 describe('FadeOutInState', () => {
 
+	let game: Game;
+
+	beforeEach(() => {
+		game = new Game();
+	});
+
 	afterEach(() => {
 		vi.resetAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it('constructor happy path', () => {
 
-		const leavingState: State<Game> = new State<Game>();
-		const enteringState: State<Game> = new State<Game>();
+		const leavingState: State<Game> = new State<Game>(game);
+		const enteringState: State<Game> = new State<Game>(game);
 		const temp: FunctionWrapperForTesting = {
 			transitionLogic: vi.fn(),
 		};
@@ -48,8 +54,8 @@ describe('FadeOutInState', () => {
 			} as Game;
 
 			gameSetStateSpy = vi.spyOn(game, 'setState');
-			mockLeavingState = new State<Game>();
-			mockEnteringState = new State<Game>();
+			mockLeavingState = new State<Game>(game);
+			mockEnteringState = new State<Game>(game);
 			mockLeavingRenderSpy = vi.spyOn(mockLeavingState, 'render').mockImplementation(() => {
 			});
 			mockEnteringRenderSpy = vi.spyOn(mockEnteringState, 'render').mockImplementation(() => {
@@ -59,7 +65,7 @@ describe('FadeOutInState', () => {
 			timeMillis = 500;
 
 			fadeState = new FadeOutInState<Game>(mockLeavingState, mockEnteringState, transitionLogicSpy, timeMillis);
-			fadeState.enter(game);
+			fadeState.enter();
 
 			vi.useFakeTimers();
 		});
@@ -135,8 +141,8 @@ describe('FadeOutInState', () => {
 
 	it('transitionLogic is called at halfway point', () => {
 
-		const leavingState: State<Game> = new State<Game>();
-		const enteringState: State<Game> = new State<Game>();
+		const leavingState: State<Game> = new State<Game>(game);
+		const enteringState: State<Game> = new State<Game>(game);
 		const temp: FunctionWrapperForTesting = {
 			transitionLogic: vi.fn(),
 		};

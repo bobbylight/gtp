@@ -1,6 +1,8 @@
+import { afterEach } from 'vitest';
 import AssetLoader from '../gtp/AssetLoader.js';
 import AudioSystem from '../gtp/AudioSystem.js';
 import Utils from '../gtp/Utils.js';
+import Image from '../gtp/Image.js';
 import TiledMap from './TiledMap.js';
 import TiledLayer from './TiledLayer.js';
 import { TiledMapData } from './TiledMapData.js';
@@ -74,6 +76,10 @@ const simpleMapData: TiledMapData = {
 	width: 2,
 };
 
+const mockImage = {
+	drawScaled2: vi.fn(),
+} as unknown as Image;
+
 describe('TiledMap', () => {
 
 	let assets: AssetLoader;
@@ -83,6 +89,7 @@ describe('TiledMap', () => {
 
 		assets = new AssetLoader(1, new AudioSystem(), '');
 		assets.set('test-tiles.json', {});
+		vi.spyOn(assets, 'getTmxTilesetImage').mockReturnValue(mockImage);
 
 		const args: TiledMapArgs = {
 			screenWidth: 2,
@@ -90,6 +97,11 @@ describe('TiledMap', () => {
 			assets,
 		};
 		tiledMap = new TiledMap(simpleMapData, args);
+	});
+
+	afterEach(() => {
+		vi.resetAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it('constructor adds the proper number of layers, tilesets and properties', () => {
@@ -109,23 +121,11 @@ describe('TiledMap', () => {
 	});
 
 	it('draw() renders the map', () => {
-
-		const mockImage = {
-			drawScaled2: vi.fn(),
-		};
-
-		(window as any).game = {
-			assets: {
-				getTmxTilesetImage: () => {
-					return mockImage;
-				},
-			},
-		};
-
+		const drawScaled2Spy = vi.spyOn(mockImage, 'drawScaled2');
 		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		const ctx: CanvasRenderingContext2D = Utils.getRenderingContext(canvas);
 		tiledMap.draw(ctx, 1, 1);
-		expect(mockImage.drawScaled2).toHaveBeenCalled();
+		expect(drawScaled2Spy).toHaveBeenCalled();
 	});
 
 	describe('getLayer()', () => {
