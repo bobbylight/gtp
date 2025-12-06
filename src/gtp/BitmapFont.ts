@@ -1,6 +1,5 @@
 import Image, { ColorChange } from './Image.js';
 import SpriteSheet from './SpriteSheet.js';
-import { Window } from './GtpBase.js';
 
 /**
  * Specifies the default color for this font in calls to drawString() (that is, the
@@ -34,11 +33,9 @@ export default class BitmapFont extends SpriteSheet {
 		this.fontMap[color] = this.createRecoloredCopy(...colorChanges);
 	}
 
-	drawString(str: string, x: number, y: number, color = DEFAULT_COLOR) {
+	drawString(ctx: CanvasRenderingContext2D, str: string, x: number, y: number, color = DEFAULT_COLOR) {
 
 		const glyphCount: number = this.size;
-		const gameWindow: Window = window as any;
-		const ctx: CanvasRenderingContext2D = gameWindow.game.getRenderingContext();
 		const charWidth: number = this.cellW;
 		const variant = this.fontMap[color] ?? this;
 

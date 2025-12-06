@@ -101,7 +101,7 @@ describe('Game', () => {
 		});
 		game.toggleShowFps();
 
-		game.setState(new DummyState());
+		game.setState(new DummyState(game));
 
 		expect(() => { game.render(); }).not.toThrowError();
 	});
@@ -109,7 +109,7 @@ describe('Game', () => {
 	it('start() starts an event loop', async() => {
 
 		const game: Game = new Game();
-		game.setState(new DummyState());
+		game.setState(new DummyState(game));
 		game.start();
 		game.toggleShowFps();
 

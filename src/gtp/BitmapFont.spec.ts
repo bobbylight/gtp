@@ -1,7 +1,17 @@
-import { BitmapFont, Game, Image } from '../index.js';
-import { Window } from './GtpBase.js';
+import { beforeEach } from 'vitest';
+import { BitmapFont, Image } from '../index.js';
 
 describe('BitmapFont', () => {
+	let ctx: CanvasRenderingContext2D;
+
+	beforeEach(() => {
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
+		const temp = canvas.getContext('2d');
+		if (!temp) {
+			throw new Error('Could not get rendering context for testing');
+		}
+		ctx = temp;
+	});
 
 	afterEach(() => {
 		vi.resetAllMocks();
@@ -23,9 +33,6 @@ describe('BitmapFont', () => {
 
 	describe('addVariant()', () => {
 
-		const gameWindow: Window = window as any;
-		gameWindow.game = new Game();
-
 		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = 40;
 		canvas.height = 60;
@@ -37,14 +44,11 @@ describe('BitmapFont', () => {
 				fromR: 0, fromG: 0, fromB: 0, toR: 255, toG: 255, toB: 255,
 			});
 			vi.spyOn(font, 'drawByIndex').mockImplementation(() => {});
-			expect(() => { font.drawString('      ', 0, 0, 'test'); }).not.toThrowError();
+			expect(() => { font.drawString(ctx, '      ', 0, 0, 'test'); }).not.toThrowError();
 		});
 	});
 
 	describe('drawString()', () => {
-
-		const gameWindow: Window = window as any;
-		gameWindow.game = new Game();
 
 		const canvas: HTMLCanvasElement = document.createElement('canvas');
 		canvas.width = 40;
@@ -54,7 +58,7 @@ describe('BitmapFont', () => {
 		it('renders all printable chars', () => {
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
 			const drawByIndexSpy = vi.spyOn(font, 'drawByIndex');
-			font.drawString('      ', 0, 0);
+			font.drawString(ctx, '      ', 0, 0);
 			expect(drawByIndexSpy).toHaveBeenCalledTimes(6);
 		});
 
@@ -62,7 +66,7 @@ describe('BitmapFont', () => {
 
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
 			const drawByIndexSpy = vi.spyOn(font, 'drawByIndex');
-			font.drawString(' \x13 ', 0, 0);
+			font.drawString(ctx, ' \x13 ', 0, 0);
 
 			// All 3 chars rendered are for font index 0
 			expect(drawByIndexSpy).toHaveBeenCalledTimes(3);
@@ -77,7 +81,7 @@ describe('BitmapFont', () => {
 
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
 			const drawByIndexSpy = vi.spyOn(font, 'drawByIndex');
-			font.drawString(' \x70 ', 0, 0); // 0x70 > the font size of 6 chars
+			font.drawString(ctx, ' \x70 ', 0, 0); // 0x70 > the font size of 6 chars
 
 			// All 3 chars rendered are for font index 0
 			expect(drawByIndexSpy).toHaveBeenCalledTimes(3);
@@ -91,7 +95,7 @@ describe('BitmapFont', () => {
 		it('does not error if an invalid color is specified', () => {
 			const font = new BitmapFont(image, 10, 10, 0, 0, 2);
 			vi.spyOn(font, 'drawByIndex').mockImplementation(() => {});
-			expect(() => { font.drawString('      ', 0, 0, 'invalidVariant'); }).not.toThrowError();
+			expect(() => { font.drawString(ctx, '      ', 0, 0, 'invalidVariant'); }).not.toThrowError();
 		});
 	});
 });

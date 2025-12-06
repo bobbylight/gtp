@@ -128,19 +128,4 @@ export default {
 		}
 		return Date.now(); // IE < 10
 	},
-
-	/**
-	 * Defines console functions for IE9 and other braindead browsers.
-	 */
-	initConsole() {
-		if (!window.console) {
-			const noOp = () => {};
-			(window as any).console = {
-				info: noOp,
-				log: noOp,
-				warn: noOp,
-				'error': noOp,
-			};
-		}
-	},
 };
