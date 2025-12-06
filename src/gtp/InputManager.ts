@@ -23,10 +23,10 @@ export default class InputManager {
 	 * Touch and mouse input are currently not supported.
 	 *
 	 * @param [keyRefireMillis=0] What the key refiring time should be, in milliseconds.
-	 *        This is useful if you plan on using the <code>clear</code> argument when querying
-	 *        for key states, as it dictates how frequently the key's down status will refire.
-	 *        It's not useful and effectively ignored if you never use <code>clear</code>.
-	 *        A value of 0 means keys will not send repeat "pressed" events.
+	 *        A value of 0 means to take the operating system default. Note this value
+	 *        is only really meaningful/used if you specify <code>clear = true</code>
+	 *        when querying the key down states, as otherwise the key is considered
+	 *        down/pressed as long as it is held down.
 	 */
 	constructor(keyRefireMillis = 0) {
 		this.keys = [];
