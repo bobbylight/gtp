@@ -98,4 +98,21 @@ describe('BitmapFont', () => {
 			expect(() => { font.drawString(ctx, '      ', 0, 0, 'invalidVariant'); }).not.toThrowError();
 		});
 	});
+
+	describe('stringWidth()', () => {
+
+		const canvas: HTMLCanvasElement = document.createElement('canvas');
+		canvas.width = 40;
+		canvas.height = 60;
+		const image: Image = new Image(canvas);
+		const font = new BitmapFont(image, 10, 10, 0, 0, 2);
+
+		it('returns 0 for a zero-length string', () => {
+			expect(font.stringWidth('')).toEqual(0);
+		});
+
+		it('returns the proper width for a string with at least 1 char', () => {
+			expect(font.stringWidth('abcdefg')).toEqual(7 * font.cellW);
+		});
+	});
 });

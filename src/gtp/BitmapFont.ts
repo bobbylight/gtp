@@ -49,4 +49,8 @@ export default class BitmapFont extends SpriteSheet {
 		}
 
 	}
+
+	stringWidth(str: string): number {
+		return str.length * this.cellW;
+	}
 }

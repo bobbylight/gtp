@@ -41,11 +41,10 @@ export default class Game {
 	assets: AssetLoader;
 	clearScreenColor: string;
 	fpsColor: string;
-	statusMessageRGB: string;
-	private statusMessageColor: string | null;
 	showFps: boolean;
 	frames: number;
 	private fpsMsg: string;
+	statusMessageRGB: string;
 	private statusMessage: string | null;
 	private statusMessageAlpha: number;
 	private statusMessageTime: number;
@@ -72,8 +71,7 @@ export default class Game {
 		this.clearScreenColor = 'rgb(0,0,0)';
 
 		this.fpsColor = 'rgb(255,255,255)';
-		this.statusMessageRGB = '255,255,255';
-		this.statusMessageColor = null;
+		this.statusMessageRGB = '#fff';
 		this.showFps = false;
 		this.frames = 0;
 		this.fpsMsg = `${this.targetFps} fps`;
@@ -187,12 +185,27 @@ export default class Game {
 
 	private renderStatusMessage(ctx: CanvasRenderingContext2D) {
 		if (this.statusMessage) {
-			const x = 10;
-			const y: number = this.canvas.height - 6;
-			ctx.font = '10pt Arial';
-			ctx.fillStyle = this.statusMessageColor ?? '#fff';
-			ctx.fillText(this.statusMessage, x, y);
+			const origAlpha = ctx.globalAlpha;
+			ctx.globalAlpha = this.statusMessageAlpha;
+			try {
+				this.renderStatusMessageImpl(ctx, this.statusMessage, this.statusMessageRGB);
+			} finally {
+				ctx.globalAlpha = origAlpha;
+			}
 		}
+	}
+
+	/**
+	 * Renders the given message at the bottom of the screen. This is called by the same when it wants to display
+	 * debugging information. Subclasses can override if they want to customize the rendering to better align with
+	 * the motif of their game.
+	 */
+	protected renderStatusMessageImpl(ctx: CanvasRenderingContext2D, message: string, color = '#fff') {
+		const x = 10;
+		const y = this.canvas.height - 6;
+		ctx.font = '10pt Arial';
+		ctx.fillStyle = color;
+		ctx.fillText(message, x, y);
 	}
 
 	/**
@@ -250,10 +263,8 @@ export default class Game {
 			const time: number = Utils.timestamp();
 			if (time > this.statusMessageTime) {
 				this.statusMessageTime = time + STATUS_MESSAGE_TIME_INC;
-				this.statusMessageAlpha -= STATUS_MESSAGE_ALPHA_DEC;
-				const alpha: number = Math.min(1, this.statusMessageAlpha);
-				this.statusMessageColor = `rgba(${this.statusMessageRGB},${alpha})`;
-				if (this.statusMessageAlpha <= 0) {
+				this.statusMessageAlpha = Math.max(this.statusMessageAlpha - STATUS_MESSAGE_ALPHA_DEC, 0);
+				if (this.statusMessageAlpha === 0) {
 					this.statusMessage = null;
 				}
 			}
