@@ -50,6 +50,16 @@ export interface TiledLayerData {
 	image?: string;
 
 	/**
+	 * Height of the image used by this layer. <code>imagelayer</code> only. (since 1.11.1)
+	 */
+	imageheight?: number;
+
+	/**
+	 * Width of the image used by this layer. <code>imagelayer</code> only. (since 1.11.1)
+	 */
+	imagewidth?: number;
+
+	/**
 	 * Array of child layers. <code>group</code> only.
 	 */
 	layer?: TiledLayerData[];
