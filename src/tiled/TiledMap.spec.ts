@@ -62,7 +62,7 @@ const simpleMapData: TiledMapData = {
 		},
 	],
 	renderorder: 'right-down',
-	tiledversion: '1.8.3',
+	tiledversion: '1.11.1',
 	tileheight: 16,
 	tilewidth: 16,
 	tilesets: [
