@@ -19,6 +19,8 @@ export default class TiledLayer implements TiledLayerData, TiledPropertiesContai
 	height: number;
 	id: number;
 	image?: string;
+	imageheight?: number;
+	imagewidth?: number;
 	layer?: TiledLayerData[];
 	locked?: boolean;
 	name: string;

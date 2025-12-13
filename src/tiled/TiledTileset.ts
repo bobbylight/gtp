@@ -25,6 +25,7 @@ export default interface TiledTileset {
 
 	backgroundcolor?: string;
 	columns?: number;
+	fillmode?: 'stretch' | 'preserve-aspect-fit';
 	firstgid: number;
 	grid?: TiledTilesetGrid;
 	image: string;
@@ -41,6 +42,7 @@ export default interface TiledTileset {
 	tiledversion?: string;
 	tileheight: number;
 	tileoffset?: TiledTileOffset;
+	tilerendersize?: 'tile' | 'grid';
 	tiles?: TiledTilesetTile[];
 	tilewidth: number;
 	transforms?: TiledTilesetTransformations;
@@ -95,6 +97,10 @@ export interface TiledTilesetTile {
 	image?: string;
 	imageheight: number;
 	imagewidth: number;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
 	/**
 	 * Layer with type "objectgroup", when collision shapes are specified.
 	 */

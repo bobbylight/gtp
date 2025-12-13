@@ -26,6 +26,8 @@ describe('TiledLayer', () => {
 			height: 2,
 			id: 1,
 			image: 'test-image.png',
+			imageheight: 100,
+			imagewidth: 100,
 			name: TEST_TILE_LAYER_NAME,
 			offsetx: 0,
 			offsety: 0,
@@ -50,6 +52,8 @@ describe('TiledLayer', () => {
 			height: 2,
 			id: 1,
 			image: 'test-image.png',
+			imageheight: 100,
+			imagewidth: 100,
 			name: TEST_OBJECT_GROUP_LAYER_NAME,
 			objects: [
 				{
