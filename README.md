@@ -11,7 +11,7 @@ Features include:
 * Audio
 * Asset management (async loading of graphics, sounds, resources)
 * Game states
-* [Tiled](http://www.mapeditor.org/) map support (supports 1.8.x JSON format)
+* [Tiled](http://www.mapeditor.org/) map support (supports 1.11.x JSON format)
 
 ## Hacking
 First, check out the project and install all dependencies:
