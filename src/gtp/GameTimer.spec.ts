@@ -40,13 +40,13 @@ describe('_GameTimer', () => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		timer.paused = true;
-		expect(() => { timer.resetPlayTime(); }).toThrowError();
+		expect(() => { timer.resetPlayTime(); }).toThrow();
 	});
 
 	it('resetPlayTime should throw an error if called when not updating', () => {
 		const timer: GameTimer = new GameTimer();
 		timer.start();
 		timer.updating = false;
-		expect(() => { timer.resetPlayTime(); }).toThrowError();
+		expect(() => { timer.resetPlayTime(); }).toThrow();
 	});
 });

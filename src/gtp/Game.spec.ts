@@ -15,7 +15,7 @@ describe('Game', () => {
 	it('constructor happy path', () => {
 		expect(() => {
 			new Game();
-		}).not.toThrowError();
+		}).not.toThrow();
 	});
 
 	it('clearScreen() works', () => {
@@ -103,7 +103,7 @@ describe('Game', () => {
 
 		game.setState(new DummyState(game));
 
-		expect(() => { game.render(); }).not.toThrowError();
+		expect(() => { game.render(); }).not.toThrow();
 	});
 
 	it('start() starts an event loop', async() => {

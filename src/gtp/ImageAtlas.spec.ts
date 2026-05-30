@@ -43,7 +43,7 @@ describe('ImageAtlas', () => {
 			],
 		};
 
-		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
+		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrow();
 	});
 
 	it('parse() fails if y missing', () => {
@@ -64,7 +64,7 @@ describe('ImageAtlas', () => {
 			],
 		};
 
-		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
+		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrow();
 	});
 
 	it('parse() fails if w missing', () => {
@@ -85,7 +85,7 @@ describe('ImageAtlas', () => {
 			],
 		};
 
-		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
+		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrow();
 	});
 
 	it('parse() fails if h missing', () => {
@@ -106,7 +106,7 @@ describe('ImageAtlas', () => {
 			],
 		};
 
-		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
+		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrow();
 	});
 
 	it('parse() works for valid image, dim with spaces', () => {
@@ -165,7 +165,7 @@ describe('ImageAtlas', () => {
 			],
 		};
 
-		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
+		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrow();
 	});
 
 	it('parse() fails if dim contains > 4 numbers', () => {
@@ -184,6 +184,6 @@ describe('ImageAtlas', () => {
 			],
 		};
 
-		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrowError();
+		expect(() => { new ImageAtlas(canvas, atlasInfo).parse(); }).toThrow();
 	});
 });

@@ -6,6 +6,6 @@ describe('State', () => {
 		const game = new Game();
 		expect(() => {
 			new State(game);
-		}).not.toThrowError();
+		}).not.toThrow();
 	});
 });
