@@ -20,6 +20,7 @@
     "target": "es6",
     "module": "NodeNext",
     "outDir": "lib/",
+    "rootDir": "src/",
     "sourceMap": true,
     "diagnostics": true,
     "lib": ["esnext", "dom", "esnext.disposable"],

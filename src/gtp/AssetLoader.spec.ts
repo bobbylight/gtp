@@ -73,7 +73,7 @@ describe('AssetLoader', () => {
 		it('constructor, happy path', () => {
 			expect(() => {
 				new AssetLoader(1, new AudioSystem(), assetRoot);
-			}).not.toThrowError();
+			}).not.toThrow();
 		});
 
 		it('addJson() loads the data', async() => {
@@ -315,7 +315,7 @@ describe('AssetLoader', () => {
 
 			expect(() => {
 				assetLoader.addTmxMap(map);
-			}).not.toThrowError();
+			}).not.toThrow();
 		});
 
 		it('addTmxMap() works with empty tilesets', () => {
@@ -349,7 +349,7 @@ describe('AssetLoader', () => {
 
 			expect(() => {
 				assetLoader.addTmxMap(map);
-			}).not.toThrowError();
+			}).not.toThrow();
 		});
 
 		it('set() works to manually add a resource', () => {

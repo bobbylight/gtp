@@ -151,7 +151,7 @@ describe('AudioSystem', () => {
 
 		expect(() => {
 			audio.stopMusic();
-		}).not.toThrowError();
+		}).not.toThrow();
 	});
 
 	it('stopMusic() will pause the currently-playing music', () => {

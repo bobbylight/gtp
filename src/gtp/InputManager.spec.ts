@@ -32,7 +32,7 @@ describe('InputManager', () => {
 	});
 
 	const simulateKeyDown = (keyCode: Keys, preventDefault = vi.fn(), stopPropagation = vi.fn()) => {
-		const event = new KeyboardEvent('keydown', { keyCode: keyCode } as KeyboardEventInit);
+		const event = new KeyboardEvent('keydown', { keyCode: keyCode });
 		vi.spyOn(event, 'preventDefault').mockImplementation(preventDefault);
 		vi.spyOn(event, 'stopPropagation').mockImplementation(stopPropagation);
 		document.onkeydown?.(event);
@@ -40,7 +40,7 @@ describe('InputManager', () => {
 	};
 
 	const simulateKeyUp = (keyCode: Keys, preventDefault = vi.fn(), stopPropagation = vi.fn()) => {
-		const event = new KeyboardEvent('keyup', { keyCode: keyCode } as KeyboardEventInit);
+		const event = new KeyboardEvent('keyup', { keyCode: keyCode });
 		vi.spyOn(event, 'preventDefault').mockImplementation(preventDefault);
 		vi.spyOn(event, 'stopPropagation').mockImplementation(stopPropagation);
 		document.onkeyup?.(event);
@@ -51,13 +51,13 @@ describe('InputManager', () => {
 		it('initializes properties correctly with default refireMillis', () => {
 			expect(() => {
 				new InputManager();
-			}).not.toThrowError();
+			}).not.toThrow();
 		});
 
 		it('initializes properties correctly with custom refireMillis', () => {
 			expect(() => {
 				new InputManager(100);
-			}).not.toThrowError();
+			}).not.toThrow();
 		});
 	});
 

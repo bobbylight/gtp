@@ -135,7 +135,7 @@ describe('TiledMap', () => {
 		});
 
 		it('throws an error if the layer requested is not defined', () => {
-			expect(() => tiledMap.getLayer('unknown')).toThrowError();
+			expect(() => tiledMap.getLayer('unknown')).toThrow();
 		});
 	});
 
@@ -170,7 +170,7 @@ describe('TiledMap', () => {
 		});
 
 		it('throws an error if the property requested is not defined and there is no default', () => {
-			expect(() => tiledMap.getProperty('unknown')).toThrowError();
+			expect(() => tiledMap.getProperty('unknown')).toThrow();
 		});
 	});
 
